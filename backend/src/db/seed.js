@@ -1,0 +1,254 @@
+import db from "./db.js";
+import { faker } from "@faker-js/faker";
+import bcrypt from "bcrypt";
+
+// password = password seed
+const PASSWORD = "password";
+const HASHED_PASSWORD = bcrypt.hashSync(PASSWORD, 10);
+
+// define categories and tags for each categories
+const CATEGORIES = [
+  {
+    name: "Living Room",
+    tags: ["Sofa", "Coffee Table", "Armchair", "Bookshelf"],
+  },
+  {
+    name: "Bedroom",
+    tags: ["Bed Frame", "Wardrobe", "Nightstand"],
+  },
+  {
+    name: "Kitchen",
+    tags: ["Kitchen Counter", "Bar Stool", "Dining Table", "Kitchen Cabinet"],
+  },
+  {
+    name: "Bathroom",
+    tags: ["Sink", "Bathroom Shelf", "Vanity Cabinet"],
+  },
+  {
+    name: "Study Room",
+    tags: ["Desk", "Office Chair", "Study Shelf", "Drawer Cabinet"],
+  },
+];
+
+// HELPERS
+// seed phone number
+const malaysiaPhone = () => {
+  return "01" + faker.string.numeric(8);
+};
+
+// seed product name
+const productName = (tag) => {
+  const adjectives = [
+    "Walnut",
+    "Nordic",
+    "Ivory",
+    "Limestone",
+    "Oak",
+    "Modern",
+    "Rustic",
+    "Matte",
+    "Elegant",
+    "Minimal",
+  ];
+
+  const styles = [
+    "Haven",
+    "Prime",
+    "Aura",
+    "Series",
+    "Edition",
+    "Line",
+    "Studio",
+    "Classic",
+  ];
+
+  const colors = ["Grey", "White", "Black", "Oak", "Beige", "Walnut"];
+
+  return `${faker.helpers.arrayElement(adjectives)} ${
+    faker.helpers.arrayElement(colors)
+  } ${faker.helpers.arrayElement(styles)} ${tag}`;
+};
+
+// seed product description
+const productDescription = (name) => {
+  return `The ${name} is crafted with premium materials, designed for modern living spaces. It blends durability with aesthetic elegance, making it a perfect fit for contemporary interiors.`;
+};
+
+// MAIN
+// the seed function
+const seedDb = async () => {
+  try {
+    console.log("Seeding database...");
+
+    // start transaction
+    await db.query ("BEGIN");
+
+    // clean reset everytime we run seeding
+    console.log("Clearing existing data...");
+
+    await db.query(`
+      TRUNCATE TABLE
+        feedback,
+        product_images,
+        products,
+        product_tags,
+        categories,
+        otp_requests,
+        users
+      RESTART IDENTITY CASCADE;
+    `);
+
+    console.log("Database reset completed");
+
+    // map tags to categories
+    const categoryMap = {};
+    const tagMap = {};
+
+    for (const cat of CATEGORIES) {
+      const catRes = await db.query(
+        `INSERT INTO categories (name) VALUES ($1) RETURNING id`,
+        [cat.name]
+      );
+
+      const categoryId = catRes.rows[0].id;
+      categoryMap[cat.name] = categoryId;
+
+      for (const tag of cat.tags) {
+        const tagRes = await db.query(
+          `INSERT INTO product_tags (category_id, name) VALUES ($1, $2) RETURNING id`,
+          [categoryId, tag]
+        );
+
+        tagMap[`${cat.name}-${tag}`] = tagRes.rows[0].id;
+      }
+    }
+
+    console.log("Categories & tags seeded");
+
+    // seed users
+    const userIds = [];
+
+    for (let i = 0; i < 20; i++) {
+      const firstName = faker.person.firstName();
+      const lastName = faker.person.lastName();
+      const email = faker.internet.email({ firstName, lastName });
+
+      const res = await db.query(
+        `INSERT INTO users 
+        (first_name, last_name, email, phone_number, address, password_hash)
+        VALUES ($1,$2,$3,$4,$5,$6)
+        RETURNING id`,
+        [
+          firstName,
+          lastName,
+          email,
+          malaysiaPhone(),
+          faker.location.streetAddress(),
+          HASHED_PASSWORD,
+        ]
+      );
+
+      userIds.push(res.rows[0].id);
+    }
+
+    console.log("Users seeded");
+
+    // seed products
+    const productIds = [];
+
+    for (const cat of CATEGORIES) {
+      for (const tag of cat.tags) {
+        const tagId = tagMap[`${cat.name}-${tag}`];
+
+        for (let i = 0; i < 10; i++) {
+          const name = productName(tag);
+
+          const res = await db.query(
+            `INSERT INTO products 
+            (name, description, category_id, tag_id, base_price, width_cm, height_cm, depth_cm, featured)
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+            RETURNING id`,
+            [
+              name,
+              productDescription(name),
+              categoryMap[cat.name],
+              tagId,
+              faker.number.float({ min: 100, max: 5000, precision: 0.01 }),
+              faker.number.float({ min: 30, max: 300 }),
+              faker.number.float({ min: 30, max: 250 }),
+              faker.number.float({ min: 30, max: 200 }),
+              faker.datatype.boolean(0.2),
+            ]
+          );
+
+          productIds.push(res.rows[0].id);
+        }
+      }
+    }
+
+    console.log("Products seeded");
+
+    // seed product images
+    for (const productId of productIds) {
+      const imageCount = faker.number.int({ min: 1, max: 3 });
+
+      for (let i = 0; i < imageCount; i++) {
+        await db.query(
+          `INSERT INTO product_images (product_id, image_url, display_order)
+           VALUES ($1,$2,$3)`,
+          [
+            productId,
+            `https://picsum.photos/seed/${productId}-${i}/800/600`,
+            i + 1,
+          ]
+        );
+      }
+    }
+
+    console.log("Product images seeded");
+
+    // seed feedbacks
+    const feedbackComments = [
+      "Excellent craftsmanship and quality, wide range of choices provided as well.",
+      "Very comfortable and stylish, 10/10 for me.",
+      "Fits perfectly with my home interior, warm tone lover satisfied.",
+      "Worth the price everytime. I enjoyed the customisable furniture service.",
+      "Amazing modern design, spectacular choice of materials used.",
+      "Solid materials and easy to assemble, love the idea of designing my own furniture!",
+      "Beautiful furniture with premium finishing, I love ComfyHome.",
+      "Exceeded my expectations, and within a reasonable price range!",
+      "Elegant and functional pieces of daily everyday needs.",
+      "Would definitely recommend to others, especially the sofas on sale.",
+    ];
+
+    for (let i = 0; i < 50; i++) {
+      const userId = faker.helpers.arrayElement(userIds);
+
+      await db.query(
+        `INSERT INTO feedback (user_id, rating, comment)
+         VALUES ($1,$2,$3)`,
+        [
+          userId,
+          faker.number.int({ min: 1, max: 5 }),
+          faker.helpers.arrayElement(feedbackComments),
+        ]
+      );
+    }
+
+    console.log("Feedback seeded");
+
+    // commit transaction
+    await db.query("COMMIT");
+
+    console.log("Database seeding has been completed!");
+    process.exit(0);
+  } catch (err) {
+    // rollback on error
+    await db.query("ROLLBACK");
+    console.error("Seeding failed. Transaction rolled back.");
+    console.error(err);
+    process.exit(1);
+  }
+};
+
+seedDb();
