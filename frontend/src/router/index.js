@@ -6,6 +6,7 @@ import MainLayout from '@/layout/MainLayout.vue'
 import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 import Registration from '@/views/Registration.vue'
+import Products from '@/views/Products.vue'
 
 const routes = [
   {
@@ -13,6 +14,7 @@ const routes = [
     component: MainLayout,
     children: [
       { path: '', component: Home },
+      { path: 'products', component: Products },
       // other main pages here
     ],
   },

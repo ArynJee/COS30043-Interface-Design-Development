@@ -81,6 +81,12 @@ const initDb = async () => {
         );
     `);
 
+    // add stock_count if it doesn't exist yet (safe for existing DBs)
+    await db.query(`
+      ALTER TABLE products
+        ADD COLUMN IF NOT EXISTS stock_count INTEGER DEFAULT 1000;
+    `);
+
     console.log("Database initialized");
 
   } catch (err) {

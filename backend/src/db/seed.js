@@ -164,9 +164,9 @@ const seedDb = async () => {
           const name = productName(tag);
 
           const res = await db.query(
-            `INSERT INTO products 
-            (name, description, category_id, tag_id, base_price, width_cm, height_cm, depth_cm, featured)
-            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+            `INSERT INTO products
+            (name, description, category_id, tag_id, base_price, sold_count, width_cm, height_cm, depth_cm, featured)
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
             RETURNING id`,
             [
               name,
@@ -174,6 +174,7 @@ const seedDb = async () => {
               categoryMap[cat.name],
               tagId,
               faker.number.float({ min: 100, max: 5000, precision: 0.01 }),
+              faker.number.int({ min: 0, max: 800 }),
               faker.number.float({ min: 30, max: 300 }),
               faker.number.float({ min: 30, max: 250 }),
               faker.number.float({ min: 30, max: 200 }),
@@ -190,7 +191,7 @@ const seedDb = async () => {
 
     // seed product images
     for (const productId of productIds) {
-      const imageCount = faker.number.int({ min: 1, max: 3 });
+      const imageCount = faker.number.int({ min: 2, max: 4 });
 
       for (let i = 0; i < imageCount; i++) {
         await db.query(
