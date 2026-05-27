@@ -101,7 +101,7 @@ onMounted(async () => {
       <div class="hero-headline">
         <h1>Comfortable Living.</h1>
         <p class="hero-sub">Crafting spaces that define how you live.</p>
-        <router-link to="/products" class="hero-cta rounded-5">View Collection</router-link>
+        <router-link to="/products" class="hero-cta">View Collection</router-link>
       </div>
 
       <!-- community showcase hard in hero -->
