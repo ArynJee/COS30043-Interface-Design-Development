@@ -262,7 +262,7 @@ onMounted(async () => {
         <h2 class="feedback-title mb-5">What Our Clients Say</h2>
 
         <!-- Feedback cards -->
-        <div class="row g-4 mb-4" v-if="feedbacks.length > 0">
+        <div class="row mb-5" v-if="feedbacks.length > 0">
           <div
             v-for="fb in feedbacks"
             :key="fb.id"
@@ -907,6 +907,8 @@ onMounted(async () => {
   transition:
     background 0.25s,
     color 0.25s;
+  justify-content: space-between;
+  gap: 15px;
 }
 .fb-cta-btn:hover {
   background: #1e1a14;

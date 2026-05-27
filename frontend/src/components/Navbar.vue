@@ -46,7 +46,7 @@ const profileRoute = computed(() => {
         </ul>
 
         <!-- right: branch, cart, profile -->
-        <div class="d-flex align-items-center gap-4 ms-auto">
+        <div class="rightlink d-flex align-items-center ms-auto">
           <router-link title="Locations" to="/locations" class="text-dark">
             <MapPin :size="20" />
           </router-link>
@@ -68,10 +68,15 @@ const profileRoute = computed(() => {
 .navbar {
   font-family: 'Times New Roman', Times, serif;
 }
+.navbar-brand {
+  font-weight: bold;
+  letter-spacing: 1px;
+}
 .nav-link {
   color: #2c2218 !important;
   transition: opacity 0.3s ease;
   letter-spacing: 1px;
+  font-weight: bold;
 }
 .nav-link:hover {
   opacity: 0.5;
@@ -92,4 +97,9 @@ const profileRoute = computed(() => {
 a {
   text-decoration: none;
 }
+.rightlink{
+  justify-content: space-between;
+  gap: 30px;
+}
+
 </style>
