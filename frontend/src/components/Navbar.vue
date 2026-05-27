@@ -5,6 +5,14 @@ import { MapPin, ShoppingCart, UserCircle, Search, ShoppingBag, LayoutGrid, Slid
 import { useDarkMode } from '@/hooks/useDarkMode'
 
 const { isDark, toggleDark } = useDarkMode()
+const isAnimating = ref(false)
+
+function handleToggle() {
+  if (isAnimating.value) return
+  isAnimating.value = true
+  toggleDark()
+  setTimeout(() => { isAnimating.value = false }, 360)
+}
 
 const navLinks = [
   { name: 'Products', path: '/products', icon: ShoppingBag },
@@ -23,7 +31,7 @@ const searchQuery = ref('')
 <template>
   <!-- desktop view -->
   <nav class="top-navbar d-none d-lg-flex">
-    <div class="container-fluid px-4 d-flex align-items-center h-100">
+    <div class="container-fluid px-5 d-flex align-items-center h-100">
       <!-- Logo -->
       <router-link to="/" class="brand fw-bold text-uppercase text-decoration-none">ComfyHome</router-link>
 
@@ -60,9 +68,9 @@ const searchQuery = ref('')
           <UserCircle :size="21" />
         </router-link>
 
-        <button class="icon-btn theme-toggle" :title="isDark ? 'Light mode' : 'Dark mode'" @click="toggleDark">
-          <Sun v-if="isDark" :size="19" />
-          <Moon v-else :size="19" />
+        <button class="icon-btn theme-toggle" :class="{ 'is-spinning': isAnimating }" @click="handleToggle" :title="isDark ? 'Light mode' : 'Dark mode'">
+          <Moon v-if="isDark" :size="19" />
+          <Sun v-else :size="19" />
         </button>
       </div>
     </div>
@@ -120,15 +128,17 @@ const searchQuery = ref('')
         <span class="sb-label">{{ isLoggedIn ? 'Profile' : 'Login' }}</span>
         <span class="sb-tooltip">{{ isLoggedIn ? 'Profile' : 'Login' }}</span>
       </router-link>
+
+      <!-- light / dark mode toggler -->
       <button class="sb-link sb-theme-btn position-relative d-flex align-items-center gap-3 rounded-2 px-2 py-2 overflow-hidden border-0 w-100" @click="toggleDark">
-        <component :is="isDark ? Sun : Moon" :size="19" class="sb-icon" />
-        <span class="sb-label pe-none">{{ isDark ? 'Light Mode' : 'Dark Mode' }}</span>
-        <span class="sb-tooltip">{{ isDark ? 'Light Mode' : 'Dark Mode' }}</span>
+        <component :is="isDark ? Moon : Sun" :size="19" class="sb-icon" />
+        <span class="sb-label pe-none">{{ isDark ? 'Dark Mode' : 'Light Mode' }}</span>
+        <span class="sb-tooltip">{{ isDark ? 'Dark Mode' : 'Light Mode' }}</span>
       </button>
     </div>
   </aside>
 
-  <!-- Dim overlay when sidebar is expanded -->
+  <!-- overlay when sidebar is expanded -->
   <div
     class="sidebar-overlay d-lg-none position-fixed inset-0"
     :class="{ visible: sidebarOpen }"
@@ -155,7 +165,6 @@ const searchQuery = ref('')
   white-space: nowrap;
 }
 
-/* Nav links sit directly after logo */
 .nav-links {
   list-style: none;
   display: flex;
@@ -407,6 +416,13 @@ const searchQuery = ref('')
   background: none;
   border: none;
   cursor: pointer;
+}
+@keyframes spinOnce {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.theme-toggle.is-spinning {
+  animation: spinOnce 0.42s ease forwards;
 }
 
 .sb-theme-btn {
