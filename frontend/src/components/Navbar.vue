@@ -1,105 +1,421 @@
 <script setup>
-import { computed } from 'vue'
-import { RouterLink } from 'vue-router'
-import { MapPin, ShoppingCart, UserCircle } from '@lucide/vue'
+import { ref, computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { MapPin, ShoppingCart, UserCircle, Search, ShoppingBag, LayoutGrid, Sliders, Info, ChevronLeft, ChevronRight } from '@lucide/vue'
 
 const navLinks = [
-  { name: 'Products', path: '/products' },
-  { name: 'Showcase', path: '/showcase' },
-  { name: 'Customize', path: '/customize' },
-  { name: 'About Us', path: '/about' },
+  { name: 'Products', path: '/products', icon: ShoppingBag },
+  { name: 'Showcase', path: '/showcase', icon: LayoutGrid },
+  { name: 'Customize', path: '/customize', icon: Sliders },
+  { name: 'About Us', path: '/about', icon: Info },
 ]
 
-// check login status
-const isLoggedIn = computed(() => {
-  return !!localStorage.getItem('token')
-})
-
-// dynamic profile route
-const profileRoute = computed(() => {
-  return isLoggedIn.value
-    ? '/profile'
-    : '/login'
-})
+const isLoggedIn = computed(() => !!localStorage.getItem('token'))
+const profileRoute = computed(() => isLoggedIn.value ? '/profile' : '/login')
+const route = useRoute()
+const sidebarOpen = ref(false)
+const searchQuery = ref('')
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top py-3">
-    <div class="container position-relative d-flex align-items-center">
-      <!-- left: logo-->
-      <router-link to="/" class="navbar-brand fw-bold fs-4 text-uppercase m-0">
-        ComfyHome
-      </router-link>
+  <!-- desktop view -->
+  <nav class="top-navbar d-none d-lg-flex">
+    <div class="container d-flex align-items-center h-100">
+      <!-- Logo -->
+      <router-link to="/" class="brand">ComfyHome</router-link>
 
-      <!-- hamburger menu for mobile -->
-      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarNav">
-
-        <!-- center: links -->
-        <ul class="navbar-nav mx-auto text-uppercase small fw-bold custom-center-nav">
-          <li v-for="link in navLinks" :key="link.name" class="nav-item px-3">
-            <router-link :to="link.path" class="nav-link" v-text="link.name"></router-link>
+      <!-- Right: nav links + utility icons -->
+      <div class="right-cluster">
+        <ul class="nav-links">
+          <li v-for="link in navLinks" :key="link.name">
+            <router-link
+              :to="link.path"
+              class="nav-item"
+              :class="{ 'is-active': route.path.startsWith(link.path) }"
+            >
+              {{ link.name }}
+            </router-link>
           </li>
         </ul>
 
-        <!-- right: branch, cart, profile -->
-        <div class="rightlink d-flex align-items-center ms-auto">
-          <router-link title="Locations" to="/locations" class="text-dark">
-            <MapPin :size="20" />
+        <div class="utility-icons">
+          <router-link title="Locations" to="/locations" class="icon-btn">
+            <MapPin :size="19" />
           </router-link>
 
-          <router-link title="Cart" to="/cart" class="text-dark position-relative">
-            <ShoppingCart :size="20" />
+          <!-- search bar -->
+          <label class="search-pill">
+            <Search :size="14" class="search-icon-inner" />
+            <input v-model="searchQuery" type="text" placeholder="Search…" />
+          </label>
+
+          <router-link title="Cart" to="/cart" class="icon-btn">
+            <ShoppingCart :size="19" />
           </router-link>
 
-          <router-link title="Profile" :to="profileRoute" class="text-dark">
-            <UserCircle :size="22" />
+          <router-link title="Profile" :to="profileRoute" class="icon-btn">
+            <UserCircle :size="21" />
           </router-link>
         </div>
       </div>
     </div>
   </nav>
+
+  <!-- mobile sidebar -->
+  <aside class="mobile-sidebar d-lg-none top-0 left-0 position-fixed d-flex flex-column overflow-hidden" :class="{ 'is-open': sidebarOpen }">
+
+    <!-- toggle to open -->
+    <div class="sb-header justify-content-between align-items-center d-flex">
+      <router-link to="/" class="sb-brand d-flex align-items-center text-decoration-none overflow-hidden">
+        <span class="sb-brand-label fw-bold text-uppercase">ComfyHome</span>
+      </router-link>
+      <button class="sb-toggle d-flex align-items-center justify-content-center rounded-2" @click="sidebarOpen = !sidebarOpen" aria-label="Toggle sidebar">
+        <ChevronLeft v-if="sidebarOpen" :size="16" />
+        <ChevronRight v-else :size="16" />
+      </button>
+    </div>
+
+    <!-- Search (expanded only) -->
+    <div class="sb-search d-flex align-items-center gap-2 rounded-pill mx-2 mt-3 mb-1 px-2 py-1 overflow-hidden">
+      <Search :size="14" class="sb-search-icon" />
+      <input v-model="searchQuery" type="text" placeholder="Search…" class="sb-search-input border-0 w-100" />
+    </div>
+
+    <!-- Nav links -->
+    <nav class="sb-nav d-flex flex-column gap-1 overflow-y-auto px-2 py-3">
+      <router-link
+        v-for="link in navLinks"
+        :key="link.name"
+        :to="link.path"
+        class="sb-link position-relative d-flex align-items-center gap-3 rounded-2 px-2 py-2 my-1 overflow-hidden text-decoration-none"
+        :class="{ 'is-active': route.path.startsWith(link.path) }"
+      >
+        <component :is="link.icon" :size="19" class="sb-icon" />
+        <span class="sb-label pe-none">{{ link.name }}</span>
+        <span class="sb-tooltip">{{ link.name }}</span>
+      </router-link>
+    </nav>
+
+    <!-- Bottom utility links -->
+    <div class="sb-bottom d-flex flex-column gap-1 p-2">
+      <router-link to="/locations" class="sb-link position-relative d-flex align-items-center gap-3 rounded-2 px-2 py-2 overflow-hidden text-decoration-none">
+        <MapPin :size="19" class="sb-icon" />
+        <span class="sb-label pe-none">Locations</span>
+        <span class="sb-tooltip">Locations</span>
+      </router-link>
+      <router-link to="/cart" class="sb-link position-relative d-flex align-items-center gap-3 rounded-2 px-2 py-2 overflow-hidden text-decoration-none">
+        <ShoppingCart :size="19" class="sb-icon" />
+        <span class="sb-label pe-none">Cart</span>
+        <span class="sb-tooltip">Cart</span>
+      </router-link>
+      <router-link :to="profileRoute" class="sb-link position-relative d-flex align-items-center gap-3 rounded-2 px-2 py-2 overflow-hidden text-decoration-none">
+        <UserCircle :size="19" class="sb-icon" />
+        <span class="sb-label">{{ isLoggedIn ? 'Profile' : 'Login' }}</span>
+        <span class="sb-tooltip">{{ isLoggedIn ? 'Profile' : 'Login' }}</span>
+      </router-link>
+    </div>
+  </aside>
+
+  <!-- Dim overlay when sidebar is expanded -->
+  <div
+    class="sidebar-overlay d-lg-none position-fixed inset-0"
+    :class="{ visible: sidebarOpen }"
+    @click="sidebarOpen = false"
+  ></div>
 </template>
 
 <style scoped>
-.navbar {
+/* desktop view */
+.top-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  height: 62px;
+  background: #fff;
+  border-bottom: 1px solid #e8e3dc;
   font-family: 'Times New Roman', Times, serif;
 }
-.navbar-brand {
-  font-weight: bold;
-  letter-spacing: 1px;
-}
-.nav-link {
-  color: #2c2218 !important;
-  transition: opacity 0.3s ease;
-  letter-spacing: 1px;
-  font-weight: bold;
-}
-.nav-link:hover {
-  opacity: 0.5;
-  color: #8b6f47 !important
-}
-@media (min-width: 992px) {
-  .custom-center-nav {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    white-space: nowrap;
-  }
-}
-.ms-auto {
-  margin-left: auto !important;
-}
-a {
+
+.brand {
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #2c2218;
   text-decoration: none;
-}
-.rightlink{
-  justify-content: space-between;
-  gap: 30px;
+  white-space: nowrap;
 }
 
+.right-cluster {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-left: auto;
+}
+
+/* Nav links */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  position: relative;
+  display: inline-block;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #2c2218;
+  text-decoration: none;
+  transition: color 0.25s ease;
+  border-radius: 6px;
+}
+
+/* Animated underline bar */
+.nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 10px;
+  right: 10px;
+  height: 2px;
+  background: #8b6f47;
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-item:hover {
+  color: #8b6f47;
+}
+.nav-item:hover::after {
+  transform: scaleX(1);
+}
+
+/* Active state */
+.nav-item.is-active {
+  color: #8b6f47;
+  background: rgba(139, 111, 71, 0.07);
+}
+.nav-item.is-active::after {
+  transform: scaleX(1);
+}
+
+/* Utility icons */
+.utility-icons {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2c2218;
+  text-decoration: none;
+  padding: 6px;
+  border-radius: 8px;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.icon-btn:hover {
+  background: rgba(139, 111, 71, 0.1);
+  color: #8b6f47;
+  transform: translateY(-1px);
+}
+
+/* Search pill */
+.search-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f5f2ee;
+  border: 1px solid #e4ddd5;
+  border-radius: 999px;
+  padding: 5px 12px;
+  cursor: text;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.search-pill:focus-within {
+  border-color: #8b6f47;
+  box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.12);
+}
+.search-icon-inner {
+  color: #9b8b79;
+  flex-shrink: 0;
+}
+.search-pill input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.82rem;
+  color: #2c2218;
+  width: 130px;
+  font-family: 'Times New Roman', Times, serif;
+}
+.search-pill input::placeholder {
+  color: #b8a99a;
+}
+
+/* mobile sidebar */
+.mobile-sidebar {
+  height: 100vh;
+  width: 62px;
+  background: #fff;
+  border-right: 1px solid #e8e3dc;
+  z-index: 1100;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Times New Roman', Times, serif;
+}
+.mobile-sidebar.is-open {
+  width: 220px;
+  box-shadow: 4px 0 24px rgba(44, 34, 24, 0.12);
+}
+
+/* sidebar header */
+.sb-header {
+  justify-content: space-between;
+  padding: 16px 12px;
+  min-height: 62px;
+  border-bottom: 1px solid #f0ebe4;
+}
+.sb-brand {
+  white-space: nowrap;
+}
+.sb-brand-label {
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  color: #2c2218;
+  opacity: 0;
+}
+.mobile-sidebar.is-open .sb-brand-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.sb-toggle {
+  width: 26px;
+  height: 26px;
+  border: 1px solid #e4ddd5;
+  background: #fff;
+  color: #6b5d52;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+.sb-toggle:hover {
+  background: #f5f2ee;
+}
+
+/* sidebar search */
+.sb-search {
+  background: #f5f2ee;
+  border: 1px solid #e4ddd5;
+  transition: opacity 0.2s ease, max-height 0.3s ease;
+  max-height: 0;
+  opacity: 0;
+}
+.mobile-sidebar.is-open .sb-search {
+  max-height: 44px;
+  opacity: 1;
+  margin: 10px 10px 6px;
+  padding: 7px 10px;
+  border-width: 1px;
+}
+.sb-search-icon {
+  color: #9b8b79;
+  flex-shrink: 0;
+}
+.sb-search-input {
+  background: transparent;
+  outline: none;
+  font-size: 0.82rem;
+  color: #2c2218;
+  font-family: 'Times New Roman', Times, serif;
+}
+.sb-search-input::placeholder {
+  color: #b8a99a;
+}
+
+/* sidebar navlinks */
+.sb-nav {
+  flex: 1;
+}
+.sb-bottom {
+  border-top: 1px solid #f0ebe4;
+}
+
+.sb-link {
+  color: #4a3c30;
+  transition: background 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+}
+.sb-link:hover {
+  background: #f5f2ee;
+  color: #2c2218;
+}
+.sb-link.is-active {
+  background: rgba(139, 111, 71, 0.1);
+  color: #8b6f47;
+  font-weight: 700;
+}
+.sb-icon {
+  flex-shrink: 0;
+}
+.sb-label {
+  font-size: 0.88rem;
+  opacity: 0;
+}
+.mobile-sidebar.is-open .sb-label {
+  opacity: 1;
+}
+
+/* Tooltip shown on collapsed sidebar hover */
+.sb-tooltip {
+  display: none;
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: #2c2218;
+  color: #f5f0ea;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 9999;
+}
+.sb-tooltip::before {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-right-color: #2c2218;
+}
+/* Only show tooltip when sidebar is collapsed */
+.mobile-sidebar:not(.is-open) .sb-link:hover .sb-tooltip {
+  display: block;
+}
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(44, 34, 24, 0.3);
+  z-index: 1050;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.sidebar-overlay.visible {
+  display: block;
+  opacity: 1;
+}
 </style>
