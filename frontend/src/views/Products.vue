@@ -646,6 +646,65 @@ onBeforeUnmount(() => {
   padding: 0 0.25rem;
 }
 
+/* ── dark mode ── */
+[data-theme="dark"] .products-page { background: #1a1610; }
+[data-theme="dark"] .filter-bar { background: #1a1610; }
+[data-theme="dark"] .filter-label { color: #9a8875; }
+[data-theme="dark"] .result-count { color: #9a8875; }
+[data-theme="dark"] .filter-btn {
+  border-color: #3a3025;
+  color: #e8ddd0;
+}
+[data-theme="dark"] .filter-btn:hover { border-color: #c4a882; }
+[data-theme="dark"] .filter-btn.is-open {
+  background: #e8ddd0;
+  border-color: #e8ddd0;
+  color: #1a1610;
+}
+[data-theme="dark"] .filter-panel {
+  background: #2a2418;
+  border-color: #3a3025;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+[data-theme="dark"] .panel-item { color: #e8ddd0; }
+[data-theme="dark"] .panel-item:hover { background: #3a3025; }
+[data-theme="dark"] .sort-option { color: #e8ddd0; }
+[data-theme="dark"] .sort-active { color: #c4a882; }
+[data-theme="dark"] .clear-all-btn { color: #9a8875; }
+[data-theme="dark"] .clear-all-btn:hover { color: #e8ddd0; }
+[data-theme="dark"] .search-input {
+  border-color: #3a3025;
+  color: #e8ddd0;
+}
+[data-theme="dark"] .search-input::placeholder { color: #6a5a4a; }
+[data-theme="dark"] .search-input:focus { border-color: #c4a882; }
+[data-theme="dark"] .product-card {
+  background: #2a2418;
+  border-color: #3a3025;
+}
+[data-theme="dark"] .card-name { color: #e8ddd0; }
+[data-theme="dark"] .card-measurements,
+[data-theme="dark"] .card-sold { color: #9a8875; }
+[data-theme="dark"] .card-price { color: #e8ddd0; }
+[data-theme="dark"] .card-add-btn {
+  background: #e8ddd0;
+  color: #1a1610;
+}
+[data-theme="dark"] .card-add-btn:hover { background: #c4a882; }
+[data-theme="dark"] .state-msg { color: #9a8875; }
+[data-theme="dark"] .page-btn {
+  background: #2a2418;
+  border-color: #3a3025;
+  color: #e8ddd0;
+}
+[data-theme="dark"] .page-btn:hover:not(:disabled) { border-color: #c4a882; }
+[data-theme="dark"] .page-btn.page-active {
+  background: #e8ddd0;
+  color: #1a1610;
+  border-color: #e8ddd0;
+}
+[data-theme="dark"] .page-ellipsis { color: #9a8875; }
+
 /* ── responsive ── */
 @media (max-width: 1199px) {
   .product-grid {

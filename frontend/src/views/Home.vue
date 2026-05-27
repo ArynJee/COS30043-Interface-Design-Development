@@ -925,6 +925,54 @@ onMounted(async () => {
   opacity: 0;
 }
 
+/* ── dark mode ── */
+[data-theme="dark"] .feature-grid { background: #1e1b14; }
+[data-theme="dark"] .fg-main-title { color: #e8ddd0; }
+[data-theme="dark"] .fg-card-light {
+  background: #2a2418;
+  border-color: #3a3025;
+}
+[data-theme="dark"] .fg-card-title { color: #e8ddd0; }
+[data-theme="dark"] .fg-card-body { color: #9a8875; }
+[data-theme="dark"] .fg-img-label {
+  background: rgba(20, 16, 10, 0.85);
+  color: #e8ddd0;
+}
+[data-theme="dark"] .stats-section {
+  background: #1e1b14;
+  border-color: #3a3025;
+}
+[data-theme="dark"] .stat-number { color: #e8ddd0; }
+[data-theme="dark"] .stat-label { color: #9a8875; }
+[data-theme="dark"] .stat-divider { background: #3a3025; }
+[data-theme="dark"] .about-section { background: #221d15; }
+[data-theme="dark"] .about-title { color: #e8ddd0; }
+[data-theme="dark"] .about-body { color: #9a8875; }
+[data-theme="dark"] .about-btn {
+  color: #e8ddd0;
+  border-color: #e8ddd0;
+}
+[data-theme="dark"] .about-btn:hover {
+  color: #c4a882;
+  border-color: #c4a882;
+}
+[data-theme="dark"] .explore-section { background: #1e1b14; }
+[data-theme="dark"] .explore-title { color: #e8ddd0; }
+[data-theme="dark"] .explore-sub { color: #9a8875; }
+[data-theme="dark"] .feedback-section { background: #221d15; }
+[data-theme="dark"] .feedback-title { color: #e8ddd0; }
+[data-theme="dark"] .fb-card { background: #2a2418; }
+[data-theme="dark"] .fb-comment { color: #e8ddd0; }
+[data-theme="dark"] .fb-user { color: #9a8875; }
+[data-theme="dark"] .fb-cta-btn {
+  border-color: #e8ddd0;
+  color: #e8ddd0;
+}
+[data-theme="dark"] .fb-cta-btn:hover {
+  background: #e8ddd0;
+  color: #1a1610;
+}
+
 /* responsive */
 @media (max-width: 991px) {
   .fg-layout {

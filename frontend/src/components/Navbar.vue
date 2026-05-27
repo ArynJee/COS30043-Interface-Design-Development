@@ -1,7 +1,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { MapPin, ShoppingCart, UserCircle, Search, ShoppingBag, LayoutGrid, Sliders, Info, ChevronLeft, ChevronRight } from '@lucide/vue'
+import { MapPin, ShoppingCart, UserCircle, Search, ShoppingBag, LayoutGrid, Sliders, Info, ChevronLeft, ChevronRight, Sun, Moon } from '@lucide/vue'
+import { useDarkMode } from '@/hooks/useDarkMode'
+
+const { isDark, toggleDark } = useDarkMode()
 
 const navLinks = [
   { name: 'Products', path: '/products', icon: ShoppingBag },
@@ -20,7 +23,7 @@ const searchQuery = ref('')
 <template>
   <!-- desktop view -->
   <nav class="top-navbar d-none d-lg-flex">
-    <div class="container d-flex align-items-center h-100">
+    <div class="container-fluid px-4 d-flex align-items-center h-100">
       <!-- Logo -->
       <router-link to="/" class="brand fw-bold text-uppercase text-decoration-none">ComfyHome</router-link>
 
@@ -56,6 +59,11 @@ const searchQuery = ref('')
         <router-link title="Profile" :to="profileRoute" class="icon-btn">
           <UserCircle :size="21" />
         </router-link>
+
+        <button class="icon-btn theme-toggle" :title="isDark ? 'Light mode' : 'Dark mode'" @click="toggleDark">
+          <Sun v-if="isDark" :size="19" />
+          <Moon v-else :size="19" />
+        </button>
       </div>
     </div>
   </nav>
@@ -112,6 +120,11 @@ const searchQuery = ref('')
         <span class="sb-label">{{ isLoggedIn ? 'Profile' : 'Login' }}</span>
         <span class="sb-tooltip">{{ isLoggedIn ? 'Profile' : 'Login' }}</span>
       </router-link>
+      <button class="sb-link sb-theme-btn position-relative d-flex align-items-center gap-3 rounded-2 px-2 py-2 overflow-hidden border-0 w-100" @click="toggleDark">
+        <component :is="isDark ? Sun : Moon" :size="19" class="sb-icon" />
+        <span class="sb-label pe-none">{{ isDark ? 'Light Mode' : 'Dark Mode' }}</span>
+        <span class="sb-tooltip">{{ isDark ? 'Light Mode' : 'Dark Mode' }}</span>
+      </button>
     </div>
   </aside>
 
@@ -389,4 +402,68 @@ const searchQuery = ref('')
   display: block;
   opacity: 1;
 }
+
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.sb-theme-btn {
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+/* ── dark mode ── */
+[data-theme="dark"] .top-navbar {
+  background: #1e1b14;
+  border-bottom-color: #3a3025;
+}
+[data-theme="dark"] .brand { color: #e8ddd0; }
+[data-theme="dark"] .nav-item { color: #c8bdb0; }
+[data-theme="dark"] .nav-item:hover,
+[data-theme="dark"] .nav-item.is-active { color: #c4a882; }
+[data-theme="dark"] .icon-btn { color: #c8bdb0; }
+[data-theme="dark"] .icon-btn:hover { color: #c4a882; }
+[data-theme="dark"] .search-pill {
+  background: #2a2418;
+  border-color: #3a3025;
+}
+[data-theme="dark"] .search-pill input { color: #e8ddd0; }
+[data-theme="dark"] .search-pill input::placeholder { color: #6a5a4a; }
+[data-theme="dark"] .mobile-sidebar {
+  background: #1e1b14;
+  border-right-color: #3a3025;
+}
+[data-theme="dark"] .sb-header { border-bottom-color: #3a3025; }
+[data-theme="dark"] .sb-bottom { border-top-color: #3a3025; }
+[data-theme="dark"] .sb-brand-label { color: #c8bdb0; }
+[data-theme="dark"] .sb-toggle {
+  background: #2a2418;
+  border-color: #3a3025;
+  color: #c8bdb0;
+}
+[data-theme="dark"] .sb-toggle:hover { background: #3a3025; }
+[data-theme="dark"] .sb-search {
+  background: #2a2418;
+  border-color: #3a3025;
+}
+[data-theme="dark"] .sb-search-input { color: #e8ddd0; }
+[data-theme="dark"] .sb-search-input::placeholder { color: #6a5a4a; }
+[data-theme="dark"] .sb-link { color: #c8bdb0; }
+[data-theme="dark"] .sb-link:hover {
+  background: #2a2418;
+  color: #e8ddd0;
+}
+[data-theme="dark"] .sb-link.is-active {
+  background: rgba(196, 168, 130, 0.15);
+  color: #c4a882;
+}
+[data-theme="dark"] .sb-tooltip {
+  background: #e8ddd0;
+  color: #1e1b14;
+}
+[data-theme="dark"] .sb-tooltip::before { border-right-color: #e8ddd0; }
+[data-theme="dark"] .sidebar-overlay { background: rgba(0, 0, 0, 0.55); }
 </style>
