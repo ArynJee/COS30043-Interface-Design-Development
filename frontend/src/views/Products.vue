@@ -1,166 +1,147 @@
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { SlidersHorizontal, ChevronLeft, ChevronRight, X } from '@lucide/vue'
-import { getProductsApi, getFiltersApi } from '@/services/productServices.js'
+import { ref, watch, onBeforeUnmount } from 'vue'
+import { RouterLink } from 'vue-router'
+import { ChevronLeft, ChevronRight, ChevronDown } from '@lucide/vue'
+import useProducts from '@/hooks/useProducts.js'
 
-const route = useRoute()
+const {
+  products, total, totalPages, currentPage, loading,
+  categories, selectedCategories, selectedTags, sortBy,
+  hasActiveFilters, visibleTags, visiblePages,
+  formatPrice, formatMeasurements,
+  goToPage, toggleCategory, toggleTag, clearFilters,
+} = useProducts()
 
-// ── data ──────────────────────────────────────────────
-const products   = ref([])
-const total      = ref(0)
-const totalPages = ref(0)
-const currentPage = ref(1)
-const loading    = ref(false)
+// filter dropdown state
+const openDropdown = ref(null)
+const categoryDropdownRef = ref(null)
+const tagDropdownRef      = ref(null)
 
-const categories         = ref([])
-const tags               = ref([])
-const selectedCategories = ref([])
-const selectedTags       = ref([])
-const sortBy             = ref('default')
-const sidebarOpen        = ref(true)
-
-// ── slug → category name (from home page links) ───────
-const slugToName = {
-  'living-room': 'Living Room',
-  'study-room':  'Study Room',
-  'kitchen':     'Kitchen',
-  'bathroom':    'Bathroom',
-  'bedroom':     'Bedroom',
+const toggleDropdown = (name) => {
+  openDropdown.value = openDropdown.value === name ? null : name
 }
 
-// ── computed ──────────────────────────────────────────
-const hasActiveFilters = computed(
-  () => selectedCategories.value.length > 0 || selectedTags.value.length > 0
-)
-
-// show only tags that belong to currently selected categories (or all if none selected)
-const visibleTags = computed(() => {
-  if (selectedCategories.value.length === 0) return tags.value
-  return tags.value.filter(t => selectedCategories.value.includes(t.category_id))
-})
-
-const visiblePages = computed(() => {
-  const tp = totalPages.value
-  const cur = currentPage.value
-  if (tp <= 7) return Array.from({ length: tp }, (_, i) => i + 1)
-  const pages = [1]
-  if (cur > 3) pages.push('…')
-  for (let i = Math.max(2, cur - 1); i <= Math.min(tp - 1, cur + 1); i++) pages.push(i)
-  if (cur < tp - 2) pages.push('…')
-  pages.push(tp)
-  return pages
-})
-
-// ── helpers ───────────────────────────────────────────
-const formatPrice = (price) =>
-  'RM ' + parseFloat(price).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-
-const formatMeasurements = (p) => {
-  const h = p.height_cm != null ? Math.round(p.height_cm) : null
-  const w = p.width_cm  != null ? Math.round(p.width_cm)  : null
-  const d = p.depth_cm  != null ? Math.round(p.depth_cm)  : null
-  if (!h || !w) return null
-  return d ? `${h}H × ${w}W × ${d}D cm` : `${h}H × ${w}W cm`
-}
-
-// ── fetch ─────────────────────────────────────────────
-const fetchProducts = async () => {
-  loading.value = true
-  try {
-    const params = { page: currentPage.value, limit: 12, sort: sortBy.value }
-    if (selectedCategories.value.length) params.category_ids = selectedCategories.value.join(',')
-    if (selectedTags.value.length)       params.tag_ids      = selectedTags.value.join(',')
-
-    const data = await getProductsApi(params)
-    products.value   = data.products
-    total.value      = data.total
-    totalPages.value = data.totalPages
-  } finally {
-    loading.value = false
+const handleOutsideClick = (e) => {
+  if (!openDropdown.value) return
+  // only check the wrapper of the dropdown that is currently open
+  const activeRef = openDropdown.value === 'category' ? categoryDropdownRef : tagDropdownRef
+  if (activeRef.value && !activeRef.value.contains(e.target)) {
+    openDropdown.value = null
   }
 }
 
-// reset page + fetch when filters/sort change
-watch([selectedCategories, selectedTags, sortBy], () => {
-  currentPage.value = 1
-  fetchProducts()
-}, { deep: true })
-
-// deselect tags that no longer belong to selected categories
-watch(selectedCategories, (cats) => {
-  if (cats.length > 0) {
-    selectedTags.value = selectedTags.value.filter(id => {
-      const tag = tags.value.find(t => t.id === id)
-      return tag && cats.includes(tag.category_id)
-    })
-  }
+// add/remove the document listener only while a dropdown is open
+watch(openDropdown, (val) => {
+  if (val) document.addEventListener('mousedown', handleOutsideClick)
+  else document.removeEventListener('mousedown', handleOutsideClick)
 })
 
-// ── actions ───────────────────────────────────────────
-const goToPage = (p) => {
-  if (p < 1 || p > totalPages.value) return
-  currentPage.value = p
-  fetchProducts()
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-
-const toggleCategory = (id) => {
-  const i = selectedCategories.value.indexOf(id)
-  selectedCategories.value = i === -1
-    ? [...selectedCategories.value, id]
-    : selectedCategories.value.filter(c => c !== id)
-}
-
-const toggleTag = (id) => {
-  const i = selectedTags.value.indexOf(id)
-  selectedTags.value = i === -1
-    ? [...selectedTags.value, id]
-    : selectedTags.value.filter(t => t !== id)
-}
-
-const clearFilters = () => {
-  selectedCategories.value = []
-  selectedTags.value = []
-}
-
-// ── init ──────────────────────────────────────────────
-onMounted(async () => {
-  const filterData = await getFiltersApi()
-  categories.value = filterData.categories
-  tags.value       = filterData.tags
-
-  // pre-select category from home page ?type= param
-  const slug = route.query.type
-  if (slug && slugToName[slug]) {
-    const cat = categories.value.find(c => c.name === slugToName[slug])
-    if (cat) selectedCategories.value = [cat.id]
-  }
-
-  await fetchProducts()
+onBeforeUnmount(() => {
+  document.removeEventListener('mousedown', handleOutsideClick)
 })
 </script>
 
 <template>
   <div class="products-page">
 
-    <!-- page header -->
-    <div class="page-header">
-      <h1 class="page-title">Our Collection</h1>
-      <p class="page-sub">Curated furniture for every room in your home</p>
-    </div>
+    <!-- ── hero ── -->
+    <section class="shop-hero">
+      <img src="/product/product-hero.png" alt="" class="hero-img" />
+      <div class="hero-content">
+        <p class="hero-breadcrumb">
+          <RouterLink to="/">Home</RouterLink>&ensp;&rsaquo;&ensp;Products
+        </p>
+        <h1 class="hero-title">Our Collection</h1>
+        <p class="hero-sub">Curated furniture for every room in your home</p>
+      </div>
+    </section>
 
-    <!-- controls bar -->
-    <div class="controls-bar">
-      <button class="ctrl-btn" @click="sidebarOpen = !sidebarOpen">
-        <SlidersHorizontal :size="14" class="me-2" />
-        {{ sidebarOpen ? 'Hide Filters' : 'Show Filters' }}
-      </button>
+    <!-- ── filter + sort bar ── -->
+    <div class="filter-bar">
 
-      <div class="ctrl-right">
+      <!-- left: dropdowns -->
+      <div class="filter-left">
+        <span class="filter-label">Filter by</span>
+
+        <!-- Category dropdown -->
+        <div class="filter-dropdown" ref="categoryDropdownRef">
+          <button
+            class="filter-btn"
+            :class="{ 'is-open': openDropdown === 'category' }"
+            @click="toggleDropdown('category')"
+          >
+            <span class="btn-label">
+              <span class="active-dot" v-if="selectedCategories.length" />
+              Categories
+            </span>
+            <ChevronDown :size="13" class="btn-chevron" />
+          </button>
+
+          <Transition name="drop">
+            <div class="filter-panel" v-if="openDropdown === 'category'">
+              <label
+                v-for="cat in categories"
+                :key="cat.id"
+                class="panel-item"
+              >
+                <input
+                  type="checkbox"
+                  class="panel-checkbox"
+                  :checked="selectedCategories.includes(cat.id)"
+                  @change="toggleCategory(cat.id)"
+                />
+                <span>{{ cat.name }}</span>
+              </label>
+            </div>
+          </Transition>
+        </div>
+
+        <!-- Product Type dropdown -->
+        <div class="filter-dropdown" ref="tagDropdownRef">
+          <button
+            class="filter-btn"
+            :class="{ 'is-open': openDropdown === 'tag' }"
+            @click="toggleDropdown('tag')"
+          >
+            <span class="btn-label">
+              <span class="active-dot" v-if="selectedTags.length" />
+              Product Type
+            </span>
+            <ChevronDown :size="13" class="btn-chevron" />
+          </button>
+
+          <Transition name="drop">
+            <div class="filter-panel" v-if="openDropdown === 'tag'">
+              <label
+                v-for="tag in visibleTags"
+                :key="tag.id"
+                class="panel-item"
+              >
+                <input
+                  type="checkbox"
+                  class="panel-checkbox"
+                  :checked="selectedTags.includes(tag.id)"
+                  @change="toggleTag(tag.id)"
+                />
+                <span>{{ tag.name }}</span>
+              </label>
+            </div>
+          </Transition>
+        </div>
+
+        <!-- inline clear all — appears only when filters are active -->
+        <Transition name="fade">
+          <button v-if="hasActiveFilters" class="clear-all-btn" @click="clearFilters">
+            &times; Clear All
+          </button>
+        </Transition>
+      </div>
+
+      <!-- right: count + sort -->
+      <div class="filter-right">
         <span class="result-count">{{ total }} items</span>
         <select class="sort-select" v-model="sortBy">
-          <option value="default">Default</option>
+          <option value="default">Default Sorting</option>
           <option value="price_asc">Price: Low to High</option>
           <option value="price_desc">Price: High to Low</option>
           <option value="most_sold">Most Sold</option>
@@ -168,133 +149,77 @@ onMounted(async () => {
       </div>
     </div>
 
-    <!-- main layout -->
-    <div class="layout-wrapper" :class="{ 'sidebar-hidden': !sidebarOpen }">
+    <!-- ── products ── -->
+    <div class="products-container">
 
-      <!-- sidebar -->
-      <aside class="sidebar">
-        <div class="sidebar-inner">
-          <!-- clear filter -->
-          <button class="clear-btn" :disabled="!hasActiveFilters" @click="clearFilters">
-            <X :size="12" class="me-1" /> Clear Filters
-          </button>
+      <div v-if="loading" class="state-msg">Loading products…</div>
 
-          <!-- category filter -->
-          <div class="filter-section">
-            <h6 class="filter-heading">Category</h6>
-            <label
-              v-for="cat in categories"
-              :key="cat.id"
-              class="filter-label"
-            >
-              <input
-                type="checkbox"
-                class="filter-checkbox"
-                :checked="selectedCategories.includes(cat.id)"
-                @change="toggleCategory(cat.id)"
-              />
-              <span>{{ cat.name }}</span>
-            </label>
-          </div>
-
-          <!-- product type / tag filter -->
-          <div class="filter-section" v-if="visibleTags.length">
-            <h6 class="filter-heading">Product Type</h6>
-            <label
-              v-for="tag in visibleTags"
-              :key="tag.id"
-              class="filter-label"
-            >
-              <input
-                type="checkbox"
-                class="filter-checkbox"
-                :checked="selectedTags.includes(tag.id)"
-                @change="toggleTag(tag.id)"
-              />
-              <span>{{ tag.name }}</span>
-            </label>
-          </div>
-        </div>
-      </aside>
-
-      <!-- products area -->
-      <div class="products-area">
-
-        <!-- loading -->
-        <div v-if="loading" class="state-msg">Loading products…</div>
-
-        <!-- empty -->
-        <div v-else-if="products.length === 0" class="state-msg">
-          No products found. Try adjusting your filters.
-        </div>
-
-        <!-- grid -->
-        <div v-else class="product-grid">
-          <div
-            v-for="product in products"
-            :key="product.id"
-            class="product-card"
-          >
-            <!-- image with hover swap -->
-            <router-link :to="`/products/${product.id}`" class="card-img-wrapper">
-              <img
-                :src="product.images[0]"
-                :alt="product.name"
-                class="img-primary"
-              />
-              <img
-                :src="product.images[1] ?? product.images[0]"
-                :alt="product.name"
-                class="img-secondary"
-              />
-            </router-link>
-
-            <!-- card info -->
-            <div class="card-body">
-              <div class="card-meta">
-                <span class="card-category-badge">{{ product.category }}</span>
-                <span class="card-sold">{{ product.sold_count }} sold</span>
-              </div>
-              <h3 class="card-name">{{ product.name }}</h3>
-              <p class="card-measurements" v-if="formatMeasurements(product)">
-                {{ formatMeasurements(product) }}
-              </p>
-              <span class="card-price">{{ formatPrice(product.base_price) }}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- pagination -->
-        <nav class="pagination-wrap" v-if="totalPages > 1" aria-label="Products pagination">
-          <button
-            class="page-btn"
-            :disabled="currentPage === 1"
-            @click="goToPage(currentPage - 1)"
-            aria-label="Previous page"
-          >
-            <ChevronLeft :size="14" />
-          </button>
-
-          <template v-for="p in visiblePages" :key="p">
-            <span v-if="p === '…'" class="page-ellipsis">…</span>
-            <button
-              v-else
-              :class="['page-btn', { 'page-active': currentPage === p }]"
-              @click="goToPage(p)"
-            >{{ p }}</button>
-          </template>
-
-          <button
-            class="page-btn"
-            :disabled="currentPage === totalPages"
-            @click="goToPage(currentPage + 1)"
-            aria-label="Next page"
-          >
-            <ChevronRight :size="14" />
-          </button>
-        </nav>
+      <div v-else-if="products.length === 0" class="state-msg">
+        No products found. Try adjusting your filters.
       </div>
+
+      <div v-else class="product-grid">
+        <div
+          v-for="product in products"
+          :key="product.id"
+          class="product-card"
+        >
+          <!-- image with hover swap -->
+          <router-link :to="`/products/${product.id}`" class="card-img-wrapper">
+            <img :src="product.images[0]" :alt="product.name" class="img-primary" />
+            <img
+              :src="product.images[1] ?? product.images[0]"
+              :alt="product.name"
+              class="img-secondary"
+            />
+          </router-link>
+
+          <!-- card info -->
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-category-badge">{{ product.category }}</span>
+              <span class="card-sold">{{ product.sold_count }} sold</span>
+            </div>
+            <h3 class="card-name">{{ product.name }}</h3>
+            <p class="card-measurements" v-if="formatMeasurements(product)">
+              {{ formatMeasurements(product) }}
+            </p>
+            <span class="card-price">{{ formatPrice(product.base_price) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- pagination -->
+      <nav class="pagination-wrap" v-if="totalPages > 1" aria-label="Products pagination">
+        <button
+          class="page-btn page-arrow"
+          :disabled="currentPage === 1"
+          @click="goToPage(currentPage - 1)"
+          aria-label="Previous page"
+        >
+          <ChevronLeft :size="15" />
+        </button>
+
+        <template v-for="p in visiblePages" :key="p">
+          <span v-if="p === '…'" class="page-ellipsis">…</span>
+          <button
+            v-else
+            :class="['page-btn', { 'page-active': currentPage === p }]"
+            @click="goToPage(p)"
+          >{{ p }}</button>
+        </template>
+
+        <button
+          class="page-btn page-arrow"
+          :disabled="currentPage === totalPages"
+          @click="goToPage(currentPage + 1)"
+          aria-label="Next page"
+        >
+          <ChevronRight :size="15" />
+        </button>
+      </nav>
     </div>
+
   </div>
 </template>
 
@@ -305,160 +230,196 @@ onMounted(async () => {
   min-height: 100vh;
 }
 
-/* ── page header ── */
-.page-header {
-  background: #1e1a14;
-  color: #fff;
-  text-align: center;
-  padding: 3.5rem 1rem 3rem;
+/* ── hero ── */
+.shop-hero {
+  position: relative;
+  height: 300px;
+  background: #f0ebe2;   /* warm fallback while image loads */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
 }
-.page-title {
-  font-size: clamp(2.2rem, 5vw, 3.5rem);
+.hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;  /* keep visual content on the right */
+}
+.shop-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(30, 26, 20, 0.6) 0%, rgba(30, 26, 20, 0) 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-content {
+  position: relative;
+  z-index: 1;
+  padding: 0 5rem;
+}
+.hero-breadcrumb {
+  font-size: 0.78rem;
+  color: #2c2218;
+  margin-bottom: 0.9rem;
+  letter-spacing: 0.04em;
+}
+.hero-breadcrumb a {
+  color: #2c2218;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.hero-breadcrumb a:hover { color: #2c2218; }
+.hero-title {
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
   font-weight: 700;
-  letter-spacing: -0.01em;
-  margin-bottom: 0.4rem;
+  color: #2c2218;
+  line-height: 1.1;
+  margin-bottom: 0.55rem;
 }
-.page-sub {
+.hero-sub {
   font-size: 0.88rem;
-  letter-spacing: 0.1em;
-  opacity: 0.65;
+  color: #2c2218;
+  letter-spacing: 0.04em;
   margin: 0;
+  max-width: 320px;
 }
 
-/* ── controls bar ── */
-.controls-bar {
+/* ── filter bar ── */
+.filter-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.85rem 2rem;
+  padding: 0.7rem 5rem;
   background: #fff;
   border-bottom: 1px solid #e0d5c5;
   position: sticky;
-  top: 0;         /* sticks below the navbar (which is also sticky) */
-  z-index: 50;
+  top: 0;       /* adjust to match your navbar height if they overlap */
+  z-index: 90;  /* stay below Bootstrap's sticky navbar (z-index 1020) */
 }
-.ctrl-right {
+.filter-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.filter-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #7a6a58;
+  padding-right: 0.35rem;
+}
+.filter-right {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
-.ctrl-btn {
-  display: inline-flex;
-  align-items: center;
-  background: transparent;
-  border: 1px solid #2c2218;
-  color: #2c2218;
-  font-family: 'Times New Roman', serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0.45rem 1rem;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-.ctrl-btn:hover {
-  background: #1e1a14;
-  color: #fff;
-}
 .result-count {
   font-size: 0.8rem;
   color: #7a6a58;
+  white-space: nowrap;
 }
 .sort-select {
   background: transparent;
-  border: 1px solid #2c2218;
+  border: 1px solid #d0c5b5;
   color: #2c2218;
   font-family: 'Times New Roman', serif;
   font-size: 0.75rem;
-  letter-spacing: 0.05em;
-  padding: 0.45rem 0.75rem;
+  letter-spacing: 0.04em;
+  padding: 0.38rem 0.7rem;
   cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
 }
+.sort-select:hover { border-color: #c4a882; }
 
-/* ── layout ── */
-.layout-wrapper {
-  display: flex;
-  gap: 0;
-  align-items: flex-start;
-  padding: 1.5rem 2rem 3rem;
+/* ── filter dropdown trigger ── */
+.filter-dropdown {
+  position: relative;
 }
-
-/* ── sidebar ── */
-.sidebar {
-  width: 240px;
-  min-width: 240px;
-  background: #fff;
-  border: 1px solid #e0d5c5;
-  margin-right: 1.5rem;
-  flex-shrink: 0;
-  transition: width 0.3s ease, min-width 0.3s ease, margin 0.3s ease, opacity 0.25s ease;
-  overflow: hidden;
-}
-.layout-wrapper.sidebar-hidden .sidebar {
-  width: 0;
-  min-width: 0;
-  margin-right: 0;
-  opacity: 0;
-  border: none;
-}
-.sidebar-inner {
-  padding: 1.25rem;
-  min-width: 210px;
-}
-
-.clear-btn {
+.filter-btn {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 100%;
+  gap: 0.45rem;
   background: transparent;
-  border: 1px solid #e0d5c5;
-  color: #7a6a58;
-  font-family: 'Times New Roman', serif;
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0.45rem 1rem;
-  cursor: pointer;
-  margin-bottom: 1.25rem;
-  transition: border-color 0.2s, color 0.2s;
-}
-.clear-btn:not(:disabled):hover {
-  border-color: #2c2218;
+  border: 1px solid #d0c5b5;
   color: #2c2218;
+  font-family: 'Times New Roman', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  padding: 0.38rem 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  white-space: nowrap;
 }
-.clear-btn:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
+.filter-btn:hover {
+  border-color: #b09070;
+}
+.filter-btn.is-open {
+  background: #2c2218;
+  border-color: #2c2218;
+  color: #fff;
 }
 
-.filter-section {
-  margin-bottom: 1.25rem;
+.btn-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
 }
-.filter-section + .filter-section {
-  border-top: 1px solid #e0d5c5;
-  padding-top: 1.1rem;
+
+/* dot indicator — shows when that filter has active selections */
+.active-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 0.25rem;
+  background: #c4a882;
+  flex-shrink: 0;
 }
-.filter-heading {
-  font-size: 0.68rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #2c2218;
-  font-weight: 700;
-  margin-bottom: 0.75rem;
+.filter-btn.is-open .active-dot {
+  background: rgba(255,255,255,0.8);
 }
-.filter-label {
+
+/* chevron rotates 180° when open */
+.btn-chevron {
+  transition: transform 0.22s ease;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+.filter-btn.is-open .btn-chevron {
+  transform: rotate(180deg);
+  opacity: 1;
+}
+
+/* ── dropdown panel ── */
+.filter-panel {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  min-width: 190px;
+  background: #fff;
+  border: 1px solid #e0d5c5;
+  box-shadow: 0 10px 30px rgba(30, 26, 20, 0.1);
+  z-index: 200;
+  max-height: 290px;
+  overflow-y: auto;
+  padding: 0.4rem 0;
+}
+.panel-item {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.65rem;
+  padding: 0.48rem 1rem;
   font-size: 0.83rem;
   color: #2c2218;
   cursor: pointer;
-  padding: 0.22rem 0;
-  transition: color 0.2s;
+  transition: background 0.15s;
 }
-.filter-label:hover { color: #c4a882; }
-.filter-checkbox {
+.panel-item:hover { background: #faf7f2; }
+.panel-checkbox {
   accent-color: #c4a882;
   width: 14px;
   height: 14px;
@@ -466,14 +427,36 @@ onMounted(async () => {
   flex-shrink: 0;
 }
 
-/* ── products area ── */
-.products-area { flex: 1; min-width: 0; }
-
-.state-msg {
-  text-align: center;
-  padding: 5rem 2rem;
+/* ── clear all ── */
+.clear-all-btn {
+  background: transparent;
+  border: none;
   color: #7a6a58;
-  font-size: 0.95rem;
+  font-family: 'Times New Roman', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  padding: 0.38rem 0.5rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s;
+}
+.clear-all-btn:hover { color: #2c2218; }
+
+/* ── dropdown slide-down animation ── */
+.drop-enter-active { transition: opacity 0.2s ease, transform 0.2s ease; }
+.drop-leave-active { transition: opacity 0.14s ease, transform 0.14s ease; }
+.drop-enter-from  { opacity: 0; transform: translateY(-7px); }
+.drop-leave-to    { opacity: 0; transform: translateY(-7px); }
+
+/* ── fade for clear-all button ── */
+.fade-enter-active { transition: opacity 0.18s; }
+.fade-leave-active { transition: opacity 0.12s; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+
+/* ── products area ── */
+.products-container {
+  padding: 2rem 5rem 4rem;
 }
 
 /* ── product grid ── */
@@ -491,9 +474,7 @@ onMounted(async () => {
   overflow: hidden;
   transition: box-shadow 0.3s;
 }
-.product-card:hover {
-  box-shadow: 0 6px 24px rgba(30, 26, 20, 0.1);
-}
+.product-card:hover { box-shadow: 0 6px 24px rgba(30, 26, 20, 0.1); }
 
 .card-img-wrapper {
   position: relative;
@@ -515,7 +496,6 @@ onMounted(async () => {
 .product-card:hover .img-secondary { opacity: 1; }
 
 .card-body { padding: 0.85rem; }
-
 .card-meta {
   display: flex;
   justify-content: space-between;
@@ -530,10 +510,7 @@ onMounted(async () => {
   color: #fff;
   padding: 0.15rem 0.5rem;
 }
-.card-sold {
-  font-size: 0.68rem;
-  color: #7a6a58;
-}
+.card-sold { font-size: 0.68rem; color: #7a6a58; }
 .card-name {
   font-size: 0.88rem;
   font-weight: 600;
@@ -542,32 +519,27 @@ onMounted(async () => {
   margin-bottom: 0.3rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.card-measurements {
-  font-size: 0.7rem;
-  color: #7a6a58;
-  letter-spacing: 0.03em;
-  margin-bottom: 0.55rem;
-}
-.card-price {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #2c2218;
-}
+.card-measurements { font-size: 0.7rem; color: #7a6a58; margin-bottom: 0.55rem; }
+.card-price { font-size: 0.95rem; font-weight: 700; color: #2c2218; }
+
+/* ── loading / empty ── */
+.state-msg { text-align: center; padding: 5rem 2rem; color: #7a6a58; font-size: 0.95rem; }
 
 /* ── pagination ── */
 .pagination-wrap {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.35rem;
-  padding-top: 1rem;
+  gap: 0.3rem;
+  padding-top: 1.5rem;
 }
 .page-btn {
-  min-width: 36px;
-  height: 36px;
+  min-width: 38px;
+  height: 38px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -575,55 +547,35 @@ onMounted(async () => {
   border: 1px solid #e0d5c5;
   color: #2c2218;
   font-family: 'Times New Roman', serif;
-  font-size: 0.83rem;
+  font-size: 0.85rem;
   cursor: pointer;
-  padding: 0 0.4rem;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
-.page-btn:hover:not(:disabled) {
-  background: #1e1a14;
-  color: #fff;
-  border-color: #1e1a14;
-}
+.page-btn:hover:not(:disabled) { border-color: #2c2218; }
 .page-btn.page-active {
-  background: #1e1a14;
+  background: #2c2218;
   color: #fff;
-  border-color: #1e1a14;
+  border-color: #2c2218;
 }
-.page-btn:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-.page-ellipsis {
-  color: #7a6a58;
-  padding: 0 0.2rem;
-  font-size: 0.85rem;
-}
+.page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.page-ellipsis { color: #7a6a58; padding: 0 0.25rem; }
 
 /* ── responsive ── */
 @media (max-width: 1199px) {
   .product-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 991px) {
-  .product-grid { grid-template-columns: repeat(2, 1fr); }
-  .sidebar {
-    width: 200px;
-    min-width: 200px;
-  }
+  .filter-bar         { padding: 0.7rem 2.5rem; }
+  .products-container { padding: 2rem 2.5rem 4rem; }
+  .hero-content       { padding: 0 2.5rem; }
+  .product-grid       { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 767px) {
-  .layout-wrapper { flex-direction: column; padding: 1rem; }
-  .sidebar {
-    width: 100% !important;
-    min-width: 100% !important;
-    margin-right: 0;
-    margin-bottom: 1rem;
-  }
-  .layout-wrapper.sidebar-hidden .sidebar {
-    display: none;
-  }
-  .controls-bar { padding: 0.75rem 1rem; }
-  .product-grid { grid-template-columns: repeat(2, 1fr); }
+  .filter-bar         { flex-wrap: wrap; gap: 0.6rem; padding: 0.7rem 1.25rem; }
+  .filter-right       { width: 100%; justify-content: space-between; }
+  .products-container { padding: 1.5rem 1.25rem 3rem; }
+  .hero-content       { padding: 0 1.5rem; }
+  .shop-hero          { height: 220px; }
 }
 @media (max-width: 480px) {
   .product-grid { grid-template-columns: 1fr; }
