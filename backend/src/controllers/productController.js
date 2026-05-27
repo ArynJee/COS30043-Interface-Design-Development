@@ -1,6 +1,6 @@
 import db from "../db/db.js";
 
-// GET /api/products?page=1&limit=12&sort=default&category_ids=1,2&tag_ids=3
+// GET /api/products?page=1&limit=12&sort=default&category_ids=1,2&tag_ids=3&search=chair
 export const getProducts = async (req, res) => {
   try {
     const {
@@ -9,6 +9,7 @@ export const getProducts = async (req, res) => {
       category_ids = "",
       tag_ids = "",
       sort = "default",
+      search = "",
     } = req.query;
 
     const offset = (parseInt(page) - 1) * parseInt(limit);
@@ -30,6 +31,11 @@ export const getProducts = async (req, res) => {
         conditions.push(`p.tag_id = ANY($${idx++}::int[])`);
         params.push(ids);
       }
+    }
+
+    if (search.trim()) {
+      conditions.push(`p.name ILIKE $${idx++}`);
+      params.push(`%${search.trim()}%`);
     }
 
     const where = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
