@@ -22,41 +22,40 @@ const searchQuery = ref('')
   <nav class="top-navbar d-none d-lg-flex">
     <div class="container d-flex align-items-center h-100">
       <!-- Logo -->
-      <router-link to="/" class="brand">ComfyHome</router-link>
+      <router-link to="/" class="brand fw-bold text-uppercase text-decoration-none">ComfyHome</router-link>
 
-      <!-- Right: nav links + utility icons -->
-      <div class="right-cluster">
-        <ul class="nav-links">
-          <li v-for="link in navLinks" :key="link.name">
-            <router-link
-              :to="link.path"
-              class="nav-item"
-              :class="{ 'is-active': route.path.startsWith(link.path) }"
-            >
-              {{ link.name }}
-            </router-link>
-          </li>
-        </ul>
-
-        <div class="utility-icons">
-          <router-link title="Locations" to="/locations" class="icon-btn">
-            <MapPin :size="19" />
+      <!-- Nav links: directly after logo -->
+      <ul class="nav-links">
+        <li v-for="link in navLinks" :key="link.name">
+          <router-link
+            :to="link.path"
+            class="nav-item"
+            :class="{ 'is-active': route.path.startsWith(link.path) }"
+          >
+            {{ link.name }}
           </router-link>
+        </li>
+      </ul>
 
-          <!-- search bar -->
-          <label class="search-pill">
-            <Search :size="14" class="search-icon-inner" />
-            <input v-model="searchQuery" type="text" placeholder="Search…" />
-          </label>
+      <!-- right -->
+      <div class="utility-icons d-flex align-items-center gap-3 ms-auto">
+        <!-- search bar left of location -->
+        <label class="search-pill d-flex align-items-center gap-2 px-2 py-1 rounded-pill mt-2">
+          <Search :size="14" class="search-icon-inner" />
+          <input v-model="searchQuery" type="text" placeholder="Search…" />
+        </label>
 
-          <router-link title="Cart" to="/cart" class="icon-btn">
-            <ShoppingCart :size="19" />
-          </router-link>
+        <router-link title="Locations" to="/locations" class="icon-btn">
+          <MapPin :size="19" />
+        </router-link>
 
-          <router-link title="Profile" :to="profileRoute" class="icon-btn">
-            <UserCircle :size="21" />
-          </router-link>
-        </div>
+        <router-link title="Cart" to="/cart" class="icon-btn">
+          <ShoppingCart :size="19" />
+        </router-link>
+
+        <router-link title="Profile" :to="profileRoute" class="icon-btn">
+          <UserCircle :size="21" />
+        </router-link>
       </div>
     </div>
   </nav>
@@ -75,7 +74,7 @@ const searchQuery = ref('')
       </button>
     </div>
 
-    <!-- Search (expanded only) -->
+    <!-- expanded search bar -->
     <div class="sb-search d-flex align-items-center gap-2 rounded-pill mx-2 mt-3 mb-1 px-2 py-1 overflow-hidden">
       <Search :size="14" class="sb-search-icon" />
       <input v-model="searchQuery" type="text" placeholder="Search…" class="sb-search-input border-0 w-100" />
@@ -96,7 +95,7 @@ const searchQuery = ref('')
       </router-link>
     </nav>
 
-    <!-- Bottom utility links -->
+    <!-- bottom utility links -->
     <div class="sb-bottom d-flex flex-column gap-1 p-2">
       <router-link to="/locations" class="sb-link position-relative d-flex align-items-center gap-3 rounded-2 px-2 py-2 overflow-hidden text-decoration-none">
         <MapPin :size="19" class="sb-icon" />
@@ -130,35 +129,25 @@ const searchQuery = ref('')
   position: sticky;
   top: 0;
   z-index: 900;
-  height: 62px;
+  height: 80px;
   background: #fff;
   border-bottom: 1px solid #e8e3dc;
   font-family: 'Times New Roman', Times, serif;
 }
 
 .brand {
-  font-weight: 800;
   font-size: 1.25rem;
   letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: #2c2218;
-  text-decoration: none;
+  color: #473829;
   white-space: nowrap;
 }
 
-.right-cluster {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  margin-left: auto;
-}
-
-/* Nav links */
+/* Nav links sit directly after logo */
 .nav-links {
   list-style: none;
   display: flex;
   gap: 4px;
-  margin: 0;
+  margin: 0 0 0 24px;
   padding: 0;
 }
 
@@ -167,7 +156,6 @@ const searchQuery = ref('')
   display: inline-block;
   padding: 6px 10px;
   font-size: 0.78rem;
-  font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: #2c2218;
@@ -176,19 +164,18 @@ const searchQuery = ref('')
   border-radius: 6px;
 }
 
-/* Animated underline bar */
+/* animated underline bar */
 .nav-item::after {
   content: '';
   position: absolute;
-  bottom: 2px;
+  bottom: 1px;
   left: 10px;
   right: 10px;
   height: 2px;
   background: #8b6f47;
-  border-radius: 2px;
   transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+  transition: transform 0.3s cubic-bezier(0, 0, 0.01, 1);
 }
 
 .nav-item:hover {
@@ -201,19 +188,10 @@ const searchQuery = ref('')
 /* Active state */
 .nav-item.is-active {
   color: #8b6f47;
-  background: rgba(139, 111, 71, 0.07);
 }
 .nav-item.is-active::after {
   transform: scaleX(1);
 }
-
-/* Utility icons */
-.utility-icons {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
 .icon-btn {
   display: flex;
   align-items: center;
@@ -225,26 +203,19 @@ const searchQuery = ref('')
   transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 .icon-btn:hover {
-  background: rgba(139, 111, 71, 0.1);
   color: #8b6f47;
   transform: translateY(-1px);
 }
-
-/* Search pill */
 .search-pill {
-  display: flex;
-  align-items: center;
-  gap: 6px;
   background: #f5f2ee;
   border: 1px solid #e4ddd5;
-  border-radius: 999px;
-  padding: 5px 12px;
   cursor: text;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  min-width: 180px;
 }
 .search-pill:focus-within {
   border-color: #8b6f47;
-  box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.12);
+  box-shadow: 0 0 0 2px rgba(139, 111, 71, 0.12);
 }
 .search-icon-inner {
   color: #9b8b79;
