@@ -18,6 +18,8 @@ export default function useProducts() {
   const selectedTags        = ref([])
   const sortBy              = ref('default')
   const sidebarOpen         = ref(true)
+  const searchQuery         = ref('')
+  let   searchTimer         = null
 
   // ── slug → category name (from home page ?type= links) ─
   const slugToName = {
@@ -30,7 +32,7 @@ export default function useProducts() {
 
   // ── computed ───────────────────────────────────────────
   const hasActiveFilters = computed(
-    () => selectedCategories.value.length > 0 || selectedTags.value.length > 0
+    () => selectedCategories.value.length > 0 || selectedTags.value.length > 0 || searchQuery.value.trim() !== ''
   )
 
   // show only tags belonging to selected categories (or all if none selected)
@@ -74,6 +76,7 @@ export default function useProducts() {
       const params = { page: currentPage.value, limit: 12, sort: sortBy.value }
       if (selectedCategories.value.length) params.category_ids = selectedCategories.value.join(',')
       if (selectedTags.value.length)       params.tag_ids      = selectedTags.value.join(',')
+      if (searchQuery.value.trim())        params.search       = searchQuery.value.trim()
 
       const data = await getProductsApi(params)
       products.value   = data.products
@@ -89,6 +92,15 @@ export default function useProducts() {
     currentPage.value = 1
     fetchProducts()
   }, { deep: true })
+
+  // debounced re-fetch when search query changes
+  watch(searchQuery, () => {
+    clearTimeout(searchTimer)
+    searchTimer = setTimeout(() => {
+      currentPage.value = 1
+      fetchProducts()
+    }, 350)
+  })
 
   // deselect tags that no longer belong to selected categories
   watch(selectedCategories, (cats) => {
@@ -125,6 +137,7 @@ export default function useProducts() {
   const clearFilters = () => {
     selectedCategories.value = []
     selectedTags.value = []
+    searchQuery.value = ''
   }
 
   // ── init ───────────────────────────────────────────────
@@ -156,6 +169,7 @@ export default function useProducts() {
     selectedTags,
     sortBy,
     sidebarOpen,
+    searchQuery,
     // computed
     hasActiveFilters,
     visibleTags,

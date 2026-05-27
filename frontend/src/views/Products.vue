@@ -1,12 +1,12 @@
 <script setup>
 import { ref, watch, onBeforeUnmount } from 'vue'
 import { RouterLink } from 'vue-router'
-import { ChevronLeft, ChevronRight, ChevronDown } from '@lucide/vue'
+import { ChevronLeft, ChevronRight, ChevronDown, Search, ShoppingCart } from '@lucide/vue'
 import useProducts from '@/hooks/useProducts.js'
 
 const {
   products, total, totalPages, currentPage, loading,
-  categories, selectedCategories, selectedTags, sortBy,
+  categories, selectedCategories, selectedTags, sortBy, searchQuery,
   hasActiveFilters, visibleTags, visiblePages,
   formatPrice, formatMeasurements,
   goToPage, toggleCategory, toggleTag, clearFilters,
@@ -137,8 +137,17 @@ onBeforeUnmount(() => {
         </Transition>
       </div>
 
-      <!-- right: count + sort -->
+      <!-- right: search + count + sort -->
       <div class="filter-right">
+        <div class="search-bar">
+          <Search :size="14" class="search-icon" />
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search products…"
+            class="search-input"
+          />
+        </div>
         <span class="result-count">{{ total }} items</span>
         <select class="sort-select" v-model="sortBy">
           <option value="default">Default Sorting</option>
@@ -184,7 +193,12 @@ onBeforeUnmount(() => {
             <p class="card-measurements" v-if="formatMeasurements(product)">
               {{ formatMeasurements(product) }}
             </p>
-            <span class="card-price">{{ formatPrice(product.base_price) }}</span>
+            <div class="card-footer">
+              <span class="card-price">{{ formatPrice(product.base_price) }}</span>
+              <button class="add-to-cart-btn" :title="`Add ${product.name} to cart`">
+                <ShoppingCart :size="14" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -524,7 +538,56 @@ onBeforeUnmount(() => {
   overflow: hidden;
 }
 .card-measurements { font-size: 0.7rem; color: #7a6a58; margin-bottom: 0.55rem; }
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .card-price { font-size: 0.95rem; font-weight: 700; color: #2c2218; }
+.add-to-cart-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #2c2218;
+  color: #fff;
+  border: none;
+  padding: 0.38rem 0.55rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.add-to-cart-btn:hover { background: #c4a882; }
+
+/* ── search bar ── */
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  color: #7a6a58;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+.search-input {
+  border: 1px solid #d0c5b5;
+  border-radius: 9999px;
+  padding: 0.38rem 0.9rem 0.38rem 2.1rem;
+  font-family: 'Times New Roman', serif;
+  font-size: 0.78rem;
+  color: #2c2218;
+  background: transparent;
+  outline: none;
+  width: 200px;
+  transition: border-color 0.2s, width 0.2s;
+}
+.search-input::placeholder { color: #b0a090; }
+.search-input:focus {
+  border-color: #c4a882;
+  width: 240px;
+}
 
 /* ── loading / empty ── */
 .state-msg { text-align: center; padding: 5rem 2rem; color: #7a6a58; font-size: 0.95rem; }
