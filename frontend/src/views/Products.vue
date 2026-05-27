@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, onBeforeUnmount } from "vue";
 import { RouterLink } from "vue-router";
-import { ChevronLeft, ChevronRight, ChevronDown, Search } from "@lucide/vue";
+import { ChevronLeft, ChevronRight, ChevronDown, Search, Plus} from "@lucide/vue";
 import useProducts from "@/hooks/useProducts.js";
 
 const {
@@ -70,40 +70,40 @@ onBeforeUnmount(() => {
 <template>
   <div class="products-page">
     <!-- ── hero ── -->
-    <section class="shop-hero">
-      <img src="/product/product-hero.png" alt="" class="hero-img" />
-      <div class="hero-content">
-        <p class="hero-breadcrumb">
+    <section class="shop-hero position-relative overflow-hidden d-flex align-items-center">
+      <img src="/product/product-hero.png" alt="" class="hero-img position-absolute w-100 h-100 object-fit-cover" />
+      <div class="hero-content position-relative z-1">
+        <p class="hero-breadcrumb mb-3">
           <RouterLink to="/">Home</RouterLink>&ensp;&rsaquo;&ensp;Products
         </p>
-        <h1 class="hero-title">Our Collection</h1>
-        <p class="hero-sub">Curated furniture for every room in your home</p>
+        <h1 class="hero-title fw-bold mb-3">Our Collection</h1>
+        <p class="hero-sub m-0">Curated furniture for every room in your home</p>
       </div>
     </section>
 
     <!-- ── filter + sort bar ── -->
-    <div class="filter-bar">
+    <div class="filter-bar d-flex align-items-center justify-content-between position-sticky mt-5">
       <!-- left: dropdowns -->
-      <div class="filter-left">
-        <span class="filter-label">Filter by</span>
+      <div class="d-flex align-items-center gap-2">
+        <span class="filter-label pe-2 text-uppercase">Filter by</span>
 
         <!-- Category dropdown -->
         <div class="filter-dropdown" ref="categoryDropdownRef">
           <button
-            class="filter-btn"
+            class="filter-btn d-inline-flex align-items-center gap-1 pointer px-3 py-2"
             :class="{ 'is-open': openDropdown === 'category' }"
             @click="toggleDropdown('category')"
           >
-            <span class="btn-label">
-              <span class="active-dot" v-if="selectedCategories.length" />
+            <span class="d-inline-flex align-items-center gap-1">
+              <span class="active-dot d-inline-block rounded-3 me-2" v-if="selectedCategories.length" />
               Categories
             </span>
             <ChevronDown :size="13" class="btn-chevron" />
           </button>
 
           <Transition name="drop">
-            <div class="filter-panel" v-if="openDropdown === 'category'">
-              <label v-for="cat in categories" :key="cat.id" class="panel-item">
+            <div class="filter-panel position-absolute overflow-y-auto left-0" v-if="openDropdown === 'category'">
+              <label v-for="cat in categories" :key="cat.id" class="panel-item d-flex align-items-center gap-1 px-3 py-2">
                 <input
                   type="checkbox"
                   class="panel-checkbox"
@@ -119,23 +119,23 @@ onBeforeUnmount(() => {
         <!-- Product Type dropdown -->
         <div class="filter-dropdown" ref="tagDropdownRef">
           <button
-            class="filter-btn"
+            class="filter-btn d-inline-flex align-items-center gap-1 pointer px-3 py-2"
             :class="{ 'is-open': openDropdown === 'tag' }"
             @click="toggleDropdown('tag')"
           >
-            <span class="btn-label">
-              <span class="active-dot" v-if="selectedTags.length" />
+            <span class="d-inline-flex align-items-center gap-1">
+              <span class="active-dot d-inline-block rounded-3 me-2" v-if="selectedTags.length" />
               Product Type
             </span>
             <ChevronDown :size="13" class="btn-chevron" />
           </button>
 
           <Transition name="drop">
-            <div class="filter-panel" v-if="openDropdown === 'tag'">
+            <div class="filter-panel position-absolute overflow-y-auto left-0" v-if="openDropdown === 'tag'">
               <label
                 v-for="tag in visibleTags"
                 :key="tag.id"
-                class="panel-item"
+                class="panel-item d-flex align-items-center gap-1 px-3 py-2"
               >
                 <input
                   type="checkbox"
@@ -153,7 +153,7 @@ onBeforeUnmount(() => {
         <Transition name="fade">
           <button
             v-if="hasActiveFilters"
-            class="clear-all-btn"
+            class="clear-all-btn border-0 text-decoration-underline px-2"
             @click="clearFilters"
           >
             &times; Clear All
@@ -162,14 +162,14 @@ onBeforeUnmount(() => {
       </div>
 
       <!-- right: search + count + sort -->
-      <div class="filter-right">
-        <div class="search-wrap">
-          <Search :size="13" class="search-icon" />
+      <div class="filter-right d-flex align-items-center gap-3">
+        <div class="position-relative d-flex align-items-center">
+          <Search :size="13" class="search-icon position-absolute pe-none" />
           <input
             v-model="searchQuery"
             type="text"
             placeholder="Search products…"
-            class="search-input"
+            class="search-input rounded-pill"
           />
         </div>
         <span class="result-count">{{ total }} items</span>
@@ -177,20 +177,20 @@ onBeforeUnmount(() => {
         <!-- custom sort dropdown -->
         <div class="filter-dropdown" ref="sortDropdownRef">
           <button
-            class="filter-btn"
+            class="filter-btn d-inline-flex align-items-center gap-1 pointer px-3 py-2"
             :class="{ 'is-open': openDropdown === 'sort' }"
             @click="toggleDropdown('sort')"
           >
-            <span class="btn-label">{{ sortLabels[sortBy] }}</span>
+            <span class="d-inline-flex align-items-center gap-1">{{ sortLabels[sortBy] }}</span>
             <ChevronDown :size="13" class="btn-chevron" />
           </button>
           <Transition name="drop">
-            <div class="filter-panel sort-panel" v-if="openDropdown === 'sort'">
+            <div class="filter-panel sort-panel position-absolute overflow-y-auto left-0" v-if="openDropdown === 'sort'">
               <button
                 v-for="(label, val) in sortLabels"
                 :key="val"
-                class="panel-item sort-option"
-                :class="{ 'sort-active': sortBy === val }"
+                class="panel-item sort-option d-flex align-items-center gap-1 px-3 py-2 border-0 w-100 text-start"
+                :class="{ 'sort-active fw-bold': sortBy === val }"
                 @click="
                   sortBy = val;
                   openDropdown = null;
@@ -204,7 +204,7 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <!-- ── products ── -->
+    <!-- products -->
     <div class="products-container">
       <div v-if="loading" class="state-msg">Loading products…</div>
 
@@ -212,37 +212,37 @@ onBeforeUnmount(() => {
         No products found. Try adjusting your filters.
       </div>
 
-      <div v-else class="product-grid">
-        <div v-for="product in products" :key="product.id" class="product-card">
+      <div v-else class="product-grid d-grid gap-4 mb-5">
+        <div v-for="product in products" :key="product.id" class="product-card overflow-hidden">
           <!-- image with hover swap -->
-          <router-link :to="`/products/${product.id}`" class="card-img-wrapper">
+          <router-link :to="`/products/${product.id}`" class="card-img-wrapper position-relative d-block overflow-hidden">
             <img
               :src="product.images[0]"
               :alt="product.name"
-              class="img-primary"
+              class="img-primary position-absolute inset-0 w-100 h-100 object-fit-cover"
             />
             <img
               :src="product.images[1] ?? product.images[0]"
               :alt="product.name"
-              class="img-secondary"
+              class="img-secondary position-absolute inset-0 w-100 h-100 object-fit-cover"
             />
           </router-link>
 
           <!-- card info -->
           <div class="card-body">
-            <div class="card-meta">
-              <span class="card-category-badge">{{ product.category }}</span>
+            <div class="card-meta d-flex align-items-center justify-content-between mb-4">
+              <span class="card-category-badge text-uppercase">{{ product.category }}</span>
               <span class="card-sold">{{ product.sold_count }} sold</span>
             </div>
-            <h3 class="card-name">{{ product.name }}</h3>
+            <h3 class="card-name fw-bold mb-2 overflow-hidden">{{ product.name }}</h3>
             <p class="card-measurements" v-if="formatMeasurements(product)">
               {{ formatMeasurements(product) }}
             </p>
-            <div class="card-price-row">
-              <span class="card-price">{{
+            <div class="card-price-row d-flex align-items-center justify-content-between mt-3">
+              <span class="card-price fw-bold">{{
                 formatPrice(product.base_price)
               }}</span>
-              <button class="card-add-btn">Add to Cart</button>
+              <button class="card-add-btn border-0 px-2 py-2"><Plus size="14" class="me-1 justify-content-center text-center"/>Add to Cart</button>
             </div>
           </div>
         </div>
@@ -296,20 +296,12 @@ onBeforeUnmount(() => {
 
 /* ── hero ── */
 .shop-hero {
-  position: relative;
-  height: 300px;
-  background: #f0ebe2; /* warm fallback while image loads */
-  overflow: hidden;
-  display: flex;
-  align-items: center;
+  height: 400px;
+  background: #f0ebe2;
 }
 .hero-img {
-  position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: right center; /* keep visual content on the right */
+  object-position: right center;
 }
 .shop-hero::after {
   content: "";
@@ -317,74 +309,48 @@ onBeforeUnmount(() => {
   inset: 0;
   background: linear-gradient(
     to right,
-    rgba(30, 26, 20, 0.6) 0%,
-    rgba(30, 26, 20, 0) 65%
+    rgba(30, 26, 20, 0.8) 0%,
+    rgba(30, 26, 20, 0) 70%
   );
   pointer-events: none;
   z-index: 0;
 }
 .hero-content {
-  position: relative;
-  z-index: 1;
   padding: 0 5rem;
 }
 .hero-breadcrumb {
   font-size: 0.78rem;
-  color: #2c2218;
-  margin-bottom: 0.9rem;
+  color: #f0e1cc;
   letter-spacing: 0.04em;
 }
 .hero-breadcrumb a {
-  color: #2c2218;
+  color: #f0e1cc;
   text-decoration: none;
   transition: color 0.2s;
 }
 .hero-breadcrumb a:hover {
-  color: #2c2218;
+  color: #dbbea0;
 }
 .hero-title {
-  font-size: clamp(2.2rem, 4vw, 3.2rem);
-  font-weight: 700;
-  color: #2c2218;
+  font-size: clamp(2.2rem, 4vw, 3.2rem); 
+  color: #f0e1cc;
   line-height: 1.1;
-  margin-bottom: 0.55rem;
 }
 .hero-sub {
-  font-size: 0.88rem;
-  color: #2c2218;
+  font-size: 0.85rem;
+  color: #f0e1cc;
   letter-spacing: 0.04em;
-  margin: 0;
   max-width: 320px;
 }
-
 /* ── filter bar ── */
 .filter-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 0.7rem 5rem;
-  background: #fff;
-  border-bottom: 1px solid #e0d5c5;
-  position: sticky;
-  top: 0; /* adjust to match your navbar height if they overlap */
-  z-index: 90; /* stay below Bootstrap's sticky navbar (z-index 1020) */
-}
-.filter-left {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
+  z-index: 90;
 }
 .filter-label {
   font-size: 0.72rem;
   letter-spacing: 0.12em;
-  text-transform: uppercase;
   color: #7a6a58;
-  padding-right: 0.35rem;
-}
-.filter-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
 }
 .result-count {
   font-size: 0.8rem;
@@ -392,21 +358,13 @@ onBeforeUnmount(() => {
   white-space: nowrap;
 }
 /* ── search bar ── */
-.search-wrap {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
 .search-icon {
-  position: absolute;
   left: 0.6rem;
   color: #9a8a78;
-  pointer-events: none;
   flex-shrink: 0;
 }
 .search-input {
   border: 1px solid #d0c5b5;
-  border-radius: 999px;
   padding: 0.35rem 0.8rem 0.35rem 2rem;
   font-family: "Times New Roman", serif;
   font-size: 0.78rem;
@@ -414,7 +372,6 @@ onBeforeUnmount(() => {
   background: transparent;
   outline: none;
   transition: border-color 0.2s;
-  width: 190px;
 }
 .search-input:focus {
   border-color: #b09070;
@@ -428,17 +385,12 @@ onBeforeUnmount(() => {
   position: relative;
 }
 .filter-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
   background: transparent;
   border: 1px solid #d0c5b5;
   color: #2c2218;
   font-family: "Times New Roman", serif;
   font-size: 0.78rem;
   letter-spacing: 0.05em;
-  padding: 0.38rem 0.8rem;
-  cursor: pointer;
   transition:
     border-color 0.2s,
     background 0.2s,
@@ -454,19 +406,10 @@ onBeforeUnmount(() => {
   color: #fff;
 }
 
-.btn-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-
 /* dot indicator — shows when that filter has active selections */
 .active-dot {
-  display: inline-block;
   width: 6px;
   height: 6px;
-  border-radius: 50%;
-  margin-right: 0.25rem;
   background: #c4a882;
   flex-shrink: 0;
 }
@@ -487,27 +430,19 @@ onBeforeUnmount(() => {
 
 /* ── dropdown panel ── */
 .filter-panel {
-  position: absolute;
   top: calc(100% + 5px);
-  left: 0;
   min-width: 190px;
   background: #fff;
   border: 1px solid #e0d5c5;
   box-shadow: 0 10px 30px rgba(30, 26, 20, 0.1);
   z-index: 200;
   max-height: 290px;
-  overflow-y: auto;
-  padding: 0.4rem 0;
 }
 .panel-item {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  padding: 0.48rem 1rem;
   font-size: 0.83rem;
   color: #2c2218;
-  cursor: pointer;
   transition: background 0.15s;
+  cursor: pointer;
 }
 .panel-item:hover {
   background: #faf7f2;
@@ -517,15 +452,10 @@ onBeforeUnmount(() => {
   left: auto;
 }
 .sort-option {
-  width: 100%;
   background: none;
-  border: none;
   font-family: "Times New Roman", serif;
-  text-align: left;
-  cursor: pointer;
 }
 .sort-active {
-  font-weight: 600;
   color: #2c2218;
 }
 .panel-checkbox {
@@ -539,14 +469,11 @@ onBeforeUnmount(() => {
 /* ── clear all ── */
 .clear-all-btn {
   background: transparent;
-  border: none;
   color: #7a6a58;
   font-family: "Times New Roman", serif;
   font-size: 0.78rem;
   letter-spacing: 0.04em;
   cursor: pointer;
-  padding: 0.38rem 0.5rem;
-  text-decoration: underline;
   text-underline-offset: 2px;
   transition: color 0.2s;
 }
@@ -588,22 +515,18 @@ onBeforeUnmount(() => {
 
 /* ── products area ── */
 .products-container {
-  padding: 2rem 5rem 4rem;
+  padding: 2rem 5rem 4rem;  
 }
 
 /* ── product grid ── */
 .product-grid {
-  display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.15rem;
-  margin-bottom: 2.5rem;
 }
 
 /* ── product card ── */
 .product-card {
   background: #fff;
   border: 1px solid #e0d5c5;
-  overflow: hidden;
   transition: box-shadow 0.3s;
 }
 .product-card:hover {
@@ -611,19 +534,11 @@ onBeforeUnmount(() => {
 }
 
 .card-img-wrapper {
-  position: relative;
-  display: block;
-  overflow: hidden;
   aspect-ratio: 4 / 3;
 }
 .img-primary,
 .img-secondary {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: opacity 0.45s ease;
+  transition: opacity 0.40s ease;
 }
 .img-secondary {
   opacity: 0;
@@ -638,16 +553,9 @@ onBeforeUnmount(() => {
 .card-body {
   padding: 0.85rem;
 }
-.card-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.45rem;
-}
 .card-category-badge {
   font-size: 0.6rem;
   letter-spacing: 0.12em;
-  text-transform: uppercase;
   background: #c4a882;
   color: #fff;
   padding: 0.15rem 0.5rem;
@@ -658,40 +566,27 @@ onBeforeUnmount(() => {
 }
 .card-name {
   font-size: 0.88rem;
-  font-weight: 600;
   color: #2c2218;
   line-height: 1.35;
-  margin-bottom: 0.3rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 .card-measurements {
   font-size: 0.7rem;
   color: #7a6a58;
-  margin-bottom: 0.55rem;
-}
-.card-price-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
 }
 .card-price {
   font-size: 0.95rem;
-  font-weight: 700;
   color: #2c2218;
 }
 .card-add-btn {
   background: #2c2218;
   color: #fff;
-  border: none;
   font-family: "Times New Roman", serif;
   font-size: 0.7rem;
   letter-spacing: 0.06em;
-  padding: 0.3rem 0.65rem;
   cursor: pointer;
   white-space: nowrap;
   transition: background 0.2s;
