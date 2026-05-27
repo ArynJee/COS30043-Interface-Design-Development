@@ -7,6 +7,7 @@ import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 import Registration from '@/views/Registration.vue'
 import Products from '@/views/Products.vue'
+import Showcase from '@/views/Showcase.vue'
 
 const routes = [
   {
@@ -15,6 +16,7 @@ const routes = [
     children: [
       { path: '', component: Home },
       { path: 'products', component: Products },
+      { path: 'showcase', component: Showcase },
       // other main pages here
     ],
   },

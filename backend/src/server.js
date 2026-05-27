@@ -6,6 +6,7 @@ import "./db/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
+import showcaseRoutes from "./routes/showcaseRoutes.js";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/feedback", feedbackRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/showcase", showcaseRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend running");

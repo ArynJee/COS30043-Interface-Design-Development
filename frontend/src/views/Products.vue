@@ -1,7 +1,13 @@
 <script setup>
 import { ref, watch, onBeforeUnmount } from "vue";
 import { RouterLink } from "vue-router";
-import { ChevronLeft, ChevronRight, ChevronDown, Search, Plus} from "@lucide/vue";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
+  Search,
+  Plus,
+} from "@lucide/vue";
 import useProducts from "@/hooks/useProducts.js";
 
 const {
@@ -70,19 +76,29 @@ onBeforeUnmount(() => {
 <template>
   <div class="products-page">
     <!-- ── hero ── -->
-    <section class="shop-hero position-relative overflow-hidden d-flex align-items-center">
-      <img src="/product/product-hero.png" alt="" class="hero-img position-absolute w-100 h-100 object-fit-cover" />
+    <section
+      class="shop-hero position-relative overflow-hidden d-flex align-items-center"
+    >
+      <img
+        src="/product/product-hero.png"
+        alt=""
+        class="hero-img position-absolute w-100 h-100 object-fit-cover"
+      />
       <div class="hero-content position-relative z-1">
         <p class="hero-breadcrumb mb-3">
           <RouterLink to="/">Home</RouterLink>&ensp;&rsaquo;&ensp;Products
         </p>
         <h1 class="hero-title fw-bold mb-3">Our Collection</h1>
-        <p class="hero-sub m-0">Curated furniture for every room in your home</p>
+        <p class="hero-sub m-0">
+          Curated furniture for every room in your home
+        </p>
       </div>
     </section>
 
     <!-- ── filter + sort bar ── -->
-    <div class="filter-bar d-flex align-items-center justify-content-between position-sticky mt-5">
+    <div
+      class="filter-bar d-flex align-items-center justify-content-between position-sticky mt-5"
+    >
       <!-- left: dropdowns -->
       <div class="d-flex align-items-center gap-2">
         <span class="filter-label pe-2 text-uppercase">Filter by</span>
@@ -95,15 +111,25 @@ onBeforeUnmount(() => {
             @click="toggleDropdown('category')"
           >
             <span class="d-inline-flex align-items-center gap-1">
-              <span class="active-dot d-inline-block rounded-3 me-2" v-if="selectedCategories.length" />
+              <span
+                class="active-dot d-inline-block rounded-3 me-2"
+                v-if="selectedCategories.length"
+              />
               Categories
             </span>
             <ChevronDown :size="13" class="btn-chevron" />
           </button>
 
           <Transition name="drop">
-            <div class="filter-panel position-absolute overflow-y-auto left-0" v-if="openDropdown === 'category'">
-              <label v-for="cat in categories" :key="cat.id" class="panel-item d-flex align-items-center gap-1 px-3 py-2">
+            <div
+              class="filter-panel position-absolute overflow-y-auto left-0"
+              v-if="openDropdown === 'category'"
+            >
+              <label
+                v-for="cat in categories"
+                :key="cat.id"
+                class="panel-item d-flex align-items-center gap-1 px-3 py-2"
+              >
                 <input
                   type="checkbox"
                   class="panel-checkbox"
@@ -124,14 +150,20 @@ onBeforeUnmount(() => {
             @click="toggleDropdown('tag')"
           >
             <span class="d-inline-flex align-items-center gap-1">
-              <span class="active-dot d-inline-block rounded-3 me-2" v-if="selectedTags.length" />
+              <span
+                class="active-dot d-inline-block rounded-3 me-2"
+                v-if="selectedTags.length"
+              />
               Product Type
             </span>
             <ChevronDown :size="13" class="btn-chevron" />
           </button>
 
           <Transition name="drop">
-            <div class="filter-panel position-absolute overflow-y-auto left-0" v-if="openDropdown === 'tag'">
+            <div
+              class="filter-panel position-absolute overflow-y-auto left-0"
+              v-if="openDropdown === 'tag'"
+            >
               <label
                 v-for="tag in visibleTags"
                 :key="tag.id"
@@ -181,11 +213,16 @@ onBeforeUnmount(() => {
             :class="{ 'is-open': openDropdown === 'sort' }"
             @click="toggleDropdown('sort')"
           >
-            <span class="d-inline-flex align-items-center gap-1">{{ sortLabels[sortBy] }}</span>
+            <span class="d-inline-flex align-items-center gap-1">{{
+              sortLabels[sortBy]
+            }}</span>
             <ChevronDown :size="13" class="btn-chevron" />
           </button>
           <Transition name="drop">
-            <div class="filter-panel sort-panel position-absolute overflow-y-auto left-0" v-if="openDropdown === 'sort'">
+            <div
+              class="filter-panel sort-panel position-absolute overflow-y-auto left-0"
+              v-if="openDropdown === 'sort'"
+            >
               <button
                 v-for="(label, val) in sortLabels"
                 :key="val"
@@ -213,9 +250,16 @@ onBeforeUnmount(() => {
       </div>
 
       <div v-else class="product-grid d-grid gap-4 mb-5">
-        <div v-for="product in products" :key="product.id" class="product-card overflow-hidden">
+        <div
+          v-for="product in products"
+          :key="product.id"
+          class="product-card overflow-hidden"
+        >
           <!-- image with hover swap -->
-          <router-link :to="`/products/${product.id}`" class="card-img-wrapper position-relative d-block overflow-hidden">
+          <router-link
+            :to="`/products/${product.id}`"
+            class="card-img-wrapper position-relative d-block overflow-hidden"
+          >
             <img
               :src="product.images[0]"
               :alt="product.name"
@@ -230,19 +274,32 @@ onBeforeUnmount(() => {
 
           <!-- card info -->
           <div class="card-body">
-            <div class="card-meta d-flex align-items-center justify-content-between mb-4">
-              <span class="card-category-badge text-uppercase">{{ product.category }}</span>
+            <div
+              class="card-meta d-flex align-items-center justify-content-between mb-4"
+            >
+              <span class="card-category-badge text-uppercase">{{
+                product.category
+              }}</span>
               <span class="card-sold">{{ product.sold_count }} sold</span>
             </div>
-            <h3 class="card-name fw-bold mb-2 overflow-hidden">{{ product.name }}</h3>
+            <h3 class="card-name fw-bold mb-2 overflow-hidden">
+              {{ product.name }}
+            </h3>
             <p class="card-measurements" v-if="formatMeasurements(product)">
               {{ formatMeasurements(product) }}
             </p>
-            <div class="card-price-row d-flex align-items-center justify-content-between mt-3">
+            <div
+              class="card-price-row d-flex align-items-center justify-content-between mt-3"
+            >
               <span class="card-price fw-bold">{{
                 formatPrice(product.base_price)
               }}</span>
-              <button class="card-add-btn border-0 px-2 py-2"><Plus size="14" class="me-1 justify-content-center text-center"/>Add to Cart</button>
+              <button class="card-add-btn border-0 px-2 py-2">
+                <Plus
+                  size="14"
+                  class="me-1 justify-content-center text-center"
+                />Add to Cart
+              </button>
             </div>
           </div>
         </div>
@@ -332,7 +389,7 @@ onBeforeUnmount(() => {
   color: #dbbea0;
 }
 .hero-title {
-  font-size: clamp(2.2rem, 4vw, 3.2rem); 
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
   color: #f0e1cc;
   line-height: 1.1;
 }
@@ -515,7 +572,7 @@ onBeforeUnmount(() => {
 
 /* ── products area ── */
 .products-container {
-  padding: 2rem 5rem 4rem;  
+  padding: 2rem 5rem 4rem;
 }
 
 /* ── product grid ── */
@@ -538,7 +595,7 @@ onBeforeUnmount(() => {
 }
 .img-primary,
 .img-secondary {
-  transition: opacity 0.40s ease;
+  transition: opacity 0.4s ease;
 }
 .img-secondary {
   opacity: 0;
@@ -647,15 +704,25 @@ onBeforeUnmount(() => {
 }
 
 /* ── dark mode ── */
-[data-theme="dark"] .products-page { background: #1a1610; }
-[data-theme="dark"] .filter-bar { background: #1a1610; }
-[data-theme="dark"] .filter-label { color: #9a8875; }
-[data-theme="dark"] .result-count { color: #9a8875; }
+[data-theme="dark"] .products-page {
+  background: #1a1610;
+}
+[data-theme="dark"] .filter-bar {
+  background: #1a1610;
+}
+[data-theme="dark"] .filter-label {
+  color: #9a8875;
+}
+[data-theme="dark"] .result-count {
+  color: #9a8875;
+}
 [data-theme="dark"] .filter-btn {
   border-color: #3a3025;
   color: #e8ddd0;
 }
-[data-theme="dark"] .filter-btn:hover { border-color: #c4a882; }
+[data-theme="dark"] .filter-btn:hover {
+  border-color: #c4a882;
+}
 [data-theme="dark"] .filter-btn.is-open {
   background: #e8ddd0;
   border-color: #e8ddd0;
@@ -666,44 +733,74 @@ onBeforeUnmount(() => {
   border-color: #3a3025;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
-[data-theme="dark"] .panel-item { color: #e8ddd0; }
-[data-theme="dark"] .panel-item:hover { background: #3a3025; }
-[data-theme="dark"] .sort-option { color: #e8ddd0; }
-[data-theme="dark"] .sort-active { color: #c4a882; }
-[data-theme="dark"] .clear-all-btn { color: #9a8875; }
-[data-theme="dark"] .clear-all-btn:hover { color: #e8ddd0; }
+[data-theme="dark"] .panel-item {
+  color: #e8ddd0;
+}
+[data-theme="dark"] .panel-item:hover {
+  background: #3a3025;
+}
+[data-theme="dark"] .sort-option {
+  color: #e8ddd0;
+}
+[data-theme="dark"] .sort-active {
+  color: #c4a882;
+}
+[data-theme="dark"] .clear-all-btn {
+  color: #9a8875;
+}
+[data-theme="dark"] .clear-all-btn:hover {
+  color: #e8ddd0;
+}
 [data-theme="dark"] .search-input {
   border-color: #3a3025;
   color: #e8ddd0;
 }
-[data-theme="dark"] .search-input::placeholder { color: #6a5a4a; }
-[data-theme="dark"] .search-input:focus { border-color: #c4a882; }
+[data-theme="dark"] .search-input::placeholder {
+  color: #6a5a4a;
+}
+[data-theme="dark"] .search-input:focus {
+  border-color: #c4a882;
+}
 [data-theme="dark"] .product-card {
   background: #2a2418;
   border-color: #3a3025;
 }
-[data-theme="dark"] .card-name { color: #e8ddd0; }
+[data-theme="dark"] .card-name {
+  color: #e8ddd0;
+}
 [data-theme="dark"] .card-measurements,
-[data-theme="dark"] .card-sold { color: #9a8875; }
-[data-theme="dark"] .card-price { color: #e8ddd0; }
+[data-theme="dark"] .card-sold {
+  color: #9a8875;
+}
+[data-theme="dark"] .card-price {
+  color: #e8ddd0;
+}
 [data-theme="dark"] .card-add-btn {
   background: #e8ddd0;
   color: #1a1610;
 }
-[data-theme="dark"] .card-add-btn:hover { background: #c4a882; }
-[data-theme="dark"] .state-msg { color: #9a8875; }
+[data-theme="dark"] .card-add-btn:hover {
+  background: #c4a882;
+}
+[data-theme="dark"] .state-msg {
+  color: #9a8875;
+}
 [data-theme="dark"] .page-btn {
   background: #2a2418;
   border-color: #3a3025;
   color: #e8ddd0;
 }
-[data-theme="dark"] .page-btn:hover:not(:disabled) { border-color: #c4a882; }
+[data-theme="dark"] .page-btn:hover:not(:disabled) {
+  border-color: #c4a882;
+}
 [data-theme="dark"] .page-btn.page-active {
   background: #e8ddd0;
   color: #1a1610;
   border-color: #e8ddd0;
 }
-[data-theme="dark"] .page-ellipsis { color: #9a8875; }
+[data-theme="dark"] .page-ellipsis {
+  color: #9a8875;
+}
 
 /* ── responsive ── */
 @media (max-width: 1199px) {

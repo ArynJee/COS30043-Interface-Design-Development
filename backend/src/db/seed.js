@@ -88,6 +88,7 @@ const seedDb = async () => {
 
     await db.query(`
       TRUNCATE TABLE
+        design_contributions,
         feedback,
         product_images,
         products,
@@ -237,6 +238,88 @@ const seedDb = async () => {
     }
 
     console.log("Feedback seeded");
+
+    // seed design contributions (showcase page)
+    const SHOWCASE_CONTRIBUTIONS = [
+      {
+        user: {
+          first_name: "Isabelle",
+          last_name: "Chen",
+          email: "isabelle.chen@comfyhome.my",
+          phone_number: "0123456789",
+          address: "15 Jalan Bukit Kecil, Petaling Jaya, Selangor",
+        },
+        contribution: {
+          area: "Kitchen",
+          furniture_type: "Kitchen Counter",
+          description:
+            "A minimalist kitchen counter featuring Calacatta marble surface and handleless sage-green cabinets. Round-edge detailing softens the overall silhouette while ceramic tile cladding keeps the look timeless and easy to maintain.",
+          preview_image_url: "https://picsum.photos/seed/comfy-kitchen-1/800/600",
+          configuration: {
+            shape: { name: "Round Edges", price: 1000 },
+            color: { name: "Sage White", price: 50 },
+            texture: { name: "Calacatta Ceramic", price: 1000 },
+          },
+          total_cost: 2050.0,
+        },
+      },
+      {
+        user: {
+          first_name: "Marcus",
+          last_name: "Tan",
+          email: "marcus.tan@comfyhome.my",
+          phone_number: "0187654321",
+          address: "42 Lorong Maju 3, Bangsar, Kuala Lumpur",
+        },
+        contribution: {
+          area: "Living Room",
+          furniture_type: "Sofa",
+          description:
+            "Inspired by mid-century modern design, this tufted sofa is wrapped in deep forest-green velvet over a solid oak L-shaped frame. Paired with brushed brass accent legs, it makes a warm and sophisticated living room statement.",
+          preview_image_url: "https://picsum.photos/seed/comfy-sofa-1/800/600",
+          configuration: {
+            shape: { name: "L-Shape Frame", price: 1500 },
+            color: { name: "Forest Green", price: 100 },
+            fabric: { name: "Premium Velvet", price: 2000 },
+            accent: { name: "Brass Legs", price: 250 },
+          },
+          total_cost: 3850.0,
+        },
+      },
+    ];
+
+    for (const { user, contribution } of SHOWCASE_CONTRIBUTIONS) {
+      const userRes = await db.query(
+        `INSERT INTO users (first_name, last_name, email, phone_number, address, password_hash)
+         VALUES ($1,$2,$3,$4,$5,$6)
+         RETURNING id`,
+        [
+          user.first_name,
+          user.last_name,
+          user.email,
+          user.phone_number,
+          user.address,
+          HASHED_PASSWORD,
+        ]
+      );
+
+      await db.query(
+        `INSERT INTO design_contributions
+           (user_id, area, furniture_type, description, preview_image_url, configuration, total_cost)
+         VALUES ($1,$2,$3,$4,$5,$6,$7)`,
+        [
+          userRes.rows[0].id,
+          contribution.area,
+          contribution.furniture_type,
+          contribution.description,
+          contribution.preview_image_url,
+          JSON.stringify(contribution.configuration),
+          contribution.total_cost,
+        ]
+      );
+    }
+
+    console.log("Showcase contributions seeded");
 
     // commit transaction
     await db.query("COMMIT");
