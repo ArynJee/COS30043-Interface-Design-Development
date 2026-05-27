@@ -17,6 +17,7 @@ export default function useProducts() {
   const selectedCategories  = ref([])
   const selectedTags        = ref([])
   const sortBy              = ref('default')
+  const searchQuery         = ref('')
   const sidebarOpen         = ref(true)
 
   // ── slug → category name (from home page ?type= links) ─
@@ -74,6 +75,7 @@ export default function useProducts() {
       const params = { page: currentPage.value, limit: 12, sort: sortBy.value }
       if (selectedCategories.value.length) params.category_ids = selectedCategories.value.join(',')
       if (selectedTags.value.length)       params.tag_ids      = selectedTags.value.join(',')
+      if (searchQuery.value.trim())        params.search       = searchQuery.value.trim()
 
       const data = await getProductsApi(params)
       products.value   = data.products
@@ -89,6 +91,16 @@ export default function useProducts() {
     currentPage.value = 1
     fetchProducts()
   }, { deep: true })
+
+  // debounced search
+  let searchTimer = null
+  watch(searchQuery, () => {
+    clearTimeout(searchTimer)
+    searchTimer = setTimeout(() => {
+      currentPage.value = 1
+      fetchProducts()
+    }, 350)
+  })
 
   // deselect tags that no longer belong to selected categories
   watch(selectedCategories, (cats) => {
@@ -155,6 +167,7 @@ export default function useProducts() {
     selectedCategories,
     selectedTags,
     sortBy,
+    searchQuery,
     sidebarOpen,
     // computed
     hasActiveFilters,

@@ -1,49 +1,74 @@
 <script setup>
-import { ref, watch, onBeforeUnmount } from 'vue'
-import { RouterLink } from 'vue-router'
-import { ChevronLeft, ChevronRight, ChevronDown } from '@lucide/vue'
-import useProducts from '@/hooks/useProducts.js'
+import { ref, watch, onBeforeUnmount } from "vue";
+import { RouterLink } from "vue-router";
+import { ChevronLeft, ChevronRight, ChevronDown, Search } from "@lucide/vue";
+import useProducts from "@/hooks/useProducts.js";
 
 const {
-  products, total, totalPages, currentPage, loading,
-  categories, selectedCategories, selectedTags, sortBy,
-  hasActiveFilters, visibleTags, visiblePages,
-  formatPrice, formatMeasurements,
-  goToPage, toggleCategory, toggleTag, clearFilters,
-} = useProducts()
+  products,
+  total,
+  totalPages,
+  currentPage,
+  loading,
+  categories,
+  selectedCategories,
+  selectedTags,
+  sortBy,
+  searchQuery,
+  hasActiveFilters,
+  visibleTags,
+  visiblePages,
+  formatPrice,
+  formatMeasurements,
+  goToPage,
+  toggleCategory,
+  toggleTag,
+  clearFilters,
+} = useProducts();
 
 // filter dropdown state
-const openDropdown = ref(null)
-const categoryDropdownRef = ref(null)
-const tagDropdownRef      = ref(null)
+const openDropdown = ref(null);
+const categoryDropdownRef = ref(null);
+const tagDropdownRef = ref(null);
+const sortDropdownRef = ref(null);
+
+const sortLabels = {
+  default: "Default Sorting",
+  price_asc: "Price: Low to High",
+  price_desc: "Price: High to Low",
+  most_sold: "Most Sold",
+};
 
 const toggleDropdown = (name) => {
-  openDropdown.value = openDropdown.value === name ? null : name
-}
+  openDropdown.value = openDropdown.value === name ? null : name;
+};
 
 const handleOutsideClick = (e) => {
-  if (!openDropdown.value) return
-  // only check the wrapper of the dropdown that is currently open
-  const activeRef = openDropdown.value === 'category' ? categoryDropdownRef : tagDropdownRef
-  if (activeRef.value && !activeRef.value.contains(e.target)) {
-    openDropdown.value = null
+  if (!openDropdown.value) return;
+  const refMap = {
+    category: categoryDropdownRef,
+    tag: tagDropdownRef,
+    sort: sortDropdownRef,
+  };
+  const activeRef = refMap[openDropdown.value];
+  if (activeRef?.value && !activeRef.value.contains(e.target)) {
+    openDropdown.value = null;
   }
-}
+};
 
 // add/remove the document listener only while a dropdown is open
 watch(openDropdown, (val) => {
-  if (val) document.addEventListener('mousedown', handleOutsideClick)
-  else document.removeEventListener('mousedown', handleOutsideClick)
-})
+  if (val) document.addEventListener("mousedown", handleOutsideClick);
+  else document.removeEventListener("mousedown", handleOutsideClick);
+});
 
 onBeforeUnmount(() => {
-  document.removeEventListener('mousedown', handleOutsideClick)
-})
+  document.removeEventListener("mousedown", handleOutsideClick);
+});
 </script>
 
 <template>
   <div class="products-page">
-
     <!-- ── hero ── -->
     <section class="shop-hero">
       <img src="/product/product-hero.png" alt="" class="hero-img" />
@@ -58,7 +83,6 @@ onBeforeUnmount(() => {
 
     <!-- ── filter + sort bar ── -->
     <div class="filter-bar">
-
       <!-- left: dropdowns -->
       <div class="filter-left">
         <span class="filter-label">Filter by</span>
@@ -79,11 +103,7 @@ onBeforeUnmount(() => {
 
           <Transition name="drop">
             <div class="filter-panel" v-if="openDropdown === 'category'">
-              <label
-                v-for="cat in categories"
-                :key="cat.id"
-                class="panel-item"
-              >
+              <label v-for="cat in categories" :key="cat.id" class="panel-item">
                 <input
                   type="checkbox"
                   class="panel-checkbox"
@@ -131,27 +151,61 @@ onBeforeUnmount(() => {
 
         <!-- inline clear all — appears only when filters are active -->
         <Transition name="fade">
-          <button v-if="hasActiveFilters" class="clear-all-btn" @click="clearFilters">
+          <button
+            v-if="hasActiveFilters"
+            class="clear-all-btn"
+            @click="clearFilters"
+          >
             &times; Clear All
           </button>
         </Transition>
       </div>
 
-      <!-- right: count + sort -->
+      <!-- right: search + count + sort -->
       <div class="filter-right">
+        <div class="search-wrap">
+          <Search :size="13" class="search-icon" />
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search products…"
+            class="search-input"
+          />
+        </div>
         <span class="result-count">{{ total }} items</span>
-        <select class="sort-select" v-model="sortBy">
-          <option value="default">Default Sorting</option>
-          <option value="price_asc">Price: Low to High</option>
-          <option value="price_desc">Price: High to Low</option>
-          <option value="most_sold">Most Sold</option>
-        </select>
+
+        <!-- custom sort dropdown -->
+        <div class="filter-dropdown" ref="sortDropdownRef">
+          <button
+            class="filter-btn"
+            :class="{ 'is-open': openDropdown === 'sort' }"
+            @click="toggleDropdown('sort')"
+          >
+            <span class="btn-label">{{ sortLabels[sortBy] }}</span>
+            <ChevronDown :size="13" class="btn-chevron" />
+          </button>
+          <Transition name="drop">
+            <div class="filter-panel sort-panel" v-if="openDropdown === 'sort'">
+              <button
+                v-for="(label, val) in sortLabels"
+                :key="val"
+                class="panel-item sort-option"
+                :class="{ 'sort-active': sortBy === val }"
+                @click="
+                  sortBy = val;
+                  openDropdown = null;
+                "
+              >
+                {{ label }}
+              </button>
+            </div>
+          </Transition>
+        </div>
       </div>
     </div>
 
     <!-- ── products ── -->
     <div class="products-container">
-
       <div v-if="loading" class="state-msg">Loading products…</div>
 
       <div v-else-if="products.length === 0" class="state-msg">
@@ -159,14 +213,14 @@ onBeforeUnmount(() => {
       </div>
 
       <div v-else class="product-grid">
-        <div
-          v-for="product in products"
-          :key="product.id"
-          class="product-card"
-        >
+        <div v-for="product in products" :key="product.id" class="product-card">
           <!-- image with hover swap -->
           <router-link :to="`/products/${product.id}`" class="card-img-wrapper">
-            <img :src="product.images[0]" :alt="product.name" class="img-primary" />
+            <img
+              :src="product.images[0]"
+              :alt="product.name"
+              class="img-primary"
+            />
             <img
               :src="product.images[1] ?? product.images[0]"
               :alt="product.name"
@@ -184,13 +238,22 @@ onBeforeUnmount(() => {
             <p class="card-measurements" v-if="formatMeasurements(product)">
               {{ formatMeasurements(product) }}
             </p>
-            <span class="card-price">{{ formatPrice(product.base_price) }}</span>
+            <div class="card-price-row">
+              <span class="card-price">{{
+                formatPrice(product.base_price)
+              }}</span>
+              <button class="card-add-btn">Add to Cart</button>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- pagination -->
-      <nav class="pagination-wrap" v-if="totalPages > 1" aria-label="Products pagination">
+      <nav
+        class="pagination-wrap"
+        v-if="totalPages > 1"
+        aria-label="Products pagination"
+      >
         <button
           class="page-btn page-arrow"
           :disabled="currentPage === 1"
@@ -206,7 +269,9 @@ onBeforeUnmount(() => {
             v-else
             :class="['page-btn', { 'page-active': currentPage === p }]"
             @click="goToPage(p)"
-          >{{ p }}</button>
+          >
+            {{ p }}
+          </button>
         </template>
 
         <button
@@ -219,13 +284,12 @@ onBeforeUnmount(() => {
         </button>
       </nav>
     </div>
-
   </div>
 </template>
 
 <style scoped>
 .products-page {
-  font-family: 'Times New Roman', Times, serif;
+  font-family: "Times New Roman", Times, serif;
   background: #faf7f2;
   min-height: 100vh;
 }
@@ -234,7 +298,7 @@ onBeforeUnmount(() => {
 .shop-hero {
   position: relative;
   height: 300px;
-  background: #f0ebe2;   /* warm fallback while image loads */
+  background: #f0ebe2; /* warm fallback while image loads */
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -245,13 +309,17 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: right center;  /* keep visual content on the right */
+  object-position: right center; /* keep visual content on the right */
 }
 .shop-hero::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, rgba(30, 26, 20, 0.6) 0%, rgba(30, 26, 20, 0) 65%);
+  background: linear-gradient(
+    to right,
+    rgba(30, 26, 20, 0.6) 0%,
+    rgba(30, 26, 20, 0) 65%
+  );
   pointer-events: none;
   z-index: 0;
 }
@@ -271,7 +339,9 @@ onBeforeUnmount(() => {
   text-decoration: none;
   transition: color 0.2s;
 }
-.hero-breadcrumb a:hover { color: #2c2218; }
+.hero-breadcrumb a:hover {
+  color: #2c2218;
+}
 .hero-title {
   font-size: clamp(2.2rem, 4vw, 3.2rem);
   font-weight: 700;
@@ -296,8 +366,8 @@ onBeforeUnmount(() => {
   background: #fff;
   border-bottom: 1px solid #e0d5c5;
   position: sticky;
-  top: 0;       /* adjust to match your navbar height if they overlap */
-  z-index: 90;  /* stay below Bootstrap's sticky navbar (z-index 1020) */
+  top: 0; /* adjust to match your navbar height if they overlap */
+  z-index: 90; /* stay below Bootstrap's sticky navbar (z-index 1020) */
 }
 .filter-left {
   display: flex;
@@ -321,19 +391,37 @@ onBeforeUnmount(() => {
   color: #7a6a58;
   white-space: nowrap;
 }
-.sort-select {
-  background: transparent;
+/* ── search bar ── */
+.search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.search-icon {
+  position: absolute;
+  left: 0.6rem;
+  color: #9a8a78;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+.search-input {
   border: 1px solid #d0c5b5;
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem 0.35rem 2rem;
+  font-family: "Times New Roman", serif;
+  font-size: 0.78rem;
   color: #2c2218;
-  font-family: 'Times New Roman', serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.04em;
-  padding: 0.38rem 0.7rem;
-  cursor: pointer;
+  background: transparent;
   outline: none;
   transition: border-color 0.2s;
+  width: 190px;
 }
-.sort-select:hover { border-color: #c4a882; }
+.search-input:focus {
+  border-color: #b09070;
+}
+.search-input::placeholder {
+  color: #b8aaa0;
+}
 
 /* ── filter dropdown trigger ── */
 .filter-dropdown {
@@ -346,12 +434,15 @@ onBeforeUnmount(() => {
   background: transparent;
   border: 1px solid #d0c5b5;
   color: #2c2218;
-  font-family: 'Times New Roman', serif;
+  font-family: "Times New Roman", serif;
   font-size: 0.78rem;
   letter-spacing: 0.05em;
   padding: 0.38rem 0.8rem;
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    color 0.2s;
   white-space: nowrap;
 }
 .filter-btn:hover {
@@ -380,7 +471,7 @@ onBeforeUnmount(() => {
   flex-shrink: 0;
 }
 .filter-btn.is-open .active-dot {
-  background: rgba(255,255,255,0.8);
+  background: rgba(255, 255, 255, 0.8);
 }
 
 /* chevron rotates 180° when open */
@@ -418,7 +509,25 @@ onBeforeUnmount(() => {
   cursor: pointer;
   transition: background 0.15s;
 }
-.panel-item:hover { background: #faf7f2; }
+.panel-item:hover {
+  background: #faf7f2;
+}
+.sort-panel {
+  right: 0;
+  left: auto;
+}
+.sort-option {
+  width: 100%;
+  background: none;
+  border: none;
+  font-family: "Times New Roman", serif;
+  text-align: left;
+  cursor: pointer;
+}
+.sort-active {
+  font-weight: 600;
+  color: #2c2218;
+}
 .panel-checkbox {
   accent-color: #c4a882;
   width: 14px;
@@ -432,7 +541,7 @@ onBeforeUnmount(() => {
   background: transparent;
   border: none;
   color: #7a6a58;
-  font-family: 'Times New Roman', serif;
+  font-family: "Times New Roman", serif;
   font-size: 0.78rem;
   letter-spacing: 0.04em;
   cursor: pointer;
@@ -441,18 +550,41 @@ onBeforeUnmount(() => {
   text-underline-offset: 2px;
   transition: color 0.2s;
 }
-.clear-all-btn:hover { color: #2c2218; }
+.clear-all-btn:hover {
+  color: #2c2218;
+}
 
 /* ── dropdown slide-down animation ── */
-.drop-enter-active { transition: opacity 0.2s ease, transform 0.2s ease; }
-.drop-leave-active { transition: opacity 0.14s ease, transform 0.14s ease; }
-.drop-enter-from  { opacity: 0; transform: translateY(-7px); }
-.drop-leave-to    { opacity: 0; transform: translateY(-7px); }
+.drop-enter-active {
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+.drop-leave-active {
+  transition:
+    opacity 0.14s ease,
+    transform 0.14s ease;
+}
+.drop-enter-from {
+  opacity: 0;
+  transform: translateY(-7px);
+}
+.drop-leave-to {
+  opacity: 0;
+  transform: translateY(-7px);
+}
 
 /* ── fade for clear-all button ── */
-.fade-enter-active { transition: opacity 0.18s; }
-.fade-leave-active { transition: opacity 0.12s; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
+.fade-enter-active {
+  transition: opacity 0.18s;
+}
+.fade-leave-active {
+  transition: opacity 0.12s;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 
 /* ── products area ── */
 .products-container {
@@ -474,7 +606,9 @@ onBeforeUnmount(() => {
   overflow: hidden;
   transition: box-shadow 0.3s;
 }
-.product-card:hover { box-shadow: 0 6px 24px rgba(30, 26, 20, 0.1); }
+.product-card:hover {
+  box-shadow: 0 6px 24px rgba(30, 26, 20, 0.1);
+}
 
 .card-img-wrapper {
   position: relative;
@@ -491,11 +625,19 @@ onBeforeUnmount(() => {
   object-fit: cover;
   transition: opacity 0.45s ease;
 }
-.img-secondary { opacity: 0; }
-.product-card:hover .img-primary  { opacity: 0; }
-.product-card:hover .img-secondary { opacity: 1; }
+.img-secondary {
+  opacity: 0;
+}
+.product-card:hover .img-primary {
+  opacity: 0;
+}
+.product-card:hover .img-secondary {
+  opacity: 1;
+}
 
-.card-body { padding: 0.85rem; }
+.card-body {
+  padding: 0.85rem;
+}
 .card-meta {
   display: flex;
   justify-content: space-between;
@@ -510,7 +652,10 @@ onBeforeUnmount(() => {
   color: #fff;
   padding: 0.15rem 0.5rem;
 }
-.card-sold { font-size: 0.68rem; color: #7a6a58; }
+.card-sold {
+  font-size: 0.68rem;
+  color: #7a6a58;
+}
 .card-name {
   font-size: 0.88rem;
   font-weight: 600;
@@ -523,11 +668,46 @@ onBeforeUnmount(() => {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.card-measurements { font-size: 0.7rem; color: #7a6a58; margin-bottom: 0.55rem; }
-.card-price { font-size: 0.95rem; font-weight: 700; color: #2c2218; }
+.card-measurements {
+  font-size: 0.7rem;
+  color: #7a6a58;
+  margin-bottom: 0.55rem;
+}
+.card-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.card-price {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #2c2218;
+}
+.card-add-btn {
+  background: #2c2218;
+  color: #fff;
+  border: none;
+  font-family: "Times New Roman", serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  padding: 0.3rem 0.65rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.card-add-btn:hover {
+  background: #4a3828;
+}
 
 /* ── loading / empty ── */
-.state-msg { text-align: center; padding: 5rem 2rem; color: #7a6a58; font-size: 0.95rem; }
+.state-msg {
+  text-align: center;
+  padding: 5rem 2rem;
+  color: #7a6a58;
+  font-size: 0.95rem;
+}
 
 /* ── pagination ── */
 .pagination-wrap {
@@ -546,38 +726,74 @@ onBeforeUnmount(() => {
   background: #fff;
   border: 1px solid #e0d5c5;
   color: #2c2218;
-  font-family: 'Times New Roman', serif;
+  font-family: "Times New Roman", serif;
   font-size: 0.85rem;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
 }
-.page-btn:hover:not(:disabled) { border-color: #2c2218; }
+.page-btn:hover:not(:disabled) {
+  border-color: #2c2218;
+}
 .page-btn.page-active {
   background: #2c2218;
   color: #fff;
   border-color: #2c2218;
 }
-.page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-.page-ellipsis { color: #7a6a58; padding: 0 0.25rem; }
+.page-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.page-ellipsis {
+  color: #7a6a58;
+  padding: 0 0.25rem;
+}
 
 /* ── responsive ── */
 @media (max-width: 1199px) {
-  .product-grid { grid-template-columns: repeat(3, 1fr); }
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 @media (max-width: 991px) {
-  .filter-bar         { padding: 0.7rem 2.5rem; }
-  .products-container { padding: 2rem 2.5rem 4rem; }
-  .hero-content       { padding: 0 2.5rem; }
-  .product-grid       { grid-template-columns: repeat(2, 1fr); }
+  .filter-bar {
+    padding: 0.7rem 2.5rem;
+  }
+  .products-container {
+    padding: 2rem 2.5rem 4rem;
+  }
+  .hero-content {
+    padding: 0 2.5rem;
+  }
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 @media (max-width: 767px) {
-  .filter-bar         { flex-wrap: wrap; gap: 0.6rem; padding: 0.7rem 1.25rem; }
-  .filter-right       { width: 100%; justify-content: space-between; }
-  .products-container { padding: 1.5rem 1.25rem 3rem; }
-  .hero-content       { padding: 0 1.5rem; }
-  .shop-hero          { height: 220px; }
+  .filter-bar {
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    padding: 0.7rem 1.25rem;
+  }
+  .filter-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .products-container {
+    padding: 1.5rem 1.25rem 3rem;
+  }
+  .hero-content {
+    padding: 0 1.5rem;
+  }
+  .shop-hero {
+    height: 220px;
+  }
 }
 @media (max-width: 480px) {
-  .product-grid { grid-template-columns: 1fr; }
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
