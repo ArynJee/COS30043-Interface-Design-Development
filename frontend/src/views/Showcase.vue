@@ -1,69 +1,99 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { RouterLink } from 'vue-router'
-import { ArrowRight, Sparkle} from '@lucide/vue'
-import { getContributionsApi } from '@/services/showcaseServices.js'
+import { ref, computed, onMounted } from "vue";
+import { RouterLink } from "vue-router";
+import { ArrowRight, Sparkle } from "@lucide/vue";
+import { getContributionsApi } from "@/services/showcaseServices.js";
 
-const contributions = ref([])
-const loading = ref(true)
-const selectedArea = ref('All')
+const contributions = ref([]);
+const loading = ref(true);
+const selectedArea = ref("All");
 
-const AREAS = ['All', 'Living Room', 'Bedroom', 'Kitchen', 'Study Room', 'Bathroom']
+const AREAS = [
+  "All",
+  "Living Room",
+  "Bedroom",
+  "Kitchen",
+  "Study Room",
+  "Bathroom",
+];
 
 const AREA_ACCENT = {
-  'Living Room': '#c4956a',
-  'Bedroom':     '#b07a8a',
-  'Kitchen':     '#7a9a70',
-  'Study Room':  '#6a80a0',
-  'Bathroom':    '#6a9a9a',
-}
+  "Living Room": "#c4956a",
+  Bedroom: "#b07a8a",
+  Kitchen: "#7a9a70",
+  "Study Room": "#6a80a0",
+  Bathroom: "#6a9a9a",
+};
 
-const totalContributors = computed(() => new Set(contributions.value.map(c => c.email).filter(Boolean)).size)
-const totalAreas = computed(() => new Set(contributions.value.map(c => c.area)).size)
+const totalContributors = computed(
+  () => new Set(contributions.value.map((c) => c.email).filter(Boolean)).size,
+);
+const totalAreas = computed(
+  () => new Set(contributions.value.map((c) => c.area)).size,
+);
 
 const filtered = computed(() =>
-  selectedArea.value === 'All'
+  selectedArea.value === "All"
     ? contributions.value
-    : contributions.value.filter(c => c.area === selectedArea.value)
-)
+    : contributions.value.filter((c) => c.area === selectedArea.value),
+);
 
 const formatPrice = (price) =>
-  `RM ${parseFloat(price).toLocaleString('en-MY', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+  `RM ${parseFloat(price).toLocaleString("en-MY", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 
 const formatDate = (dateStr) =>
-  new Date(dateStr).toLocaleDateString('en-MY', { year: 'numeric', month: 'short', day: 'numeric' })
+  new Date(dateStr).toLocaleDateString("en-MY", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 
 const getInitials = (first, last) =>
-  `${first?.[0] ?? '?'}${last?.[0] ?? ''}`.toUpperCase()
+  `${first?.[0] ?? "?"}${last?.[0] ?? ""}`.toUpperCase();
 
-const getAvatarColor = (name = '') => {
-  const PALETTE = ['#c4956a', '#b07a8a', '#7a9a70', '#6a80a0', '#8b6f47', '#c4a882']
-  let h = 0
-  for (let i = 0; i < name.length; i++) h = name.charCodeAt(i) + ((h << 5) - h)
-  return PALETTE[Math.abs(h) % PALETTE.length]
-}
+const getAvatarColor = (name = "") => {
+  const PALETTE = [
+    "#c4956a",
+    "#b07a8a",
+    "#7a9a70",
+    "#6a80a0",
+    "#8b6f47",
+    "#c4a882",
+  ];
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = name.charCodeAt(i) + ((h << 5) - h);
+  return PALETTE[Math.abs(h) % PALETTE.length];
+};
 
 const configEntries = (cfg) =>
-  cfg ? Object.entries(cfg).map(([k, v]) => ({ label: k[0].toUpperCase() + k.slice(1), ...v })) : []
+  cfg
+    ? Object.entries(cfg).map(([k, v]) => ({
+        label: k[0].toUpperCase() + k.slice(1),
+        ...v,
+      }))
+    : [];
 
 onMounted(async () => {
   try {
-    const data = await getContributionsApi()
-    contributions.value = data.contributions
+    const data = await getContributionsApi();
+    contributions.value = data.contributions;
   } catch (e) {
-    console.error(e)
+    console.error(e);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-})
+});
 </script>
 
 <template>
   <div class="sc-page">
-
     <!-- ── HERO ── -->
     <section class="sc-hero position-relative overflow-hidden">
-      <img src="/showcase/showcase-hero.jpg" alt="" class="hero-img position-absolute inset-0 w-100 h-100 object-fit-cover" />
+      <img
+        src="/showcase/showcase-hero.jpg"
+        alt=""
+        class="hero-img position-absolute inset-0 w-100 h-100 object-fit-cover"
+      />
 
       <div class="hero-inner position-relative z-1">
         <p class="hero-crumb mb-4">
@@ -77,7 +107,9 @@ onMounted(async () => {
         </div>
 
         <h1 class="hero-title mb-3">Design Showcase</h1>
-        <p class="hero-sub mb-5">Handcrafted furniture visions from our creative community</p>
+        <p class="hero-sub mb-5">
+          Handcrafted furniture visions from our creative community
+        </p>
 
         <div class="hero-stats d-flex align-items-center flex-wrap">
           <div class="stat-col">
@@ -102,9 +134,14 @@ onMounted(async () => {
     </section>
 
     <!-- ── DIVIDER STRIP ── -->
-    <div class="divider-strip d-flex align-items-center justify-content-center gap-3">
+    <div
+      class="divider-strip d-flex align-items-center justify-content-center gap-3"
+    >
       <span class="ds-line"></span>
-      <span class="ds-text"><Sparkle size="11"/>&nbsp; CRAFTED WITH PASSION &nbsp;<Sparkle size="11"/></span>
+      <span class="ds-text"
+        ><Sparkle size="11" />&nbsp; CRAFTED WITH PASSION &nbsp;<Sparkle
+          size="11"
+      /></span>
       <span class="ds-line"></span>
     </div>
 
@@ -123,7 +160,6 @@ onMounted(async () => {
 
     <!-- ── MAIN CONTENT ── -->
     <div class="sc-container">
-
       <!-- Loading skeletons -->
       <div v-if="loading" class="skeleton-grid">
         <div v-for="i in 3" :key="i" class="skeleton-card">
@@ -140,8 +176,14 @@ onMounted(async () => {
       <div v-else-if="filtered.length === 0" class="sc-empty text-center">
         <div class="empty-orn">✦</div>
         <h3 class="empty-title">No Designs Yet</h3>
-        <p class="empty-sub">Be the first to contribute a {{ selectedArea }} design to the community.</p>
-        <RouterLink to="/customize" class="empty-cta d-inline-flex align-items-center gap-2">
+        <p class="empty-sub">
+          Be the first to contribute a {{ selectedArea }} design to the
+          community.
+        </p>
+        <RouterLink
+          to="/customize"
+          class="empty-cta d-inline-flex align-items-center gap-2"
+        >
           Start Designing <ArrowRight :size="14" />
         </RouterLink>
       </div>
@@ -163,12 +205,17 @@ onMounted(async () => {
             />
             <div class="card-img-grad position-absolute inset-0"></div>
 
-            <span class="card-area-badge position-absolute"
-              :style="{ background: AREA_ACCENT[c.area] ?? '#c4a882' }">
+            <span
+              class="card-area-badge position-absolute"
+              :style="{ background: AREA_ACCENT[c.area] ?? '#c4a882' }"
+            >
               {{ c.area }}
             </span>
 
-            <span v-if="idx === 0 && filtered.length > 1" class="card-featured-tag position-absolute">
+            <span
+              v-if="idx === 0 && filtered.length > 1"
+              class="card-featured-tag position-absolute"
+            >
               ✦ &thinsp; Featured
             </span>
           </div>
@@ -179,17 +226,27 @@ onMounted(async () => {
             <div class="contrib-row d-flex align-items-center gap-2 mb-3">
               <div
                 class="contrib-avatar d-flex align-items-center justify-content-center flex-shrink-0"
-                :style="{ background: getAvatarColor((c.first_name ?? '') + (c.last_name ?? '')) }"
+                :style="{
+                  background: getAvatarColor(
+                    (c.first_name ?? '') + (c.last_name ?? ''),
+                  ),
+                }"
               >
                 {{ getInitials(c.first_name, c.last_name) }}
               </div>
               <div class="contrib-info">
                 <div class="contrib-name">
-                  {{ c.first_name ? `${c.first_name} ${c.last_name}` : 'Anonymous' }}
+                  {{
+                    c.first_name
+                      ? `${c.first_name} ${c.last_name}`
+                      : "Anonymous"
+                  }}
                 </div>
                 <div class="contrib-date">{{ formatDate(c.created_at) }}</div>
               </div>
-              <div class="card-price ms-auto">{{ formatPrice(c.total_cost) }}</div>
+              <div class="card-price ms-auto">
+                {{ formatPrice(c.total_cost) }}
+              </div>
             </div>
 
             <!-- Furniture type label -->
@@ -200,7 +257,11 @@ onMounted(async () => {
 
             <!-- Config chips -->
             <div class="config-chips d-flex flex-wrap gap-1 mb-4">
-              <span v-for="entry in configEntries(c.configuration)" :key="entry.label" class="cfg-chip">
+              <span
+                v-for="entry in configEntries(c.configuration)"
+                :key="entry.label"
+                class="cfg-chip"
+              >
                 <span class="cfg-key">{{ entry.label }}</span>
                 <span class="cfg-sep">·</span>
                 <span class="cfg-val">{{ entry.name }}</span>
@@ -224,14 +285,17 @@ onMounted(async () => {
         <div class="bcta-orn">✦</div>
         <h2 class="bcta-title">Have a Design to Share?</h2>
         <p class="bcta-sub">
-          Customize your own furniture, then contribute it to our growing community of creators.
+          Customize your own furniture, then contribute it to our growing
+          community of creators.
         </p>
-        <RouterLink to="/customize" class="bcta-btn d-inline-flex align-items-center gap-2">
+        <RouterLink
+          to="/customize"
+          class="bcta-btn d-inline-flex align-items-center gap-2"
+        >
           Start Designing <ArrowRight :size="16" />
         </RouterLink>
       </div>
     </section>
-
   </div>
 </template>
 
@@ -281,20 +345,24 @@ onMounted(async () => {
   text-decoration: none;
   transition: color 0.2s;
 }
-.hero-crumb a:hover { color: #dbbea0; }
+.hero-crumb a:hover {
+  color: #dbbea0;
+}
 
 /* eyebrow */
-.hero-eyebrow { gap: 0.6rem; }
+.hero-eyebrow {
+  gap: 0.6rem;
+}
 .ey-text {
   font-size: 0.65rem;
   letter-spacing: 0.28em;
-  color: #c4a882;
+  color: #f0e1cc;
   white-space: nowrap;
 }
 .ey-line {
   flex: 0 0 50px;
   height: 1px;
-  background: rgba(196, 168, 130, 0.45);
+  background: rgba(255, 239, 216, 0.45);
 }
 
 .hero-title {
@@ -311,13 +379,17 @@ onMounted(async () => {
 }
 
 /* stats */
-.hero-stats { gap: 0; }
+.hero-stats {
+  gap: 0;
+}
 .stat-col {
   display: flex;
   flex-direction: column;
   padding: 0 1.6rem;
 }
-.stat-col:first-child { padding-left: 0; }
+.stat-col:first-child {
+  padding-left: 0;
+}
 .stat-n {
   font-size: 2.2rem;
   font-weight: bold;
@@ -391,7 +463,9 @@ onMounted(async () => {
   z-index: 50;
   scrollbar-width: none;
 }
-.filter-strip::-webkit-scrollbar { display: none; }
+.filter-strip::-webkit-scrollbar {
+  display: none;
+}
 
 .area-pill {
   padding: 0.4rem 1.1rem;
@@ -404,7 +478,10 @@ onMounted(async () => {
   color: #5a4a3a;
   cursor: pointer;
   white-space: nowrap;
-  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    color 0.2s;
   flex-shrink: 0;
 }
 .area-pill:hover {
@@ -450,11 +527,20 @@ onMounted(async () => {
   border-radius: 2px;
   animation: shimmer 1.5s ease-in-out infinite;
 }
-.sk-line--wide { width: 80%; }
-.sk-line--narrow { width: 45%; }
+.sk-line--wide {
+  width: 80%;
+}
+.sk-line--narrow {
+  width: 45%;
+}
 @keyframes shimmer {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.85; }
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.85;
+  }
 }
 
 /* ── EMPTY ── */
@@ -491,7 +577,10 @@ onMounted(async () => {
   text-decoration: none;
   transition: background 0.2s;
 }
-.empty-cta:hover { background: #4a3828; color: #f0e1cc; }
+.empty-cta:hover {
+  background: #4a3828;
+  color: #f0e1cc;
+}
 
 /* ── SHOWCASE GRID ── */
 .sc-grid {
@@ -505,7 +594,10 @@ onMounted(async () => {
   background: #fff;
   border: 1px solid #e8e3dc;
   overflow: hidden;
-  transition: box-shadow 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
+  transition:
+    box-shadow 0.35s ease,
+    transform 0.35s ease,
+    border-color 0.35s ease;
 }
 .sc-card:hover {
   box-shadow: 0 16px 48px rgba(30, 26, 20, 0.13);
@@ -514,8 +606,12 @@ onMounted(async () => {
 }
 
 /* Featured card takes first 2 columns */
-.sc-card.is-featured { grid-column: span 2; }
-.sc-card.is-featured .card-img-wrap { aspect-ratio: 16 / 9; }
+.sc-card.is-featured {
+  grid-column: span 2;
+}
+.sc-card.is-featured .card-img-wrap {
+  aspect-ratio: 16 / 9;
+}
 
 /* Image wrapper */
 .card-img-wrap {
@@ -526,7 +622,9 @@ onMounted(async () => {
   transition: transform 0.65s ease;
   display: block;
 }
-.sc-card:hover .card-img { transform: scale(1.06); }
+.sc-card:hover .card-img {
+  transform: scale(1.06);
+}
 
 /* gradient overlay */
 .card-img-grad {
@@ -627,9 +725,16 @@ onMounted(async () => {
   color: #6a5a4a;
   border-radius: 2px;
 }
-.cfg-key { font-weight: 600; color: #4a3a2a; }
-.cfg-sep { color: #c4a882; }
-.cfg-val { color: #7a6a58; }
+.cfg-key {
+  font-weight: 600;
+  color: #4a3a2a;
+}
+.cfg-sep {
+  color: #c4a882;
+}
+.cfg-val {
+  color: #7a6a58;
+}
 
 /* CTA */
 .card-cta {
@@ -641,7 +746,9 @@ onMounted(async () => {
   letter-spacing: 0.08em;
   padding: 0.5rem 1rem;
   cursor: pointer;
-  transition: background 0.22s, color 0.22s;
+  transition:
+    background 0.22s,
+    color 0.22s;
 }
 .card-cta:hover {
   background: #2c2218;
@@ -650,7 +757,9 @@ onMounted(async () => {
 
 /* ── CARD TRANSITION ── */
 .card-fade-enter-active {
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
 }
 .card-fade-enter-from {
   opacity: 0;
@@ -664,11 +773,19 @@ onMounted(async () => {
 }
 .bcta-bg {
   background:
-    radial-gradient(ellipse at 70% 50%, rgba(139, 111, 71, 0.2) 0%, transparent 60%),
+    radial-gradient(
+      ellipse at 70% 50%,
+      rgba(139, 111, 71, 0.2) 0%,
+      transparent 60%
+    ),
     linear-gradient(145deg, #1a1410 0%, #2c2218 60%, #1a1410 100%);
 }
 .bcta-dots {
-  background-image: radial-gradient(circle, rgba(196, 168, 130, 0.15) 1px, transparent 1px);
+  background-image: radial-gradient(
+    circle,
+    rgba(196, 168, 130, 0.15) 1px,
+    transparent 1px
+  );
   background-size: 28px 28px;
 }
 .bcta-orn {
@@ -701,17 +818,26 @@ onMounted(async () => {
   text-decoration: none;
   transition: background 0.22s;
 }
-.bcta-btn:hover { background: #d4b892; color: #1a1410; }
+.bcta-btn:hover {
+  background: #d4b892;
+  color: #1a1410;
+}
 
 /* ── DARK MODE ── */
-[data-theme="dark"] .sc-page { background: #1a1610; }
+[data-theme="dark"] .sc-page {
+  background: #1a1610;
+}
 
 [data-theme="dark"] .divider-strip {
   background: #1e1b14;
   border-color: #3a3025;
 }
-[data-theme="dark"] .ds-text { color: #6a5a4a; }
-[data-theme="dark"] .ds-line { background: #3a3025; }
+[data-theme="dark"] .ds-text {
+  color: #6a5a4a;
+}
+[data-theme="dark"] .ds-line {
+  background: #3a3025;
+}
 
 [data-theme="dark"] .filter-strip {
   background: #1e1b14;
@@ -740,16 +866,28 @@ onMounted(async () => {
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
 }
 
-[data-theme="dark"] .contrib-name { color: #e8ddd0; }
-[data-theme="dark"] .contrib-date { color: #6a5a4a; }
-[data-theme="dark"] .card-type-label { color: #6a5a4a; }
-[data-theme="dark"] .card-desc { color: #c0b0a0; }
+[data-theme="dark"] .contrib-name {
+  color: #e8ddd0;
+}
+[data-theme="dark"] .contrib-date {
+  color: #6a5a4a;
+}
+[data-theme="dark"] .card-type-label {
+  color: #6a5a4a;
+}
+[data-theme="dark"] .card-desc {
+  color: #c0b0a0;
+}
 [data-theme="dark"] .cfg-chip {
   border-color: #3a3025;
   color: #8a7a6a;
 }
-[data-theme="dark"] .cfg-key { color: #c0b0a0; }
-[data-theme="dark"] .cfg-val { color: #8a7a6a; }
+[data-theme="dark"] .cfg-key {
+  color: #c0b0a0;
+}
+[data-theme="dark"] .cfg-val {
+  color: #8a7a6a;
+}
 [data-theme="dark"] .card-cta {
   border-color: #c8b8a8;
   color: #c8b8a8;
@@ -761,44 +899,99 @@ onMounted(async () => {
 }
 
 [data-theme="dark"] .sk-img,
-[data-theme="dark"] .sk-line { background: #3a3025; }
-[data-theme="dark"] .skeleton-card { background: #2a2418; border-color: #3a3025; }
+[data-theme="dark"] .sk-line {
+  background: #3a3025;
+}
+[data-theme="dark"] .skeleton-card {
+  background: #2a2418;
+  border-color: #3a3025;
+}
 
-[data-theme="dark"] .empty-title { color: #e8ddd0; }
-[data-theme="dark"] .empty-sub { color: #8a7a6a; }
+[data-theme="dark"] .empty-title {
+  color: #e8ddd0;
+}
+[data-theme="dark"] .empty-sub {
+  color: #8a7a6a;
+}
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1199px) {
-  .sc-grid { grid-template-columns: repeat(2, 1fr); }
-  .sc-card.is-featured { grid-column: span 2; }
-  .skeleton-grid { grid-template-columns: repeat(2, 1fr); }
+  .sc-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .sc-card.is-featured {
+    grid-column: span 2;
+  }
+  .skeleton-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 @media (max-width: 991px) {
-  .hero-inner { padding: 0 2.5rem; }
-  .divider-strip { padding: 0.6rem 2.5rem; }
-  .filter-strip { padding: 0.9rem 2.5rem; }
-  .sc-container { padding: 2rem 2.5rem 4rem; }
-  .bottom-cta { padding: 4.5rem 2.5rem; }
-  .hero-ornament { display: none; }
-  .hero-ornament-sm { display: none; }
+  .hero-inner {
+    padding: 0 2.5rem;
+  }
+  .divider-strip {
+    padding: 0.6rem 2.5rem;
+  }
+  .filter-strip {
+    padding: 0.9rem 2.5rem;
+  }
+  .sc-container {
+    padding: 2rem 2.5rem 4rem;
+  }
+  .bottom-cta {
+    padding: 4.5rem 2.5rem;
+  }
+  .hero-ornament {
+    display: none;
+  }
+  .hero-ornament-sm {
+    display: none;
+  }
 }
 @media (max-width: 767px) {
-  .sc-hero { height: auto; min-height: 300px; }
-  .hero-inner { padding: 2rem 1.5rem; }
-  .divider-strip { padding: 0.6rem 1.5rem; }
-  .filter-strip { padding: 0.75rem 1.25rem; top: 0; }
-  .sc-container { padding: 1.5rem 1.25rem 3rem; }
-  .bottom-cta { padding: 3.5rem 1.5rem; }
-  .sc-grid { grid-template-columns: 1fr; }
+  .sc-hero {
+    height: auto;
+    min-height: 300px;
+  }
+  .hero-inner {
+    padding: 2rem 1.5rem;
+  }
+  .divider-strip {
+    padding: 0.6rem 1.5rem;
+  }
+  .filter-strip {
+    padding: 0.75rem 1.25rem;
+    top: 0;
+  }
+  .sc-container {
+    padding: 1.5rem 1.25rem 3rem;
+  }
+  .bottom-cta {
+    padding: 3.5rem 1.5rem;
+  }
+  .sc-grid {
+    grid-template-columns: 1fr;
+  }
   .sc-card.is-featured {
     grid-column: span 1;
   }
-  .sc-card.is-featured .card-img-wrap { aspect-ratio: 4 / 3; }
-  .skeleton-grid { grid-template-columns: 1fr; }
-  .stat-col { padding: 0 1rem; }
-  .stat-col:first-child { padding-left: 0; }
+  .sc-card.is-featured .card-img-wrap {
+    aspect-ratio: 4 / 3;
+  }
+  .skeleton-grid {
+    grid-template-columns: 1fr;
+  }
+  .stat-col {
+    padding: 0 1rem;
+  }
+  .stat-col:first-child {
+    padding-left: 0;
+  }
 }
 @media (max-width: 480px) {
-  .hero-stats { gap: 0; }
+  .hero-stats {
+    gap: 0;
+  }
 }
 </style>
