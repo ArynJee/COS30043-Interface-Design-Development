@@ -961,6 +961,7 @@ defineExpose({ captureScreenshot })
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .fv-hint {
+  font-family: 'Times New Roman', serif;
   position: absolute;
   bottom: 12px;
   left: 50%;

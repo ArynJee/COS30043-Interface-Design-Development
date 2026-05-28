@@ -102,7 +102,10 @@ export default function useCustomize(viewerRef) {
 
   function openContribModal() {
     if (!currentType.value) return
-    if (!localStorage.getItem('token')) {
+    const token = localStorage.getItem('token')
+    console.log('[contribute] openContribModal — token in localStorage:', token)
+    console.log('[contribute] all localStorage keys:', Object.keys(localStorage))
+    if (!token) {
       cartError.value = 'Please log in to contribute a design.'
       return
     }
@@ -113,21 +116,28 @@ export default function useCustomize(viewerRef) {
 
   async function submitContribution(description) {
     if (!currentType.value) return
+    const token = localStorage.getItem('token')
+    console.log('[contribute] submitContribution — token at submit time:', token)
     contribSubmitting.value = true
     contribError.value      = ''
     try {
-      await contributeDesignApi({
-        area:          currentType.value.area,
+      const payload = {
+        area:           currentType.value.area,
         furniture_type: currentType.value.name,
         description,
         configuration:  selectedConfig.value,
         total_cost:     totalPrice.value,
         preview_image:  contribPreview.value,
-      })
+      }
+      console.log('[contribute] sending payload:', payload)
+      await contributeDesignApi(payload)
       contribOpen.value    = false
       contribSuccess.value = true
       setTimeout(() => { contribSuccess.value = false }, 4000)
     } catch (e) {
+      console.error('[contribute] API error:', e)
+      console.error('[contribute] response status:', e?.response?.status)
+      console.error('[contribute] response data:', e?.response?.data)
       contribError.value = e?.response?.data?.message || 'Submission failed.'
     } finally {
       contribSubmitting.value = false

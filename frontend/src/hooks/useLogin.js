@@ -36,6 +36,7 @@ export default function useLogin() {
     loading.value = true
     try {
       const data = await loginApi(form)
+      localStorage.setItem('token', data.token)
       router.push('/')
     } catch (err) {
       errors.general = err.response?.data?.message || 'Invalid email or password.'

@@ -8,6 +8,23 @@ import {
   CheckCircle2,
   AlertCircle,
   RotateCcw,
+  Coffee,
+  Armchair,
+  BookOpen,
+  BedDouble,
+  Shirt,
+  Lamp,
+  ChefHat,
+  GlassWater,
+  UtensilsCrossed,
+  CookingPot,
+  Droplets,
+  ShowerHead,
+  Glasses,
+  PenLine,
+  Briefcase,
+  GraduationCap,
+  Archive,
 } from '@lucide/vue'
 import FurnitureViewer from '@/components/FurnitureViewer.vue'
 import ContributionModal from '@/components/ContributionModal.vue'
@@ -24,6 +41,27 @@ const {
   contribPreview, openContribModal, submitContribution,
   formatPrice,
 } = useCustomize(viewerRef)
+
+const FURNITURE_ICONS = {
+  sofa:             SofaIcon,
+  armchair:         Armchair,
+  coffee_table:     Coffee,
+  dining_table:     UtensilsCrossed,
+  bookshelf:        BookOpen,
+  study_shelf:      GraduationCap,
+  bathroom_shelf:   ShowerHead,
+  bed_frame:        BedDouble,
+  wardrobe:         Shirt,
+  nightstand:       Lamp,
+  kitchen_counter:  ChefHat,
+  kitchen_cabinet:  CookingPot,
+  sink:             Droplets,
+  vanity_cabinet:   Glasses,
+  bar_stool:        GlassWater,
+  desk:             PenLine,
+  office_chair:     Briefcase,
+  drawer_cabinet:   Archive,
+}
 
 // friendly label map for config section headings
 const CONFIG_LABELS = {
@@ -56,25 +94,28 @@ const priceBreakdown = computed(() => {
 
     <!-- ── HERO ──────────────────────────────────────────────────────────── -->
     <section class="cu-hero">
-      <div class="cu-hero-inner container">
+      <img
+        src="/showcase/customize-hero.jpg"
+        alt=""
+        class="cu-hero-img"
+      />
+
+      <div class="cu-hero-inner">
         <p class="cu-crumb">
           <RouterLink to="/">Home</RouterLink>&ensp;›&ensp;
           <RouterLink to="/products">Products</RouterLink>&ensp;›&ensp;
           <span>Customize</span>
         </p>
-        <div class="cu-hero-text">
-          <div class="cu-eyebrow">
-            <span class="ey-line"></span>
-            <span class="ey-text">HD FEATURE</span>
-            <span class="ey-line"></span>
-          </div>
-          <h1 class="cu-hero-title">Design Your Furniture</h1>
-          <p class="cu-hero-sub">
-            Craft something uniquely yours — choose shape, material, colour, fabric and watch
-            your design come to life in real-time 3D.
-          </p>
-        </div>
+
+        <h1 class="cu-hero-title">Design Your Furniture</h1>
+        <p class="cu-hero-sub">
+          Craft something uniquely yours — choose shape, material, colour, fabric and watch
+          your design come to life in real-time 3D.
+        </p>
       </div>
+
+      <div class="cu-hero-orn" aria-hidden="true">✦</div>
+      <div class="cu-hero-orn-sm" aria-hidden="true">✦</div>
     </section>
 
     <!-- ── MAIN WORKSPACE ─────────────────────────────────────────────────── -->
@@ -111,7 +152,7 @@ const priceBreakdown = computed(() => {
               @click="selectType(ft.id)"
             >
               <div class="cu-type-icon">
-                <SofaIcon :size="22" />
+                <component :is="FURNITURE_ICONS[ft.id] || SofaIcon" :size="22" />
               </div>
               <span class="cu-type-name">{{ ft.name }}</span>
               <span class="cu-type-price">from {{ formatPrice(ft.basePrice) }}</span>
@@ -312,45 +353,137 @@ const priceBreakdown = computed(() => {
 
 /* ── hero ─────────────────────────────────────────────────────────────────── */
 .cu-hero {
-  background: linear-gradient(135deg, #2c2218 0%, #4a3828 100%);
-  color: #f0ebe2;
-  padding: 3.5rem 0 2.8rem;
+  height: 400px;
+  background: #1e1a14;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
 }
 
-.cu-hero-inner { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+.cu-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(30, 26, 20, 0.88) 0%,
+    rgba(30, 26, 20, 0) 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cu-hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+}
+
+.cu-hero-inner {
+  font-family: 'Times New Roman', serif;
+  position: relative;
+  z-index: 1;
+  padding: 0 5rem;
+  max-width: 700px;
+}
 
 .cu-crumb {
-  font-size: 0.8rem;
-  color: rgba(240,235,226,0.6);
-  margin-bottom: 1.5rem;
+  font-family: 'Times New Roman', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: #f0e1cc;
+  margin-bottom: 1.25rem;
 }
 
-.cu-crumb a { color: rgba(240,235,226,0.7); text-decoration: none; }
-.cu-crumb a:hover { color: #f0ebe2; }
+.cu-crumb a { color: #f0e1cc; text-decoration: none; transition: color 0.2s; }
+.cu-crumb a:hover { color: #dbbea0; }
 
 .cu-eyebrow {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.6rem;
   margin-bottom: 0.75rem;
 }
 
-.ey-line { flex: 0 0 28px; height: 1px; background: #c4a882; }
-.ey-text { font-size: 0.72rem; letter-spacing: 0.12em; color: #c4a882; }
+.ey-line { flex: 0 0 50px; height: 1px; background: rgba(255, 239, 216, 0.45); }
+.ey-text { font-size: 0.65rem; letter-spacing: 0.28em; color: #f0e1cc; white-space: nowrap; }
 
 .cu-hero-title {
   font-family: 'Times New Roman', serif;
-  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  color: #f0e1cc;
+  line-height: 1.1;
+  font-weight: bold;
   margin: 0 0 0.75rem;
-  color: #f0ebe2;
 }
 
 .cu-hero-sub {
-  font-size: 0.95rem;
-  color: rgba(240,235,226,0.75);
-  max-width: 520px;
+  font-size: 0.85rem;
+  color: #f0e1cc;
+  letter-spacing: 0.04em;
+  max-width: 380px;
   line-height: 1.6;
-  margin: 0;
+  margin: 0 0 2rem;
+}
+
+/* hero stats */
+.cu-hero-stats {
+  display: flex;
+  align-items: center;
+}
+
+.stat-col {
+  display: flex;
+  flex-direction: column;
+  padding: 0 1.6rem;
+}
+.stat-col:first-child { padding-left: 0; }
+
+.stat-n {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #c4a882;
+  line-height: 1;
+}
+.stat-l {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f0e1cc;
+  margin-top: 0.2rem;
+}
+.stat-div {
+  width: 1px;
+  height: 40px;
+  background: rgba(240, 225, 204, 0.35);
+  flex-shrink: 0;
+}
+
+/* hero ornaments */
+.cu-hero-orn {
+  position: absolute;
+  right: 5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10rem;
+  color: rgba(196, 168, 130, 0.07);
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+}
+.cu-hero-orn-sm {
+  position: absolute;
+  right: 18rem;
+  top: 25%;
+  font-size: 3rem;
+  color: rgba(196, 168, 130, 0.12);
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
 }
 
 /* ── workspace layout ────────────────────────────────────────────────────── */
@@ -418,6 +551,7 @@ const priceBreakdown = computed(() => {
 
 /* area tabs */
 .cu-area-tabs {
+  font-family: 'Times New Roman', serif;
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
@@ -466,13 +600,14 @@ const priceBreakdown = computed(() => {
 .cu-type-card.active .cu-type-icon  { color: #c4a882; }
 
 .cu-type-icon  { color: var(--cu-muted); }
-.cu-type-name  { font-size: 0.80rem; font-weight: 600; color: var(--cu-text); line-height: 1.2; }
-.cu-type-price { font-size: 0.70rem; color: var(--cu-muted); }
+.cu-type-name  { font-family: 'Times New Roman', serif; font-size: 0.80rem; font-weight: 600; color: var(--cu-text); line-height: 1.2; }
+.cu-type-price { font-family: 'Times New Roman', serif; font-size: 0.70rem; color: var(--cu-muted); }
 
 /* config sections */
 .cu-config-section { margin-bottom: 1.25rem; }
 
 .cu-config-heading {
+  font-family: 'Times New Roman', serif;
   font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -489,6 +624,7 @@ const priceBreakdown = computed(() => {
 }
 
 .cu-swatch {
+  font-family: 'Times New Roman', serif;
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -524,6 +660,7 @@ const priceBreakdown = computed(() => {
 }
 
 .cu-opt-card {
+  font-family: 'Times New Roman', serif;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -546,6 +683,7 @@ const priceBreakdown = computed(() => {
 
 /* empty hint */
 .cu-empty-hint {
+  font-family: 'Times New Roman', serif;
   padding: 2.5rem 1.5rem;
   text-align: center;
   color: var(--cu-muted);
@@ -593,6 +731,7 @@ const priceBreakdown = computed(() => {
 
 /* price card */
 .cu-price-card {
+  font-family: 'Times New Roman', serif;
   background: var(--cu-card);
   border: 1px solid var(--cu-border);
   border-radius: 16px;
@@ -731,6 +870,13 @@ const priceBreakdown = computed(() => {
     overflow-y: visible;
   }
   .cu-viewer-wrap { height: 380px; }
+  .cu-hero-inner  { padding: 0 2.5rem; }
+  .cu-hero-orn, .cu-hero-orn-sm { display: none; }
+}
+
+@media (max-width: 767px) {
+  .cu-hero { height: auto; min-height: 300px; }
+  .cu-hero-inner { padding: 2rem 1.5rem; }
 }
 
 @media (max-width: 576px) {
