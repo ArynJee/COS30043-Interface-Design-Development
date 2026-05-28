@@ -17,7 +17,6 @@
         <!-- preview thumbnail -->
         <div v-if="previewImage" class="cm-preview">
           <img :src="previewImage" alt="Your custom furniture preview" class="cm-preview-img" />
-          <div class="cm-preview-badge">Your Design</div>
         </div>
 
         <!-- design info -->
@@ -137,6 +136,7 @@ function handleSubmit() {
 
 .cm-sub {
   font-size: 0.82rem;
+  font-family: 'Times New Roman', serif;
   color: var(--text-muted, #8B7355);
   margin: 0;
 }
@@ -188,6 +188,7 @@ function handleSubmit() {
 }
 
 .cm-badge {
+  font-family: 'Times New Roman', serif;
   font-size: 0.78rem;
   background: #f5f0e8;
   color: #5a4a3a;
@@ -199,6 +200,7 @@ function handleSubmit() {
 .cm-badge--area { background: #ece5d8; }
 
 .cm-price {
+  font-family: 'Times New Roman', serif;
   margin-left: auto;
   font-size: 0.88rem;
   color: var(--text-muted, #8B7355);
@@ -209,6 +211,7 @@ function handleSubmit() {
 .cm-field { margin-bottom: 0.75rem; }
 
 .cm-label {
+  font-family: 'Times New Roman', serif;
   display: block;
   font-size: 0.82rem;
   font-weight: 600;
@@ -224,7 +227,7 @@ function handleSubmit() {
   border-radius: 8px;
   padding: 0.65rem 0.85rem;
   font-size: 0.88rem;
-  font-family: inherit;
+  font-family: 'Times New Roman', serif;
   resize: vertical;
   background: var(--bg-input, #faf7f2);
   color: var(--text-primary, #2c2218);
@@ -243,6 +246,7 @@ function handleSubmit() {
 }
 
 .cm-error {
+  font-family: 'Times New Roman', serif;
   background: #fdf0ed;
   border: 1px solid #e8a090;
   color: #9b4030;
@@ -260,10 +264,11 @@ function handleSubmit() {
 }
 
 .cm-btn {
+  font-family: 'Times New Roman', serif;
   padding: 0.55rem 1.35rem;
   border-radius: 8px;
   font-size: 0.88rem;
-  font-weight: 600;
+  letter-spacing: 0.05em;
   cursor: pointer;
   display: flex;
   align-items: center;
