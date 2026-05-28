@@ -1,88 +1,20 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
 import { RouterLink } from "vue-router";
-import { ArrowRight, Sparkle } from "@lucide/vue";
-import { getContributionsApi } from "@/services/showcaseServices.js";
+import { ArrowRight, Sparkle, Armchair } from "@lucide/vue";
+import { useShowcase, AREAS } from "@/hooks/useShowcase.js";
 
-const contributions = ref([]);
-const loading = ref(true);
-const selectedArea = ref("All");
-
-const AREAS = [
-  "All",
-  "Living Room",
-  "Bedroom",
-  "Kitchen",
-  "Study Room",
-  "Bathroom",
-];
-
-const AREA_ACCENT = {
-  "Living Room": "#c4956a",
-  Bedroom: "#b07a8a",
-  Kitchen: "#7a9a70",
-  "Study Room": "#6a80a0",
-  Bathroom: "#6a9a9a",
-};
-
-const totalContributors = computed(
-  () => new Set(contributions.value.map((c) => c.email).filter(Boolean)).size,
-);
-const totalAreas = computed(
-  () => new Set(contributions.value.map((c) => c.area)).size,
-);
-
-const filtered = computed(() =>
-  selectedArea.value === "All"
-    ? contributions.value
-    : contributions.value.filter((c) => c.area === selectedArea.value),
-);
-
-const formatPrice = (price) =>
-  `RM ${parseFloat(price).toLocaleString("en-MY", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
-
-const formatDate = (dateStr) =>
-  new Date(dateStr).toLocaleDateString("en-MY", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-
-const getInitials = (first, last) =>
-  `${first?.[0] ?? "?"}${last?.[0] ?? ""}`.toUpperCase();
-
-const getAvatarColor = (name = "") => {
-  const PALETTE = [
-    "#c4956a",
-    "#b07a8a",
-    "#7a9a70",
-    "#6a80a0",
-    "#8b6f47",
-    "#c4a882",
-  ];
-  let h = 0;
-  for (let i = 0; i < name.length; i++) h = name.charCodeAt(i) + ((h << 5) - h);
-  return PALETTE[Math.abs(h) % PALETTE.length];
-};
-
-const configEntries = (cfg) =>
-  cfg
-    ? Object.entries(cfg).map(([k, v]) => ({
-        label: k[0].toUpperCase() + k.slice(1),
-        ...v,
-      }))
-    : [];
-
-onMounted(async () => {
-  try {
-    const data = await getContributionsApi();
-    contributions.value = data.contributions;
-  } catch (e) {
-    console.error(e);
-  } finally {
-    loading.value = false;
-  }
-});
+const {
+  contributions,
+  loading,
+  selectedArea,
+  totalContributors,
+  totalAreas,
+  filtered,
+  formatPrice,
+  formatDate,
+  getInitials,
+  configEntries,
+} = useShowcase();
 </script>
 
 <template>
@@ -135,22 +67,22 @@ onMounted(async () => {
 
     <!-- ── DIVIDER STRIP ── -->
     <div
-      class="divider-strip d-flex align-items-center justify-content-center gap-3"
+      class="divider-strip d-flex align-items-center justify-content-center gap-3 py-5 mt-4"
     >
       <span class="ds-line"></span>
-      <span class="ds-text"
+      <span class="ds-text text-uppercase"
         ><Sparkle size="11" />&nbsp; CRAFTED WITH PASSION &nbsp;<Sparkle
           size="11"
       /></span>
       <span class="ds-line"></span>
     </div>
 
-    <!-- ── AREA FILTER ── -->
-    <div class="filter-strip d-flex align-items-center gap-2 overflow-x-auto">
+  <!-- area filter -->
+    <div class="filter-strip d-flex align-items-center gap-5 overflow-x-auto justify-content-center position-sticky px-2 py-4">
       <button
         v-for="area in AREAS"
         :key="area"
-        class="area-pill"
+        class="area-pill px-3 py-2 rounded-pill"
         :class="{ 'is-active': selectedArea === area }"
         @click="selectedArea = area"
       >
@@ -207,7 +139,7 @@ onMounted(async () => {
 
             <span
               class="card-area-badge position-absolute"
-              :style="{ background: AREA_ACCENT[c.area] ?? '#c4a882' }"
+              style="background: #c4a882"
             >
               {{ c.area }}
             </span>
@@ -226,11 +158,7 @@ onMounted(async () => {
             <div class="contrib-row d-flex align-items-center gap-2 mb-3">
               <div
                 class="contrib-avatar d-flex align-items-center justify-content-center flex-shrink-0"
-                :style="{
-                  background: getAvatarColor(
-                    (c.first_name ?? '') + (c.last_name ?? ''),
-                  ),
-                }"
+                style="background: #c4a882"
               >
                 {{ getInitials(c.first_name, c.last_name) }}
               </div>
@@ -282,7 +210,7 @@ onMounted(async () => {
       <div class="bcta-bg position-absolute inset-0"></div>
       <div class="bcta-dots position-absolute inset-0"></div>
       <div class="bcta-inner position-relative z-1 text-center">
-        <div class="bcta-orn">✦</div>
+        <div class="bcta-orn"><Armchair size="40"/></div>
         <h2 class="bcta-title">Have a Design to Share?</h2>
         <p class="bcta-sub">
           Customize your own furniture, then contribute it to our growing
@@ -433,43 +361,34 @@ onMounted(async () => {
 
 /* ── DIVIDER STRIP ── */
 .divider-strip {
-  border-top: 1px solid #e8e3dc;
-  border-bottom: 1px solid #e8e3dc;
-  background: #f5f0ea;
   padding: 0.6rem 5rem;
   gap: 1rem;
 }
 .ds-text {
-  font-size: 0.6rem;
+  font-size: 0.8rem;
   letter-spacing: 0.22em;
   color: #b09070;
   white-space: nowrap;
-  text-transform: uppercase;
 }
 .ds-line {
   flex: 1;
-  max-width: 120px;
+  max-width: 200px;
   height: 1px;
   background: #d0c5b5;
 }
 
 /* ── FILTER STRIP ── */
 .filter-strip {
-  padding: 1rem 5rem;
-  border-bottom: 1px solid #e8e3dc;
-  background: #fff;
-  position: sticky;
   top: 80px;
   z-index: 50;
   scrollbar-width: none;
+  background: #faf6f0;
 }
 .filter-strip::-webkit-scrollbar {
   display: none;
 }
 
 .area-pill {
-  padding: 0.4rem 1.1rem;
-  border-radius: 100px;
   border: 1px solid #d0c5b5;
   background: transparent;
   font-family: "Times New Roman", serif;
@@ -797,7 +716,7 @@ onMounted(async () => {
 }
 .bcta-title {
   font-size: clamp(1.6rem, 3vw, 2.6rem);
-  color: #77401a;
+  color: #2b1708;
   margin-bottom: 0.75rem;
 }
 .bcta-sub {
@@ -905,6 +824,10 @@ onMounted(async () => {
 [data-theme="dark"] .skeleton-card {
   background: #2a2418;
   border-color: #3a3025;
+}
+
+[data-theme="dark"] .bcta-title {
+  color: #b89e7f;
 }
 
 [data-theme="dark"] .empty-title {
