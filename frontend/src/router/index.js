@@ -8,6 +8,7 @@ import Login from '@/views/Login.vue'
 import Registration from '@/views/Registration.vue'
 import Products from '@/views/Products.vue'
 import Showcase from '@/views/Showcase.vue'
+import Customize from '@/views/Customize.vue'
 
 const routes = [
   {
@@ -17,7 +18,7 @@ const routes = [
       { path: '', component: Home },
       { path: 'products', component: Products },
       { path: 'showcase', component: Showcase },
-      // other main pages here
+      { path: 'customize', component: Customize },
     ],
   },
 
