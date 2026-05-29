@@ -96,7 +96,7 @@ function handleSubmit() {
 .cm-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(44, 34, 24, 0.55);
+  background: rgba(20, 16, 10, 0.65);
   backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
@@ -109,8 +109,7 @@ function handleSubmit() {
 @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
 
 .cm-modal {
-  background: var(--bg-card, #fff);
-  border-radius: 16px;
+  background: #faf7f2;
   width: 100%;
   max-width: 520px;
   padding: 2rem;
@@ -137,7 +136,7 @@ function handleSubmit() {
 .cm-sub {
   font-size: 0.82rem;
   font-family: 'Times New Roman', serif;
-  color: var(--text-muted, #8B7355);
+  color: #7a6a58;
   margin: 0;
 }
 
@@ -145,19 +144,20 @@ function handleSubmit() {
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--text-muted, #8B7355);
+  color: #7a6a58;
   padding: 4px;
   border-radius: 6px;
   display: flex;
   transition: background 0.15s;
 }
 
-.cm-close:hover { background: var(--bg-hover, #f5f0e8); }
+.cm-close:hover { background: #f0ebe2; }
 
 .cm-preview {
   position: relative;
   margin-bottom: 1rem;
   border-radius: 10px;
+  border: 1px solid #c8c1b5;
   overflow: hidden;
   height: 200px;
 }
@@ -192,7 +192,7 @@ function handleSubmit() {
   font-size: 0.78rem;
   background: #f5f0e8;
   color: #5a4a3a;
-  border: 1px solid #e0d8cc;
+  border: 1px solid #e0d5c5;
   padding: 3px 10px;
   border-radius: 20px;
 }
@@ -203,7 +203,7 @@ function handleSubmit() {
   font-family: 'Times New Roman', serif;
   margin-left: auto;
   font-size: 0.88rem;
-  color: var(--text-muted, #8B7355);
+  color: #7a6a58;
 }
 
 .cm-price strong { color: #c4a882; }
@@ -215,7 +215,7 @@ function handleSubmit() {
   display: block;
   font-size: 0.82rem;
   font-weight: 600;
-  color: var(--text-secondary, #5a4a3a);
+  color: #7a6a58;
   margin-bottom: 0.4rem;
 }
 
@@ -223,14 +223,14 @@ function handleSubmit() {
 
 .cm-textarea {
   width: 100%;
-  border: 1px solid var(--border-color, #e0d8cc);
+  border: 1px solid #e0d5c5;
   border-radius: 8px;
   padding: 0.65rem 0.85rem;
   font-size: 0.88rem;
   font-family: 'Times New Roman', serif;
   resize: vertical;
-  background: var(--bg-input, #faf7f2);
-  color: var(--text-primary, #2c2218);
+  background: #ffffff;
+  color: #2c2218;
   transition: border-color 0.15s;
   outline: none;
 }
@@ -238,10 +238,11 @@ function handleSubmit() {
 .cm-textarea:focus { border-color: #c4a882; box-shadow: 0 0 0 3px rgba(196, 168, 130, 0.15); }
 
 .cm-char-count {
+  font-family: 'Times New Roman', serif;
   display: block;
   text-align: right;
   font-size: 0.74rem;
-  color: var(--text-muted, #8B7355);
+  color: #7a6a58;
   margin-top: 0.25rem;
 }
 
@@ -281,18 +282,18 @@ function handleSubmit() {
 
 .cm-btn--ghost {
   background: transparent;
-  border: 1px solid var(--border-color, #e0d8cc);
-  color: var(--text-secondary, #5a4a3a);
+  border: 1px solid #e0d5c5;
+  color: #7a6a58;
 }
 
-.cm-btn--ghost:hover:not(:disabled) { background: var(--bg-hover, #f5f0e8); }
+.cm-btn--ghost:hover:not(:disabled) { background: #f5f0e8; }
 
 .cm-btn--primary {
-  background: #2c2218;
+  background: #1e1a14;
   color: #f0ebe2;
 }
 
-.cm-btn--primary:hover:not(:disabled) { background: #3d3024; }
+.cm-btn--primary:hover:not(:disabled) { background: #8b6f47; }
 
 .cm-spinner {
   width: 14px;

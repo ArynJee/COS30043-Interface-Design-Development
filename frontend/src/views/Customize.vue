@@ -92,50 +92,47 @@ const priceBreakdown = computed(() => {
 <template>
   <div class="cu-page">
 
-    <!-- ── HERO ──────────────────────────────────────────────────────────── -->
-    <section class="cu-hero">
+    <!-- hero -->
+    <section class="cu-hero d-flex align-items-center overflow-hidden position-relative">
       <img
         src="/showcase/customize-hero.jpg"
         alt=""
-        class="cu-hero-img"
+        class="cu-hero-img position-absolute inset-0 w-100 h-100 object-fit-cover"
       />
 
-      <div class="cu-hero-inner">
-        <p class="cu-crumb">
+      <div class="cu-hero-inner position-relative z-1">
+        <p class="cu-crumb mb-4">
           <RouterLink to="/">Home</RouterLink>&ensp;›&ensp;
           <RouterLink to="/products">Products</RouterLink>&ensp;›&ensp;
           <span>Customize</span>
         </p>
 
-        <h1 class="cu-hero-title">Design Your Furniture</h1>
+        <h1 class="cu-hero-title fw-bold pb-4">Design Your Furniture</h1>
         <p class="cu-hero-sub">
           Craft something uniquely yours — choose shape, material, colour, fabric and watch
           your design come to life in real-time 3D.
         </p>
       </div>
-
-      <div class="cu-hero-orn" aria-hidden="true">✦</div>
-      <div class="cu-hero-orn-sm" aria-hidden="true">✦</div>
     </section>
 
-    <!-- ── MAIN WORKSPACE ─────────────────────────────────────────────────── -->
-    <div class="cu-workspace container">
+    <!-- workspace -->
+    <div class="cu-workspace container mx-auto mt-5 d-grid align-items-start gap-4">
 
-      <!-- ═══ LEFT PANEL — Selector + Config ══════════════════════════════ -->
-      <aside class="cu-panel cu-panel--left">
+      <!--configuration panel -->
+      <aside class="cu-panel cu-panel--left overflow-hidden position-sticky overflow-y-auto">
 
         <!-- STEP 1: furniture type -->
-        <div class="cu-step">
-          <h2 class="cu-step-title">
-            <span class="cu-step-num">1</span> Select Furniture
+        <div class="cu-step p-4">
+          <h2 class="cu-step-title mb-4 d-flex align-items-center gap-2">
+            <span class="cu-step-num rounded-pill d-inline-flex align-items-center justify-content-center">1</span> Select Furniture
           </h2>
 
           <!-- area tabs -->
-          <div class="cu-area-tabs" role="tablist">
+          <div class="cu-area-tabs d-flex gap-2 mb-4" role="tablist">
             <button
               v-for="area in AREAS"
               :key="area"
-              class="cu-area-tab"
+              class="cu-area-tab px-3 py-1 rounded-pill"
               :class="{ active: selectedArea === area }"
               @click="selectArea(area)"
               role="tab"
@@ -143,11 +140,11 @@ const priceBreakdown = computed(() => {
           </div>
 
           <!-- furniture type grid -->
-          <div class="cu-type-grid">
+          <div class="cu-type-grid d-grid gap-3">
             <button
               v-for="ft in furnitureInArea"
               :key="ft.id"
-              class="cu-type-card"
+              class="cu-type-card d-flex flex-column align-items-center gap-1 p-3 border-1 rounded-4 text-center"
               :class="{ active: selectedTypeId === ft.id }"
               @click="selectType(ft.id)"
             >
@@ -162,31 +159,31 @@ const priceBreakdown = computed(() => {
 
         <!-- STEP 2: customisation options -->
         <template v-if="currentType">
-          <div class="cu-step cu-step--config">
-            <h2 class="cu-step-title">
-              <span class="cu-step-num">2</span> Customise
+          <div class="cu-step cu-step--config p-4 border-0">
+            <h2 class="cu-step-title mb-4 d-flex align-items-center gap-2">
+              <span class="cu-step-num rounded-pill d-inline-flex align-items-center justify-content-center">2</span> Customise
               <span class="cu-step-sub">{{ currentType.name }}</span>
             </h2>
 
             <div
               v-for="key in configKeys"
               :key="key"
-              class="cu-config-section"
+              class="cu-config-section mb-4"
             >
-              <h3 class="cu-config-heading">{{ configLabel(key) }}</h3>
+              <h3 class="cu-config-heading fw-bold text-uppercase mb-2">{{ configLabel(key) }}</h3>
 
               <!-- colour swatches -->
-              <div v-if="key === 'color'" class="cu-color-grid">
+              <div v-if="key === 'color'" class="cu-color-grid d-flex flex-wrap gap-2">
                 <button
                   v-for="opt in currentType.configs[key]"
                   :key="opt.id"
-                  class="cu-swatch"
+                  class="cu-swatch d-flex align-items-center gap-1 px-2 py-1 border-1 rounded-pill"
                   :class="{ active: selectedConfig[key]?.id === opt.id }"
                   :title="opt.name + (opt.price ? ' +' + formatPrice(opt.price) : ' (included)')"
                   @click="selectOption(key, opt)"
                 >
-                  <span class="cu-swatch-dot" :style="{ background: opt.hex }"></span>
-                  <span class="cu-swatch-label">
+                  <span class="cu-swatch-dot rounded-pill" :style="{ background: opt.hex }"></span>
+                  <span class="cu-swatch-label d-flex align-items-center gap-1">
                     {{ opt.name }}
                     <span v-if="opt.price" class="cu-opt-price">+{{ formatPrice(opt.price) }}</span>
                   </span>
@@ -195,11 +192,11 @@ const priceBreakdown = computed(() => {
               </div>
 
               <!-- regular option cards -->
-              <div v-else class="cu-opt-grid">
+              <div v-else class="cu-opt-grid d-flex flex-column gap-2">
                 <button
                   v-for="opt in currentType.configs[key]"
                   :key="opt.id"
-                  class="cu-opt-card"
+                  class="cu-opt-card d-flex align-items-center gap-2 px-3 py-2 border-1 rounded-4 text-left w-100 justify-content-between"
                   :class="{ active: selectedConfig[key]?.id === opt.id }"
                   @click="selectOption(key, opt)"
                 >
@@ -216,28 +213,29 @@ const priceBreakdown = computed(() => {
           </div>
         </template>
 
-        <div v-else class="cu-empty-hint">
+        <div v-else class="cu-empty-hint px-2 py-5 text-center">
           <SofaIcon :size="40" stroke-width="1" class="cu-empty-icon" />
           <p>Select a furniture type above<br>to start customising.</p>
         </div>
 
       </aside>
 
-      <!-- ═══ RIGHT PANEL — 3D Viewer + Price Summary ══════════════════════ -->
-      <main class="cu-panel cu-panel--right">
+      <!-- 3d viewer -->
+      <main class="cu-panel cu-panel--right d-flex flex-column gap-2">
 
         <!-- 3D viewer -->
-        <div class="cu-viewer-wrap">
+        <div class="cu-viewer-wrap position-relative overflow-hidden">
+          <!-- call FurnitureViewer.vue -->
           <FurnitureViewer
             ref="viewerRef"
             :skeleton-type="currentType?.skeletonType || ''"
             :furniture-type="currentType?.id || ''"
             :configuration="selectedConfig"
-            class="cu-viewer"
+            class="cu-viewer w-100 h-100"
           />
 
           <!-- no-selection overlay -->
-          <div v-if="!currentType" class="cu-viewer-placeholder">
+          <div v-if="!currentType" class="cu-viewer-placeholder position-absolute d-flex flex-column align-items-center justify-content-center gap-2 text-center p-4">
             <SofaIcon :size="56" stroke-width="1" class="cu-ph-icon" />
             <p class="cu-ph-text">Your 3D preview will appear here</p>
             <p class="cu-ph-sub">Select a furniture type to begin</p>
@@ -245,17 +243,17 @@ const priceBreakdown = computed(() => {
         </div>
 
         <!-- price summary -->
-        <div v-if="currentType" class="cu-price-card">
-          <h3 class="cu-price-title">Price Summary</h3>
-          <div class="cu-price-rows">
-            <div class="cu-price-row">
+        <div v-if="currentType" class="cu-price-card p-4">
+          <h3 class="cu-price-title mb-4 fw-semibold border-bottom">Price Summary</h3>
+          <div class="cu-price-rows d-flex flex-column gap-2">
+            <div class="cu-price-row d-flex justify-content-between">
               <span>Base ({{ currentType.name }})</span>
               <span>{{ formatPrice(currentType.basePrice) }}</span>
             </div>
             <div
               v-for="line in priceBreakdown"
               :key="line.label"
-              class="cu-price-row"
+              class="cu-price-row d-flex justify-content-between"
             >
               <span>{{ line.label }}: {{ line.name }}</span>
               <span :class="line.price < 0 ? 'cu-price--deduct' : 'cu-price--add'">
@@ -266,21 +264,9 @@ const priceBreakdown = computed(() => {
             </div>
           </div>
           <div class="cu-price-divider"></div>
-          <div class="cu-price-total">
+          <div class="cu-price-total d-flex justify-content-between align-items-baseline mb-2">
             <span>Total Estimated</span>
-            <span class="cu-price-amount">{{ formatPrice(totalPrice) }}</span>
-          </div>
-
-          <!-- example summary pill -->
-          <div class="cu-config-summary">
-            <span
-              v-for="key in configKeys"
-              :key="key"
-              v-if="selectedConfig[key]"
-              class="cu-config-chip"
-            >
-              {{ configLabel(key) }}: {{ selectedConfig[key]?.name }}
-            </span>
+            <span class="cu-price-amount fw-bold">{{ formatPrice(totalPrice) }}</span>
           </div>
 
           <!-- toast messages -->
@@ -320,7 +306,7 @@ const priceBreakdown = computed(() => {
       </main>
     </div>
 
-    <!-- ── CONTRIBUTION MODAL ─────────────────────────────────────────────── -->
+    <!-- contribution modal -->
     <ContributionModal
       v-model="contribOpen"
       :preview-image="contribPreview"
@@ -336,7 +322,6 @@ const priceBreakdown = computed(() => {
 </template>
 
 <style scoped>
-/* ── variables ────────────────────────────────────────────────────────────── */
 .cu-page {
   --cu-bg:        #faf7f2;
   --cu-card:      #fff;
@@ -355,10 +340,6 @@ const priceBreakdown = computed(() => {
 .cu-hero {
   height: 400px;
   background: #1e1a14;
-  display: flex;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
 }
 
 .cu-hero::after {
@@ -375,18 +356,11 @@ const priceBreakdown = computed(() => {
 }
 
 .cu-hero-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
   object-position: right center;
 }
 
 .cu-hero-inner {
   font-family: 'Times New Roman', serif;
-  position: relative;
-  z-index: 1;
   padding: 0 5rem;
   max-width: 700px;
 }
@@ -396,29 +370,16 @@ const priceBreakdown = computed(() => {
   font-size: 0.78rem;
   letter-spacing: 0.04em;
   color: #f0e1cc;
-  margin-bottom: 1.25rem;
 }
 
 .cu-crumb a { color: #f0e1cc; text-decoration: none; transition: color 0.2s; }
 .cu-crumb a:hover { color: #dbbea0; }
-
-.cu-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-bottom: 0.75rem;
-}
-
-.ey-line { flex: 0 0 50px; height: 1px; background: rgba(255, 239, 216, 0.45); }
-.ey-text { font-size: 0.65rem; letter-spacing: 0.28em; color: #f0e1cc; white-space: nowrap; }
 
 .cu-hero-title {
   font-family: 'Times New Roman', serif;
   font-size: clamp(2.2rem, 4vw, 3.2rem);
   color: #f0e1cc;
   line-height: 1.1;
-  font-weight: bold;
-  margin: 0 0 0.75rem;
 }
 
 .cu-hero-sub {
@@ -427,105 +388,32 @@ const priceBreakdown = computed(() => {
   letter-spacing: 0.04em;
   max-width: 380px;
   line-height: 1.6;
-  margin: 0 0 2rem;
 }
 
-/* hero stats */
-.cu-hero-stats {
-  display: flex;
-  align-items: center;
-}
-
-.stat-col {
-  display: flex;
-  flex-direction: column;
-  padding: 0 1.6rem;
-}
-.stat-col:first-child { padding-left: 0; }
-
-.stat-n {
-  font-size: 2.2rem;
-  font-weight: bold;
-  color: #c4a882;
-  line-height: 1;
-}
-.stat-l {
-  font-size: 0.65rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #f0e1cc;
-  margin-top: 0.2rem;
-}
-.stat-div {
-  width: 1px;
-  height: 40px;
-  background: rgba(240, 225, 204, 0.35);
-  flex-shrink: 0;
-}
-
-/* hero ornaments */
-.cu-hero-orn {
-  position: absolute;
-  right: 5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 10rem;
-  color: rgba(196, 168, 130, 0.07);
-  pointer-events: none;
-  user-select: none;
-  line-height: 1;
-}
-.cu-hero-orn-sm {
-  position: absolute;
-  right: 18rem;
-  top: 25%;
-  font-size: 3rem;
-  color: rgba(196, 168, 130, 0.12);
-  pointer-events: none;
-  user-select: none;
-  line-height: 1;
-}
-
-/* ── workspace layout ────────────────────────────────────────────────────── */
+/* workspace layout */
 .cu-workspace {
-  max-width: 1200px;
-  margin: 2.5rem auto;
   padding: 0 1.5rem 4rem;
-  display: grid;
   grid-template-columns: 380px 1fr;
-  gap: 2rem;
-  align-items: start;
 }
 
-/* ── left panel ──────────────────────────────────────────────────────────── */
+/* left panel */
 .cu-panel--left {
   background: var(--cu-card);
   border: 1px solid var(--cu-border);
-  border-radius: 16px;
-  overflow: hidden;
-  position: sticky;
   top: 80px;
   max-height: calc(100vh - 100px);
-  overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #e0d8cc transparent;
 }
 
 .cu-step {
-  padding: 1.5rem;
   border-bottom: 1px solid var(--cu-border);
 }
-
-.cu-step--config { border-bottom: none; }
 
 .cu-step-title {
   font-family: 'Times New Roman', serif;
   font-size: 1.05rem;
   color: var(--cu-text);
-  margin: 0 0 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .cu-step-num {
@@ -533,10 +421,6 @@ const priceBreakdown = computed(() => {
   height: 22px;
   background: var(--cu-accent-dk);
   color: #f0ebe2;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   font-size: 0.72rem;
   font-family: sans-serif;
   flex-shrink: 0;
@@ -552,16 +436,13 @@ const priceBreakdown = computed(() => {
 /* area tabs */
 .cu-area-tabs {
   font-family: 'Times New Roman', serif;
-  display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-bottom: 1rem;
 }
 
 .cu-area-tab {
   font-size: 0.77rem;
-  padding: 4px 12px;
-  border-radius: 20px;
+  /* padding: 4px 12px; */
+  /* border-radius: 20px; */
   border: 1px solid var(--cu-border);
   background: transparent;
   color: var(--cu-text-2);
@@ -574,23 +455,14 @@ const priceBreakdown = computed(() => {
 
 /* furniture type grid */
 .cu-type-grid {
-  display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
 }
 
 .cu-type-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.75rem 0.5rem;
   border: 1.5px solid var(--cu-border);
-  border-radius: 10px;
   background: transparent;
   cursor: pointer;
   transition: all 0.18s;
-  text-align: center;
 }
 
 .cu-type-card:hover  { border-color: var(--cu-accent); background: var(--cu-hover); }
@@ -604,33 +476,17 @@ const priceBreakdown = computed(() => {
 .cu-type-price { font-family: 'Times New Roman', serif; font-size: 0.70rem; color: var(--cu-muted); }
 
 /* config sections */
-.cu-config-section { margin-bottom: 1.25rem; }
 
 .cu-config-heading {
   font-family: 'Times New Roman', serif;
   font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--cu-muted);
-  margin: 0 0 0.5rem;
-}
-
-/* colour swatches */
-.cu-color-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
 }
 
 .cu-swatch {
   font-family: 'Times New Roman', serif;
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 4px 8px 4px 5px;
   border: 1.5px solid var(--cu-border);
-  border-radius: 20px;
   background: transparent;
   cursor: pointer;
   transition: all 0.15s;
@@ -644,34 +500,18 @@ const priceBreakdown = computed(() => {
 .cu-swatch-dot {
   width: 14px;
   height: 14px;
-  border-radius: 50%;
   border: 1px solid rgba(0,0,0,0.12);
   flex-shrink: 0;
 }
 
-.cu-swatch-label { display: flex; align-items: center; gap: 0.25rem; }
 .cu-swatch-check { color: var(--cu-accent-dk); flex-shrink: 0; }
-
-/* option cards */
-.cu-opt-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
 
 .cu-opt-card {
   font-family: 'Times New Roman', serif;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem 0.7rem;
   border: 1.5px solid var(--cu-border);
-  border-radius: 8px;
   background: transparent;
   cursor: pointer;
   transition: all 0.15s;
-  text-align: left;
-  width: 100%;
 }
 
 .cu-opt-card:hover  { border-color: var(--cu-accent); background: var(--cu-hover); }
@@ -684,8 +524,6 @@ const priceBreakdown = computed(() => {
 /* empty hint */
 .cu-empty-hint {
   font-family: 'Times New Roman', serif;
-  padding: 2.5rem 1.5rem;
-  text-align: center;
   color: var(--cu-muted);
   font-size: 0.88rem;
   line-height: 1.6;
@@ -693,63 +531,36 @@ const priceBreakdown = computed(() => {
 
 .cu-empty-icon { color: #d4c4b0; margin-bottom: 0.75rem; }
 
-/* ── right panel ──────────────────────────────────────────────────────────── */
-.cu-panel--right {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
 /* 3D viewer */
 .cu-viewer-wrap {
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
   background: #f5f0e8;
   border: 1px solid var(--cu-border);
-  height: 480px;
+  height: 609px;
 }
 
-.cu-viewer { width: 100%; height: 100%; }
-
 .cu-viewer-placeholder {
-  position: absolute;
   inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   background: #f5f0e8;
-  gap: 0.5rem;
-  text-align: center;
-  padding: 2rem;
 }
 
 .cu-ph-icon  { color: #d4c4b0; margin-bottom: 0.5rem; }
 .cu-ph-text  { font-family: 'Times New Roman', serif; font-size: 1.1rem; color: var(--cu-text); margin: 0; }
-.cu-ph-sub   { font-size: 0.82rem; color: var(--cu-muted); margin: 0; }
+.cu-ph-sub   { font-family: 'Times New Roman', serif; font-size: 0.82rem; color: var(--cu-muted); margin: 0; }
 
 /* price card */
 .cu-price-card {
   font-family: 'Times New Roman', serif;
   background: var(--cu-card);
   border: 1px solid var(--cu-border);
-  border-radius: 16px;
-  padding: 1.5rem;
 }
 
 .cu-price-title {
   font-family: 'Times New Roman', serif;
   font-size: 1.05rem;
   color: var(--cu-text);
-  margin: 0 0 1rem;
 }
 
-.cu-price-rows  { display: flex; flex-direction: column; gap: 0.35rem; }
-
 .cu-price-row {
-  display: flex;
-  justify-content: space-between;
   font-size: 0.85rem;
   color: var(--cu-text-2);
 }
@@ -759,20 +570,12 @@ const priceBreakdown = computed(() => {
 
 .cu-price-divider { height: 1px; background: var(--cu-border); margin: 0.85rem 0; }
 
-.cu-price-total {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 1rem;
-}
-
 .cu-price-total > span:first-child { font-size: 0.88rem; color: var(--cu-text-2); font-weight: 600; }
 
 .cu-price-amount {
   font-family: 'Times New Roman', serif;
   font-size: 1.6rem;
   color: var(--cu-text);
-  font-weight: bold;
 }
 
 /* config summary chips */

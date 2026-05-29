@@ -35,11 +35,11 @@ const footerLinks = [
             <div class="footer-links-col">
               <h6 class="footer-col-title">Products</h6>
               <ul>
-                <li><router-link to="/products#couches">Couches</router-link></li>
-                <li><router-link to="/products#diningtables">Dining Tables</router-link></li>
-                <li><router-link to="/products#kitchencounters">Kitchen Counters</router-link></li>
-                <li><router-link to="/products#beds">Beds</router-link></li>
-                <li><router-link to="/products#wardrobes">Wardrobe</router-link></li>
+                <li><router-link to="/products?type=living-room">Living Room</router-link></li>
+                <li><router-link to="/products?type=study-room">Study Room</router-link></li>
+                <li><router-link to="/products?type=kitchen">Kitchen</router-link></li>
+                <li><router-link to="/products?type=bathroom">Bathroom</router-link></li>
+                <li><router-link to="/products?type=bedroom">Bedroom</router-link></li>
               </ul>
             </div>
 

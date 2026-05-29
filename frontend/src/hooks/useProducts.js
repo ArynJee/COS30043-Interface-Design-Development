@@ -155,6 +155,18 @@ export default function useProducts() {
     await fetchProducts()
   })
 
+  // re-apply ?type= filter when navigating while already on this page
+  watch(() => route.query.type, (slug) => {
+    if (!categories.value.length) return
+    selectedTags.value = []
+    if (slug && slugToName[slug]) {
+      const cat = categories.value.find(c => c.name === slugToName[slug])
+      selectedCategories.value = cat ? [cat.id] : []
+    } else {
+      selectedCategories.value = []
+    }
+  })
+
   return {
     // state
     products,
