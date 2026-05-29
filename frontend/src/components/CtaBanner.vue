@@ -89,7 +89,7 @@ defineProps({
 }
 
 .cb-eyebrow {
-  font-size: 0.68rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.22em;
   color: #a08060;
 }
@@ -102,7 +102,7 @@ defineProps({
 }
 
 .cb-body {
-  font-size: 0.84rem;
+  font-size: var(--fs-base);
   color: #6a5a4a;
   line-height: 1.7;
   max-width: 360px;
@@ -115,7 +115,7 @@ defineProps({
 
 .cb-pill-text {
   font-family: "Times New Roman", Times, serif;
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.14em;
   color: #9a8a7a;
 }

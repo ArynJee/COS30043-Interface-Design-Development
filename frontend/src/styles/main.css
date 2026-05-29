@@ -10,68 +10,76 @@
   --font-serif: "Times New Roman", Times, serif;
 
   /* Backgrounds */
-  --bg-page:     #faf7f2;   /* main page background            */
-  --bg-alt:      #f0ebe2;   /* alternate section / img-wrap bg */
-  --bg-surface:  #ffffff;   /* card, panel, input background   */
-  --bg-elevated: #fdf9f5;   /* hover, selected row, active opt */
+  --bg-page: #faf7f2; /* main page background            */
+  --bg-alt: #f0ebe2; /* alternate section / img-wrap bg */
+  --bg-surface: #ffffff; /* card, panel, input background   */
+  --bg-elevated: #fdf9f5; /* hover, selected row, active opt */
 
   /* Text */
-  --color-primary:   #2c2218;   /* headings, body, strong text   */
-  --color-secondary: #7a6a58;   /* labels, captions, descriptions */
-  --color-muted:     #9a8875;   /* hints, placeholders, dimmed   */
-  --color-subtle:    #b0a090;   /* very faint decorative text    */
-  --color-cream:     #f0e1cc;   /* text on always-dark sections  */
-  --color-free:      #2c2218;   /* "FREE" / unlocked labels      */
+  --color-primary: #2c2218; /* headings, body, strong text   */
+  --color-secondary: #7a6a58; /* labels, captions, descriptions */
+  --color-muted: #9a8875; /* hints, placeholders, dimmed   */
+  --color-subtle: #b0a090; /* very faint decorative text    */
+  --color-cream: #f0e1cc; /* text on always-dark sections  */
+  --color-free: #2c2218; /* "FREE" / unlocked labels      */
 
   /* Accent */
-  --accent:       #c4a882;
-  --accent-dk:    #8b6f47;
+  --accent: #c4a882;
+  --accent-dk: #8b6f47;
   --accent-hover: #b09070;
 
   /* Borders */
-  --border:       #e0d5c5;   /* standard card / table border  */
-  --border-light: #f0ebe2;   /* subtle row / section divider  */
-  --border-input: #d0c5b5;   /* form field border             */
+  --border: #e0d5c5; /* standard card / table border  */
+  --border-light: #f0ebe2; /* subtle row / section divider  */
+  --border-input: #d0c5b5; /* form field border             */
 
   /* Primary button (dark bg, light text) */
-  --btn-bg:       #2c2218;
+  --btn-bg: #2c2218;
   --btn-bg-hover: #4a3828;
-  --btn-color:    #ffffff;
+  --btn-color: #ffffff;
 
   /* Alt button — used in auth / hero CTA (darkest bg) */
-  --btn-alt-bg:       #1e1a14;
-  --btn-alt-hover:    #c4a882;
+  --btn-alt-bg: #1e1a14;
+  --btn-alt-hover: #c4a882;
 
   /* State */
-  --color-error:   #b85c4a;
+  --color-error: #b85c4a;
   --color-error-2: #8b5a48;
   --color-success: #3a6b3a;
+
+  /* Type Scale — doubled from previous values */
+  --fs-2xs:  0.65rem;   /* micro badges, tiny labels    */
+  --fs-xs:   0.80rem;   /* captions, helper text        */
+  --fs-sm:   0.90rem;   /* labels, table headers, meta  */
+  --fs-base: 1rem;    /* standard UI text, form text  */
+  --fs-md:   1.15rem;   /* emphasized text, buttons     */
+  --fs-lg:   1.6rem;    /* larger body, section text    */
 }
 
 /* ── Dark Mode Token Overrides ─────────────── */
 [data-theme="dark"] {
-  --bg-page:     #1a1610;
-  --bg-alt:      #1e1b14;
-  --bg-surface:  #1e1b14;
+  --bg-page: #1a1610;
+  --bg-alt: #1e1b14;
+  --bg-surface: #1e1b14;
   --bg-elevated: #2a2418;
 
-  --color-primary:   #e8ddd0;
+  --color-primary: #e8ddd0;
   --color-secondary: #9a8875;
-  --color-muted:     #6a5a4a;
-  --color-subtle:    #5a4a3a;
-  --color-cream:     #e8ddd0;
-  --color-free:      #c4a882;   /* warm tan "free/unlocked" in dark mode */
-  --color-error-2:   #b08878;   /* muted warm brown for destructive actions */
+  --color-muted: #6a5a4a;
+  --color-subtle: #5a4a3a;
+  --color-cream: #e8ddd0;
+  --color-free: #c4a882; /* warm tan "free/unlocked" in dark mode */
+  --color-error-2: #b08878; /* muted warm brown for destructive actions */
 
-  --border:       #3a3025;
+  --border: #3a3025;
   --border-light: #2e2820;
   --border-input: #3a3025;
 
-  --btn-bg:       #e8ddd0;
+  --btn-bg: #e8ddd0;
   --btn-bg-hover: #c4a882;
-  --btn-color:    #1a1610;
+  --btn-color: #1a1610;
 
-  --btn-alt-bg:    #e8ddd0;
+  --btn-alt-bg: #e8ddd0;
   --btn-alt-hover: #c4a882;
 }
 

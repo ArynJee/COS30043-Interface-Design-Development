@@ -390,7 +390,7 @@ onMounted(async () => {
   border: 1px solid rgba(255, 255, 255, 0.7);
   color: #ffffff;
   text-decoration: none;
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   transition: 0.3s;
@@ -415,7 +415,7 @@ onMounted(async () => {
 
 .hero-card-badge {
   display: inline-block;
-  font-size: 0.68rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   background: rgba(196, 168, 130, 0.6);
@@ -425,7 +425,7 @@ onMounted(async () => {
 }
 
 .hero-card-text {
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   line-height: 1.7;
   opacity: 0.9;
   margin-bottom: 1.1rem;
@@ -436,7 +436,7 @@ onMounted(async () => {
   align-items: center;
   color: #c4a882;
   text-decoration: none;
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   border-bottom: 1px solid #c4a882;
@@ -506,7 +506,7 @@ onMounted(async () => {
   left: 1.2rem;
   background: rgba(250, 247, 242, 0.85);
   backdrop-filter: blur(8px);
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-primary);
@@ -561,7 +561,7 @@ onMounted(async () => {
 
 .fg-card-tag {
   display: inline-block;
-  font-size: 0.65rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   background: #e0d5c5;
@@ -583,7 +583,7 @@ onMounted(async () => {
   margin-bottom: 0.5rem;
 }
 .fg-card-body {
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   line-height: 1.65;
   color: var(--color-secondary);
   margin: 0;
@@ -644,7 +644,7 @@ onMounted(async () => {
   vertical-align: super;
 }
 .stat-label {
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-secondary);
@@ -682,7 +682,7 @@ onMounted(async () => {
 }
 
 .about-eyebrow {
-  font-size: 0.75rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: #c4a882;
@@ -696,7 +696,7 @@ onMounted(async () => {
   margin-bottom: 1.25rem;
 }
 .about-body {
-  font-size: 0.95rem;
+  font-size: var(--fs-md);
   line-height: 1.8;
   color: var(--color-secondary);
   margin-bottom: 2rem;
@@ -704,7 +704,7 @@ onMounted(async () => {
 .about-btn {
   display: inline-flex;
   align-items: center;
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-primary);
@@ -744,7 +744,7 @@ onMounted(async () => {
   gap: 0.75rem;
 }
 .explore-sub {
-  font-size: 0.85rem;
+  font-size: var(--fs-base);
   line-height: 1.65;
   color: var(--color-secondary);
   margin: 0;
@@ -753,7 +753,7 @@ onMounted(async () => {
 }
 .explore-view-more {
   display: inline-block;
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: #ffffff;
@@ -849,7 +849,7 @@ onMounted(async () => {
 }
 .bento-name {
   color: #ffffff;
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   letter-spacing: 0.06em;
   font-weight: 500;
 }
@@ -897,14 +897,14 @@ onMounted(async () => {
   color: var(--accent);
 }
 .fb-comment {
-  font-size: 0.9rem;
+  font-size: var(--fs-md);
   line-height: 1.7;
   color: var(--color-primary);
   font-style: italic;
   margin-bottom: 1rem;
 }
 .fb-user {
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.08em;
   color: var(--color-secondary);
 }
@@ -915,7 +915,7 @@ onMounted(async () => {
   border: 1px solid var(--btn-alt-bg);
   color: var(--btn-alt-bg);
   font-family: var(--font-serif);
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   padding: 0.75rem 2rem;

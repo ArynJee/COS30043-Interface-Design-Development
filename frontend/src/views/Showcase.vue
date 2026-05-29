@@ -249,7 +249,7 @@ const {
 }
 
 .hero-crumb {
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.04em;
   color: #f0e1cc;
 }
@@ -267,7 +267,7 @@ const {
   gap: 0.6rem;
 }
 .ey-text {
-  font-size: 0.65rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.28em;
   color: #f0e1cc;
   white-space: nowrap;
@@ -285,7 +285,7 @@ const {
   font-weight: bold;
 }
 .hero-sub {
-  font-size: 0.85rem;
+  font-size: var(--fs-base);
   color: #f0e1cc;
   letter-spacing: 0.04em;
   max-width: 360px;
@@ -310,7 +310,7 @@ const {
   line-height: 1;
 }
 .stat-l {
-  font-size: 0.65rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #f0e1cc;
@@ -350,7 +350,7 @@ const {
   gap: 1rem;
 }
 .ds-text {
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.22em;
   color: var(--accent-dk);
   white-space: nowrap;
@@ -376,7 +376,7 @@ const {
   border: 1px solid var(--border-input);
   background: transparent;
   font-family: var(--font-serif);
-  font-size: 0.76rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.06em;
   color: var(--color-secondary);
   cursor: pointer;
@@ -463,7 +463,7 @@ const {
   margin-bottom: 0.5rem;
 }
 .empty-sub {
-  font-size: 0.86rem;
+  font-size: var(--fs-base);
   color: var(--color-secondary);
   max-width: 350px;
   margin: 0 auto 1.5rem;
@@ -475,7 +475,7 @@ const {
   color: var(--color-cream);
   padding: 0.55rem 1.4rem;
   font-family: var(--font-serif);
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.07em;
   text-decoration: none;
   transition: background 0.2s;
@@ -544,7 +544,7 @@ const {
   bottom: 1rem;
   left: 1rem;
   color: #fff;
-  font-size: 0.58rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   padding: 0.25rem 0.7rem;
@@ -558,7 +558,7 @@ const {
   right: 1rem;
   background: rgba(18, 14, 10, 0.72);
   color: #c4a882;
-  font-size: 0.62rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.1em;
   padding: 0.3rem 0.8rem;
   border: 1px solid rgba(196, 168, 130, 0.35);
@@ -576,36 +576,36 @@ const {
   height: 36px;
   border-radius: 50%;
   color: #fff;
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   font-weight: 700;
   letter-spacing: 0.04em;
   flex-shrink: 0;
   background: #c4a882;
 }
 .contrib-name {
-  font-size: 0.83rem;
+  font-size: var(--fs-base);
   font-weight: 700;
   color: var(--color-primary);
   line-height: 1.3;
 }
 .contrib-date {
-  font-size: 0.66rem;
+  font-size: var(--fs-xs);
   color: var(--color-muted);
 }
 .card-price {
-  font-size: 0.95rem;
+  font-size: var(--fs-md);
   font-weight: 700;
   color: var(--accent-dk);
   white-space: nowrap;
 }
 .card-type-label {
-  font-size: 0.65rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-muted);
 }
 .card-desc {
-  font-size: 0.84rem;
+  font-size: var(--fs-base);
   color: var(--color-secondary);
   line-height: 1.6;
   display: -webkit-box;
@@ -620,7 +620,7 @@ const {
   gap: 0.3rem;
   border: 1px solid var(--border);
   padding: 0.15rem 0.55rem;
-  font-size: 0.63rem;
+  font-size: var(--fs-2xs);
   color: var(--color-secondary);
   border-radius: 2px;
 }
@@ -639,7 +639,7 @@ const {
   background: transparent;
   color: var(--btn-bg);
   font-family: var(--font-serif);
-  font-size: 0.76rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.08em;
   padding: 0.5rem 1rem;
   cursor: pointer;

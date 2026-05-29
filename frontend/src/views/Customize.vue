@@ -369,7 +369,7 @@ const priceBreakdown = computed(() => {
 
 .cu-crumb {
   font-family: 'Times New Roman', serif;
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.04em;
   color: #f0e1cc;
 }
@@ -385,7 +385,7 @@ const priceBreakdown = computed(() => {
 }
 
 .cu-hero-sub {
-  font-size: 0.85rem;
+  font-size: var(--fs-base);
   color: #f0e1cc;
   letter-spacing: 0.04em;
   max-width: 380px;
@@ -423,13 +423,13 @@ const priceBreakdown = computed(() => {
   height: 22px;
   background: var(--cu-accent-dk);
   color: #f0ebe2;
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   font-family: sans-serif;
   flex-shrink: 0;
 }
 
 .cu-step-sub {
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   color: var(--cu-muted);
   font-style: italic;
   font-family: 'Times New Roman', serif;
@@ -442,7 +442,7 @@ const priceBreakdown = computed(() => {
 }
 
 .cu-area-tab {
-  font-size: 0.77rem;
+  font-size: var(--fs-sm);
   /* padding: 4px 12px; */
   /* border-radius: 20px; */
   border: 1px solid var(--cu-border);
@@ -474,14 +474,14 @@ const priceBreakdown = computed(() => {
 .cu-type-card.active .cu-type-icon  { color: #c4a882; }
 
 .cu-type-icon  { color: var(--cu-muted); }
-.cu-type-name  { font-family: 'Times New Roman', serif; font-size: 0.80rem; font-weight: 600; color: var(--cu-text); line-height: 1.2; }
-.cu-type-price { font-family: 'Times New Roman', serif; font-size: 0.70rem; color: var(--cu-muted); }
+.cu-type-name  { font-family: 'Times New Roman', serif; font-size: var(--fs-sm); font-weight: 600; color: var(--cu-text); line-height: 1.2; }
+.cu-type-price { font-family: 'Times New Roman', serif; font-size: var(--fs-xs); color: var(--cu-muted); }
 
 /* config sections */
 
 .cu-config-heading {
   font-family: 'Times New Roman', serif;
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.08em;
   color: var(--cu-muted);
 }
@@ -492,7 +492,7 @@ const priceBreakdown = computed(() => {
   background: transparent;
   cursor: pointer;
   transition: all 0.15s;
-  font-size: 0.75rem;
+  font-size: var(--fs-sm);
   color: var(--cu-text-2);
 }
 
@@ -519,15 +519,15 @@ const priceBreakdown = computed(() => {
 .cu-opt-card:hover  { border-color: var(--cu-accent); background: var(--cu-hover); }
 .cu-opt-card.active { border-color: var(--cu-accent-dk); background: var(--cu-hover); }
 
-.cu-opt-name  { font-size: 0.82rem; color: var(--cu-text); }
-.cu-opt-price { font-size: 0.74rem; color: var(--cu-muted); margin-left: auto; margin-right: 0.4rem; }
+.cu-opt-name  { font-size: var(--fs-base); color: var(--cu-text); }
+.cu-opt-price { font-size: var(--fs-xs); color: var(--cu-muted); margin-left: auto; margin-right: 0.4rem; }
 .cu-opt-check { color: var(--cu-accent-dk); flex-shrink: 0; }
 
 /* empty hint */
 .cu-empty-hint {
   font-family: 'Times New Roman', serif;
   color: var(--cu-muted);
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   line-height: 1.6;
 }
 
@@ -547,7 +547,7 @@ const priceBreakdown = computed(() => {
 
 .cu-ph-icon  { color: #d4c4b0; margin-bottom: 0.5rem; }
 .cu-ph-text  { font-family: 'Times New Roman', serif; font-size: 1.1rem; color: var(--cu-text); margin: 0; }
-.cu-ph-sub   { font-family: 'Times New Roman', serif; font-size: 0.82rem; color: var(--cu-muted); margin: 0; }
+.cu-ph-sub   { font-family: 'Times New Roman', serif; font-size: var(--fs-base); color: var(--cu-muted); margin: 0; }
 
 /* price card */
 .cu-price-card {
@@ -563,7 +563,7 @@ const priceBreakdown = computed(() => {
 }
 
 .cu-price-row {
-  font-size: 0.85rem;
+  font-size: var(--fs-base);
   color: var(--cu-text-2);
 }
 
@@ -572,7 +572,7 @@ const priceBreakdown = computed(() => {
 
 .cu-price-divider { height: 1px; background: var(--cu-border); margin: 0.85rem 0; }
 
-.cu-price-total > span:first-child { font-size: 0.88rem; color: var(--cu-text-2); font-weight: 600; }
+.cu-price-total > span:first-child { font-size: var(--fs-base); color: var(--cu-text-2); font-weight: 600; }
 
 .cu-price-amount {
   font-family: 'Times New Roman', serif;
@@ -589,7 +589,7 @@ const priceBreakdown = computed(() => {
 }
 
 .cu-config-chip {
-  font-size: 0.73rem;
+  font-size: var(--fs-xs);
   background: #f0ebe2;
   color: #5a4a3a;
   border: 1px solid #e0d8cc;
@@ -604,7 +604,7 @@ const priceBreakdown = computed(() => {
   gap: 0.5rem;
   padding: 0.6rem 0.9rem;
   border-radius: 8px;
-  font-size: 0.83rem;
+  font-size: var(--fs-base);
   margin-bottom: 0.85rem;
 }
 
@@ -628,7 +628,7 @@ const priceBreakdown = computed(() => {
   gap: 0.45rem;
   padding: 0.75rem 1rem;
   border-radius: 10px;
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   font-weight: 600;
   cursor: pointer;
   border: none;

@@ -185,7 +185,7 @@ const searchQuery = ref('')
   position: relative;
   display: inline-block;
   padding: 6px 10px;
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   letter-spacing: 1px;
   text-transform: uppercase;
   color: #2c2218;
@@ -255,7 +255,7 @@ const searchQuery = ref('')
   border: none;
   background: transparent;
   outline: none;
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   color: #2c2218;
   width: 130px;
   font-family: 'Times New Roman', Times, serif;
@@ -290,7 +290,7 @@ const searchQuery = ref('')
   white-space: nowrap;
 }
 .sb-brand-label {
-  font-size: 0.95rem;
+  font-size: var(--fs-md);
   letter-spacing: 1px;
   color: #2c2218;
   opacity: 0;
@@ -336,7 +336,7 @@ const searchQuery = ref('')
 .sb-search-input {
   background: transparent;
   outline: none;
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   color: #2c2218;
   font-family: 'Times New Roman', Times, serif;
 }
@@ -370,7 +370,7 @@ const searchQuery = ref('')
   flex-shrink: 0;
 }
 .sb-label {
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   opacity: 0;
 }
 .mobile-sidebar.is-open .sb-label {
@@ -388,7 +388,7 @@ const searchQuery = ref('')
   color: #f5f0ea;
   padding: 4px 10px;
   border-radius: 6px;
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   white-space: nowrap;
   pointer-events: none;
   z-index: 9999;

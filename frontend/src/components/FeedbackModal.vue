@@ -171,7 +171,7 @@ const emit = defineEmits([
 
 .modal-label {
   display: block;
-  font-size: 0.75rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #7a6a58;
@@ -183,7 +183,7 @@ const emit = defineEmits([
   background: #ffffff;
   padding: 0.65rem 0.9rem;
   font-family: 'Times New Roman', serif;
-  font-size: 0.9rem;
+  font-size: var(--fs-md);
   color: #2c2218;
   outline: none;
   transition: border-color 0.2s;
@@ -225,7 +225,7 @@ const emit = defineEmits([
   border: none;
   padding: 0.85rem;
   font-family: 'Times New Roman', serif;
-  font-size: 0.85rem;
+  font-size: var(--fs-base);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   cursor: pointer;
@@ -241,7 +241,7 @@ const emit = defineEmits([
   color: #c4a882;
 }
 .modal-success p {
-  font-size: 1rem;
+  font-size: var(--fs-lg);
   color: #2c2218;
   margin: 0;
 }

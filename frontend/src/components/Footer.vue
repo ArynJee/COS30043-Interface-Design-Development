@@ -88,14 +88,14 @@ const footerLinks = [
   margin-bottom: 1rem;
 }
 .footer-brand-tagline {
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   line-height: 1.75;
   color: rgba(255, 255, 255, 0.5);
   max-width: 300px;
   margin: 0;
 }
 .footer-col-title {
-  font-size: 0.7rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #c4a882;
@@ -112,7 +112,7 @@ const footerLinks = [
 .footer-links-col ul li a {
   color: rgba(255, 255, 255, 0.55);
   text-decoration: none;
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   transition: color 0.2s;
 }
 .footer-links-col ul li a:hover {
@@ -123,7 +123,7 @@ const footerLinks = [
   padding: 1.25rem 0;
 }
 .footer-copy {
-  font-size: 0.73rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.06em;
   color: rgba(255, 255, 255, 0.35);
 }

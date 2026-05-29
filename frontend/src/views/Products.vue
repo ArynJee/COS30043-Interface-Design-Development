@@ -420,7 +420,7 @@ onBeforeUnmount(() => {
   padding: 0 5rem;
 }
 .hero-breadcrumb {
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   color: #f0e1cc;
   letter-spacing: 0.04em;
 }
@@ -438,7 +438,7 @@ onBeforeUnmount(() => {
   line-height: 1.1;
 }
 .hero-sub {
-  font-size: 0.85rem;
+  font-size: var(--fs-base);
   color: #f0e1cc;
   letter-spacing: 0.04em;
   max-width: 320px;
@@ -449,12 +449,12 @@ onBeforeUnmount(() => {
   z-index: 90;
 }
 .filter-label {
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.12em;
   color: var(--color-secondary);
 }
 .result-count {
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   color: var(--color-secondary);
   white-space: nowrap;
 }
@@ -468,7 +468,7 @@ onBeforeUnmount(() => {
   border: 1px solid var(--border-input);
   padding: 0.35rem 0.8rem 0.35rem 2rem;
   font-family: var(--font-serif);
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   color: var(--color-primary);
   background: transparent;
   outline: none;
@@ -490,7 +490,7 @@ onBeforeUnmount(() => {
   border: 1px solid var(--border-input);
   color: var(--color-primary);
   font-family: var(--font-serif);
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.05em;
   transition:
     border-color 0.2s,
@@ -538,7 +538,7 @@ onBeforeUnmount(() => {
   max-height: 290px;
 }
 .panel-item {
-  font-size: 0.83rem;
+  font-size: var(--fs-base);
   color: var(--color-primary);
   transition: background 0.15s;
   cursor: pointer;
@@ -568,7 +568,7 @@ onBeforeUnmount(() => {
   background: transparent;
   color: var(--color-secondary);
   font-family: var(--font-serif);
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.04em;
   cursor: pointer;
   text-underline-offset: 2px;
@@ -650,22 +650,22 @@ onBeforeUnmount(() => {
 .card-body {
   padding: 0.85rem;
 }
-.card-category-badge { font-size: 0.6rem; letter-spacing: 0.12em; background: var(--accent); color: #fff; padding: 0.15rem 0.5rem; }
-.card-sold { font-size: 0.68rem; color: var(--color-secondary); }
-.card-name { font-size: 0.88rem; color: var(--color-primary); line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; }
-.card-measurements { font-size: 0.7rem; color: var(--color-secondary); }
-.card-price { font-size: 0.95rem; color: var(--color-primary); }
-.card-add-btn { background: var(--btn-bg); color: var(--btn-color); font-family: var(--font-serif); font-size: 0.7rem; letter-spacing: 0.06em; cursor: pointer; white-space: nowrap; transition: background 0.2s; flex-shrink: 0; }
+.card-category-badge { font-size: var(--fs-2xs); letter-spacing: 0.12em; background: var(--accent); color: #fff; padding: 0.15rem 0.5rem; }
+.card-sold { font-size: var(--fs-xs); color: var(--color-secondary); }
+.card-name { font-size: var(--fs-base); color: var(--color-primary); line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; }
+.card-measurements { font-size: var(--fs-xs); color: var(--color-secondary); }
+.card-price { font-size: var(--fs-md); color: var(--color-primary); }
+.card-add-btn { background: var(--btn-bg); color: var(--btn-color); font-family: var(--font-serif); font-size: var(--fs-xs); letter-spacing: 0.06em; cursor: pointer; white-space: nowrap; transition: background 0.2s; flex-shrink: 0; }
 .card-add-btn:hover:not(:disabled) { background: var(--btn-bg-hover); }
 .card-add-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .card-add-btn.btn-added { background: var(--color-success); }
 
 /* ── loading / empty ── */
-.state-msg { text-align: center; padding: 5rem 2rem; color: var(--color-secondary); font-size: 0.95rem; }
+.state-msg { text-align: center; padding: 5rem 2rem; color: var(--color-secondary); font-size: var(--fs-md); }
 
 /* ── pagination ── */
 .pagination-wrap { display: flex; justify-content: center; align-items: center; gap: 0.3rem; padding-top: 1.5rem; }
-.page-btn { min-width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; background: var(--bg-surface); border: 1px solid var(--border); color: var(--color-primary); font-family: var(--font-serif); font-size: 0.85rem; cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+.page-btn { min-width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; background: var(--bg-surface); border: 1px solid var(--border); color: var(--color-primary); font-family: var(--font-serif); font-size: var(--fs-base); cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s; }
 .page-btn:hover:not(:disabled) { border-color: var(--color-primary); }
 .page-btn.page-active { background: var(--btn-bg); color: var(--btn-color); border-color: var(--btn-bg); }
 .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }

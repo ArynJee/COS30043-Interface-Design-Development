@@ -373,7 +373,7 @@ onMounted(async () => {
   position: relative;
 }
 .hero-breadcrumb {
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   color: var(--color-muted);
   margin-bottom: 0.75rem;
 }
@@ -391,7 +391,7 @@ onMounted(async () => {
   margin-bottom: 0.35rem;
 }
 .hero-sub {
-  font-size: 0.85rem;
+  font-size: var(--fs-base);
   color: var(--color-muted);
   margin: 0;
 }
@@ -435,13 +435,13 @@ onMounted(async () => {
   text-transform: uppercase;
 }
 .sidebar-name {
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   font-weight: 600;
   color: var(--color-primary);
   margin-bottom: 0.2rem;
 }
 .sidebar-email {
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   color: var(--color-muted);
   word-break: break-all;
 }
@@ -457,7 +457,7 @@ onMounted(async () => {
   background: none;
   border: none;
   font-family: var(--font-serif);
-  font-size: 0.83rem;
+  font-size: var(--fs-base);
   color: var(--color-primary);
   cursor: pointer;
   text-align: left;
@@ -504,14 +504,14 @@ onMounted(async () => {
   margin: 0;
 }
 .tab-count {
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   color: var(--color-muted);
 }
 .edit-btn {
   background: none;
   border: 1px solid var(--border-input);
   font-family: var(--font-serif);
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   color: var(--color-primary);
   padding: 0.4rem 1rem;
   cursor: pointer;
@@ -549,12 +549,12 @@ onMounted(async () => {
   gap: 1rem;
 }
 .order-id {
-  font-size: 0.85rem;
+  font-size: var(--fs-base);
   font-weight: 600;
   color: var(--color-primary);
 }
 .order-date {
-  font-size: 0.75rem;
+  font-size: var(--fs-sm);
   color: var(--color-muted);
 }
 .order-right {
@@ -563,12 +563,12 @@ onMounted(async () => {
   gap: 0.75rem;
 }
 .order-total {
-  font-size: 0.9rem;
+  font-size: var(--fs-md);
   font-weight: 600;
   color: var(--color-primary);
 }
 .order-status-badge {
-  font-size: 0.6rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   background: var(--color-success);
@@ -586,14 +586,14 @@ onMounted(async () => {
   margin-bottom: 1rem;
 }
 .detail-label {
-  font-size: 0.68rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-muted);
   margin-bottom: 0.2rem;
 }
 .detail-value {
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   color: var(--color-primary);
 }
 .order-items {
@@ -628,7 +628,7 @@ onMounted(async () => {
   min-width: 0;
 }
 .order-item-name {
-  font-size: 0.83rem;
+  font-size: var(--fs-base);
   color: var(--color-primary);
   font-weight: 600;
   white-space: nowrap;
@@ -636,18 +636,18 @@ onMounted(async () => {
   text-overflow: ellipsis;
 }
 .order-item-type {
-  font-size: 0.62rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--accent);
 }
 .order-item-qty {
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   color: var(--color-muted);
   white-space: nowrap;
 }
 .order-item-price {
-  font-size: 0.85rem;
+  font-size: var(--fs-base);
   font-weight: 600;
   color: var(--color-primary);
   white-space: nowrap;
@@ -655,7 +655,7 @@ onMounted(async () => {
 .order-summary-row {
   display: flex;
   justify-content: space-between;
-  font-size: 0.85rem;
+  font-size: var(--fs-base);
   font-weight: 700;
   color: var(--color-primary);
   padding-top: 0.5rem;
@@ -682,7 +682,7 @@ onMounted(async () => {
   border-bottom: none;
 }
 .profile-label {
-  font-size: 0.7rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-muted);
@@ -690,7 +690,7 @@ onMounted(async () => {
   flex-shrink: 0;
 }
 .profile-value {
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   color: var(--color-primary);
 }
 
@@ -713,7 +713,7 @@ onMounted(async () => {
 }
 .field-label {
   display: block;
-  font-size: 0.7rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-secondary);
@@ -724,7 +724,7 @@ onMounted(async () => {
   border: 1px solid var(--border-input);
   padding: 0.6rem 0.8rem;
   font-family: var(--font-serif);
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   color: var(--color-primary);
   background: var(--bg-surface);
   outline: none;
@@ -735,12 +735,12 @@ onMounted(async () => {
   border-color: var(--accent-hover);
 }
 .save-error {
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   color: var(--color-error-2);
   margin-bottom: 0.75rem;
 }
 .save-success {
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   color: var(--color-success);
   margin-bottom: 0.75rem;
 }
@@ -754,7 +754,7 @@ onMounted(async () => {
   border: none;
   padding: 0.65rem 1.5rem;
   font-family: var(--font-serif);
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   cursor: pointer;
   transition: background 0.2s;
 }
@@ -771,7 +771,7 @@ onMounted(async () => {
   color: var(--color-secondary);
   padding: 0.65rem 1.5rem;
   font-family: var(--font-serif);
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   cursor: pointer;
   transition: background 0.2s;
 }
@@ -784,7 +784,7 @@ onMounted(async () => {
   padding: 3rem 5rem;
   text-align: center;
   color: var(--color-muted);
-  font-size: 0.9rem;
+  font-size: var(--fs-md);
 }
 .empty-state {
   padding: 2.5rem;
@@ -799,7 +799,7 @@ onMounted(async () => {
 .empty-cta {
   color: var(--accent);
   text-decoration: none;
-  font-size: 0.85rem;
+  font-size: var(--fs-base);
 }
 .empty-cta:hover {
   text-decoration: underline;

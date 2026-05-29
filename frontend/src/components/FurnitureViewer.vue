@@ -945,7 +945,7 @@ defineExpose({ captureScreenshot })
   z-index: 10;
   font-family: 'Times New Roman', serif;
   color: #8B7355;
-  font-size: 0.9rem;
+  font-size: var(--fs-md);
 }
 
 .fv-spinner {
@@ -964,7 +964,7 @@ defineExpose({ captureScreenshot })
   transform: translateX(-50%);
   background: rgba(44, 34, 24, 0.5);
   color: #f0ebe2;
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   padding: 4px 12px;
   border-radius: 20px;
   pointer-events: none;

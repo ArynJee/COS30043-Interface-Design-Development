@@ -338,7 +338,7 @@ const {
 }
 .auth-brand-eyebrow {
   display: block;
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: #c4a882;
@@ -352,7 +352,7 @@ const {
   text-shadow: 0 2px 30px rgba(0, 0, 0, 0.3);
 }
 .auth-brand-sub {
-  font-size: 0.92rem;
+  font-size: var(--fs-md);
   line-height: 1.75;
   opacity: 0.78;
   margin: 0;
@@ -375,7 +375,7 @@ const {
 }
 .auth-form-eyebrow {
   display: block;
-  font-size: 0.7rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--accent);
@@ -394,7 +394,7 @@ const {
 }
 .auth-label {
   display: block;
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-secondary);
@@ -412,7 +412,7 @@ const {
   border: 1px solid var(--border);
   background: var(--bg-surface);
   font-family: var(--font-serif);
-  font-size: 0.92rem;
+  font-size: var(--fs-md);
   color: var(--color-primary);
   outline: none;
   transition: border-color 0.2s;
@@ -459,7 +459,7 @@ const {
   background: none;
   border: none;
   font-family: var(--font-serif);
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   color: var(--color-secondary);
   cursor: pointer;
   padding: 0;
@@ -472,7 +472,7 @@ const {
 }
 .auth-field-error {
   display: block;
-  font-size: 0.74rem;
+  font-size: var(--fs-xs);
   color: var(--color-error);
   margin-top: 0.35rem;
 }
@@ -487,7 +487,7 @@ const {
   background: var(--btn-alt-bg);
   color: #ffffff;
   font-family: var(--font-serif);
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   border: none;
@@ -523,7 +523,7 @@ const {
 .auth-switch {
   text-align: center;
   margin-top: 1.5rem;
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   color: var(--color-secondary);
 }
 .auth-switch-link {
@@ -543,7 +543,7 @@ const {
   background: #fdf0ee;
   border: 1px solid #e8c4bc;
   color: var(--color-error);
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   padding: 0.75rem 1rem;
   margin-bottom: 1.25rem;
 }
@@ -573,7 +573,7 @@ const {
   right: 1.25rem;
   background: none;
   border: none;
-  font-size: 1rem;
+  font-size: var(--fs-lg);
   color: var(--color-secondary);
   cursor: pointer;
   transition: color 0.2s;
@@ -584,7 +584,7 @@ const {
 }
 .fp-eyebrow {
   display: block;
-  font-size: 0.68rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--accent);
@@ -597,7 +597,7 @@ const {
   margin: 0 0 0.75rem;
 }
 .fp-body {
-  font-size: 0.86rem;
+  font-size: var(--fs-base);
   line-height: 1.65;
   color: var(--color-secondary);
   margin-bottom: 1.5rem;
@@ -610,7 +610,7 @@ const {
   background: none;
   border: none;
   font-family: "Times New Roman", serif;
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   color: #7a6a58;
   cursor: pointer;
   text-decoration: underline;

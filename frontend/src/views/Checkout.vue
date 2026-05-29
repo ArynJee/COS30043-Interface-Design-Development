@@ -230,7 +230,7 @@ const {
 }
 .field-label {
   display: block;
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-secondary);
@@ -241,7 +241,7 @@ const {
   border: 1px solid var(--border-input);
   padding: 0.65rem 0.85rem;
   font-family: var(--font-serif);
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   color: var(--color-primary);
   background: var(--bg-surface);
   outline: none;
@@ -262,7 +262,7 @@ const {
   border: none;
   padding: 0.9rem 1rem;
   font-family: var(--font-serif);
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   letter-spacing: 0.07em;
   cursor: pointer;
   margin-top: 0.5rem;
@@ -279,7 +279,7 @@ const {
 .back-link {
   display: inline-block;
   margin-top: 0.75rem;
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   color: var(--color-secondary);
   text-decoration: none;
   transition: color 0.2s;
@@ -290,7 +290,7 @@ const {
 .back-link-btn {
   display: block;
   margin-top: 0.75rem;
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   color: var(--color-secondary);
   background: none;
   border: none;
@@ -315,14 +315,14 @@ const {
   flex-wrap: wrap;
 }
 .shipping-summary-label {
-  font-size: 0.7rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-secondary);
   flex-shrink: 0;
 }
 .shipping-summary-value {
-  font-size: 0.83rem;
+  font-size: var(--fs-base);
   color: var(--color-primary);
   flex: 1;
 }
@@ -330,7 +330,7 @@ const {
   background: none;
   border: none;
   font-family: var(--font-serif);
-  font-size: 0.75rem;
+  font-size: var(--fs-sm);
   color: var(--accent);
   cursor: pointer;
   padding: 0;
@@ -343,7 +343,7 @@ const {
   background: #fff8e8;
   border: 1px solid #e8d8a0;
   padding: 0.65rem 0.9rem;
-  font-size: 0.75rem;
+  font-size: var(--fs-sm);
   color: #5a4a00;
   margin-bottom: 1.25rem;
 }
@@ -359,7 +359,7 @@ const {
   border-color: var(--accent-hover);
 }
 .payment-error {
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   color: var(--color-error-2);
   background: #fff5f5;
   border: 1px solid #f5c6c6;
@@ -369,7 +369,7 @@ const {
 
 /* ── Order summary ── */
 .summary-header {
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-secondary);
@@ -406,7 +406,7 @@ const {
   right: -6px;
   background: var(--btn-bg);
   color: var(--btn-color);
-  font-size: 0.65rem;
+  font-size: var(--fs-2xs);
   width: 18px;
   height: 18px;
   display: flex;
@@ -418,7 +418,7 @@ const {
   min-width: 0;
 }
 .summary-item-name {
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   color: var(--color-primary);
   font-weight: 600;
   white-space: nowrap;
@@ -426,14 +426,14 @@ const {
   text-overflow: ellipsis;
 }
 .summary-item-custom {
-  font-size: 0.62rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--accent);
   margin-top: 0.15rem;
 }
 .summary-item-price {
-  font-size: 0.85rem;
+  font-size: var(--fs-base);
   font-weight: 600;
   color: var(--color-primary);
   white-space: nowrap;
@@ -446,7 +446,7 @@ const {
 .summary-total-row {
   display: flex;
   justify-content: space-between;
-  font-size: 0.83rem;
+  font-size: var(--fs-base);
   color: var(--color-secondary);
   margin-bottom: 0.4rem;
 }
@@ -454,7 +454,7 @@ const {
   color: var(--color-success);
 }
 .summary-grand-total {
-  font-size: 1rem;
+  font-size: var(--fs-lg);
   font-weight: 700;
   color: var(--color-primary);
 }

@@ -100,7 +100,7 @@ function lineClass(fromStep) {
 
 /* ── Step label ── */
 .step-label {
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--color-free);

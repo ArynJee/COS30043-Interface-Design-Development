@@ -309,7 +309,7 @@ const {
   margin: 0;
 }
 .cart-count {
-  font-size: 0.95rem;
+  font-size: var(--fs-md);
   font-weight: 400;
   color: var(--color-secondary);
   margin-left: 0.4rem;
@@ -321,7 +321,7 @@ const {
   border: none;
   color: var(--color-error-2);
   font-family: var(--font-serif);
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   cursor: pointer;
   padding: 0;
   transition: opacity 0.2s;
@@ -336,7 +336,7 @@ const {
   border: 1px solid var(--border);
 }
 .cart-table thead th {
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-secondary);
@@ -383,7 +383,7 @@ const {
 }
 .td-price {
   text-align: right;
-  font-size: 0.9rem;
+  font-size: var(--fs-md);
   font-weight: 600;
   color: var(--color-primary);
   white-space: nowrap;
@@ -417,13 +417,13 @@ const {
   object-fit: cover;
 }
 .product-name {
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   font-weight: 600;
   color: var(--color-primary);
   margin-bottom: 0.2rem;
 }
 .product-variant {
-  font-size: 0.73rem;
+  font-size: var(--fs-xs);
   color: var(--color-secondary);
   margin-top: 0.15rem;
   max-width: 240px;
@@ -433,7 +433,7 @@ const {
 }
 .product-custom-badge {
   display: inline-block;
-  font-size: 0.6rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   background: var(--accent);
@@ -455,7 +455,7 @@ const {
   border: 1px solid var(--border-input);
   background: var(--bg-surface);
   color: var(--color-primary);
-  font-size: 1rem;
+  font-size: var(--fs-lg);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -477,7 +477,7 @@ const {
 .qty-value {
   min-width: 24px;
   text-align: center;
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   color: var(--color-primary);
 }
 
@@ -518,7 +518,7 @@ const {
 }
 .fs-progress-msg,
 .fs-unlocked-msg {
-  font-size: 0.75rem;
+  font-size: var(--fs-sm);
   color: var(--color-secondary);
   margin-bottom: 0.55rem;
   line-height: 1.4;
@@ -562,7 +562,7 @@ const {
 .fs-labels {
   display: flex;
   justify-content: space-between;
-  font-size: 0.65rem;
+  font-size: var(--fs-2xs);
   color: var(--color-subtle);
   margin-top: 0.3rem;
 }
@@ -574,7 +574,7 @@ const {
   border-bottom: 1px solid var(--border);
 }
 .shipping-title {
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-secondary);
@@ -611,17 +611,17 @@ const {
   min-width: 0;
 }
 .shipping-name {
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   font-weight: 600;
   color: var(--color-primary);
 }
 .shipping-days {
-  font-size: 0.68rem;
+  font-size: var(--fs-xs);
   color: var(--color-muted);
   margin-top: 0.1rem;
 }
 .shipping-price {
-  font-size: 0.8rem;
+  font-size: var(--fs-sm);
   font-weight: 600;
   color: var(--color-primary);
   white-space: nowrap;
@@ -646,16 +646,16 @@ const {
   margin-bottom: 0.45rem;
 }
 .total-label {
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   color: var(--color-secondary);
 }
 .total-value {
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   color: var(--color-primary);
 }
 .total-final .total-label,
 .total-final .total-value {
-  font-size: 1rem;
+  font-size: var(--fs-lg);
   font-weight: 700;
   color: var(--color-primary);
 }
@@ -671,7 +671,7 @@ const {
   border: none;
   padding: 0.9rem 1rem;
   font-family: var(--font-serif);
-  font-size: 0.85rem;
+  font-size: var(--fs-base);
   letter-spacing: 0.07em;
   cursor: pointer;
   margin-top: 0.5rem;
@@ -685,7 +685,7 @@ const {
   cursor: not-allowed;
 }
 .selection-hint {
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   color: var(--color-muted);
   text-align: center;
   margin-top: 0.5rem;
@@ -696,7 +696,7 @@ const {
   padding: 3rem 1rem;
   text-align: center;
   color: var(--color-secondary);
-  font-size: 0.9rem;
+  font-size: var(--fs-md);
 }
 .empty-cart {
   padding: 3rem 1rem;
@@ -704,13 +704,13 @@ const {
   color: var(--color-secondary);
 }
 .empty-cart p {
-  font-size: 1rem;
+  font-size: var(--fs-lg);
   margin-bottom: 0.75rem;
 }
 .continue-link {
   color: var(--accent);
   text-decoration: none;
-  font-size: 0.85rem;
+  font-size: var(--fs-base);
 }
 .continue-link:hover {
   text-decoration: underline;

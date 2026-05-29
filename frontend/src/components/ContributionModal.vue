@@ -134,7 +134,7 @@ function handleSubmit() {
 }
 
 .cm-sub {
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   font-family: 'Times New Roman', serif;
   color: #7a6a58;
   margin: 0;
@@ -174,7 +174,7 @@ function handleSubmit() {
   left: 8px;
   background: rgba(44, 34, 24, 0.65);
   color: #f0ebe2;
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   padding: 3px 10px;
   border-radius: 20px;
 }
@@ -189,7 +189,7 @@ function handleSubmit() {
 
 .cm-badge {
   font-family: 'Times New Roman', serif;
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   background: #f5f0e8;
   color: #5a4a3a;
   border: 1px solid #e0d5c5;
@@ -202,7 +202,7 @@ function handleSubmit() {
 .cm-price {
   font-family: 'Times New Roman', serif;
   margin-left: auto;
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   color: #7a6a58;
 }
 
@@ -213,7 +213,7 @@ function handleSubmit() {
 .cm-label {
   font-family: 'Times New Roman', serif;
   display: block;
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   font-weight: 600;
   color: #7a6a58;
   margin-bottom: 0.4rem;
@@ -226,7 +226,7 @@ function handleSubmit() {
   border: 1px solid #e0d5c5;
   border-radius: 8px;
   padding: 0.65rem 0.85rem;
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   font-family: 'Times New Roman', serif;
   resize: vertical;
   background: #ffffff;
@@ -241,7 +241,7 @@ function handleSubmit() {
   font-family: 'Times New Roman', serif;
   display: block;
   text-align: right;
-  font-size: 0.74rem;
+  font-size: var(--fs-xs);
   color: #7a6a58;
   margin-top: 0.25rem;
 }
@@ -253,7 +253,7 @@ function handleSubmit() {
   color: #9b4030;
   border-radius: 6px;
   padding: 0.5rem 0.75rem;
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   margin-bottom: 0.75rem;
 }
 
@@ -268,7 +268,7 @@ function handleSubmit() {
   font-family: 'Times New Roman', serif;
   padding: 0.55rem 1.35rem;
   border-radius: 8px;
-  font-size: 0.88rem;
+  font-size: var(--fs-base);
   letter-spacing: 0.05em;
   cursor: pointer;
   display: flex;

@@ -109,7 +109,7 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
   margin-bottom: 0.5rem;
 }
 .confirmation-sub {
-  font-size: 0.9rem;
+  font-size: var(--fs-md);
   color: var(--color-secondary);
   margin-bottom: 2rem;
 }
@@ -129,24 +129,24 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
   padding: 0.5rem 0;
 }
 .order-label {
-  font-size: 0.78rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--color-secondary);
 }
 .order-value {
-  font-size: 0.9rem;
+  font-size: var(--fs-md);
   color: var(--color-primary);
 }
 .order-total {
   font-weight: 700;
-  font-size: 1rem;
+  font-size: var(--fs-lg);
 }
 .order-status {
   color: var(--color-success);
   font-weight: 600;
   text-transform: uppercase;
-  font-size: 0.75rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.08em;
 }
 .order-divider {
@@ -155,7 +155,7 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
 }
 
 .delivery-note {
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   color: var(--color-secondary);
   margin-bottom: 2rem;
   line-height: 1.6;
@@ -179,7 +179,7 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
   background: var(--btn-bg);
   color: var(--btn-color);
   font-family: var(--font-serif);
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   letter-spacing: 0.07em;
   text-transform: uppercase;
   padding: 0.75rem 1.75rem;
@@ -195,7 +195,7 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
   border: 1px solid var(--btn-bg);
   color: var(--btn-bg);
   font-family: var(--font-serif);
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   letter-spacing: 0.07em;
   text-transform: uppercase;
   padding: 0.75rem 1.75rem;
@@ -224,7 +224,7 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
   flex: 1;
 }
 .cta-eyebrow {
-  font-size: 0.65rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--accent);
@@ -238,7 +238,7 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
   line-height: 1.25;
 }
 .cta-sub {
-  font-size: 0.75rem;
+  font-size: var(--fs-sm);
   color: #a09080;
   margin-bottom: 0.9rem;
 }
@@ -247,7 +247,7 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
   background: var(--accent);
   color: #fff;
   font-family: var(--font-serif);
-  font-size: 0.75rem;
+  font-size: var(--fs-sm);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 0.5rem 1.3rem;
