@@ -10,6 +10,7 @@ import feedbackRoutes from "./routes/feedbackRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import showcaseRoutes from "./routes/showcaseRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,6 +28,7 @@ app.use("/api/feedback", feedbackRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/showcase", showcaseRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend running");

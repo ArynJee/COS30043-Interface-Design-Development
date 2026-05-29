@@ -9,6 +9,10 @@ import Registration from '@/views/Registration.vue'
 import Products from '@/views/Products.vue'
 import Showcase from '@/views/Showcase.vue'
 import Customize from '@/views/Customize.vue'
+import Cart from '@/views/Cart.vue'
+import Checkout from '@/views/Checkout.vue'
+import OrderConfirmation from '@/views/OrderConfirmation.vue'
+import UserProfile from '@/views/UserProfile.vue'
 
 const routes = [
   {
@@ -19,6 +23,10 @@ const routes = [
       { path: 'products', component: Products },
       { path: 'showcase', component: Showcase },
       { path: 'customize', component: Customize },
+      { path: 'cart', component: Cart },
+      { path: 'checkout', component: Checkout },
+      { path: 'order-confirmation', component: OrderConfirmation },
+      { path: 'profile', component: UserProfile },
     ],
   },
 
@@ -35,6 +43,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior: () => ({ top: 0 }),
 })
 
 export default router

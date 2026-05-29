@@ -1,14 +1,39 @@
 <script setup>
 import { ref, watch, onBeforeUnmount } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import {
   ChevronLeft,
   ChevronRight,
   ChevronDown,
   Search,
   Plus,
+  Check,
 } from "@lucide/vue";
 import useProducts from "@/hooks/useProducts.js";
+import { useCartStore } from "@/stores/cart.js";
+
+const router = useRouter();
+const cartStore = useCartStore();
+
+// Tracks per-product feedback: null | 'adding' | 'added'
+const addingStates = ref({});
+
+async function addToCart(product) {
+  if (!localStorage.getItem("token")) {
+    router.push("/login");
+    return;
+  }
+  addingStates.value[product.id] = "adding";
+  const ok = await cartStore.addProduct(product);
+  addingStates.value[product.id] = ok ? "added" : null;
+  if (ok) {
+    // Update sold_count display locally so it feels responsive
+    product.sold_count = (product.sold_count || 0) + 1;
+    setTimeout(() => {
+      addingStates.value[product.id] = null;
+    }, 1800);
+  }
+}
 
 const {
   products,
@@ -294,11 +319,15 @@ onBeforeUnmount(() => {
               <span class="card-price fw-bold">{{
                 formatPrice(product.base_price)
               }}</span>
-              <button class="card-add-btn border-0 px-2 py-2">
-                <Plus
-                  size="14"
-                  class="me-1 justify-content-center text-center"
-                />Add to Cart
+              <button
+                class="card-add-btn border-0 px-2 py-2"
+                :class="{ 'btn-added': addingStates[product.id] === 'added' }"
+                :disabled="addingStates[product.id] === 'adding'"
+                @click.prevent="addToCart(product)"
+              >
+                <Check v-if="addingStates[product.id] === 'added'" size="14" class="me-1" />
+                <Plus v-else size="14" class="me-1 justify-content-center text-center" />
+                {{ addingStates[product.id] === 'adding' ? 'Adding…' : addingStates[product.id] === 'added' ? 'Added' : 'Add to Cart' }}
               </button>
             </div>
           </div>
@@ -649,8 +678,15 @@ onBeforeUnmount(() => {
   transition: background 0.2s;
   flex-shrink: 0;
 }
-.card-add-btn:hover {
+.card-add-btn:hover:not(:disabled) {
   background: #4a3828;
+}
+.card-add-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.card-add-btn.btn-added {
+  background: #3a6b3a;
 }
 
 /* ── loading / empty ── */

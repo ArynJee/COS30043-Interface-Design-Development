@@ -12,6 +12,7 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 
 function saveBase64Image(base64Data) {
   if (!base64Data) return null;
+  if (base64Data.startsWith("/uploads/") || base64Data.startsWith("http")) return base64Data;
   const data = base64Data.replace(/^data:image\/\w+;base64,/, "");
   const filename = `cart_${Date.now()}_${Math.random().toString(36).slice(2, 9)}.png`;
   const filepath = path.join(UPLOADS_DIR, filename);
@@ -19,11 +20,12 @@ function saveBase64Image(base64Data) {
   return `/uploads/${filename}`;
 }
 
-// GET /api/cart  — user's cart items
+// GET /api/cart
 export const getCartItems = async (req, res) => {
   try {
     const result = await db.query(
-      `SELECT id, furniture_type, skeleton_type, configuration, quantity, unit_price, preview_image, created_at
+      `SELECT id, is_custom, furniture_type, skeleton_type, configuration,
+              quantity, unit_price, preview_image, product_id, item_name, created_at
        FROM cart_items WHERE user_id = $1 ORDER BY created_at DESC`,
       [req.userId]
     );
@@ -34,21 +36,61 @@ export const getCartItems = async (req, res) => {
   }
 };
 
-// POST /api/cart  — add custom item
+// POST /api/cart — add custom furniture or regular product
 export const addCartItem = async (req, res) => {
   try {
-    const { furniture_type, skeleton_type, configuration, unit_price, preview_image } = req.body;
-    if (!furniture_type || unit_price == null) {
-      return res.status(400).json({ message: "furniture_type and unit_price are required" });
+    const {
+      furniture_type, skeleton_type, configuration, unit_price, preview_image,
+      product_id, item_name, is_custom,
+    } = req.body;
+
+    if (unit_price == null) {
+      return res.status(400).json({ message: "unit_price is required" });
     }
 
-    const imageUrl = saveBase64Image(preview_image);
+    const isCustomItem = is_custom !== false;
+
+    if (isCustomItem && !furniture_type) {
+      return res.status(400).json({ message: "furniture_type is required for custom items" });
+    }
+    if (!isCustomItem && (!product_id || !item_name)) {
+      return res.status(400).json({ message: "product_id and item_name are required for product items" });
+    }
+
+    const imageUrl = isCustomItem ? saveBase64Image(preview_image) : (preview_image || null);
+
+    // Upsert: if same product already in cart, increment quantity
+    if (!isCustomItem && product_id) {
+      const existing = await db.query(
+        `SELECT id, quantity FROM cart_items WHERE user_id = $1 AND product_id = $2`,
+        [req.userId, product_id]
+      );
+      if (existing.rows.length > 0) {
+        const updated = await db.query(
+          `UPDATE cart_items SET quantity = quantity + 1, updated_at = CURRENT_TIMESTAMP
+           WHERE id = $1 RETURNING id, item_name, unit_price, quantity, preview_image, created_at`,
+          [existing.rows[0].id]
+        );
+        return res.status(200).json({ item: updated.rows[0] });
+      }
+    }
 
     const result = await db.query(
-      `INSERT INTO cart_items (user_id, furniture_type, skeleton_type, configuration, unit_price, preview_image)
-       VALUES ($1, $2, $3, $4, $5, $6)
-       RETURNING id, furniture_type, unit_price, preview_image, created_at`,
-      [req.userId, furniture_type, skeleton_type, JSON.stringify(configuration || {}), unit_price, imageUrl]
+      `INSERT INTO cart_items
+         (user_id, is_custom, furniture_type, skeleton_type, configuration, unit_price, preview_image, product_id, item_name)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+       RETURNING id, is_custom, furniture_type, unit_price, quantity, preview_image, product_id, item_name, created_at`,
+      [
+        req.userId,
+        isCustomItem,
+        furniture_type || null,
+        skeleton_type || null,
+        JSON.stringify(configuration || {}),
+        unit_price,
+        imageUrl,
+        product_id || null,
+        item_name || null,
+      ]
     );
 
     res.status(201).json({ item: result.rows[0] });
@@ -58,7 +100,32 @@ export const addCartItem = async (req, res) => {
   }
 };
 
-// DELETE /api/cart/:id  — remove item
+// PATCH /api/cart/:id — update quantity
+export const updateCartItem = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { quantity } = req.body;
+
+    if (!quantity || quantity < 1) {
+      return res.status(400).json({ message: "quantity must be >= 1" });
+    }
+
+    const result = await db.query(
+      `UPDATE cart_items SET quantity = $1, updated_at = CURRENT_TIMESTAMP
+       WHERE id = $2 AND user_id = $3
+       RETURNING id, quantity`,
+      [quantity, id, req.userId]
+    );
+
+    if (!result.rows.length) return res.status(404).json({ message: "Item not found" });
+    res.json({ item: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to update item" });
+  }
+};
+
+// DELETE /api/cart/:id — remove one item
 export const removeCartItem = async (req, res) => {
   try {
     const { id } = req.params;
@@ -71,5 +138,16 @@ export const removeCartItem = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Failed to remove item" });
+  }
+};
+
+// DELETE /api/cart — clear entire cart
+export const clearCart = async (req, res) => {
+  try {
+    await db.query(`DELETE FROM cart_items WHERE user_id = $1`, [req.userId]);
+    res.json({ message: "Cart cleared" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to clear cart" });
   }
 };

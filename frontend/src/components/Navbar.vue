@@ -1,8 +1,12 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { MapPin, ShoppingCart, UserCircle, Search, ShoppingBag, LayoutGrid, Sliders, Info, ChevronLeft, ChevronRight, Sun, Moon } from '@lucide/vue'
 import { useDarkMode } from '@/hooks/useDarkMode'
+import { useCartStore } from '@/stores/cart'
+
+const cartStore = useCartStore()
+onMounted(() => cartStore.fetchCart())
 
 const { isDark, toggleDark } = useDarkMode()
 const isAnimating = ref(false)
@@ -60,8 +64,9 @@ const searchQuery = ref('')
           <MapPin :size="19" />
         </router-link>
 
-        <router-link title="Cart" to="/cart" class="icon-btn">
+        <router-link title="Cart" to="/cart" class="icon-btn cart-icon-btn">
           <ShoppingCart :size="19" />
+          <span v-if="cartStore.itemCount > 0" class="cart-badge">{{ cartStore.itemCount > 99 ? '99+' : cartStore.itemCount }}</span>
         </router-link>
 
         <router-link title="Profile" :to="profileRoute" class="icon-btn">
@@ -119,8 +124,11 @@ const searchQuery = ref('')
         <span class="sb-tooltip">Locations</span>
       </router-link>
       <router-link to="/cart" class="sb-link position-relative d-flex align-items-center gap-3 rounded-2 px-2 py-2 overflow-hidden text-decoration-none">
-        <ShoppingCart :size="19" class="sb-icon" />
-        <span class="sb-label pe-none">Cart</span>
+        <div class="sb-cart-wrap">
+          <ShoppingCart :size="19" class="sb-icon" />
+          <span v-if="cartStore.itemCount > 0" class="sb-cart-badge">{{ cartStore.itemCount > 99 ? '99+' : cartStore.itemCount }}</span>
+        </div>
+        <span class="sb-label pe-none">Cart{{ cartStore.itemCount > 0 ? ` (${cartStore.itemCount})` : '' }}</span>
         <span class="sb-tooltip">Cart</span>
       </router-link>
       <router-link :to="profileRoute" class="sb-link position-relative d-flex align-items-center gap-3 rounded-2 px-2 py-2 overflow-hidden text-decoration-none">
@@ -410,6 +418,45 @@ const searchQuery = ref('')
 .sidebar-overlay.visible {
   display: block;
   opacity: 1;
+}
+
+.cart-icon-btn {
+  position: relative;
+}
+.cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #c4a882;
+  color: #fff;
+  font-size: 0.55rem;
+  font-family: 'Times New Roman', serif;
+  min-width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2px;
+  line-height: 1;
+}
+.sb-cart-wrap {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+}
+.sb-cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #c4a882;
+  color: #fff;
+  font-size: 0.5rem;
+  min-width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2px;
 }
 
 .theme-toggle {
