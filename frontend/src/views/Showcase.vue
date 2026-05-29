@@ -139,7 +139,6 @@ const {
 
             <span
               class="card-area-badge position-absolute"
-              style="background: #c4a882"
             >
               {{ c.area }}
             </span>
@@ -158,7 +157,6 @@ const {
             <div class="contrib-row d-flex align-items-center gap-2 mb-3">
               <div
                 class="contrib-avatar d-flex align-items-center justify-content-center flex-shrink-0"
-                style="background: #c4a882"
               >
                 {{ getInitials(c.first_name, c.last_name) }}
               </div>
@@ -321,7 +319,7 @@ const {
 .stat-n {
   font-size: 2.2rem;
   font-weight: bold;
-  color: #c4a882;
+  color: #f0e1cc;
   line-height: 1;
 }
 .stat-l {
@@ -565,6 +563,7 @@ const {
   text-transform: uppercase;
   padding: 0.25rem 0.7rem;
   font-weight: 600;
+  background: #c4a882
 }
 
 /* Featured tag */
@@ -595,6 +594,7 @@ const {
   font-weight: 700;
   letter-spacing: 0.04em;
   flex-shrink: 0;
+  background: #c4a882;  
 }
 .contrib-name {
   font-size: 0.83rem;
