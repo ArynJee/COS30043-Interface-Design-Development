@@ -203,23 +203,38 @@ const {
       </TransitionGroup>
     </div>
 
-    <!-- ── BOTTOM CTA ── -->
-    <section class="bottom-cta position-relative overflow-hidden">
-      <div class="bcta-bg position-absolute inset-0"></div>
-      <div class="bcta-dots position-absolute inset-0"></div>
-      <div class="bcta-inner position-relative z-1 text-center">
-        <div class="bcta-orn"><Armchair size="40"/></div>
-        <h2 class="bcta-title">Have a Design to Share?</h2>
-        <p class="bcta-sub">
-          Customize your own furniture, then contribute it to our growing
-          community of creators.
-        </p>
-        <RouterLink
-          to="/customize"
-          class="bcta-btn d-inline-flex align-items-center gap-2"
-        >
-          Start Designing <ArrowRight :size="16" />
-        </RouterLink>
+    <!-- customize manner cta -->
+    <section class="cb-section position-relative overflow-hidden my-5">
+      <div class="cb-orb cb-orb--1" aria-hidden="true"></div>
+      <div class="cb-orb cb-orb--2" aria-hidden="true"></div>
+
+      <div class="cb-inner position-relative z-1 d-flex align-items-center justify-content-between flex-wrap gap-4">
+        <div class="cb-left">
+          <p class="cb-eyebrow text-uppercase mb-4">Your Vision. Your Space.</p>
+          <h2 class="cb-title mb-3">Design your own<br>furniture</h2>
+          <p class="cb-body m-0">
+            Choose from 18 furniture types and fully customize materials,
+            finishes, and dimensions — then share it with the community.
+          </p>
+
+          <div class="cb-pill-row d-flex align-items-center gap-3 mt-3">
+            <div class="cb-pill rounded-pill px-4 py-3 pe-none" aria-hidden="true">
+              <span class="cb-pill-text text-uppercase">Design Now!</span>
+            </div>
+            <RouterLink to="/customize" class="cb-arrow rounded-pill d-flex align-items-center justify-content-center overflow-hidden text-decoration-none" aria-label="Go to Customize">
+              <ArrowRight :size="18" class="cb-arrow-icon" />
+            </RouterLink>
+          </div>
+        </div>
+
+        <div class="cb-right position-relative" aria-hidden="true">
+          <div class="cb-photo cb-photo--back position-absolute overflow-hidden rounded-4">
+            <img src="/home/living-room.jpg" alt="" />
+          </div>
+          <div class="cb-photo cb-photo--front position-absolute overflow-hidden rounded-4">
+            <img src="/home/bathroom.jpeg" alt="" />
+          </div>
+        </div>
       </div>
     </section>
   </div>
@@ -685,61 +700,156 @@ const {
   transform: translateY(12px);
 }
 
-/* ── BOTTOM CTA ── */
-.bottom-cta {
-  padding: 6rem 5rem;
-  text-align: center;
+/* ── CUSTOMIZE BANNER CTA ── */
+.cb-section {
+  margin: 0 4.5rem;
+  border-radius: 20px;
+  background: #f5f0e8;
 }
-.bcta-bg {
-  background:
-    radial-gradient(
-      ellipse at 70% 50%,
-      rgba(139, 111, 71, 0.2) 0%,
-      transparent 60%
-    ),
-    linear-gradient(145deg, #1a1410 0%, #2c2218 60%, #1a1410 100%);
+
+.cb-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
 }
-.bcta-dots {
-  background-image: radial-gradient(
-    circle,
-    rgba(196, 168, 130, 0.15) 1px,
-    transparent 1px
-  );
-  background-size: 28px 28px;
+.cb-orb--1 {
+  width: 420px;
+  height: 420px;
+  background: rgba(187, 141, 95, 0.28);
+  filter: blur(90px);
+  bottom: -120px;
+  left: -80px;
 }
-.bcta-orn {
-  font-size: 2.2rem;
-  color: #c4a882;
-  opacity: 0.55;
-  margin-bottom: 1.25rem;
-  line-height: 1;
+.cb-orb--2 {
+  width: 300px;
+  height: 300px;
+  background: rgba(187, 141, 95, 0.28);
+  filter: blur(70px);
+  top: -60px;
+  right: 280px;
 }
-.bcta-title {
-  font-size: clamp(1.6rem, 3vw, 2.6rem);
-  color: #2b1708;
-  margin-bottom: 0.75rem;
+
+.cb-inner {
+  padding: 3.5rem 4rem;
 }
-.bcta-sub {
-  font-size: 0.88rem;
-  color: #523f32;
+
+.cb-left {
+  flex: 1;
+  min-width: 0;
   max-width: 440px;
-  margin: 0 auto 2rem;
-  line-height: 1.65;
 }
-.bcta-btn {
+
+.cb-eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  color: #a08060;
+}
+
+.cb-title {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  color: #2c2218;
+  line-height: 1.15;
+}
+
+.cb-body {
+  font-size: 0.84rem;
+  color: #6a5a4a;
+  line-height: 1.7;
+  max-width: 360px;
+}
+
+.cb-pill {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #d8cfc4;
+}
+
+.cb-pill-text {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  color: #9a8a7a;
+}
+
+.cb-arrow {
+  width: 50px;
+  height: 50px;
   background: #c4a882;
-  color: #1a1410;
-  padding: 0.75rem 2.2rem;
-  font-family: "Times New Roman", serif;
-  font-size: 0.83rem;
-  letter-spacing: 0.09em;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background 0.22s;
+  color: #fff;
+  flex-shrink: 0;
+  transition: background 0.22s, box-shadow 0.22s;
 }
-.bcta-btn:hover {
-  background: #d4b892;
-  color: #1a1410;
+
+.cb-arrow:hover {
+  background: #8b6f47;
+  box-shadow: 0 6px 20px rgba(139, 111, 71, 0.35);
+  color: #fff;
+}
+
+.cb-arrow-icon {
+  transition: none;
+}
+
+.cb-arrow:hover .cb-arrow-icon {
+  animation: arrow-shoot 0.55s ease;
+}
+
+@keyframes arrow-shoot {
+  0%   { transform: translateX(0);    opacity: 1; }
+  40%  { transform: translateX(20px); opacity: 0; }
+  41%  { transform: translateX(-20px); opacity: 0; }
+  100% { transform: translateX(0);    opacity: 1; }
+}
+
+/* right photos */
+.cb-right {
+  flex-shrink: 0;
+  width: 400px;
+  height: 270px;
+}
+
+.cb-photo {
+  box-shadow: 0 12px 36px rgba(30, 26, 20, 0.15);
+}
+
+.cb-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cb-photo--back {
+  width: 220px;
+  height: 250px;
+  top: 0;
+  left: 20px;
+  z-index: 1;
+}
+
+.cb-photo--front {
+  width: 195px;
+  height: 215px;
+  bottom: 0;
+  right: 0;
+  z-index: 2;
+}
+
+@media (max-width: 991px) {
+  .cb-section { margin: 0 1.5rem 3rem; }
+  .cb-inner { padding: 2.5rem 2.5rem; }
+  .cb-right { width: 300px; height: 210px; }
+  .cb-photo--back { width: 165px; height: 190px; }
+  .cb-photo--front { width: 150px; height: 165px; }
+}
+
+@media (max-width: 767px) {
+  .cb-section { margin: 0 1rem 3rem; border-radius: 14px; }
+  .cb-inner { flex-direction: column; padding: 2rem 1.75rem; gap: 2rem; }
+  .cb-left { max-width: 100%; }
+  .cb-right { width: 100%; height: 200px; }
+  .cb-photo--back { width: 160px; height: 185px; left: 0; }
+  .cb-photo--front { width: 145px; height: 162px; }
 }
 
 /* ── DARK MODE ── */
