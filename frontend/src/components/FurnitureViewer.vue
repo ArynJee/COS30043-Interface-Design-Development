@@ -923,7 +923,6 @@ defineExpose({ captureScreenshot })
   width: 100%;
   height: 100%;
   min-height: 420px;
-  border-radius: 12px;
   overflow: hidden;
   background: #F5F0E8;
 }
@@ -952,9 +951,6 @@ defineExpose({ captureScreenshot })
 .fv-spinner {
   width: 32px;
   height: 32px;
-  border: 2px solid #e0d8cc;
-  border-top-color: #c4a882;
-  border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
 

@@ -142,13 +142,6 @@ const {
             >
               {{ c.area }}
             </span>
-
-            <span
-              v-if="idx === 0 && filtered.length > 1"
-              class="card-featured-tag position-absolute"
-            >
-              ✦ &thinsp; Featured
-            </span>
           </div>
 
           <!-- Body -->
@@ -865,19 +858,17 @@ const {
 }
 
 [data-theme="dark"] .divider-strip {
-  background: #1e1b14;
-  border-color: #3a3025;
+  background: #1a1610;
 }
 [data-theme="dark"] .ds-text {
-  color: #6a5a4a;
+  color: #7a6a58;
 }
 [data-theme="dark"] .ds-line {
-  background: #3a3025;
+  background: #2e2820;
 }
 
 [data-theme="dark"] .filter-strip {
-  background: #1e1b14;
-  border-bottom-color: #3a3025;
+  background: #1a1610;
 }
 [data-theme="dark"] .area-pill {
   border-color: #3a3025;
@@ -952,6 +943,10 @@ const {
 }
 [data-theme="dark"] .empty-sub {
   color: #8a7a6a;
+}
+
+[data-theme="dark"] .sc-bridge {
+  background: #1a1610;
 }
 
 /* ── RESPONSIVE ── */
