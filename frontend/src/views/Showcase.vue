@@ -204,7 +204,7 @@ const {
     </div>
 
     <!-- customize manner cta -->
-    <section class="cb-section position-relative overflow-hidden my-5">
+    <section class="cb-section position-relative overflow-hidden">
       <div class="cb-orb cb-orb--1" aria-hidden="true"></div>
       <div class="cb-orb cb-orb--2" aria-hidden="true"></div>
 
@@ -237,6 +237,8 @@ const {
         </div>
       </div>
     </section>
+
+    <div class="sc-bridge"></div>
   </div>
 </template>
 
@@ -702,9 +704,14 @@ const {
 
 /* ── CUSTOMIZE BANNER CTA ── */
 .cb-section {
-  margin: 0 4.5rem;
-  border-radius: 20px;
+  margin: 2rem 4.5rem 0;
   background: #f5f0e8;
+  border: 1px solid #e0d5c5;
+}
+
+.sc-bridge {
+  background: #fff9f39f;
+  height: 5rem;
 }
 
 .cb-orb {
@@ -804,8 +811,8 @@ const {
 /* right photos */
 .cb-right {
   flex-shrink: 0;
-  width: 400px;
-  height: 270px;
+  width: 460px;
+  height: 320px;
 }
 
 .cb-photo {
@@ -820,31 +827,31 @@ const {
 }
 
 .cb-photo--back {
-  width: 220px;
-  height: 250px;
+  width: 265px;
+  height: 300px;
   top: 0;
   left: 20px;
   z-index: 1;
 }
 
 .cb-photo--front {
-  width: 195px;
-  height: 215px;
+  width: 235px;
+  height: 258px;
   bottom: 0;
   right: 0;
   z-index: 2;
 }
 
 @media (max-width: 991px) {
-  .cb-section { margin: 0 1.5rem 3rem; }
+  .cb-section { margin: 2rem 1.5rem 0; }
   .cb-inner { padding: 2.5rem 2.5rem; }
-  .cb-right { width: 300px; height: 210px; }
-  .cb-photo--back { width: 165px; height: 190px; }
-  .cb-photo--front { width: 150px; height: 165px; }
+  .cb-right { width: 340px; height: 250px; }
+  .cb-photo--back { width: 200px; height: 230px; }
+  .cb-photo--front { width: 180px; height: 200px; }
 }
 
 @media (max-width: 767px) {
-  .cb-section { margin: 0 1rem 3rem; border-radius: 14px; }
+  .cb-section { margin: 2rem 1rem 0; border-radius: 14px; }
   .cb-inner { flex-direction: column; padding: 2rem 1.75rem; gap: 2rem; }
   .cb-left { max-width: 100%; }
   .cb-right { width: 100%; height: 200px; }
