@@ -44,7 +44,7 @@
 
   /* State */
   --color-error:   #b85c4a;
-  --color-error-2: #c0392b;
+  --color-error-2: #8b5a48;
   --color-success: #3a6b3a;
 }
 
@@ -60,7 +60,8 @@
   --color-muted:     #6a5a4a;
   --color-subtle:    #5a4a3a;
   --color-cream:     #e8ddd0;
-  --color-free:      #6dbf8a;   /* green "free/unlocked" in dark mode */
+  --color-free:      #c4a882;   /* warm tan "free/unlocked" in dark mode */
+  --color-error-2:   #b08878;   /* muted warm brown for destructive actions */
 
   --border:       #3a3025;
   --border-light: #2e2820;

@@ -50,14 +50,16 @@ function lineClass(fromStep) {
 </template>
 
 <style scoped>
+@import "@/styles/main.css";
+
 .steps-bar {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0;
   padding: 2rem 5rem 1.5rem;
-  background: #fff;
-  border-bottom: 1px solid #e0d5c5;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
 }
 
 .step {
@@ -66,60 +68,72 @@ function lineClass(fromStep) {
   gap: 0.5rem;
 }
 
+/* ── Step dot ── */
 .step-dot {
   width: 20px;
   height: 20px;
-  border: 2px solid #c8bdb0;
-  background: #fff;
+  border: 2px solid var(--border-input);
+  background: var(--bg-surface);
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.step-dot.filled {
-  background: #2c2218;
-  border-color: #2c2218;
-}
-.step-dot.done {
-  background: #c4a882;
-  border-color: #c4a882;
+  flex-shrink: 0;
 }
 
+/* Active: solid filled square */
+.step-dot.filled {
+  border-color: var(--color-primary);
+}
+
+/* Done: outer border + inner accent square */
+.step-dot.done {
+  border-color: var(--btn-bg);
+  background: var(--bg-surface);
+}
+.step-dot.done::after {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 10px;
+  background: var(--btn-bg);
+}
+
+/* ── Step label ── */
 .step-label {
   font-size: 0.78rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #a09080;
-  font-family: "Times New Roman", Times, serif;
+  color: var(--color-free);
+  font-family: var(--font-serif);
 }
 .step-active .step-label,
 .step-done .step-label {
-  color: #2c2218;
+  color: var(--color-primary);
   font-weight: 600;
 }
 
+/* ── Progress line with animated fill ── */
 .step-line {
   width: 80px;
   height: 1px;
-  background: #e0d5c5;
+  background: var(--border);
   margin: 0 0.5rem;
+  position: relative;
+  overflow: hidden;
 }
-.done-line {
-  background: #c4a882;
+.step-line::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
-/* ── Dark mode ── */
-[data-theme="dark"] .steps-bar {
-  background: #1e1b14;
-  border-bottom-color: #3a3025;
+.step-line.done-line::after {
+  width: 100%;
 }
-[data-theme="dark"] .step-label { color: #6a5a4a; }
-[data-theme="dark"] .step-active .step-label,
-[data-theme="dark"] .step-done .step-label { color: #e8ddd0; }
-[data-theme="dark"] .step-dot { background: #1a1610; border-color: #4a3a2a; }
-[data-theme="dark"] .step-dot.filled { background: #e8ddd0; border-color: #e8ddd0; }
-[data-theme="dark"] .step-dot.done { background: #c4a882; border-color: #c4a882; }
-[data-theme="dark"] .step-line { background: #3a3025; }
-[data-theme="dark"] .done-line { background: #c4a882; }
 
 /* ── Responsive ── */
 @media (max-width: 991px) {

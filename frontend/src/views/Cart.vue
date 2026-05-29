@@ -550,6 +550,9 @@ const {
   color: var(--accent-dk);
   pointer-events: none;
 }
+[data-theme="dark"] .fs-truck {
+  color: var(--color-primary);
+}
 .truck-icon {
   width: 22px;
   height: 22px;
