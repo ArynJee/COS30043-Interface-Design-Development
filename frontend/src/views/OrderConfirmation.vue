@@ -1,6 +1,7 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { useRoute, RouterLink } from "vue-router";
+import CheckoutSteps from "@/components/CheckoutSteps.vue";
 
 const route = useRoute();
 const orderId = ref(route.query.orderId || "");
@@ -19,23 +20,7 @@ const orderDate = now.toLocaleDateString("en-AU", {
 <template>
   <div class="confirmation-page">
 
-    <!-- Steps indicator — all done -->
-    <div class="steps-bar">
-      <div class="step step-done">
-        <div class="step-dot done"></div>
-        <span class="step-label">Cart</span>
-      </div>
-      <div class="step-line done-line"></div>
-      <div class="step step-done">
-        <div class="step-dot done"></div>
-        <span class="step-label">Checkout</span>
-      </div>
-      <div class="step-line done-line"></div>
-      <div class="step step-done">
-        <div class="step-dot done"></div>
-        <span class="step-label">Payment</span>
-      </div>
-    </div>
+    <CheckoutSteps current-step="confirmation" />
 
     <div class="confirmation-content">
 
@@ -106,46 +91,6 @@ const orderDate = now.toLocaleDateString("en-AU", {
   background: #faf7f2;
   min-height: 100vh;
 }
-
-/* ── Steps ── */
-.steps-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  padding: 2rem 5rem 1.5rem;
-  background: #fff;
-  border-bottom: 1px solid #e0d5c5;
-}
-.step {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.step-dot {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #c8bdb0;
-  background: #fff;
-}
-.step-dot.done {
-  background: #c4a882;
-  border-color: #c4a882;
-}
-.step-label {
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #a09080;
-}
-.step-done .step-label { color: #2c2218; font-weight: 600; }
-.step-line {
-  width: 80px;
-  height: 1px;
-  background: #e0d5c5;
-  margin: 0 0.5rem;
-}
-.done-line { background: #c4a882; }
 
 /* ── Content ── */
 .confirmation-content {
@@ -315,13 +260,6 @@ const orderDate = now.toLocaleDateString("en-AU", {
 
 /* ── Dark mode ── */
 [data-theme="dark"] .confirmation-page { background: #1a1610; }
-[data-theme="dark"] .steps-bar { background: #1e1b14; border-bottom-color: #3a3025; }
-[data-theme="dark"] .step-label { color: #6a5a4a; }
-[data-theme="dark"] .step-done .step-label { color: #e8ddd0; }
-[data-theme="dark"] .step-dot { background: #1a1610; border-color: #4a3a2a; }
-[data-theme="dark"] .step-dot.done { background: #c4a882; border-color: #c4a882; }
-[data-theme="dark"] .step-line { background: #3a3025; }
-[data-theme="dark"] .done-line { background: #c4a882; }
 [data-theme="dark"] .confirmation-title { color: #e8ddd0; }
 [data-theme="dark"] .confirmation-sub,
 [data-theme="dark"] .delivery-note { color: #9a8875; }
@@ -336,8 +274,6 @@ const orderDate = now.toLocaleDateString("en-AU", {
 
 /* ── Responsive ── */
 @media (max-width: 767px) {
-  .steps-bar { padding: 1rem 1.25rem; }
-  .step-line { width: 40px; }
   .confirmation-content { padding: 2.5rem 1.25rem; }
   .cta-banner { margin: 0 1.25rem 3rem; flex-direction: column; }
   .cta-img-wrap { width: 100%; height: 100px; }

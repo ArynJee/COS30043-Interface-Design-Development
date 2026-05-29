@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, nextTick } from "vue";
 import { useRouter, RouterLink } from "vue-router";
+import CheckoutSteps from "@/components/CheckoutSteps.vue";
 import { loadStripe } from "@stripe/stripe-js";
 import { useCartStore } from "@/stores/cart";
 import { createPaymentIntentApi, confirmOrderApi } from "@/services/orderServices";
@@ -162,23 +163,7 @@ onMounted(async () => {
 <template>
   <div class="checkout-page">
 
-    <!-- Steps indicator -->
-    <div class="steps-bar">
-      <div class="step step-done">
-        <div class="step-dot done"></div>
-        <span class="step-label">Cart</span>
-      </div>
-      <div class="step-line"></div>
-      <div class="step" :class="{ 'step-active': step === 1, 'step-done': step === 2 }">
-        <div class="step-dot" :class="{ filled: step >= 1, done: step === 2 }"></div>
-        <span class="step-label">Checkout</span>
-      </div>
-      <div class="step-line"></div>
-      <div class="step" :class="{ 'step-active': step === 2 }">
-        <div class="step-dot" :class="{ filled: step === 2 }"></div>
-        <span class="step-label">Payment</span>
-      </div>
-    </div>
+    <CheckoutSteps :current-step="step === 1 ? 'checkout' : 'payment'" />
 
     <div class="checkout-content">
 
@@ -304,57 +289,6 @@ onMounted(async () => {
   font-family: "Times New Roman", Times, serif;
   background: #faf7f2;
   min-height: 100vh;
-}
-
-/* ── Steps ── */
-.steps-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  padding: 2rem 5rem 1.5rem;
-  background: #fff;
-  border-bottom: 1px solid #e0d5c5;
-}
-.step {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.step-dot {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #c8bdb0;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-.step-dot.filled {
-  background: #2c2218;
-  border-color: #2c2218;
-}
-.step-dot.done {
-  background: #c4a882;
-  border-color: #c4a882;
-}
-.step-label {
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #a09080;
-}
-.step-active .step-label,
-.step-done .step-label {
-  color: #2c2218;
-  font-weight: 600;
-}
-.step-line {
-  width: 80px;
-  height: 1px;
-  background: #e0d5c5;
-  margin: 0 0.5rem;
 }
 
 /* ── Layout ── */
@@ -623,14 +557,6 @@ onMounted(async () => {
 
 /* ── Dark mode ── */
 [data-theme="dark"] .checkout-page { background: #1a1610; }
-[data-theme="dark"] .steps-bar { background: #1e1b14; border-bottom-color: #3a3025; }
-[data-theme="dark"] .step-label { color: #6a5a4a; }
-[data-theme="dark"] .step-active .step-label,
-[data-theme="dark"] .step-done .step-label { color: #e8ddd0; }
-[data-theme="dark"] .step-dot { background: #1a1610; border-color: #4a3a2a; }
-[data-theme="dark"] .step-dot.filled { background: #e8ddd0; border-color: #e8ddd0; }
-[data-theme="dark"] .step-dot.done { background: #c4a882; border-color: #c4a882; }
-[data-theme="dark"] .step-line { background: #3a3025; }
 [data-theme="dark"] .section-title { color: #e8ddd0; }
 [data-theme="dark"] .field-label { color: #9a8875; }
 [data-theme="dark"] .field-input { background: #2a2418; border-color: #3a3025; color: #e8ddd0; }
@@ -660,12 +586,9 @@ onMounted(async () => {
 @media (max-width: 991px) {
   .checkout-content { padding: 1.5rem 2.5rem; flex-direction: column; }
   .checkout-summary { width: 100%; }
-  .steps-bar { padding: 1.5rem 2.5rem; }
 }
 @media (max-width: 767px) {
   .checkout-content { padding: 1.25rem; }
-  .steps-bar { padding: 1rem 1.25rem; }
-  .step-line { width: 40px; }
   .field-row { flex-direction: column; }
   .field-group-sm { flex: 1; }
 }
