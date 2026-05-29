@@ -103,7 +103,7 @@ const priceBreakdown = computed(() => {
       <div class="cu-hero-inner position-relative z-1">
         <p class="cu-crumb mb-4">
           <RouterLink to="/">Home</RouterLink>&ensp;›&ensp;
-          <RouterLink to="/products">Products</RouterLink>&ensp;›&ensp;
+          <RouterLink to="/showcase">Showcase</RouterLink>&ensp;›&ensp;
           <span>Customize</span>
         </p>
 
