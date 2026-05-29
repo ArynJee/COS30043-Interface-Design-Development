@@ -1,103 +1,20 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { storeToRefs } from "pinia";
-import { useRouter, RouterLink } from "vue-router";
-import { X, Truck} from "@lucide/vue";
-import { useCartStore } from "@/stores/cart";
+import { RouterLink } from "vue-router";
+import { X, Truck } from "@lucide/vue";
 import CheckoutSteps from "@/components/CheckoutSteps.vue";
 import CtaBanner from "@/components/CtaBanner.vue";
+import useCart from "@/hooks/useCart.js";
 
-const router = useRouter();
-const cartStore = useCartStore();
-
-const { items, loading, selectedIds, allSelected, subtotal } = storeToRefs(cartStore);
-
-// ── Shipping ────────────────────────────────────────────────────────────────
-const SHIPPING_OPTIONS = [
-  { id: "sea", label: "Sea Shipping", days: "14–21 days", fee: 10 },
-  { id: "air", label: "Air Shipping",  days: "3–7 days",   fee: 15 },
-];
-const FREE_THRESHOLD = { sea: 300, air: 1000 };
-
-const selectedShipping = ref("sea");
-
-const shippingOption = computed(() =>
-  SHIPPING_OPTIONS.find((o) => o.id === selectedShipping.value)
-);
-
-const shippingFee = computed(() => {
-  const threshold = FREE_THRESHOLD[selectedShipping.value];
-  return subtotal.value >= threshold ? 0 : shippingOption.value.fee;
-});
-
-const freeShippingThreshold = computed(() => FREE_THRESHOLD[selectedShipping.value]);
-
-const amountToFreeShipping = computed(() =>
-  Math.max(0, freeShippingThreshold.value - subtotal.value)
-);
-
-const freeShippingProgress = computed(() =>
-  Math.min(100, (subtotal.value / freeShippingThreshold.value) * 100)
-);
-
-const freeShippingUnlocked = computed(() => subtotal.value >= freeShippingThreshold.value);
-
-// ── Tax & totals ────────────────────────────────────────────────────────────
-const TAX_RATE = 0.06; // 6% SST
-
-const taxAmount = computed(() =>
-  (subtotal.value + shippingFee.value) * TAX_RATE
-);
-
-const orderTotal = computed(() =>
-  subtotal.value + shippingFee.value + taxAmount.value
-);
-
-// ── Formatting ──────────────────────────────────────────────────────────────
-const formatPrice = (val) => "RM " + parseFloat(val || 0).toFixed(2);
-
-// ── Item helpers ────────────────────────────────────────────────────────────
-function getItemName(item) {
-  if (item.is_custom) {
-    return (item.furniture_type || "Custom Item")
-      .replace(/_/g, " ")
-      .replace(/\b\w/g, (c) => c.toUpperCase());
-  }
-  return item.item_name || "Product";
-}
-
-function getItemVariant(item) {
-  if (item.is_custom) {
-    const raw = item.configuration;
-    const cfg = typeof raw === "string" ? JSON.parse(raw) : (raw || {});
-    const parts = Object.entries(cfg)
-      .slice(0, 2)
-      .map(([k, v]) => {
-        const label = typeof v === "object" && v !== null ? (v.name ?? String(v)) : v;
-        return `${k}: ${label}`;
-      });
-    return parts.join(" · ") || "Custom Configuration";
-  }
-  return "";
-}
-
-async function handleClearCart() {
-  if (!confirm("Remove all items from your cart?")) return;
-  await cartStore.clearCart();
-}
-
-function goToCheckout() {
-  if (!localStorage.getItem("token")) {
-    router.push("/login");
-    return;
-  }
-  if (selectedIds.value.length === 0) return;
-  router.push("/checkout");
-}
-
-onMounted(() => {
-  cartStore.fetchCart();
-});
+const {
+  cartStore,
+  items, loading, selectedIds, allSelected, subtotal,
+  SHIPPING_OPTIONS, FREE_THRESHOLD,
+  selectedShipping, shippingOption, shippingFee,
+  freeShippingThreshold, amountToFreeShipping, freeShippingProgress, freeShippingUnlocked,
+  taxAmount, orderTotal,
+  formatPrice, getItemName, getItemVariant,
+  handleClearCart, goToCheckout,
+} = useCart();
 </script>
 
 <template>

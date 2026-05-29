@@ -1,20 +1,9 @@
 <script setup>
-import { ref } from "vue";
-import { useRoute, RouterLink } from "vue-router";
+import { RouterLink } from "vue-router";
 import CheckoutSteps from "@/components/CheckoutSteps.vue";
+import useOrderConfirmation from "@/hooks/useOrderConfirmation.js";
 
-const route = useRoute();
-const orderId = ref(route.query.orderId || "");
-const total = ref(parseFloat(route.query.total || 0));
-
-const formatPrice = (val) => "$" + parseFloat(val || 0).toFixed(2);
-
-const now = new Date();
-const orderDate = now.toLocaleDateString("en-AU", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-});
+const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
 </script>
 
 <template>
