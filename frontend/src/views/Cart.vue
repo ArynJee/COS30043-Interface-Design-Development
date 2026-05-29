@@ -1,13 +1,14 @@
 <script setup>
 import { onMounted } from "vue";
+import { storeToRefs } from "pinia";
 import { useRouter, RouterLink } from "vue-router";
-import { X } from "@lucide/vue";
+import { X, ArrowRight } from "@lucide/vue";
 import { useCartStore } from "@/stores/cart";
 
 const router = useRouter();
 const cartStore = useCartStore();
 
-const { items, loading, selectedIds, allSelected, subtotal } = cartStore;
+const { items, loading, selectedIds, allSelected, subtotal } = storeToRefs(cartStore);
 
 const formatPrice = (val) =>
   "$" + parseFloat(val || 0).toFixed(2);
@@ -23,10 +24,14 @@ function getItemName(item) {
 
 function getItemVariant(item) {
   if (item.is_custom) {
-    const cfg = item.configuration || {};
+    const raw = item.configuration;
+    const cfg = typeof raw === "string" ? JSON.parse(raw) : (raw || {});
     const parts = Object.entries(cfg)
       .slice(0, 2)
-      .map(([k, v]) => `${k}: ${v}`);
+      .map(([k, v]) => {
+        const label = typeof v === "object" && v !== null ? (v.name ?? String(v)) : v;
+        return `${k}: ${label}`;
+      });
     return parts.join(" · ") || "Custom Configuration";
   }
   return "";
@@ -42,7 +47,7 @@ function goToCheckout() {
     router.push("/login");
     return;
   }
-  if (selectedIds.length === 0) return;
+  if (selectedIds.value.length === 0) return;
   router.push("/checkout");
 }
 
@@ -209,20 +214,45 @@ onMounted(() => {
     </div>
 
     <!-- CTA Banner -->
-    <div class="cta-banner">
-      <div class="cta-text">
-        <p class="cta-eyebrow">Discover more</p>
-        <h3 class="cta-heading">Design your perfect space</h3>
-        <p class="cta-sub">Explore our curated collection of handcrafted furniture</p>
-        <div class="cta-actions">
-          <RouterLink to="/products" class="cta-btn-primary">Shop Now</RouterLink>
-          <RouterLink to="/customize" class="cta-btn-secondary">Customize</RouterLink>
+    <section class="cb-section position-relative overflow-hidden">
+      <div class="cb-orb cb-orb--1" aria-hidden="true"></div>
+      <div class="cb-orb cb-orb--2" aria-hidden="true"></div>
+
+      <div class="cb-inner position-relative z-1 d-flex align-items-center justify-content-between flex-wrap gap-4">
+        <div class="cb-left">
+          <p class="cb-eyebrow text-uppercase mb-4">Keep Exploring</p>
+          <h2 class="cb-title mb-3">Discover our full<br>collection</h2>
+          <p class="cb-body m-0">
+            Browse hundreds of handcrafted furniture pieces for every
+            room — or design something entirely your own.
+          </p>
+
+          <div class="cb-pill-row d-flex align-items-center gap-3 mt-3">
+            <div class="cb-pill rounded-pill px-4 py-3 pe-none" aria-hidden="true">
+              <span class="cb-pill-text text-uppercase">Shop Now!</span>
+            </div>
+            <RouterLink
+              to="/products"
+              class="cb-arrow rounded-pill d-flex align-items-center justify-content-center overflow-hidden text-decoration-none"
+              aria-label="Go to Products"
+            >
+              <ArrowRight :size="18" class="cb-arrow-icon" />
+            </RouterLink>
+          </div>
+        </div>
+
+        <div class="cb-right position-relative" aria-hidden="true">
+          <div class="cb-photo cb-photo--back position-absolute overflow-hidden rounded-4">
+            <img src="/home/living-room.jpg" alt="" />
+          </div>
+          <div class="cb-photo cb-photo--front position-absolute overflow-hidden rounded-4">
+            <img src="/home/bathroom.jpeg" alt="" />
+          </div>
         </div>
       </div>
-      <div class="cta-img-wrap">
-        <img src="/product/product-hero.png" alt="Furniture collection" class="cta-img" />
-      </div>
-    </div>
+    </section>
+
+    <div class="cb-bridge"></div>
 
   </div>
 </template>
@@ -569,89 +599,134 @@ onMounted(() => {
   text-decoration: underline;
 }
 
-/* ── CTA Banner ── */
-.cta-banner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #2c2218;
-  margin: 0 5rem 4rem;
-  overflow: hidden;
-  min-height: 160px;
+/* ── CTA Banner (mirrors Showcase cb-section) ── */
+.cb-section {
+  margin: 2rem 4.5rem 0;
+  background: #f5f0e8;
+  border: 1px solid #e0d5c5;
 }
-.cta-text {
-  padding: 2rem 2.5rem;
+.cb-bridge {
+  background: #faf7f2;
+  height: 5rem;
+}
+.cb-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.cb-orb--1 {
+  width: 420px;
+  height: 420px;
+  background: rgba(187, 141, 95, 0.28);
+  filter: blur(90px);
+  bottom: -120px;
+  left: -80px;
+}
+.cb-orb--2 {
+  width: 300px;
+  height: 300px;
+  background: rgba(187, 141, 95, 0.28);
+  filter: blur(70px);
+  top: -60px;
+  right: 280px;
+}
+.cb-inner {
+  padding: 3.5rem 4rem;
+}
+.cb-left {
   flex: 1;
+  min-width: 0;
+  max-width: 440px;
 }
-.cta-eyebrow {
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: #c4a882;
-  margin-bottom: 0.4rem;
+.cb-eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  color: #a08060;
 }
-.cta-heading {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #f0e1cc;
-  margin-bottom: 0.35rem;
-  line-height: 1.25;
+.cb-title {
+  font-family: "Times New Roman", Times, serif;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  color: #2c2218;
+  line-height: 1.15;
 }
-.cta-sub {
-  font-size: 0.75rem;
-  color: #a09080;
-  margin-bottom: 1rem;
+.cb-body {
+  font-size: 0.84rem;
+  color: #6a5a4a;
+  line-height: 1.7;
+  max-width: 360px;
 }
-.cta-actions {
-  display: flex;
-  gap: 0.75rem;
+.cb-pill {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #d8cfc4;
 }
-.cta-btn-primary {
-  display: inline-block;
+.cb-pill-text {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  color: #9a8a7a;
+}
+.cb-arrow {
+  width: 50px;
+  height: 50px;
   background: #c4a882;
   color: #fff;
-  font-family: "Times New Roman", serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.55rem 1.4rem;
-  text-decoration: none;
-  transition: background 0.2s;
-}
-.cta-btn-primary:hover {
-  background: #b8966e;
-}
-.cta-btn-secondary {
-  display: inline-block;
-  background: transparent;
-  border: 1px solid #c4a882;
-  color: #c4a882;
-  font-family: "Times New Roman", serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.55rem 1.4rem;
-  text-decoration: none;
-  transition: background 0.2s, color 0.2s;
-}
-.cta-btn-secondary:hover {
-  background: #c4a882;
-  color: #fff;
-}
-.cta-img-wrap {
-  width: 260px;
-  height: 160px;
   flex-shrink: 0;
-  overflow: hidden;
-  position: relative;
+  transition: background 0.22s, box-shadow 0.22s;
 }
-.cta-img {
+.cb-arrow:hover {
+  background: #8b6f47;
+  box-shadow: 0 6px 20px rgba(139, 111, 71, 0.35);
+  color: #fff;
+}
+.cb-arrow:hover .cb-arrow-icon {
+  animation: arrow-shoot 0.55s ease;
+}
+@keyframes arrow-shoot {
+  0%   { transform: translateX(0);     opacity: 1; }
+  40%  { transform: translateX(20px);  opacity: 0; }
+  41%  { transform: translateX(-20px); opacity: 0; }
+  100% { transform: translateX(0);     opacity: 1; }
+}
+.cb-right {
+  flex-shrink: 0;
+  width: 460px;
+  height: 320px;
+}
+.cb-photo {
+  box-shadow: 20px 20px 30px rgba(30, 26, 20, 0.195);
+}
+.cb-photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: right center;
-  opacity: 0.45;
+  display: block;
 }
+.cb-photo--back {
+  width: 265px;
+  height: 300px;
+  top: 0;
+  left: 20px;
+  z-index: 1;
+}
+.cb-photo--front {
+  width: 235px;
+  height: 258px;
+  bottom: 0;
+  right: 0;
+  z-index: 2;
+}
+
+/* ── Dark mode: cb banner ── */
+[data-theme="dark"] .cb-section {
+  background: #1e1b14;
+  border-color: #3a3025;
+}
+[data-theme="dark"] .cb-bridge { background: #1a1610; }
+[data-theme="dark"] .cb-eyebrow { color: #c4a882; }
+[data-theme="dark"] .cb-title { color: #e8ddd0; }
+[data-theme="dark"] .cb-body { color: #9a8875; }
+[data-theme="dark"] .cb-pill { background: rgba(44, 34, 24, 0.6); border-color: #3a3025; }
+[data-theme="dark"] .cb-pill-text { color: #7a6a58; }
 
 /* ── Dark mode ── */
 [data-theme="dark"] .cart-page {
@@ -711,14 +786,22 @@ onMounted(() => {
   .cart-content { padding: 1.5rem 2.5rem; flex-direction: column; }
   .cart-summary { width: 100%; }
   .steps-bar { padding: 1.5rem 2.5rem; }
-  .cta-banner { margin: 0 2.5rem 3rem; }
+  .cb-section { margin: 2rem 1.5rem 0; }
+  .cb-inner { padding: 2.5rem 2.5rem; }
+  .cb-right { width: 340px; height: 250px; }
+  .cb-photo--back { width: 200px; height: 230px; }
+  .cb-photo--front { width: 180px; height: 200px; }
 }
 @media (max-width: 767px) {
   .cart-content { padding: 1.25rem; }
   .steps-bar { padding: 1rem 1.25rem; }
   .step-line { width: 40px; }
-  .cta-banner { margin: 0 1.25rem 3rem; flex-direction: column; }
-  .cta-img-wrap { width: 100%; height: 120px; }
   .th-count, .td-count { display: none; }
+  .cb-section { margin: 2rem 1rem 0; }
+  .cb-inner { flex-direction: column; padding: 2rem 1.75rem; gap: 2rem; }
+  .cb-left { max-width: 100%; }
+  .cb-right { width: 100%; height: 200px; }
+  .cb-photo--back { width: 160px; height: 185px; left: 0; }
+  .cb-photo--front { width: 145px; height: 162px; }
 }
 </style>

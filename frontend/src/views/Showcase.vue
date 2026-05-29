@@ -196,7 +196,7 @@ const {
       </TransitionGroup>
     </div>
 
-    <!-- customize manner cta -->
+    <!-- customize banner cta -->
     <section class="cb-section position-relative overflow-hidden">
       <div class="cb-orb cb-orb--1" aria-hidden="true"></div>
       <div class="cb-orb cb-orb--2" aria-hidden="true"></div>
@@ -809,7 +809,7 @@ const {
 }
 
 .cb-photo {
-  box-shadow: 0 12px 36px rgba(30, 26, 20, 0.15);
+  box-shadow: 20px 20px 30px rgba(30, 26, 20, 0.195);
 }
 
 .cb-photo img {
@@ -948,6 +948,18 @@ const {
 [data-theme="dark"] .sc-bridge {
   background: #1a1610;
 }
+
+/* ── Dark mode: cb banner ── */
+[data-theme="dark"] .cb-section {
+  background: #1e1b14;
+  border-color: #3a3025;
+}
+[data-theme="dark"] .cb-bridge { background: #1a1610; }
+[data-theme="dark"] .cb-eyebrow { color: #c4a882; }
+[data-theme="dark"] .cb-title { color: #e8ddd0; }
+[data-theme="dark"] .cb-body { color: #9a8875; }
+[data-theme="dark"] .cb-pill { background: rgba(44, 34, 24, 0.6); border-color: #3a3025; }
+[data-theme="dark"] .cb-pill-text { color: #7a6a58; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1199px) {
