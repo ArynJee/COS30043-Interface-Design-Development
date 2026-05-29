@@ -1,8 +1,8 @@
 <script setup>
-import { onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter, RouterLink } from "vue-router";
-import { X, ArrowRight } from "@lucide/vue";
+import { X, ArrowRight, Truck} from "@lucide/vue";
 import { useCartStore } from "@/stores/cart";
 
 const router = useRouter();
@@ -10,9 +10,51 @@ const cartStore = useCartStore();
 
 const { items, loading, selectedIds, allSelected, subtotal } = storeToRefs(cartStore);
 
-const formatPrice = (val) =>
-  "$" + parseFloat(val || 0).toFixed(2);
+// ── Shipping ────────────────────────────────────────────────────────────────
+const SHIPPING_OPTIONS = [
+  { id: "sea", label: "Sea Shipping", days: "14–21 days", fee: 10 },
+  { id: "air", label: "Air Shipping",  days: "3–7 days",   fee: 15 },
+];
+const FREE_THRESHOLD = { sea: 300, air: 1000 };
 
+const selectedShipping = ref("sea");
+
+const shippingOption = computed(() =>
+  SHIPPING_OPTIONS.find((o) => o.id === selectedShipping.value)
+);
+
+const shippingFee = computed(() => {
+  const threshold = FREE_THRESHOLD[selectedShipping.value];
+  return subtotal.value >= threshold ? 0 : shippingOption.value.fee;
+});
+
+const freeShippingThreshold = computed(() => FREE_THRESHOLD[selectedShipping.value]);
+
+const amountToFreeShipping = computed(() =>
+  Math.max(0, freeShippingThreshold.value - subtotal.value)
+);
+
+const freeShippingProgress = computed(() =>
+  Math.min(100, (subtotal.value / freeShippingThreshold.value) * 100)
+);
+
+const freeShippingUnlocked = computed(() => subtotal.value >= freeShippingThreshold.value);
+
+// ── Tax & totals ────────────────────────────────────────────────────────────
+const TAX_RATE = 0.06; // 6% SST
+
+const taxAmount = computed(() =>
+  (subtotal.value + shippingFee.value) * TAX_RATE
+);
+
+const orderTotal = computed(() =>
+  subtotal.value + shippingFee.value + taxAmount.value
+);
+
+// ── Formatting ──────────────────────────────────────────────────────────────
+const formatPrice = (val) => "RM " + parseFloat(val || 0).toFixed(2);
+
+// ── Item helpers ────────────────────────────────────────────────────────────
 function getItemName(item) {
   if (item.is_custom) {
     return (item.furniture_type || "Custom Item")
@@ -86,7 +128,7 @@ onMounted(() => {
         <!-- Header -->
         <div class="cart-header">
           <h2 class="cart-title">
-            Cart
+            My  Cart
             <span class="cart-count">({{ cartStore.itemCount }} product{{ cartStore.itemCount !== 1 ? "s" : "" }})</span>
           </h2>
           <button class="clear-btn" @click="handleClearCart">
@@ -104,7 +146,7 @@ onMounted(() => {
         </div>
 
         <!-- Table -->
-        <table v-else class="cart-table">
+        <table v-else class="cart-table w-100">
           <thead>
             <tr>
               <th class="th-check">
@@ -186,16 +228,72 @@ onMounted(() => {
       <!-- RIGHT: Summary -->
       <div class="cart-summary" v-if="items.length > 0 || loading">
 
-        <!-- Totals -->
+        <!-- Free-shipping progress slider -->
+        <div class="fs-slider-wrap">
+          <div v-if="freeShippingUnlocked" class="fs-unlocked-msg">
+            Free shipping unlocked!
+          </div>
+          <div v-else class="fs-progress-msg">
+            Spend <strong>{{ formatPrice(amountToFreeShipping) }}</strong> more for free
+            {{ shippingOption.label.toLowerCase() }}
+          </div>
+          <div class="fs-track">
+            <div class="fs-fill" :style="{ width: freeShippingProgress + '%' }"></div>
+            <div class="fs-truck" :style="{ left: freeShippingProgress + '%' }">
+              <Truck size="23"/>
+            </div>
+          </div>
+          <div class="fs-labels">
+            <span>RM 0</span>
+            <span>RM {{ freeShippingThreshold }}</span>
+          </div>
+        </div>
+
+        <!-- Shipping method -->
+        <div class="shipping-section">
+          <p class="shipping-title">Shipping Method</p>
+          <label
+            v-for="opt in SHIPPING_OPTIONS"
+            :key="opt.id"
+            class="shipping-option"
+            :class="{ 'shipping-option--active': selectedShipping === opt.id }"
+          >
+            <input
+              type="radio"
+              :value="opt.id"
+              v-model="selectedShipping"
+              class="shipping-radio"
+            />
+            <span class="shipping-info">
+              <span class="shipping-name">{{ opt.label }}</span>
+              <span class="shipping-days">{{ opt.days }}</span>
+            </span>
+            <span class="shipping-price" :class="{ 'shipping-free': subtotal >= FREE_THRESHOLD[opt.id] }">
+              {{ subtotal >= FREE_THRESHOLD[opt.id] ? 'FREE' : formatPrice(opt.fee) }}
+            </span>
+          </label>
+        </div>
+
+        <!-- Order breakdown -->
         <div class="summary-section">
           <div class="total-row">
             <span class="total-label">Subtotal</span>
             <span class="total-value">{{ formatPrice(subtotal) }}</span>
           </div>
+          <div class="total-row">
+            <span class="total-label">Shipping</span>
+            <span class="total-value" :class="{ 'free-tag': shippingFee === 0 }">
+              {{ shippingFee === 0 ? 'FREE' : formatPrice(shippingFee) }}
+            </span>
+          </div>
+          <div class="total-row">
+            <span class="total-label">SST (6%)</span>
+            <span class="total-value">{{ formatPrice(taxAmount) }}</span>
+          </div>
           <div class="summary-divider"></div>
           <div class="total-row total-final">
             <span class="total-label">Total</span>
-            <span class="total-value">{{ formatPrice(subtotal) }}</span>
+            <span class="total-value">{{ formatPrice(orderTotal) }}</span>
           </div>
         </div>
 
@@ -314,7 +412,7 @@ onMounted(() => {
   display: flex;
   gap: 2rem;
   padding: 2.5rem 5rem;
-  align-items: flex-start;
+  align-items: stretch;
 }
 
 /* ── LEFT: cart main ── */
@@ -358,8 +456,8 @@ onMounted(() => {
 
 /* ── Cart table ── */
 .cart-table {
-  width: 100%;
   border-collapse: collapse;
+  border: 1px solid #e0d5c5;
 }
 .cart-table thead th {
   font-size: 0.72rem;
@@ -509,28 +607,144 @@ onMounted(() => {
 
 /* ── RIGHT: Summary panel ── */
 .cart-summary {
-  width: 300px;
+  width: 320px;
   flex-shrink: 0;
   background: #fff;
   border: 1px solid #e0d5c5;
   padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.cart-summary .summary-section:last-of-type {
+  margin-top: auto;
 }
 
+/* ── Free-shipping slider ── */
+.fs-slider-wrap {
+  margin-bottom: 1.25rem;
+}
+.fs-progress-msg,
+.fs-unlocked-msg {
+  font-size: 0.75rem;
+  color: #7a6a58;
+  margin-bottom: 0.55rem;
+  line-height: 1.4;
+}
+.fs-unlocked-msg {
+  color: #2c2218;
+}
+.fs-progress-msg strong {
+  color: #2c2218;
+}
+.fs-track {
+  position: relative;
+  height: 6px;
+  background: #ede6da;
+  border-radius: 3px;
+  overflow: visible;
+}
+.fs-fill {
+  height: 100%;
+  background: #c4a882;
+  border-radius: 3px;
+  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.fs-truck {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: left 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #8b6f47;
+  pointer-events: none;
+}
+.truck-icon {
+  width: 22px;
+  height: 22px;
+  display: block;
+  filter: drop-shadow(0 1px 3px rgba(44,34,24,0.18));
+}
+.fs-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  color: #b0a090;
+  margin-top: 0.3rem;
+}
+
+/* ── Shipping method ── */
+.shipping-section {
+  margin-bottom: 1.1rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid #e0d5c5;
+}
+.shipping-title {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #7a6a58;
+  margin: 0 0 0.6rem;
+}
+.shipping-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #e0d5c5;
+  cursor: pointer;
+  margin-bottom: 0.45rem;
+  transition: border-color 0.18s, background 0.18s;
+  user-select: none;
+}
+.shipping-option:last-child { margin-bottom: 0; }
+.shipping-option--active {
+  border-color: #c4a882;
+  background: #fdf9f4;
+}
+.shipping-radio {
+  accent-color: #c4a882;
+  flex-shrink: 0;
+}
+.shipping-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.shipping-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #2c2218;
+}
+.shipping-days {
+  font-size: 0.68rem;
+  color: #9a8875;
+  margin-top: 0.1rem;
+}
+.shipping-price {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #2c2218;
+  white-space: nowrap;
+}
+.shipping-free {
+  color: #2c2218;
+}
+
+/* ── Order breakdown ── */
 .summary-section {
   margin-bottom: 1rem;
 }
-
 .summary-divider {
   height: 1px;
   background: #e0d5c5;
-  margin: 1rem 0;
+  margin: 0.85rem 0;
 }
-
 .total-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.55rem;
+  margin-bottom: 0.45rem;
 }
 .total-label {
   font-size: 0.82rem;
@@ -545,6 +759,10 @@ onMounted(() => {
   font-size: 1rem;
   font-weight: 700;
   color: #2c2218;
+}
+.free-tag {
+  color: #2c2218;
+  font-weight: 600;
 }
 
 .checkout-btn {
@@ -770,11 +988,27 @@ onMounted(() => {
   background: #1e1b14;
   border-color: #3a3025;
 }
+[data-theme="dark"] .fs-track { background: #2e2820; }
+[data-theme="dark"] .fs-fill { background: #8b6f47; }
+[data-theme="dark"] .fs-truck { color: #c4a882; }
+[data-theme="dark"] .fs-progress-msg { color: #9a8875; }
+[data-theme="dark"] .fs-progress-msg strong { color: #e8ddd0; }
+[data-theme="dark"] .fs-unlocked-msg { color: #6dbf8a; }
+[data-theme="dark"] .fs-labels { color: #5a4a3a; }
+[data-theme="dark"] .shipping-title { color: #9a8875; }
+[data-theme="dark"] .shipping-section { border-bottom-color: #3a3025; }
+[data-theme="dark"] .shipping-option { border-color: #3a3025; }
+[data-theme="dark"] .shipping-option--active { border-color: #8b6f47; background: #221e17; }
+[data-theme="dark"] .shipping-name { color: #e8ddd0; }
+[data-theme="dark"] .shipping-days { color: #6a5a4a; }
+[data-theme="dark"] .shipping-price { color: #e8ddd0; }
+[data-theme="dark"] .shipping-free { color: #6dbf8a; }
 [data-theme="dark"] .summary-divider { background: #3a3025; }
 [data-theme="dark"] .total-label { color: #9a8875; }
 [data-theme="dark"] .total-value { color: #e8ddd0; }
 [data-theme="dark"] .total-final .total-label,
 [data-theme="dark"] .total-final .total-value { color: #e8ddd0; }
+[data-theme="dark"] .free-tag { color: #6dbf8a; }
 [data-theme="dark"] .checkout-btn { background: #e8ddd0; color: #1a1610; }
 [data-theme="dark"] .checkout-btn:hover:not(:disabled) { background: #c4a882; }
 [data-theme="dark"] .selection-hint { color: #6a5a4a; }
