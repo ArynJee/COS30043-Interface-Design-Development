@@ -322,16 +322,18 @@ const priceBreakdown = computed(() => {
 </template>
 
 <style scoped>
+@import '@/styles/main.css';
+
 .cu-page {
-  --cu-bg:        #faf7f2;
-  --cu-card:      #fff;
-  --cu-border:    #e8e0d4;
-  --cu-text:      #2c2218;
-  --cu-text-2:    #5a4a3a;
-  --cu-muted:     #8B7355;
-  --cu-accent:    #c4a882;
-  --cu-accent-dk: #2c2218;
-  --cu-hover:     #f5f0e8;
+  --cu-bg:        var(--bg-page);
+  --cu-card:      var(--bg-surface);
+  --cu-border:    var(--border);
+  --cu-text:      var(--color-primary);
+  --cu-text-2:    var(--color-secondary);
+  --cu-muted:     var(--accent-dk);
+  --cu-accent:    var(--accent);
+  --cu-accent-dk: var(--btn-bg);
+  --cu-hover:     var(--bg-elevated);
   min-height: 100vh;
   background: var(--cu-bg);
 }
@@ -688,15 +690,4 @@ const priceBreakdown = computed(() => {
   .cu-viewer-wrap { height: 300px; }
 }
 
-/* ── dark mode ───────────────────────────────────────────────────────────── */
-[data-theme="dark"] .cu-page        { --cu-bg: #100e0b; --cu-card: #1a1610; --cu-border: #2e2820; --cu-text: #f0ebe2; --cu-text-2: #c8b89a; --cu-muted: #a08868; --cu-hover: #241e18; }
-[data-theme="dark"] .cu-area-tab    { color: #c8b89a; }
-[data-theme="dark"] .cu-type-card   { color: #c8b89a; }
-[data-theme="dark"] .cu-opt-card    { color: #c8b89a; }
-[data-theme="dark"] .cu-swatch      { color: #c8b89a; }
-[data-theme="dark"] .cu-config-chip { background: #241e18; color: #c8b89a; border-color: #2e2820; }
-[data-theme="dark"] .cu-price-card  { background: #1a1610; }
-[data-theme="dark"] .cu-btn--contrib{ color: #c8b89a; }
-[data-theme="dark"] .cu-viewer-placeholder { background: #1a1610; }
-[data-theme="dark"] .cu-ph-text     { color: #f0ebe2; }
 </style>

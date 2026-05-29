@@ -78,8 +78,10 @@ const {
       <span class="ds-line"></span>
     </div>
 
-  <!-- area filter -->
-    <div class="filter-strip d-flex align-items-center gap-5 overflow-x-auto justify-content-center position-sticky px-2 py-4">
+    <!-- area filter -->
+    <div
+      class="filter-strip d-flex align-items-center gap-5 overflow-x-auto justify-content-center position-sticky px-2 py-4"
+    >
       <button
         v-for="area in AREAS"
         :key="area"
@@ -138,9 +140,7 @@ const {
             />
             <div class="card-img-grad position-absolute inset-0"></div>
 
-            <span
-              class="card-area-badge position-absolute"
-            >
+            <span class="card-area-badge position-absolute">
               {{ c.area }}
             </span>
           </div>
@@ -212,10 +212,11 @@ const {
 </template>
 
 <style scoped>
+@import "@/styles/main.css";
+
 /* ── PAGE ── */
 .sc-page {
-  font-family: "Times New Roman", Times, serif;
-  background: #faf7f2;
+  background: var(--bg-page);
   min-height: 100vh;
 }
 
@@ -351,14 +352,14 @@ const {
 .ds-text {
   font-size: 0.8rem;
   letter-spacing: 0.22em;
-  color: #b09070;
+  color: var(--accent-dk);
   white-space: nowrap;
 }
 .ds-line {
   flex: 1;
   max-width: 200px;
   height: 1px;
-  background: #d0c5b5;
+  background: var(--border-input);
 }
 
 /* ── FILTER STRIP ── */
@@ -366,19 +367,18 @@ const {
   top: 80px;
   z-index: 50;
   scrollbar-width: none;
-  background: #faf6f0;
+  background: var(--bg-page);
 }
 .filter-strip::-webkit-scrollbar {
   display: none;
 }
-
 .area-pill {
-  border: 1px solid #d0c5b5;
+  border: 1px solid var(--border-input);
   background: transparent;
-  font-family: "Times New Roman", serif;
+  font-family: var(--font-serif);
   font-size: 0.76rem;
   letter-spacing: 0.06em;
-  color: #5a4a3a;
+  color: var(--color-secondary);
   cursor: pointer;
   white-space: nowrap;
   transition:
@@ -388,13 +388,13 @@ const {
   flex-shrink: 0;
 }
 .area-pill:hover {
-  border-color: #8b6f47;
-  color: #2c2218;
+  border-color: var(--accent-dk);
+  color: var(--color-primary);
 }
 .area-pill.is-active {
-  background: #2c2218;
-  border-color: #2c2218;
-  color: #f0e1cc;
+  background: var(--btn-bg);
+  border-color: var(--btn-bg);
+  color: var(--color-cream);
 }
 
 /* ── CONTAINER ── */
@@ -409,13 +409,13 @@ const {
   gap: 1.5rem;
 }
 .skeleton-card {
-  background: #fff;
-  border: 1px solid #e8e3dc;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   overflow: hidden;
 }
 .sk-img {
   height: 280px;
-  background: #ede8e0;
+  background: var(--bg-alt);
   animation: shimmer 1.5s ease-in-out infinite;
 }
 .sk-body {
@@ -426,7 +426,7 @@ const {
 }
 .sk-line {
   height: 12px;
-  background: #ede8e0;
+  background: var(--bg-alt);
   border-radius: 2px;
   animation: shimmer 1.5s ease-in-out infinite;
 }
@@ -452,37 +452,37 @@ const {
 }
 .empty-orn {
   font-size: 3rem;
-  color: #c4a882;
+  color: var(--accent);
   opacity: 0.4;
   margin-bottom: 1.25rem;
   line-height: 1;
 }
 .empty-title {
   font-size: 1.4rem;
-  color: #2c2218;
+  color: var(--color-primary);
   margin-bottom: 0.5rem;
 }
 .empty-sub {
   font-size: 0.86rem;
-  color: #7a6a58;
+  color: var(--color-secondary);
   max-width: 350px;
   margin: 0 auto 1.5rem;
 }
 .empty-cta {
   display: inline-flex;
   align-items: center;
-  background: #2c2218;
-  color: #f0e1cc;
+  background: var(--btn-bg);
+  color: var(--color-cream);
   padding: 0.55rem 1.4rem;
-  font-family: "Times New Roman", serif;
+  font-family: var(--font-serif);
   font-size: 0.8rem;
   letter-spacing: 0.07em;
   text-decoration: none;
   transition: background 0.2s;
 }
 .empty-cta:hover {
-  background: #4a3828;
-  color: #f0e1cc;
+  background: var(--btn-bg-hover);
+  color: var(--color-cream);
 }
 
 /* ── SHOWCASE GRID ── */
@@ -494,8 +494,8 @@ const {
 
 /* ── CARD ── */
 .sc-card {
-  background: #fff;
-  border: 1px solid #e8e3dc;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   overflow: hidden;
   transition:
     box-shadow 0.35s ease,
@@ -549,7 +549,7 @@ const {
   text-transform: uppercase;
   padding: 0.25rem 0.7rem;
   font-weight: 600;
-  background: #c4a882
+  background: #c4a882;
 }
 
 /* Featured tag */
@@ -580,37 +580,33 @@ const {
   font-weight: 700;
   letter-spacing: 0.04em;
   flex-shrink: 0;
-  background: #c4a882;  
+  background: #c4a882;
 }
 .contrib-name {
   font-size: 0.83rem;
   font-weight: 700;
-  color: #2c2218;
+  color: var(--color-primary);
   line-height: 1.3;
 }
 .contrib-date {
   font-size: 0.66rem;
-  color: #9a8875;
+  color: var(--color-muted);
 }
 .card-price {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #8b6f47;
+  color: var(--accent-dk);
   white-space: nowrap;
 }
-
-/* Type label */
 .card-type-label {
   font-size: 0.65rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #a09080;
+  color: var(--color-muted);
 }
-
-/* Description */
 .card-desc {
   font-size: 0.84rem;
-  color: #4a3a2a;
+  color: var(--color-secondary);
   line-height: 1.6;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -618,35 +614,31 @@ const {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-
-/* Config chips */
 .cfg-chip {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  border: 1px solid #d8d0c4;
+  border: 1px solid var(--border);
   padding: 0.15rem 0.55rem;
   font-size: 0.63rem;
-  color: #6a5a4a;
+  color: var(--color-secondary);
   border-radius: 2px;
 }
 .cfg-key {
   font-weight: 600;
-  color: #4a3a2a;
+  color: var(--color-primary);
 }
 .cfg-sep {
-  color: #c4a882;
+  color: var(--accent);
 }
 .cfg-val {
-  color: #7a6a58;
+  color: var(--color-secondary);
 }
-
-/* CTA */
 .card-cta {
-  border: 1px solid #2c2218;
+  border: 1px solid var(--btn-bg);
   background: transparent;
-  color: #2c2218;
-  font-family: "Times New Roman", serif;
+  color: var(--btn-bg);
+  font-family: var(--font-serif);
   font-size: 0.76rem;
   letter-spacing: 0.08em;
   padding: 0.5rem 1rem;
@@ -656,8 +648,8 @@ const {
     color 0.22s;
 }
 .card-cta:hover {
-  background: #2c2218;
-  color: #f0e1cc;
+  background: var(--btn-bg);
+  color: var(--color-cream);
 }
 
 /* ── CARD TRANSITION ── */
@@ -672,107 +664,9 @@ const {
 }
 
 .sc-bridge {
-  background: #fff9f39f;
+  background: var(--bg-page);
   height: 5rem;
 }
-
-/* ── DARK MODE ── */
-[data-theme="dark"] .sc-page {
-  background: #1a1610;
-}
-
-[data-theme="dark"] .divider-strip {
-  background: #1a1610;
-}
-[data-theme="dark"] .ds-text {
-  color: #7a6a58;
-}
-[data-theme="dark"] .ds-line {
-  background: #2e2820;
-}
-
-[data-theme="dark"] .filter-strip {
-  background: #1a1610;
-}
-[data-theme="dark"] .area-pill {
-  border-color: #3a3025;
-  color: #b8a898;
-}
-[data-theme="dark"] .area-pill:hover {
-  border-color: #c4a882;
-  color: #e8ddd0;
-}
-[data-theme="dark"] .area-pill.is-active {
-  background: #e8ddd0;
-  border-color: #e8ddd0;
-  color: #1a1610;
-}
-
-[data-theme="dark"] .sc-card {
-  background: #2a2418;
-  border-color: #3a3025;
-}
-[data-theme="dark"] .sc-card:hover {
-  border-color: #c4a882;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
-}
-
-[data-theme="dark"] .contrib-name {
-  color: #e8ddd0;
-}
-[data-theme="dark"] .contrib-date {
-  color: #6a5a4a;
-}
-[data-theme="dark"] .card-type-label {
-  color: #6a5a4a;
-}
-[data-theme="dark"] .card-desc {
-  color: #c0b0a0;
-}
-[data-theme="dark"] .cfg-chip {
-  border-color: #3a3025;
-  color: #8a7a6a;
-}
-[data-theme="dark"] .cfg-key {
-  color: #c0b0a0;
-}
-[data-theme="dark"] .cfg-val {
-  color: #8a7a6a;
-}
-[data-theme="dark"] .card-cta {
-  border-color: #c8b8a8;
-  color: #c8b8a8;
-}
-[data-theme="dark"] .card-cta:hover {
-  background: #e8ddd0;
-  color: #1a1610;
-  border-color: #e8ddd0;
-}
-
-[data-theme="dark"] .sk-img,
-[data-theme="dark"] .sk-line {
-  background: #3a3025;
-}
-[data-theme="dark"] .skeleton-card {
-  background: #2a2418;
-  border-color: #3a3025;
-}
-
-[data-theme="dark"] .bcta-title {
-  color: #b89e7f;
-}
-
-[data-theme="dark"] .empty-title {
-  color: #e8ddd0;
-}
-[data-theme="dark"] .empty-sub {
-  color: #8a7a6a;
-}
-
-[data-theme="dark"] .sc-bridge {
-  background: #1a1610;
-}
-
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1199px) {

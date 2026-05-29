@@ -8,21 +8,26 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
 
 <template>
   <div class="confirmation-page">
-
     <CheckoutSteps current-step="confirmation" />
 
     <div class="confirmation-content">
-
       <!-- Success icon -->
       <div class="success-icon">
         <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-          <circle cx="24" cy="24" r="23" stroke="#c4a882" stroke-width="2"/>
-          <path d="M14 24l7 7 13-13" stroke="#c4a882" stroke-width="2.5" stroke-linecap="square"/>
+          <circle cx="24" cy="24" r="23" stroke="#c4a882" stroke-width="2" />
+          <path
+            d="M14 24l7 7 13-13"
+            stroke="#c4a882"
+            stroke-width="2.5"
+            stroke-linecap="square"
+          />
         </svg>
       </div>
 
       <h1 class="confirmation-title">Order Confirmed</h1>
-      <p class="confirmation-sub">Thank you for your purchase. Your order has been placed successfully.</p>
+      <p class="confirmation-sub">
+        Thank you for your purchase. Your order has been placed successfully.
+      </p>
 
       <!-- Order card -->
       <div class="order-card">
@@ -53,8 +58,12 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
       </p>
 
       <div class="cta-actions">
-        <RouterLink to="/products" class="btn-primary">Continue Shopping</RouterLink>
-        <RouterLink to="/profile" class="btn-secondary">View My Orders</RouterLink>
+        <RouterLink to="/products" class="btn-primary"
+          >Continue Shopping</RouterLink
+        >
+        <RouterLink to="/profile" class="btn-secondary"
+          >View My Orders</RouterLink
+        >
       </div>
     </div>
 
@@ -70,14 +79,14 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
         <img src="/product/product-hero.png" alt="" class="cta-img" />
       </div>
     </div>
-
   </div>
 </template>
 
 <style scoped>
+@import "@/styles/main.css";
+
 .confirmation-page {
-  font-family: "Times New Roman", Times, serif;
-  background: #faf7f2;
+  background: var(--bg-page);
   min-height: 100vh;
 }
 
@@ -96,19 +105,19 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
 .confirmation-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #2c2218;
+  color: var(--color-primary);
   margin-bottom: 0.5rem;
 }
 .confirmation-sub {
   font-size: 0.9rem;
-  color: #7a6a58;
+  color: var(--color-secondary);
   margin-bottom: 2rem;
 }
 
 /* ── Order card ── */
 .order-card {
-  background: #fff;
-  border: 1px solid #e0d5c5;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   padding: 1.5rem;
   text-align: left;
   margin-bottom: 1.5rem;
@@ -123,18 +132,18 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
   font-size: 0.78rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: #7a6a58;
+  color: var(--color-secondary);
 }
 .order-value {
   font-size: 0.9rem;
-  color: #2c2218;
+  color: var(--color-primary);
 }
 .order-total {
   font-weight: 700;
   font-size: 1rem;
 }
 .order-status {
-  color: #3a6b3a;
+  color: var(--color-success);
   font-weight: 600;
   text-transform: uppercase;
   font-size: 0.75rem;
@@ -142,20 +151,22 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
 }
 .order-divider {
   height: 1px;
-  background: #f0ebe2;
+  background: var(--border-light);
 }
 
 .delivery-note {
   font-size: 0.82rem;
-  color: #7a6a58;
+  color: var(--color-secondary);
   margin-bottom: 2rem;
   line-height: 1.6;
 }
 .profile-link {
-  color: #c4a882;
+  color: var(--accent);
   text-decoration: none;
 }
-.profile-link:hover { text-decoration: underline; }
+.profile-link:hover {
+  text-decoration: underline;
+}
 
 /* ── CTA actions ── */
 .cta-actions {
@@ -165,9 +176,9 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
 }
 .btn-primary {
   display: inline-block;
-  background: #2c2218;
-  color: #fff;
-  font-family: "Times New Roman", serif;
+  background: var(--btn-bg);
+  color: var(--btn-color);
+  font-family: var(--font-serif);
   font-size: 0.82rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -175,23 +186,30 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
   text-decoration: none;
   transition: background 0.2s;
 }
-.btn-primary:hover { background: #4a3828; }
+.btn-primary:hover {
+  background: var(--btn-bg-hover);
+}
 .btn-secondary {
   display: inline-block;
   background: transparent;
-  border: 1px solid #2c2218;
-  color: #2c2218;
-  font-family: "Times New Roman", serif;
+  border: 1px solid var(--btn-bg);
+  color: var(--btn-bg);
+  font-family: var(--font-serif);
   font-size: 0.82rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
   padding: 0.75rem 1.75rem;
   text-decoration: none;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
-.btn-secondary:hover { background: #2c2218; color: #fff; }
+.btn-secondary:hover {
+  background: var(--btn-bg);
+  color: var(--btn-color);
+}
 
-/* ── CTA Banner ── */
+/* ── CTA Banner (always dark) ── */
 .cta-banner {
   display: flex;
   align-items: center;
@@ -201,12 +219,15 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
   overflow: hidden;
   min-height: 140px;
 }
-.cta-text { padding: 2rem 2.5rem; flex: 1; }
+.cta-text {
+  padding: 2rem 2.5rem;
+  flex: 1;
+}
 .cta-eyebrow {
   font-size: 0.65rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #c4a882;
+  color: var(--accent);
   margin-bottom: 0.35rem;
 }
 .cta-heading {
@@ -223,9 +244,9 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
 }
 .cta-btn {
   display: inline-block;
-  background: #c4a882;
+  background: var(--accent);
   color: #fff;
-  font-family: "Times New Roman", serif;
+  font-family: var(--font-serif);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -233,7 +254,9 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
   text-decoration: none;
   transition: background 0.2s;
 }
-.cta-btn:hover { background: #b8966e; }
+.cta-btn:hover {
+  background: var(--accent-dk);
+}
 .cta-img-wrap {
   width: 240px;
   height: 140px;
@@ -247,26 +270,26 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
   opacity: 0.4;
 }
 
-/* ── Dark mode ── */
-[data-theme="dark"] .confirmation-page { background: #1a1610; }
-[data-theme="dark"] .confirmation-title { color: #e8ddd0; }
-[data-theme="dark"] .confirmation-sub,
-[data-theme="dark"] .delivery-note { color: #9a8875; }
-[data-theme="dark"] .order-card { background: #1e1b14; border-color: #3a3025; }
-[data-theme="dark"] .order-label { color: #9a8875; }
-[data-theme="dark"] .order-value { color: #e8ddd0; }
-[data-theme="dark"] .order-divider { background: #2e2820; }
-[data-theme="dark"] .btn-primary { background: #e8ddd0; color: #1a1610; }
-[data-theme="dark"] .btn-primary:hover { background: #c4a882; }
-[data-theme="dark"] .btn-secondary { border-color: #e8ddd0; color: #e8ddd0; }
-[data-theme="dark"] .btn-secondary:hover { background: #e8ddd0; color: #1a1610; }
-
 /* ── Responsive ── */
 @media (max-width: 767px) {
-  .confirmation-content { padding: 2.5rem 1.25rem; }
-  .cta-banner { margin: 0 1.25rem 3rem; flex-direction: column; }
-  .cta-img-wrap { width: 100%; height: 100px; }
-  .cta-actions { flex-direction: column; align-items: stretch; }
-  .btn-primary, .btn-secondary { text-align: center; }
+  .confirmation-content {
+    padding: 2.5rem 1.25rem;
+  }
+  .cta-banner {
+    margin: 0 1.25rem 3rem;
+    flex-direction: column;
+  }
+  .cta-img-wrap {
+    width: 100%;
+    height: 100px;
+  }
+  .cta-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn-primary,
+  .btn-secondary {
+    text-align: center;
+  }
 }
 </style>

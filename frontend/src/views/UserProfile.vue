@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { ChevronDown, ChevronUp, Package, User, LogOut } from "@lucide/vue";
 import axios from "axios";
@@ -31,7 +31,9 @@ const formatPrice = (val) => "$" + parseFloat(val || 0).toFixed(2);
 
 const formatDate = (dateStr) =>
   new Date(dateStr).toLocaleDateString("en-AU", {
-    day: "numeric", month: "short", year: "numeric",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
   });
 
 function toggleOrder(id) {
@@ -79,7 +81,9 @@ async function saveProfile() {
   saveError.value = "";
   saveSuccess.value = false;
   try {
-    const res = await axios.patch(`${API}/me`, form.value, { headers: authHeader() });
+    const res = await axios.patch(`${API}/me`, form.value, {
+      headers: authHeader(),
+    });
     user.value = { ...user.value, ...res.data };
     editMode.value = false;
     saveSuccess.value = true;
@@ -109,7 +113,6 @@ onMounted(async () => {
 
 <template>
   <div class="profile-page">
-
     <!-- Hero -->
     <section class="profile-hero">
       <div class="hero-inner">
@@ -124,14 +127,15 @@ onMounted(async () => {
     </section>
 
     <div class="profile-content" v-if="!loadingProfile">
-
       <!-- Sidebar -->
       <aside class="profile-sidebar">
         <div class="sidebar-user">
           <div class="avatar-circle">
             {{ user?.first_name?.[0] }}{{ user?.last_name?.[0] }}
           </div>
-          <div class="sidebar-name">{{ user?.first_name }} {{ user?.last_name }}</div>
+          <div class="sidebar-name">
+            {{ user?.first_name }} {{ user?.last_name }}
+          </div>
           <div class="sidebar-email">{{ user?.email }}</div>
         </div>
 
@@ -161,12 +165,15 @@ onMounted(async () => {
 
       <!-- Main content -->
       <div class="profile-main">
-
         <!-- Orders tab -->
         <div v-if="activeTab === 'orders'">
           <div class="tab-header">
             <h2 class="tab-title">Order History</h2>
-            <span class="tab-count">{{ orders.length }} order{{ orders.length !== 1 ? "s" : "" }}</span>
+            <span class="tab-count"
+              >{{ orders.length }} order{{
+                orders.length !== 1 ? "s" : ""
+              }}</span
+            >
           </div>
 
           <div v-if="loadingOrders" class="state-msg">Loading orders…</div>
@@ -177,22 +184,26 @@ onMounted(async () => {
           </div>
 
           <div v-else class="orders-list">
-            <div
-              v-for="order in orders"
-              :key="order.id"
-              class="order-card"
-            >
+            <div v-for="order in orders" :key="order.id" class="order-card">
               <!-- Order header (always visible) -->
               <div class="order-header" @click="toggleOrder(order.id)">
                 <div class="order-meta">
                   <span class="order-id">#{{ order.id }}</span>
-                  <span class="order-date">{{ formatDate(order.created_at) }}</span>
+                  <span class="order-date">{{
+                    formatDate(order.created_at)
+                  }}</span>
                 </div>
                 <div class="order-right">
-                  <span class="order-total">{{ formatPrice(order.total_amount) }}</span>
+                  <span class="order-total">{{
+                    formatPrice(order.total_amount)
+                  }}</span>
                   <span class="order-status-badge">{{ order.status }}</span>
                   <component
-                    :is="expandedOrders.includes(order.id) ? ChevronUp : ChevronDown"
+                    :is="
+                      expandedOrders.includes(order.id)
+                        ? ChevronUp
+                        : ChevronDown
+                    "
                     :size="16"
                     class="order-chevron"
                   />
@@ -200,13 +211,16 @@ onMounted(async () => {
               </div>
 
               <!-- Shipping info + items (expanded) -->
-              <div v-if="expandedOrders.includes(order.id)" class="order-detail">
+              <div
+                v-if="expandedOrders.includes(order.id)"
+                class="order-detail"
+              >
                 <div class="order-shipping">
                   <div class="detail-label">Shipped to</div>
                   <div class="detail-value">
-                    {{ order.shipping_name }} —
-                    {{ order.shipping_address }},
-                    {{ order.shipping_city }}, {{ order.shipping_state }} {{ order.shipping_zip }}
+                    {{ order.shipping_name }} — {{ order.shipping_address }},
+                    {{ order.shipping_city }}, {{ order.shipping_state }}
+                    {{ order.shipping_zip }}
                   </div>
                 </div>
 
@@ -225,7 +239,12 @@ onMounted(async () => {
                     </div>
                     <div class="order-item-info">
                       <div class="order-item-name">{{ getItemName(item) }}</div>
-                      <div class="order-item-type" v-if="item.item_type === 'custom'">Custom</div>
+                      <div
+                        class="order-item-type"
+                        v-if="item.item_type === 'custom'"
+                      >
+                        Custom
+                      </div>
                     </div>
                     <div class="order-item-qty">× {{ item.quantity }}</div>
                     <div class="order-item-price">
@@ -236,7 +255,9 @@ onMounted(async () => {
 
                 <div class="order-summary-row">
                   <span>Order Total</span>
-                  <span class="order-summary-total">{{ formatPrice(order.total_amount) }}</span>
+                  <span class="order-summary-total">{{
+                    formatPrice(order.total_amount)
+                  }}</span>
                 </div>
               </div>
             </div>
@@ -247,7 +268,9 @@ onMounted(async () => {
         <div v-if="activeTab === 'profile'">
           <div class="tab-header">
             <h2 class="tab-title">Profile Details</h2>
-            <button v-if="!editMode" class="edit-btn" @click="editMode = true">Edit</button>
+            <button v-if="!editMode" class="edit-btn" @click="editMode = true">
+              Edit
+            </button>
           </div>
 
           <div v-if="!editMode" class="profile-view">
@@ -273,7 +296,9 @@ onMounted(async () => {
             </div>
             <div class="profile-row">
               <span class="profile-label">Member Since</span>
-              <span class="profile-value">{{ formatDate(user?.created_at) }}</span>
+              <span class="profile-value">{{
+                formatDate(user?.created_at)
+              }}</span>
             </div>
           </div>
 
@@ -281,11 +306,19 @@ onMounted(async () => {
             <div class="field-row">
               <div class="field-group">
                 <label class="field-label">First Name</label>
-                <input v-model="form.firstName" class="field-input" type="text" />
+                <input
+                  v-model="form.firstName"
+                  class="field-input"
+                  type="text"
+                />
               </div>
               <div class="field-group">
                 <label class="field-label">Last Name</label>
-                <input v-model="form.lastName" class="field-input" type="text" />
+                <input
+                  v-model="form.lastName"
+                  class="field-input"
+                  type="text"
+                />
               </div>
             </div>
             <div class="field-group">
@@ -298,17 +331,26 @@ onMounted(async () => {
             </div>
 
             <div v-if="saveError" class="save-error">{{ saveError }}</div>
-            <div v-if="saveSuccess" class="save-success">Changes saved successfully.</div>
+            <div v-if="saveSuccess" class="save-success">
+              Changes saved successfully.
+            </div>
 
             <div class="edit-actions">
               <button class="save-btn" @click="saveProfile" :disabled="saving">
                 {{ saving ? "Saving…" : "Save Changes" }}
               </button>
-              <button class="cancel-btn" @click="editMode = false; saveError = ''">Cancel</button>
+              <button
+                class="cancel-btn"
+                @click="
+                  editMode = false;
+                  saveError = '';
+                "
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -317,13 +359,14 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+@import "@/styles/main.css";
+
 .profile-page {
-  font-family: "Times New Roman", Times, serif;
-  background: #faf7f2;
+  background: var(--bg-page);
   min-height: 100vh;
 }
 
-/* ── Hero ── */
+/* ── Hero (always dark) ── */
 .profile-hero {
   background: #2c2218;
   padding: 3rem 5rem;
@@ -331,14 +374,16 @@ onMounted(async () => {
 }
 .hero-breadcrumb {
   font-size: 0.72rem;
-  color: #9a8875;
+  color: var(--color-muted);
   margin-bottom: 0.75rem;
 }
 .hero-breadcrumb a {
-  color: #9a8875;
+  color: var(--color-muted);
   text-decoration: none;
 }
-.hero-breadcrumb a:hover { color: #c4a882; }
+.hero-breadcrumb a:hover {
+  color: var(--accent);
+}
 .hero-title {
   font-size: 2rem;
   font-weight: 700;
@@ -347,7 +392,7 @@ onMounted(async () => {
 }
 .hero-sub {
   font-size: 0.85rem;
-  color: #9a8875;
+  color: var(--color-muted);
   margin: 0;
 }
 
@@ -361,8 +406,8 @@ onMounted(async () => {
 .profile-sidebar {
   width: 220px;
   flex-shrink: 0;
-  background: #fff;
-  border: 1px solid #e0d5c5;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   overflow: hidden;
 }
 .profile-main {
@@ -374,12 +419,12 @@ onMounted(async () => {
 .sidebar-user {
   padding: 1.5rem;
   text-align: center;
-  border-bottom: 1px solid #f0ebe2;
+  border-bottom: 1px solid var(--border-light);
 }
 .avatar-circle {
   width: 52px;
   height: 52px;
-  background: #c4a882;
+  background: var(--accent);
   color: #fff;
   font-size: 1.1rem;
   font-weight: 700;
@@ -392,12 +437,12 @@ onMounted(async () => {
 .sidebar-name {
   font-size: 0.88rem;
   font-weight: 600;
-  color: #2c2218;
+  color: var(--color-primary);
   margin-bottom: 0.2rem;
 }
 .sidebar-email {
   font-size: 0.72rem;
-  color: #9a8875;
+  color: var(--color-muted);
   word-break: break-all;
 }
 .sidebar-nav {
@@ -411,19 +456,39 @@ onMounted(async () => {
   padding: 0.6rem 0.75rem;
   background: none;
   border: none;
-  font-family: "Times New Roman", serif;
+  font-family: var(--font-serif);
   font-size: 0.83rem;
-  color: #4a3c30;
+  color: var(--color-primary);
   cursor: pointer;
   text-align: left;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
-.sidebar-link:hover { background: #faf7f2; }
-.sidebar-link.active { background: #faf7f2; color: #2c2218; font-weight: 600; }
-.sidebar-icon { flex-shrink: 0; color: #9a8875; }
-.sidebar-link.active .sidebar-icon { color: #c4a882; }
-.logout-link { color: #c0392b; border-top: 1px solid #f0ebe2; margin-top: 0.5rem; padding-top: 0.75rem; }
-.logout-link:hover { background: #fff5f5; }
+.sidebar-link:hover {
+  background: var(--bg-page);
+}
+.sidebar-link.active {
+  background: var(--bg-page);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+.sidebar-icon {
+  flex-shrink: 0;
+  color: var(--color-muted);
+}
+.sidebar-link.active .sidebar-icon {
+  color: var(--accent);
+}
+.logout-link {
+  color: var(--color-error-2);
+  border-top: 1px solid var(--border-light);
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+}
+.logout-link:hover {
+  background: #fff5f5;
+}
 
 /* ── Tab header ── */
 .tab-header {
@@ -435,31 +500,36 @@ onMounted(async () => {
 .tab-title {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #2c2218;
+  color: var(--color-primary);
   margin: 0;
 }
 .tab-count {
   font-size: 0.78rem;
-  color: #9a8875;
+  color: var(--color-muted);
 }
 .edit-btn {
   background: none;
-  border: 1px solid #d0c5b5;
-  font-family: "Times New Roman", serif;
+  border: 1px solid var(--border-input);
+  font-family: var(--font-serif);
   font-size: 0.78rem;
-  color: #2c2218;
+  color: var(--color-primary);
   padding: 0.4rem 1rem;
   cursor: pointer;
   transition: background 0.2s;
 }
-.edit-btn:hover { background: #f5f0e8; }
+.edit-btn:hover {
+  background: var(--bg-elevated);
+}
 
 /* ── Orders list ── */
-.orders-list { display: flex; flex-direction: column; gap: 1rem; }
-
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 .order-card {
-  background: #fff;
-  border: 1px solid #e0d5c5;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   overflow: hidden;
 }
 .order-header {
@@ -470,56 +540,96 @@ onMounted(async () => {
   cursor: pointer;
   transition: background 0.15s;
 }
-.order-header:hover { background: #faf7f2; }
-.order-meta { display: flex; align-items: center; gap: 1rem; }
-.order-id { font-size: 0.85rem; font-weight: 600; color: #2c2218; }
-.order-date { font-size: 0.75rem; color: #9a8875; }
-.order-right { display: flex; align-items: center; gap: 0.75rem; }
-.order-total { font-size: 0.9rem; font-weight: 600; color: #2c2218; }
+.order-header:hover {
+  background: var(--bg-elevated);
+}
+.order-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.order-id {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+.order-date {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+.order-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.order-total {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
 .order-status-badge {
   font-size: 0.6rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  background: #3a6b3a;
+  background: var(--color-success);
   color: #fff;
   padding: 0.15rem 0.5rem;
 }
-.order-chevron { color: #9a8875; }
-
+.order-chevron {
+  color: var(--color-muted);
+}
 .order-detail {
-  border-top: 1px solid #f0ebe2;
+  border-top: 1px solid var(--border-light);
   padding: 1rem 1.25rem;
 }
-.order-shipping { margin-bottom: 1rem; }
+.order-shipping {
+  margin-bottom: 1rem;
+}
 .detail-label {
   font-size: 0.68rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #9a8875;
+  color: var(--color-muted);
   margin-bottom: 0.2rem;
 }
-.detail-value { font-size: 0.82rem; color: #2c2218; }
-
-.order-items { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
+.detail-value {
+  font-size: 0.82rem;
+  color: var(--color-primary);
+}
+.order-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
 .order-item {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem 0;
-  border-bottom: 1px solid #f5f0ea;
+  border-bottom: 1px solid var(--border-light);
 }
-.order-item:last-child { border-bottom: none; }
-.order-item-img-wrap { width: 48px; height: 48px; flex-shrink: 0; }
+.order-item:last-child {
+  border-bottom: none;
+}
+.order-item-img-wrap {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
 .order-item-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border: 1px solid #e0d5c5;
+  border: 1px solid var(--border);
 }
-.order-item-info { flex: 1; min-width: 0; }
+.order-item-info {
+  flex: 1;
+  min-width: 0;
+}
 .order-item-name {
   font-size: 0.83rem;
-  color: #2c2218;
+  color: var(--color-primary);
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
@@ -529,157 +639,197 @@ onMounted(async () => {
   font-size: 0.62rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: #c4a882;
+  color: var(--accent);
 }
-.order-item-qty { font-size: 0.8rem; color: #9a8875; white-space: nowrap; }
-.order-item-price { font-size: 0.85rem; font-weight: 600; color: #2c2218; white-space: nowrap; }
-
+.order-item-qty {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+.order-item-price {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
 .order-summary-row {
   display: flex;
   justify-content: space-between;
   font-size: 0.85rem;
   font-weight: 700;
-  color: #2c2218;
+  color: var(--color-primary);
   padding-top: 0.5rem;
-  border-top: 1px solid #e0d5c5;
+  border-top: 1px solid var(--border);
 }
-.order-summary-total { color: #2c2218; }
+.order-summary-total {
+  color: var(--color-primary);
+}
 
 /* ── Profile view ── */
-.profile-view { background: #fff; border: 1px solid #e0d5c5; padding: 0; }
+.profile-view {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  padding: 0;
+}
 .profile-row {
   display: flex;
   align-items: baseline;
   gap: 1rem;
   padding: 0.85rem 1.25rem;
-  border-bottom: 1px solid #f0ebe2;
+  border-bottom: 1px solid var(--border-light);
 }
-.profile-row:last-child { border-bottom: none; }
+.profile-row:last-child {
+  border-bottom: none;
+}
 .profile-label {
   font-size: 0.7rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #9a8875;
+  color: var(--color-muted);
   min-width: 110px;
   flex-shrink: 0;
 }
-.profile-value { font-size: 0.88rem; color: #2c2218; }
+.profile-value {
+  font-size: 0.88rem;
+  color: var(--color-primary);
+}
 
 /* ── Profile edit ── */
-.profile-edit-form { background: #fff; border: 1px solid #e0d5c5; padding: 1.5rem; }
-.field-row { display: flex; gap: 1rem; margin-bottom: 0; }
-.field-row .field-group { flex: 1; }
-.field-group { margin-bottom: 1.1rem; }
+.profile-edit-form {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+}
+.field-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0;
+}
+.field-row .field-group {
+  flex: 1;
+}
+.field-group {
+  margin-bottom: 1.1rem;
+}
 .field-label {
   display: block;
   font-size: 0.7rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #7a6a58;
+  color: var(--color-secondary);
   margin-bottom: 0.35rem;
 }
 .field-input {
   width: 100%;
-  border: 1px solid #d0c5b5;
+  border: 1px solid var(--border-input);
   padding: 0.6rem 0.8rem;
-  font-family: "Times New Roman", serif;
+  font-family: var(--font-serif);
   font-size: 0.88rem;
-  color: #2c2218;
+  color: var(--color-primary);
+  background: var(--bg-surface);
   outline: none;
   box-sizing: border-box;
   transition: border-color 0.2s;
 }
-.field-input:focus { border-color: #b09070; }
-.save-error { font-size: 0.78rem; color: #c0392b; margin-bottom: 0.75rem; }
-.save-success { font-size: 0.78rem; color: #3a6b3a; margin-bottom: 0.75rem; }
-.edit-actions { display: flex; gap: 0.75rem; }
+.field-input:focus {
+  border-color: var(--accent-hover);
+}
+.save-error {
+  font-size: 0.78rem;
+  color: var(--color-error-2);
+  margin-bottom: 0.75rem;
+}
+.save-success {
+  font-size: 0.78rem;
+  color: var(--color-success);
+  margin-bottom: 0.75rem;
+}
+.edit-actions {
+  display: flex;
+  gap: 0.75rem;
+}
 .save-btn {
-  background: #2c2218;
-  color: #fff;
+  background: var(--btn-bg);
+  color: var(--btn-color);
   border: none;
   padding: 0.65rem 1.5rem;
-  font-family: "Times New Roman", serif;
+  font-family: var(--font-serif);
   font-size: 0.82rem;
   cursor: pointer;
   transition: background 0.2s;
 }
-.save-btn:hover:not(:disabled) { background: #4a3828; }
-.save-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.save-btn:hover:not(:disabled) {
+  background: var(--btn-bg-hover);
+}
+.save-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 .cancel-btn {
   background: none;
-  border: 1px solid #d0c5b5;
-  color: #7a6a58;
+  border: 1px solid var(--border-input);
+  color: var(--color-secondary);
   padding: 0.65rem 1.5rem;
-  font-family: "Times New Roman", serif;
+  font-family: var(--font-serif);
   font-size: 0.82rem;
   cursor: pointer;
   transition: background 0.2s;
 }
-.cancel-btn:hover { background: #f5f0e8; }
+.cancel-btn:hover {
+  background: var(--bg-elevated);
+}
 
 /* ── States ── */
-.state-msg { padding: 3rem 5rem; text-align: center; color: #9a8875; font-size: 0.9rem; }
-.empty-state { padding: 2.5rem; text-align: center; color: #9a8875; background: #fff; border: 1px solid #e0d5c5; }
-.empty-state p { margin-bottom: 0.75rem; }
-.empty-cta { color: #c4a882; text-decoration: none; font-size: 0.85rem; }
-.empty-cta:hover { text-decoration: underline; }
-
-/* ── Dark mode ── */
-[data-theme="dark"] .profile-page { background: #1a1610; }
-[data-theme="dark"] .profile-hero { background: #100e0b; }
-[data-theme="dark"] .hero-title { color: #e8ddd0; }
-[data-theme="dark"] .hero-sub { color: #6a5a4a; }
-[data-theme="dark"] .profile-sidebar { background: #1e1b14; border-color: #3a3025; }
-[data-theme="dark"] .sidebar-user { border-bottom-color: #2e2820; }
-[data-theme="dark"] .sidebar-name { color: #e8ddd0; }
-[data-theme="dark"] .sidebar-email { color: #6a5a4a; }
-[data-theme="dark"] .sidebar-link { color: #c8bdb0; }
-[data-theme="dark"] .sidebar-link:hover,
-[data-theme="dark"] .sidebar-link.active { background: #2a2418; color: #e8ddd0; }
-[data-theme="dark"] .logout-link { border-top-color: #2e2820; color: #e08080; }
-[data-theme="dark"] .logout-link:hover { background: #2a1010; }
-[data-theme="dark"] .tab-title { color: #e8ddd0; }
-[data-theme="dark"] .tab-count { color: #6a5a4a; }
-[data-theme="dark"] .edit-btn { border-color: #3a3025; color: #e8ddd0; }
-[data-theme="dark"] .edit-btn:hover { background: #2a2418; }
-[data-theme="dark"] .order-card { background: #1e1b14; border-color: #3a3025; }
-[data-theme="dark"] .order-header:hover { background: #2a2418; }
-[data-theme="dark"] .order-id,
-[data-theme="dark"] .order-total { color: #e8ddd0; }
-[data-theme="dark"] .order-date,
-[data-theme="dark"] .order-chevron { color: #6a5a4a; }
-[data-theme="dark"] .order-detail { border-top-color: #2e2820; }
-[data-theme="dark"] .detail-value { color: #e8ddd0; }
-[data-theme="dark"] .order-item { border-bottom-color: #2e2820; }
-[data-theme="dark"] .order-item-img { border-color: #3a3025; }
-[data-theme="dark"] .order-item-name { color: #e8ddd0; }
-[data-theme="dark"] .order-item-price { color: #e8ddd0; }
-[data-theme="dark"] .order-summary-row { color: #e8ddd0; border-top-color: #3a3025; }
-[data-theme="dark"] .profile-view { background: #1e1b14; border-color: #3a3025; }
-[data-theme="dark"] .profile-row { border-bottom-color: #2e2820; }
-[data-theme="dark"] .profile-label { color: #6a5a4a; }
-[data-theme="dark"] .profile-value { color: #e8ddd0; }
-[data-theme="dark"] .profile-edit-form { background: #1e1b14; border-color: #3a3025; }
-[data-theme="dark"] .field-label { color: #9a8875; }
-[data-theme="dark"] .field-input { background: #2a2418; border-color: #3a3025; color: #e8ddd0; }
-[data-theme="dark"] .field-input:focus { border-color: #c4a882; }
-[data-theme="dark"] .save-btn { background: #e8ddd0; color: #1a1610; }
-[data-theme="dark"] .save-btn:hover:not(:disabled) { background: #c4a882; }
-[data-theme="dark"] .cancel-btn { border-color: #3a3025; color: #9a8875; }
-[data-theme="dark"] .cancel-btn:hover { background: #2a2418; }
-[data-theme="dark"] .state-msg,
-[data-theme="dark"] .empty-state { color: #6a5a4a; background: #1e1b14; border-color: #3a3025; }
+.state-msg {
+  padding: 3rem 5rem;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+.empty-state {
+  padding: 2.5rem;
+  text-align: center;
+  color: var(--color-muted);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+}
+.empty-state p {
+  margin-bottom: 0.75rem;
+}
+.empty-cta {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+.empty-cta:hover {
+  text-decoration: underline;
+}
 
 /* ── Responsive ── */
 @media (max-width: 991px) {
-  .profile-content { padding: 1.5rem 2.5rem; }
-  .profile-hero { padding: 2rem 2.5rem; }
+  .profile-content {
+    padding: 1.5rem 2.5rem;
+  }
+  .profile-hero {
+    padding: 2rem 2.5rem;
+  }
 }
 @media (max-width: 767px) {
-  .profile-content { padding: 1rem 1.25rem; flex-direction: column; }
-  .profile-hero { padding: 1.5rem 1.25rem; }
-  .profile-sidebar { width: 100%; }
-  .field-row { flex-direction: column; }
-  .state-msg { padding: 2rem 1.25rem; }
+  .profile-content {
+    padding: 1rem 1.25rem;
+    flex-direction: column;
+  }
+  .profile-hero {
+    padding: 1.5rem 1.25rem;
+  }
+  .profile-sidebar {
+    width: 100%;
+  }
+  .field-row {
+    flex-direction: column;
+  }
+  .state-msg {
+    padding: 2rem 1.25rem;
+  }
 }
 </style>

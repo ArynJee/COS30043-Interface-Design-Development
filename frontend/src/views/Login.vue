@@ -1,7 +1,7 @@
 <script setup>
-import { RouterLink } from 'vue-router'
-import { Eye, EyeOff, ArrowRight } from '@lucide/vue'
-import useLogin from '@/hooks/useLogin'
+import { RouterLink } from "vue-router";
+import { Eye, EyeOff, ArrowRight } from "@lucide/vue";
+import useLogin from "@/hooks/useLogin";
 
 const {
   form,
@@ -28,11 +28,11 @@ const {
   resendOtp,
   verifyOtp,
   resetPassword,
-} = useLogin()
+} = useLogin();
 </script>
 
 <template>
-  <div class="auth-page" style="font-family: 'Times New Roman', Times, serif">
+  <div class="auth-page">
     <!-- background landscape -->
     <div class="auth-bg">
       <img src="/home/living-room.jpg" alt="Interior" class="auth-bg-img" />
@@ -58,7 +58,9 @@ const {
           <h2 class="auth-form-title">Sign In</h2>
         </div>
 
-        <div v-if="errors.general" class="auth-error-banner">{{ errors.general }}</div>
+        <div v-if="errors.general" class="auth-error-banner">
+          {{ errors.general }}
+        </div>
 
         <!-- email -->
         <div class="auth-field">
@@ -71,7 +73,9 @@ const {
             placeholder="you@example.com"
             @keyup.enter="handleLogin"
           />
-          <span v-if="errors.email" class="auth-field-error">{{ errors.email }}</span>
+          <span v-if="errors.email" class="auth-field-error">{{
+            errors.email
+          }}</span>
         </div>
 
         <!-- password -->
@@ -88,28 +92,42 @@ const {
               placeholder="••••••••"
               @keyup.enter="handleLogin"
             />
-            <button type="button" class="pw-toggle" @click="showPassword = !showPassword">
+            <button
+              type="button"
+              class="pw-toggle"
+              @click="showPassword = !showPassword"
+            >
               <EyeOff v-if="showPassword" :size="16" />
               <Eye v-else :size="16" />
             </button>
           </div>
           <div class="auth-forgot-row">
-            <button type="button" class="auth-forgot-link" @click="openForgotPassword">
+            <button
+              type="button"
+              class="auth-forgot-link"
+              @click="openForgotPassword"
+            >
               Forgot password?
             </button>
           </div>
-          <span v-if="errors.password" class="auth-field-error">{{ errors.password }}</span>
+          <span v-if="errors.password" class="auth-field-error">{{
+            errors.password
+          }}</span>
         </div>
 
         <!-- submit -->
         <button class="auth-submit" :disabled="loading" @click="handleLogin">
-          <span v-if="!loading">Sign In <ArrowRight :size="16" class="ms-1" /></span>
+          <span v-if="!loading"
+            >Sign In <ArrowRight :size="16" class="ms-1"
+          /></span>
           <span v-else class="auth-spinner"></span>
         </button>
 
         <p class="auth-switch">
           Don't have an account?
-          <router-link to="/registration" class="auth-switch-link">Create one</router-link>
+          <router-link to="/registration" class="auth-switch-link"
+            >Create one</router-link
+          >
         </p>
       </div>
     </div>
@@ -126,7 +144,9 @@ const {
             <template v-if="fpStep === 'email'">
               <span class="fp-eyebrow">Reset Password</span>
               <h3 class="fp-title">Enter Your Email</h3>
-              <p class="fp-body">We'll send a one-time code to your registered email address.</p>
+              <p class="fp-body">
+                We'll send a one-time code to your registered email address.
+              </p>
               <div class="auth-field">
                 <label class="auth-label">Email</label>
                 <input
@@ -137,10 +157,18 @@ const {
                   placeholder="you@example.com"
                   @keyup.enter="sendOtp"
                 />
-                <span v-if="fpEmailError" class="auth-field-error">{{ fpEmailError }}</span>
+                <span v-if="fpEmailError" class="auth-field-error">{{
+                  fpEmailError
+                }}</span>
               </div>
-              <button class="auth-submit" :disabled="fpLoading" @click="sendOtp">
-                <span v-if="!fpLoading">Send OTP <ArrowRight :size="15" class="ms-1" /></span>
+              <button
+                class="auth-submit"
+                :disabled="fpLoading"
+                @click="sendOtp"
+              >
+                <span v-if="!fpLoading"
+                  >Send OTP <ArrowRight :size="15" class="ms-1"
+                /></span>
                 <span v-else class="auth-spinner"></span>
               </button>
             </template>
@@ -165,10 +193,18 @@ const {
                   placeholder="• • • • • •"
                   @keyup.enter="verifyOtp"
                 />
-                <span v-if="fpOtpError" class="auth-field-error">{{ fpOtpError }}</span>
+                <span v-if="fpOtpError" class="auth-field-error">{{
+                  fpOtpError
+                }}</span>
               </div>
-              <button class="auth-submit" :disabled="fpLoading" @click="verifyOtp">
-                <span v-if="!fpLoading">Verify <ArrowRight :size="15" class="ms-1" /></span>
+              <button
+                class="auth-submit"
+                :disabled="fpLoading"
+                @click="verifyOtp"
+              >
+                <span v-if="!fpLoading"
+                  >Verify <ArrowRight :size="15" class="ms-1"
+                /></span>
                 <span v-else class="auth-spinner"></span>
               </button>
               <div class="fp-resend">
@@ -177,7 +213,11 @@ const {
                   :disabled="resendCooldown > 0 || fpLoading"
                   @click="resendOtp"
                 >
-                  {{ resendCooldown > 0 ? `Resend OTP (${resendCooldown}s)` : 'Resend OTP' }}
+                  {{
+                    resendCooldown > 0
+                      ? `Resend OTP (${resendCooldown}s)`
+                      : "Resend OTP"
+                  }}
                 </button>
               </div>
             </template>
@@ -197,11 +237,20 @@ const {
                     :class="{ 'auth-input-error': fpPasswordError }"
                     placeholder="••••••••"
                   />
-                  <button type="button" class="pw-toggle" @click="showNewPw = !showNewPw">
-                    <EyeOff v-if="showNewPw" :size="16" /><Eye v-else :size="16" />
+                  <button
+                    type="button"
+                    class="pw-toggle"
+                    @click="showNewPw = !showNewPw"
+                  >
+                    <EyeOff v-if="showNewPw" :size="16" /><Eye
+                      v-else
+                      :size="16"
+                    />
                   </button>
                 </div>
-                <span v-if="fpPasswordError" class="auth-field-error">{{ fpPasswordError }}</span>
+                <span v-if="fpPasswordError" class="auth-field-error">{{
+                  fpPasswordError
+                }}</span>
               </div>
               <div class="auth-field">
                 <label class="auth-label">Confirm Password</label>
@@ -214,14 +263,29 @@ const {
                     placeholder="••••••••"
                     @keyup.enter="resetPassword"
                   />
-                  <button type="button" class="pw-toggle" @click="showConfirmPw = !showConfirmPw">
-                    <EyeOff v-if="showConfirmPw" :size="16" /><Eye v-else :size="16" />
+                  <button
+                    type="button"
+                    class="pw-toggle"
+                    @click="showConfirmPw = !showConfirmPw"
+                  >
+                    <EyeOff v-if="showConfirmPw" :size="16" /><Eye
+                      v-else
+                      :size="16"
+                    />
                   </button>
                 </div>
-                <span v-if="fpConfirmError" class="auth-field-error">{{ fpConfirmError }}</span>
+                <span v-if="fpConfirmError" class="auth-field-error">{{
+                  fpConfirmError
+                }}</span>
               </div>
-              <button class="auth-submit" :disabled="fpLoading" @click="resetPassword">
-                <span v-if="!fpLoading">Reset Password <ArrowRight :size="15" class="ms-1" /></span>
+              <button
+                class="auth-submit"
+                :disabled="fpLoading"
+                @click="resetPassword"
+              >
+                <span v-if="!fpLoading"
+                  >Reset Password <ArrowRight :size="15" class="ms-1"
+                /></span>
                 <span v-else class="auth-spinner"></span>
               </button>
             </template>
@@ -233,6 +297,8 @@ const {
 </template>
 
 <style scoped>
+@import "@/styles/main.css";
+
 /* ── layout ── */
 .auth-page {
   display: grid;
@@ -294,7 +360,7 @@ const {
 
 /* ── right form panel ── */
 .auth-panel {
-  background: #faf7f2;
+  background: var(--bg-page);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -312,13 +378,13 @@ const {
   font-size: 0.7rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #c4a882;
+  color: var(--accent);
   margin-bottom: 0.5rem;
 }
 .auth-form-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #2c2218;
+  color: var(--color-primary);
   margin: 0;
 }
 
@@ -331,7 +397,7 @@ const {
   font-size: 0.72rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #7a6a58;
+  color: var(--color-secondary);
   margin-bottom: 0.45rem;
 }
 .auth-label-row {
@@ -343,23 +409,23 @@ const {
 .auth-input {
   width: 100%;
   padding: 0.7rem 1rem;
-  border: 1px solid #e0d5c5;
-  background: #ffffff;
-  font-family: 'Times New Roman', serif;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  font-family: var(--font-serif);
   font-size: 0.92rem;
-  color: #2c2218;
+  color: var(--color-primary);
   outline: none;
   transition: border-color 0.2s;
   box-sizing: border-box;
 }
 .auth-input::placeholder {
-  color: #b8a898;
+  color: var(--color-muted);
 }
 .auth-input:focus {
-  border-color: #c4a882;
+  border-color: var(--accent);
 }
 .auth-input-error {
-  border-color: #b85c4a !important;
+  border-color: var(--color-error) !important;
 }
 
 .auth-input-wrap {
@@ -376,15 +442,14 @@ const {
   background: none;
   border: none;
   cursor: pointer;
-  color: #7a6a58;
+  color: var(--color-secondary);
   padding: 0;
   display: flex;
   align-items: center;
 }
 .pw-toggle:hover {
-  color: #2c2218;
+  color: var(--color-primary);
 }
-
 .auth-forgot-row {
   display: flex;
   justify-content: flex-end;
@@ -393,9 +458,9 @@ const {
 .auth-forgot-link {
   background: none;
   border: none;
-  font-family: 'Times New Roman', serif;
+  font-family: var(--font-serif);
   font-size: 0.78rem;
-  color: #7a6a58;
+  color: var(--color-secondary);
   cursor: pointer;
   padding: 0;
   text-decoration: underline;
@@ -403,13 +468,12 @@ const {
   transition: color 0.2s;
 }
 .auth-forgot-link:hover {
-  color: #c4a882;
+  color: var(--accent);
 }
-
 .auth-field-error {
   display: block;
   font-size: 0.74rem;
-  color: #b85c4a;
+  color: var(--color-error);
   margin-top: 0.35rem;
 }
 
@@ -420,9 +484,9 @@ const {
   justify-content: center;
   width: 100%;
   padding: 0.85rem 1.5rem;
-  background: #1e1a14;
+  background: var(--btn-alt-bg);
   color: #ffffff;
-  font-family: 'Times New Roman', serif;
+  font-family: var(--font-serif);
   font-size: 0.82rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -432,7 +496,7 @@ const {
   margin-top: 0.5rem;
 }
 .auth-submit:hover:not(:disabled) {
-  background: #c4a882;
+  background: var(--accent);
 }
 .auth-submit:disabled {
   opacity: 0.6;
@@ -460,25 +524,25 @@ const {
   text-align: center;
   margin-top: 1.5rem;
   font-size: 0.82rem;
-  color: #7a6a58;
+  color: var(--color-secondary);
 }
 .auth-switch-link {
-  color: #2c2218;
+  color: var(--color-primary);
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 2px;
-  text-decoration-color: #c4a882;
+  text-decoration-color: var(--accent);
   transition: color 0.2s;
 }
 .auth-switch-link:hover {
-  color: #c4a882;
+  color: var(--accent);
 }
 
 /* error banner */
 .auth-error-banner {
   background: #fdf0ee;
   border: 1px solid #e8c4bc;
-  color: #b85c4a;
+  color: var(--color-error);
   font-size: 0.82rem;
   padding: 0.75rem 1rem;
   margin-bottom: 1.25rem;
@@ -497,12 +561,11 @@ const {
   padding: 1.5rem;
 }
 .fp-modal {
-  background: #faf7f2;
+  background: var(--bg-page);
   width: 100%;
   max-width: 420px;
   padding: 2.5rem;
   position: relative;
-  font-family: 'Times New Roman', Times, serif;
 }
 .fp-close {
   position: absolute;
@@ -511,32 +574,32 @@ const {
   background: none;
   border: none;
   font-size: 1rem;
-  color: #7a6a58;
+  color: var(--color-secondary);
   cursor: pointer;
   transition: color 0.2s;
-  font-family: 'Times New Roman', serif;
+  font-family: var(--font-serif);
 }
 .fp-close:hover {
-  color: #2c2218;
+  color: var(--color-primary);
 }
 .fp-eyebrow {
   display: block;
   font-size: 0.68rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #c4a882;
+  color: var(--accent);
   margin-bottom: 0.4rem;
 }
 .fp-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2c2218;
+  color: var(--color-primary);
   margin: 0 0 0.75rem;
 }
 .fp-body {
   font-size: 0.86rem;
   line-height: 1.65;
-  color: #7a6a58;
+  color: var(--color-secondary);
   margin-bottom: 1.5rem;
 }
 .fp-resend {
@@ -546,7 +609,7 @@ const {
 .fp-resend-link {
   background: none;
   border: none;
-  font-family: 'Times New Roman', serif;
+  font-family: "Times New Roman", serif;
   font-size: 0.8rem;
   color: #7a6a58;
   cursor: pointer;

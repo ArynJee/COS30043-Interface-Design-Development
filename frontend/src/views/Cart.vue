@@ -7,32 +7,47 @@ import useCart from "@/hooks/useCart.js";
 
 const {
   cartStore,
-  items, loading, selectedIds, allSelected, subtotal,
-  SHIPPING_OPTIONS, FREE_THRESHOLD,
-  selectedShipping, shippingOption, shippingFee,
-  freeShippingThreshold, amountToFreeShipping, freeShippingProgress, freeShippingUnlocked,
-  taxAmount, orderTotal,
-  formatPrice, getItemName, getItemVariant,
-  handleClearCart, goToCheckout,
+  items,
+  loading,
+  selectedIds,
+  allSelected,
+  subtotal,
+  SHIPPING_OPTIONS,
+  FREE_THRESHOLD,
+  selectedShipping,
+  shippingOption,
+  shippingFee,
+  freeShippingThreshold,
+  amountToFreeShipping,
+  freeShippingProgress,
+  freeShippingUnlocked,
+  taxAmount,
+  orderTotal,
+  formatPrice,
+  getItemName,
+  getItemVariant,
+  handleClearCart,
+  goToCheckout,
 } = useCart();
 </script>
 
 <template>
   <div class="cart-page">
-
     <CheckoutSteps current-step="cart" />
 
     <!-- Main layout -->
     <div class="cart-content">
-
       <!-- LEFT: Cart items -->
       <div class="cart-main">
-
         <!-- Header -->
         <div class="cart-header">
           <h2 class="cart-title">
-            My  Cart
-            <span class="cart-count">({{ cartStore.itemCount }} product{{ cartStore.itemCount !== 1 ? "s" : "" }})</span>
+            My Cart
+            <span class="cart-count"
+              >({{ cartStore.itemCount }} product{{
+                cartStore.itemCount !== 1 ? "s" : ""
+              }})</span
+            >
           </h2>
           <button class="clear-btn" @click="handleClearCart">
             <X :size="13" class="me-1" />Clear cart
@@ -45,7 +60,9 @@ const {
         <!-- Empty -->
         <div v-else-if="items.length === 0" class="empty-cart">
           <p>Your cart is empty.</p>
-          <RouterLink to="/products" class="continue-link">Continue shopping →</RouterLink>
+          <RouterLink to="/products" class="continue-link"
+            >Continue shopping →</RouterLink
+          >
         </div>
 
         <!-- Table -->
@@ -96,7 +113,9 @@ const {
                     <div class="product-variant" v-if="getItemVariant(item)">
                       {{ getItemVariant(item) }}
                     </div>
-                    <div class="product-custom-badge" v-if="item.is_custom">Custom</div>
+                    <div class="product-custom-badge" v-if="item.is_custom">
+                      Custom
+                    </div>
                   </div>
                 </div>
               </td>
@@ -105,21 +124,34 @@ const {
                 <div class="qty-controls">
                   <button
                     class="qty-btn"
-                    @click="cartStore.updateQuantity(item.id, item.quantity - 1)"
+                    @click="
+                      cartStore.updateQuantity(item.id, item.quantity - 1)
+                    "
                     :disabled="item.quantity <= 1"
-                  >−</button>
+                  >
+                    −
+                  </button>
                   <span class="qty-value">{{ item.quantity }}</span>
                   <button
                     class="qty-btn"
-                    @click="cartStore.updateQuantity(item.id, item.quantity + 1)"
-                  >+</button>
+                    @click="
+                      cartStore.updateQuantity(item.id, item.quantity + 1)
+                    "
+                  >
+                    +
+                  </button>
                 </div>
               </td>
 
-              <td class="td-price">{{ formatPrice(item.unit_price * item.quantity) }}</td>
+              <td class="td-price">
+                {{ formatPrice(item.unit_price * item.quantity) }}
+              </td>
 
               <td class="td-remove">
-                <button class="remove-btn" @click="cartStore.removeItem(item.id)">
+                <button
+                  class="remove-btn"
+                  @click="cartStore.removeItem(item.id)"
+                >
                   <X :size="14" />
                 </button>
               </td>
@@ -130,20 +162,23 @@ const {
 
       <!-- RIGHT: Summary -->
       <div class="cart-summary" v-if="items.length > 0 || loading">
-
         <!-- Free-shipping progress slider -->
         <div class="fs-slider-wrap">
           <div v-if="freeShippingUnlocked" class="fs-unlocked-msg">
             Free shipping unlocked!
           </div>
           <div v-else class="fs-progress-msg">
-            Spend <strong>{{ formatPrice(amountToFreeShipping) }}</strong> more for free
+            Spend <strong>{{ formatPrice(amountToFreeShipping) }}</strong> more
+            for free
             {{ shippingOption.label.toLowerCase() }}
           </div>
           <div class="fs-track">
-            <div class="fs-fill" :style="{ width: freeShippingProgress + '%' }"></div>
+            <div
+              class="fs-fill"
+              :style="{ width: freeShippingProgress + '%' }"
+            ></div>
             <div class="fs-truck" :style="{ left: freeShippingProgress + '%' }">
-              <Truck size="23"/>
+              <Truck size="23" />
             </div>
           </div>
           <div class="fs-labels">
@@ -171,8 +206,15 @@ const {
               <span class="shipping-name">{{ opt.label }}</span>
               <span class="shipping-days">{{ opt.days }}</span>
             </span>
-            <span class="shipping-price" :class="{ 'shipping-free': subtotal >= FREE_THRESHOLD[opt.id] }">
-              {{ subtotal >= FREE_THRESHOLD[opt.id] ? 'FREE' : formatPrice(opt.fee) }}
+            <span
+              class="shipping-price"
+              :class="{ 'shipping-free': subtotal >= FREE_THRESHOLD[opt.id] }"
+            >
+              {{
+                subtotal >= FREE_THRESHOLD[opt.id]
+                  ? "FREE"
+                  : formatPrice(opt.fee)
+              }}
             </span>
           </label>
         </div>
@@ -185,8 +227,11 @@ const {
           </div>
           <div class="total-row">
             <span class="total-label">Shipping</span>
-            <span class="total-value" :class="{ 'free-tag': shippingFee === 0 }">
-              {{ shippingFee === 0 ? 'FREE' : formatPrice(shippingFee) }}
+            <span
+              class="total-value"
+              :class="{ 'free-tag': shippingFee === 0 }"
+            >
+              {{ shippingFee === 0 ? "FREE" : formatPrice(shippingFee) }}
             </span>
           </div>
           <div class="total-row">
@@ -208,7 +253,10 @@ const {
           Continue to checkout
         </button>
 
-        <div class="selection-hint" v-if="selectedIds.length < items.length && items.length > 0">
+        <div
+          class="selection-hint"
+          v-if="selectedIds.length < items.length && items.length > 0"
+        >
           {{ selectedIds.length }} of {{ items.length }} items selected
         </div>
       </div>
@@ -224,14 +272,14 @@ const {
     />
 
     <div class="cb-bridge"></div>
-
   </div>
 </template>
 
 <style scoped>
+@import "@/styles/main.css";
+
 .cart-page {
-  font-family: "Times New Roman", Times, serif;
-  background: #faf7f2;
+  background: var(--bg-page);
   min-height: 100vh;
 }
 
@@ -257,13 +305,13 @@ const {
 .cart-title {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #2c2218;
+  color: var(--color-primary);
   margin: 0;
 }
 .cart-count {
   font-size: 0.95rem;
   font-weight: 400;
-  color: #7a6a58;
+  color: var(--color-secondary);
   margin-left: 0.4rem;
 }
 .clear-btn {
@@ -271,8 +319,8 @@ const {
   align-items: center;
   background: none;
   border: none;
-  color: #c0392b;
-  font-family: "Times New Roman", serif;
+  color: var(--color-error-2);
+  font-family: var(--font-serif);
   font-size: 0.8rem;
   cursor: pointer;
   padding: 0;
@@ -285,51 +333,65 @@ const {
 /* ── Cart table ── */
 .cart-table {
   border-collapse: collapse;
-  border: 1px solid #e0d5c5;
+  border: 1px solid var(--border);
 }
 .cart-table thead th {
   font-size: 0.72rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #7a6a58;
+  color: var(--color-secondary);
   padding: 0.6rem 0.75rem;
-  border-bottom: 1px solid #e0d5c5;
+  border-bottom: 1px solid var(--border);
   font-weight: 400;
-  background: #fff;
+  background: var(--bg-surface);
 }
-.th-check { width: 36px; }
-.th-product { text-align: left; }
-.th-count { text-align: center; width: 120px; }
-.th-price { text-align: right; width: 100px; }
-.th-remove { width: 40px; }
+.th-check {
+  width: 36px;
+}
+.th-product {
+  text-align: left;
+}
+.th-count {
+  text-align: center;
+  width: 120px;
+}
+.th-price {
+  text-align: right;
+  width: 100px;
+}
+.th-remove {
+  width: 40px;
+}
 
 .cart-row {
-  border-bottom: 1px solid #f0ebe2;
+  border-bottom: 1px solid var(--border-light);
   transition: background 0.15s;
 }
 .cart-row:hover {
-  background: #fdf9f5;
+  background: var(--bg-elevated);
 }
 .row-selected {
-  background: #fffdf8;
+  background: var(--bg-elevated);
 }
 
 .cart-table tbody td {
   padding: 1rem 0.75rem;
   vertical-align: middle;
 }
-.td-check { width: 36px; }
+.td-check {
+  width: 36px;
+}
 .td-price {
   text-align: right;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #2c2218;
+  color: var(--color-primary);
   white-space: nowrap;
 }
 
 /* ── Checkbox ── */
 .row-check {
-  accent-color: #c4a882;
+  accent-color: var(--accent);
   width: 15px;
   height: 15px;
   cursor: pointer;
@@ -344,8 +406,8 @@ const {
 .product-img-wrap {
   width: 72px;
   height: 72px;
-  border: 1px solid #e0d5c5;
-  background: #f5f2ee;
+  border: 1px solid var(--border);
+  background: var(--bg-alt);
   flex-shrink: 0;
   overflow: hidden;
 }
@@ -357,12 +419,12 @@ const {
 .product-name {
   font-size: 0.88rem;
   font-weight: 600;
-  color: #2c2218;
+  color: var(--color-primary);
   margin-bottom: 0.2rem;
 }
 .product-variant {
   font-size: 0.73rem;
-  color: #7a6a58;
+  color: var(--color-secondary);
   margin-top: 0.15rem;
   max-width: 240px;
   overflow: hidden;
@@ -374,7 +436,7 @@ const {
   font-size: 0.6rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  background: #c4a882;
+  background: var(--accent);
   color: #fff;
   padding: 0.1rem 0.45rem;
   margin-top: 0.3rem;
@@ -390,21 +452,23 @@ const {
 .qty-btn {
   width: 28px;
   height: 28px;
-  border: 1px solid #d0c5b5;
-  background: #fff;
-  color: #2c2218;
+  border: 1px solid var(--border-input);
+  background: var(--bg-surface);
+  color: var(--color-primary);
   font-size: 1rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s, border-color 0.15s;
-  font-family: "Times New Roman", serif;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+  font-family: var(--font-serif);
 }
 .qty-btn:hover:not(:disabled) {
-  background: #2c2218;
-  color: #fff;
-  border-color: #2c2218;
+  background: var(--btn-bg);
+  color: var(--btn-color);
+  border-color: var(--btn-bg);
 }
 .qty-btn:disabled {
   opacity: 0.35;
@@ -414,14 +478,14 @@ const {
   min-width: 24px;
   text-align: center;
   font-size: 0.88rem;
-  color: #2c2218;
+  color: var(--color-primary);
 }
 
 /* ── Remove button ── */
 .remove-btn {
   background: none;
   border: none;
-  color: #c0392b;
+  color: var(--color-error-2);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -437,8 +501,8 @@ const {
 .cart-summary {
   width: 320px;
   flex-shrink: 0;
-  background: #fff;
-  border: 1px solid #e0d5c5;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -455,26 +519,26 @@ const {
 .fs-progress-msg,
 .fs-unlocked-msg {
   font-size: 0.75rem;
-  color: #7a6a58;
+  color: var(--color-secondary);
   margin-bottom: 0.55rem;
   line-height: 1.4;
 }
 .fs-unlocked-msg {
-  color: #2c2218;
+  color: var(--color-free);
 }
 .fs-progress-msg strong {
-  color: #2c2218;
+  color: var(--color-primary);
 }
 .fs-track {
   position: relative;
   height: 6px;
-  background: #ede6da;
+  background: var(--bg-alt);
   border-radius: 3px;
   overflow: visible;
 }
 .fs-fill {
   height: 100%;
-  background: #c4a882;
+  background: var(--accent);
   border-radius: 3px;
   transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -483,20 +547,20 @@ const {
   top: 50%;
   transform: translate(-50%, -50%);
   transition: left 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-  color: #8b6f47;
+  color: var(--accent-dk);
   pointer-events: none;
 }
 .truck-icon {
   width: 22px;
   height: 22px;
   display: block;
-  filter: drop-shadow(0 1px 3px rgba(44,34,24,0.18));
+  filter: drop-shadow(0 1px 3px rgba(44, 34, 24, 0.18));
 }
 .fs-labels {
   display: flex;
   justify-content: space-between;
   font-size: 0.65rem;
-  color: #b0a090;
+  color: var(--color-subtle);
   margin-top: 0.3rem;
 }
 
@@ -504,13 +568,13 @@ const {
 .shipping-section {
   margin-bottom: 1.1rem;
   padding-bottom: 1.1rem;
-  border-bottom: 1px solid #e0d5c5;
+  border-bottom: 1px solid var(--border);
 }
 .shipping-title {
   font-size: 0.72rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #7a6a58;
+  color: var(--color-secondary);
   margin: 0 0 0.6rem;
 }
 .shipping-option {
@@ -518,19 +582,23 @@ const {
   align-items: center;
   gap: 0.6rem;
   padding: 0.55rem 0.65rem;
-  border: 1px solid #e0d5c5;
+  border: 1px solid var(--border);
   cursor: pointer;
   margin-bottom: 0.45rem;
-  transition: border-color 0.18s, background 0.18s;
+  transition:
+    border-color 0.18s,
+    background 0.18s;
   user-select: none;
 }
-.shipping-option:last-child { margin-bottom: 0; }
+.shipping-option:last-child {
+  margin-bottom: 0;
+}
 .shipping-option--active {
-  border-color: #c4a882;
-  background: #fdf9f4;
+  border-color: var(--accent);
+  background: var(--bg-elevated);
 }
 .shipping-radio {
-  accent-color: #c4a882;
+  accent-color: var(--accent);
   flex-shrink: 0;
 }
 .shipping-info {
@@ -542,21 +610,21 @@ const {
 .shipping-name {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #2c2218;
+  color: var(--color-primary);
 }
 .shipping-days {
   font-size: 0.68rem;
-  color: #9a8875;
+  color: var(--color-muted);
   margin-top: 0.1rem;
 }
 .shipping-price {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #2c2218;
+  color: var(--color-primary);
   white-space: nowrap;
 }
 .shipping-free {
-  color: #2c2218;
+  color: var(--color-free);
 }
 
 /* ── Order breakdown ── */
@@ -565,7 +633,7 @@ const {
 }
 .summary-divider {
   height: 1px;
-  background: #e0d5c5;
+  background: var(--border);
   margin: 0.85rem 0;
 }
 .total-row {
@@ -576,30 +644,30 @@ const {
 }
 .total-label {
   font-size: 0.82rem;
-  color: #7a6a58;
+  color: var(--color-secondary);
 }
 .total-value {
   font-size: 0.88rem;
-  color: #2c2218;
+  color: var(--color-primary);
 }
 .total-final .total-label,
 .total-final .total-value {
   font-size: 1rem;
   font-weight: 700;
-  color: #2c2218;
+  color: var(--color-primary);
 }
 .free-tag {
-  color: #2c2218;
+  color: var(--color-free);
   font-weight: 600;
 }
 
 .checkout-btn {
   width: 100%;
-  background: #2c2218;
-  color: #fff;
+  background: var(--btn-bg);
+  color: var(--btn-color);
   border: none;
   padding: 0.9rem 1rem;
-  font-family: "Times New Roman", serif;
+  font-family: var(--font-serif);
   font-size: 0.85rem;
   letter-spacing: 0.07em;
   cursor: pointer;
@@ -607,7 +675,7 @@ const {
   transition: background 0.2s;
 }
 .checkout-btn:hover:not(:disabled) {
-  background: #4a3828;
+  background: var(--btn-bg-hover);
 }
 .checkout-btn:disabled {
   opacity: 0.4;
@@ -615,7 +683,7 @@ const {
 }
 .selection-hint {
   font-size: 0.72rem;
-  color: #9a8875;
+  color: var(--color-muted);
   text-align: center;
   margin-top: 0.5rem;
 }
@@ -624,99 +692,48 @@ const {
 .state-msg {
   padding: 3rem 1rem;
   text-align: center;
-  color: #7a6a58;
+  color: var(--color-secondary);
   font-size: 0.9rem;
 }
 .empty-cart {
   padding: 3rem 1rem;
   text-align: center;
-  color: #7a6a58;
+  color: var(--color-secondary);
 }
 .empty-cart p {
   font-size: 1rem;
   margin-bottom: 0.75rem;
 }
 .continue-link {
-  color: #c4a882;
+  color: var(--accent);
   text-decoration: none;
   font-size: 0.85rem;
 }
 .continue-link:hover {
   text-decoration: underline;
 }
-
 .cb-bridge {
-  background: #faf7f2;
+  background: var(--bg-page);
   height: 5rem;
 }
 
-/* ── Dark mode ── */
-[data-theme="dark"] .cart-page {
-  background: #1a1610;
-}
-[data-theme="dark"] .cart-title { color: #e8ddd0; }
-[data-theme="dark"] .cart-count { color: #9a8875; }
-[data-theme="dark"] .cart-table thead th {
-  color: #9a8875;
-  border-bottom-color: #3a3025;
-  background: #1a1610;
-}
-[data-theme="dark"] .cart-row { border-bottom-color: #2e2820; }
-[data-theme="dark"] .cart-row:hover { background: #221e17; }
-[data-theme="dark"] .row-selected { background: #1e1b15; }
-[data-theme="dark"] .product-img-wrap { border-color: #3a3025; background: #2a2418; }
-[data-theme="dark"] .product-name { color: #e8ddd0; }
-[data-theme="dark"] .product-variant { color: #9a8875; }
-[data-theme="dark"] .td-price { color: #e8ddd0; }
-[data-theme="dark"] .qty-btn {
-  background: #2a2418;
-  border-color: #3a3025;
-  color: #e8ddd0;
-}
-[data-theme="dark"] .qty-btn:hover:not(:disabled) {
-  background: #e8ddd0;
-  color: #1a1610;
-  border-color: #e8ddd0;
-}
-[data-theme="dark"] .qty-value { color: #e8ddd0; }
-[data-theme="dark"] .cart-summary {
-  background: #1e1b14;
-  border-color: #3a3025;
-}
-[data-theme="dark"] .fs-track { background: #2e2820; }
-[data-theme="dark"] .fs-fill { background: #8b6f47; }
-[data-theme="dark"] .fs-truck { color: #c4a882; }
-[data-theme="dark"] .fs-progress-msg { color: #9a8875; }
-[data-theme="dark"] .fs-progress-msg strong { color: #e8ddd0; }
-[data-theme="dark"] .fs-unlocked-msg { color: #6dbf8a; }
-[data-theme="dark"] .fs-labels { color: #5a4a3a; }
-[data-theme="dark"] .shipping-title { color: #9a8875; }
-[data-theme="dark"] .shipping-section { border-bottom-color: #3a3025; }
-[data-theme="dark"] .shipping-option { border-color: #3a3025; }
-[data-theme="dark"] .shipping-option--active { border-color: #8b6f47; background: #221e17; }
-[data-theme="dark"] .shipping-name { color: #e8ddd0; }
-[data-theme="dark"] .shipping-days { color: #6a5a4a; }
-[data-theme="dark"] .shipping-price { color: #e8ddd0; }
-[data-theme="dark"] .shipping-free { color: #6dbf8a; }
-[data-theme="dark"] .summary-divider { background: #3a3025; }
-[data-theme="dark"] .total-label { color: #9a8875; }
-[data-theme="dark"] .total-value { color: #e8ddd0; }
-[data-theme="dark"] .total-final .total-label,
-[data-theme="dark"] .total-final .total-value { color: #e8ddd0; }
-[data-theme="dark"] .free-tag { color: #6dbf8a; }
-[data-theme="dark"] .checkout-btn { background: #e8ddd0; color: #1a1610; }
-[data-theme="dark"] .checkout-btn:hover:not(:disabled) { background: #c4a882; }
-[data-theme="dark"] .selection-hint { color: #6a5a4a; }
-[data-theme="dark"] .empty-cart { color: #9a8875; }
-[data-theme="dark"] .state-msg { color: #9a8875; }
-
 /* ── Responsive ── */
 @media (max-width: 991px) {
-  .cart-content { padding: 1.5rem 2.5rem; flex-direction: column; }
-  .cart-summary { width: 100%; }
+  .cart-content {
+    padding: 1.5rem 2.5rem;
+    flex-direction: column;
+  }
+  .cart-summary {
+    width: 100%;
+  }
 }
 @media (max-width: 767px) {
-  .cart-content { padding: 1.25rem; }
-  .th-count, .td-count { display: none; }
+  .cart-content {
+    padding: 1.25rem;
+  }
+  .th-count,
+  .td-count {
+    display: none;
+  }
 }
 </style>

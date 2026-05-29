@@ -1,12 +1,12 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { RouterLink } from 'vue-router'
-import { ArrowUpRight, MessageSquare, Star } from '@lucide/vue'
-import FeedbackModal from '@/components/FeedbackModal.vue'
-import useFeedback from '@/hooks/useFeedback'
+import { ref, onMounted } from "vue";
+import { RouterLink } from "vue-router";
+import { ArrowUpRight, MessageSquare, Star } from "@lucide/vue";
+import FeedbackModal from "@/components/FeedbackModal.vue";
+import useFeedback from "@/hooks/useFeedback";
 
-const productCount = ref('-');
-const projectCount = ref('-');
+const productCount = ref("-");
+const projectCount = ref("-");
 
 const {
   feedbacks,
@@ -16,68 +16,70 @@ const {
   userFeedback,
   fetchFeedbacks,
   submitFeedback,
-} = useFeedback()
+} = useFeedback();
 
 /* ── explore our products grid categories ── */
 const productCategories = ref([
   {
     id: 1,
-    name: 'Living Room',
-    category: 'living-room',
-    size: 'tall',
-    img: '/home/living-room.jpg',
+    name: "Living Room",
+    category: "living-room",
+    size: "tall",
+    img: "/home/living-room.jpg",
   },
   {
     id: 2,
-    name: 'Study Room',
-    category: 'study-room',
-    size: 'wide',
-    img: '/home/study-room.png',
+    name: "Study Room",
+    category: "study-room",
+    size: "wide",
+    img: "/home/study-room.png",
   },
   {
     id: 3,
-    name: 'Kitchen',
-    category: 'kitchen',
-    size: 'small',
-    img: '/home/kitchen-counter.jpeg',
+    name: "Kitchen",
+    category: "kitchen",
+    size: "small",
+    img: "/home/kitchen-counter.jpeg",
   },
   {
     id: 4,
-    name: 'Bathroom',
-    category: 'bathroom',
-    size: 'tall',
-    img: '/home/bathroom.jpeg',
+    name: "Bathroom",
+    category: "bathroom",
+    size: "tall",
+    img: "/home/bathroom.jpeg",
   },
   {
     id: 5,
-    name: 'Bedroom',
-    category: 'bedroom',
-    size: 'wide',
-    img: '/home/bed.jpeg',
+    name: "Bedroom",
+    category: "bedroom",
+    size: "wide",
+    img: "/home/bed.jpeg",
   },
-])
+]);
 
 /* ── Fetch data on mount ── */
 onMounted(async () => {
   const [pRes, prRes, fbRes] = await Promise.allSettled([
-    fetch('/api/product'),
-    fetch('/api/project'),
-  ])
+    fetch("/api/product"),
+    fetch("/api/project"),
+  ]);
 
-  if (pRes.status === 'fulfilled' && pRes.value.ok) {
-    const d = await pRes.value.json()
-    productCount.value = (Array.isArray(d) ? d.length : (d.count ?? d.total ?? 0)) + '+'
+  if (pRes.status === "fulfilled" && pRes.value.ok) {
+    const d = await pRes.value.json();
+    productCount.value =
+      (Array.isArray(d) ? d.length : (d.count ?? d.total ?? 0)) + "+";
   }
 
-  if (prRes.status === 'fulfilled' && prRes.value.ok) {
-    const d = await prRes.value.json()
-    projectCount.value = (Array.isArray(d) ? d.length : (d.count ?? d.total ?? 0)) + '+'
+  if (prRes.status === "fulfilled" && prRes.value.ok) {
+    const d = await prRes.value.json();
+    projectCount.value =
+      (Array.isArray(d) ? d.length : (d.count ?? d.total ?? 0)) + "+";
   }
-})
+});
 </script>
 
 <template>
-  <div class="comfy-home" style="font-family: 'Times New Roman', Times, serif">
+  <div class="comfy-home">
     <!-- hero -->
     <section class="hero">
       <video
@@ -88,30 +90,37 @@ onMounted(async () => {
         playsinline
         disablePictureInPicture
         preload="auto"
-        oncontextmenu="return false"
+        oncontextmenu="return false;"
         @click.prevent
         @mouseenter.prevent
       >
         <source src="/home/home-hero.mp4" type="video/mp4" />
         <!-- fallback to image when video fails to load -->
-        <img src="/home/fallback-hero.jpg" alt="Interior" class="hero-fallback" />
+        <img
+          src="/home/fallback-hero.jpg"
+          alt="Interior"
+          class="hero-fallback"
+        />
       </video>
       <div class="hero-overlay"></div>
 
       <div class="hero-headline">
         <h1>Comfortable Living.</h1>
         <p class="hero-sub">Crafting spaces that define how you live.</p>
-        <router-link to="/products" class="hero-cta">View Collection</router-link>
+        <router-link to="/products" class="hero-cta"
+          >View Collection</router-link
+        >
       </div>
 
       <!-- community showcase hard in hero -->
       <div class="hero-card rounded-3">
         <span class="hero-card-badge">Community Showcase</span>
         <p class="hero-card-text">
-          See where your creativity takes you when ComfyHome provides the freedom to our dearest
-          customers to design their own furniture. Many great contributions to the community have
-          been made through our open design platform — from intimate reading nooks to statement
-          dining rooms.
+          See where your creativity takes you when ComfyHome provides the
+          freedom to our dearest customers to design their own furniture. Many
+          great contributions to the community have been made through our open
+          design platform — from intimate reading nooks to statement dining
+          rooms.
         </p>
         <router-link to="/showcase" class="hero-card-link">
           View More <ArrowUpRight :size="14" class="ms-1" />
@@ -143,16 +152,19 @@ onMounted(async () => {
                 <span class="fg-card-tag">Aesthetic</span>
                 <h3 class="fg-card-title">Into a gallery<br />of elegance</h3>
                 <p class="fg-card-body">
-                  Aesthetic furniture where every piece tells a story of refined taste and timeless
-                  craftsmanship.
+                  Aesthetic furniture where every piece tells a story of refined
+                  taste and timeless craftsmanship.
                 </p>
               </div>
 
               <!-- Card 2: Customize Furniture -->
               <div class="fg-card fg-card-dark">
-                <span class="fg-card-tag fg-tag-light">Customize Furniture</span>
+                <span class="fg-card-tag fg-tag-light"
+                  >Customize Furniture</span
+                >
                 <p class="fg-card-body fg-body-light">
-                  Indulge in the artistry of bespoke living — choose your fabric, finish, and form.
+                  Indulge in the artistry of bespoke living — choose your
+                  fabric, finish, and form.
                 </p>
                 <router-link to="/customize">
                   <div class="fg-card-arrow">
@@ -198,21 +210,19 @@ onMounted(async () => {
       <div class="container-fluid px-4 px-lg-5">
         <div class="about-layout">
           <div class="about-img-wrap">
-            <img
-              src="/home/nightstand.jpg"
-              alt="ComfyHome studio"
-            />
+            <img src="/home/nightstand.jpg" alt="ComfyHome studio" />
           </div>
 
           <div class="about-content">
             <p class="about-eyebrow">Elegance · Timeless</p>
             <h2 class="about-title">Modern Style<br />Timeless Charm</h2>
             <p class="about-body">
-              Discover ComfyHome's latest collection, featuring sofas, chairs, and armchairs
-              embodying diverse lifestyle concepts — alongside striking tables, coffee tables, and
-              sideboards crafted for the discerning home. Founded on the belief that beauty and
-              comfort are never in conflict, every piece we create carries a quiet confidence meant
-              to outlast trends.
+              Discover ComfyHome's latest collection, featuring sofas, chairs,
+              and armchairs embodying diverse lifestyle concepts — alongside
+              striking tables, coffee tables, and sideboards crafted for the
+              discerning home. Founded on the belief that beauty and comfort are
+              never in conflict, every piece we create carries a quiet
+              confidence meant to outlast trends.
             </p>
             <router-link to="/aboutus" class="about-btn">
               About Us <ArrowUpRight :size="16" class="ms-1" />
@@ -230,10 +240,12 @@ onMounted(async () => {
           <h2 class="explore-title">Explore Our Products</h2>
           <div class="explore-header-right">
             <p class="explore-sub">
-              ComfyHome will showcase its vision of contemporary architecture and interior design
-              through every carefully curated category.
+              ComfyHome will showcase its vision of contemporary architecture
+              and interior design through every carefully curated category.
             </p>
-            <router-link to="/products" class="explore-view-more">View More</router-link>
+            <router-link to="/products" class="explore-view-more"
+              >View More</router-link
+            >
           </div>
         </div>
 
@@ -305,6 +317,8 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+@import "@/styles/main.css";
+
 /* hero section */
 .hero {
   position: relative;
@@ -460,7 +474,7 @@ onMounted(async () => {
 
 /* feature grid */
 .feature-grid {
-  background: #faf7f2;
+  background: var(--bg-page);
 }
 
 .fg-layout {
@@ -495,7 +509,7 @@ onMounted(async () => {
   font-size: 0.72rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #2c2218;
+  color: var(--color-primary);
   padding: 0.4rem 0.9rem;
 }
 
@@ -512,7 +526,7 @@ onMounted(async () => {
   font-size: clamp(2rem, 4vw, 3.2rem);
   font-weight: 700;
   line-height: 1.1;
-  color: #2c2218;
+  color: var(--color-primary);
   margin: 0;
 }
 
@@ -536,8 +550,8 @@ onMounted(async () => {
 } */
 
 .fg-card-light {
-  background: #f0ebe2;
-  border: 1px solid #e0d5c5;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
 }
 .fg-card-dark {
   background: #1e1a14;
@@ -564,15 +578,14 @@ onMounted(async () => {
 .fg-card-title {
   font-size: 1.15rem;
   font-weight: 600;
-  color: #2c2218;
+  color: var(--color-primary);
   line-height: 1.3;
   margin-bottom: 0.5rem;
 }
-
 .fg-card-body {
   font-size: 0.82rem;
   line-height: 1.65;
-  color: #7a6a58;
+  color: var(--color-secondary);
   margin: 0;
 }
 .fg-body-light {
@@ -600,9 +613,9 @@ onMounted(async () => {
 
 /* stats section */
 .stats-section {
-  background: #faf7f2;
-  border-top: 1px solid #e0d5c5;
-  border-bottom: 1px solid #e0d5c5;
+  background: var(--bg-page);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 .stats-grid {
@@ -622,7 +635,7 @@ onMounted(async () => {
 .stat-number {
   font-size: clamp(2.2rem, 5vw, 3.5rem);
   font-weight: 700;
-  color: #2c2218;
+  color: var(--color-primary);
   line-height: 1;
   margin-bottom: 0.35rem;
 }
@@ -634,18 +647,17 @@ onMounted(async () => {
   font-size: 0.78rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #7a6a58;
+  color: var(--color-secondary);
 }
-
 .stat-divider {
   width: 1px;
   height: 50px;
-  background: #e0d5c5;
+  background: var(--border);
 }
 
 /* about us */
 .about-section {
-  background: #ffffff;
+  background: var(--bg-surface);
 }
 
 .about-layout {
@@ -679,14 +691,14 @@ onMounted(async () => {
 .about-title {
   font-size: clamp(1.8rem, 3.5vw, 2.8rem);
   font-weight: 700;
-  color: #2c2218;
+  color: var(--color-primary);
   line-height: 1.15;
   margin-bottom: 1.25rem;
 }
 .about-body {
   font-size: 0.95rem;
   line-height: 1.8;
-  color: #7a6a58;
+  color: var(--color-secondary);
   margin-bottom: 2rem;
 }
 .about-btn {
@@ -695,22 +707,22 @@ onMounted(async () => {
   font-size: 0.8rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #2c2218;
+  color: var(--color-primary);
   text-decoration: none;
-  border-bottom: 1px solid #2c2218;
+  border-bottom: 1px solid var(--color-primary);
   padding-bottom: 3px;
   transition:
     color 0.2s,
     border-color 0.2s;
 }
 .about-btn:hover {
-  color: #c4a882;
-  border-color: #c4a882;
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 /* explore products */
 .explore-section {
-  background: #faf7f2;
+  background: var(--bg-page);
 }
 
 .explore-header {
@@ -722,7 +734,7 @@ onMounted(async () => {
 .explore-title {
   font-size: clamp(1.8rem, 3.5vw, 2.8rem);
   font-weight: 700;
-  color: #2c2218;
+  color: var(--color-primary);
   margin: 0;
 }
 .explore-header-right {
@@ -734,7 +746,7 @@ onMounted(async () => {
 .explore-sub {
   font-size: 0.85rem;
   line-height: 1.65;
-  color: #7a6a58;
+  color: var(--color-secondary);
   margin: 0;
   text-align: right;
   max-width: 340px;
@@ -801,7 +813,7 @@ onMounted(async () => {
 }
 .bento-card:nth-child(6) {
   display: none;
-} 
+}
 /* 5 card layout */
 .bento-img {
   width: 100%;
@@ -817,7 +829,11 @@ onMounted(async () => {
 .bento-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(20, 16, 10, 0.65) 0%, rgba(20, 16, 10, 0.05) 50%);
+  background: linear-gradient(
+    to top,
+    rgba(20, 16, 10, 0.65) 0%,
+    rgba(20, 16, 10, 0.05) 50%
+  );
   transition: opacity 0.3s;
 }
 
@@ -857,16 +873,16 @@ onMounted(async () => {
 
 /* feedback content */
 .feedback-section {
-  background: #ffffff;
+  background: var(--bg-surface);
 }
 .feedback-title {
   font-size: clamp(1.6rem, 3vw, 2.4rem);
   font-weight: 700;
-  color: #2c2218;
+  color: var(--color-primary);
   text-align: center;
 }
 .fb-card {
-  background: #f0ebe2;
+  background: var(--bg-alt);
   padding: 1.75rem;
   position: relative;
 }
@@ -878,27 +894,27 @@ onMounted(async () => {
   gap: 3px;
 }
 .fb-star {
-  color: #c4a882;
+  color: var(--accent);
 }
 .fb-comment {
   font-size: 0.9rem;
   line-height: 1.7;
-  color: #2c2218;
+  color: var(--color-primary);
   font-style: italic;
   margin-bottom: 1rem;
 }
 .fb-user {
   font-size: 0.78rem;
   letter-spacing: 0.08em;
-  color: #7a6a58;
+  color: var(--color-secondary);
 }
 .fb-cta-btn {
   display: inline-flex;
   align-items: center;
   background: transparent;
-  border: 1px solid #1e1a14;
-  color: #1e1a14;
-  font-family: 'Times New Roman', serif;
+  border: 1px solid var(--btn-alt-bg);
+  color: var(--btn-alt-bg);
+  font-family: var(--font-serif);
   font-size: 0.82rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -911,8 +927,8 @@ onMounted(async () => {
   gap: 15px;
 }
 .fb-cta-btn:hover {
-  background: #1e1a14;
-  color: #ffffff;
+  background: var(--btn-alt-bg);
+  color: var(--btn-color);
 }
 
 /* feedback modal transition */
@@ -923,54 +939,6 @@ onMounted(async () => {
 .modal-fade-enter-from,
 .modal-fade-leave-to {
   opacity: 0;
-}
-
-/* ── dark mode ── */
-[data-theme="dark"] .feature-grid { background: #1e1b14; }
-[data-theme="dark"] .fg-main-title { color: #e8ddd0; }
-[data-theme="dark"] .fg-card-light {
-  background: #2a2418;
-  border-color: #3a3025;
-}
-[data-theme="dark"] .fg-card-title { color: #e8ddd0; }
-[data-theme="dark"] .fg-card-body { color: #9a8875; }
-[data-theme="dark"] .fg-img-label {
-  background: rgba(20, 16, 10, 0.85);
-  color: #e8ddd0;
-}
-[data-theme="dark"] .stats-section {
-  background: #1e1b14;
-  border-color: #3a3025;
-}
-[data-theme="dark"] .stat-number { color: #e8ddd0; }
-[data-theme="dark"] .stat-label { color: #9a8875; }
-[data-theme="dark"] .stat-divider { background: #3a3025; }
-[data-theme="dark"] .about-section { background: #221d15; }
-[data-theme="dark"] .about-title { color: #e8ddd0; }
-[data-theme="dark"] .about-body { color: #9a8875; }
-[data-theme="dark"] .about-btn {
-  color: #e8ddd0;
-  border-color: #e8ddd0;
-}
-[data-theme="dark"] .about-btn:hover {
-  color: #c4a882;
-  border-color: #c4a882;
-}
-[data-theme="dark"] .explore-section { background: #1e1b14; }
-[data-theme="dark"] .explore-title { color: #e8ddd0; }
-[data-theme="dark"] .explore-sub { color: #9a8875; }
-[data-theme="dark"] .feedback-section { background: #221d15; }
-[data-theme="dark"] .feedback-title { color: #e8ddd0; }
-[data-theme="dark"] .fb-card { background: #2a2418; }
-[data-theme="dark"] .fb-comment { color: #e8ddd0; }
-[data-theme="dark"] .fb-user { color: #9a8875; }
-[data-theme="dark"] .fb-cta-btn {
-  border-color: #e8ddd0;
-  color: #e8ddd0;
-}
-[data-theme="dark"] .fb-cta-btn:hover {
-  background: #e8ddd0;
-  color: #1a1610;
 }
 
 /* responsive */
