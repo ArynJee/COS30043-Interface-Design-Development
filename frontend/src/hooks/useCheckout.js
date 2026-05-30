@@ -156,7 +156,7 @@ export default function useCheckout() {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      const res = await axios.get("http://localhost:3000/api/auth/me", {
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const u = res.data;

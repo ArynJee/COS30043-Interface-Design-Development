@@ -53,7 +53,7 @@ export const confirmOrder = async (req, res) => {
     if (paymentIntent.status === "requires_payment_method" || paymentIntent.status === "requires_confirmation") {
       await stripe.paymentIntents.confirm(paymentIntentId, {
         payment_method: "pm_card_visa",
-        return_url: "http://localhost:5173/order-confirmation",
+        return_url: `${process.env.FRONTEND_URL}/order-confirmation`,
       });
       paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
     }

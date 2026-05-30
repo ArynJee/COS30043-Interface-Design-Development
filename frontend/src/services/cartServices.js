@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE = "http://localhost:3000/api/cart";
+const BASE = `${import.meta.env.VITE_API_BASE_URL}/api/cart`;
 
 function authHeader() {
   const token = localStorage.getItem("token");

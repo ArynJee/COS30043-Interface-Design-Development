@@ -17,7 +17,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: process.env.FRONTEND_URL }));
 app.use(express.json({ limit: "20mb" }));
 
 // serve uploaded preview images
@@ -34,6 +34,7 @@ app.get("/", (req, res) => {
   res.send("Backend running");
 });
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

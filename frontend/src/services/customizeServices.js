@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const BASE_CART     = 'http://localhost:3000/api/cart'
-const BASE_SHOWCASE = 'http://localhost:3000/api/showcase'
+const BASE_CART     = `${import.meta.env.VITE_API_BASE_URL}/api/cart`
+const BASE_SHOWCASE = `${import.meta.env.VITE_API_BASE_URL}/api/showcase`
 
 function authHeader() {
   const token = localStorage.getItem('token')

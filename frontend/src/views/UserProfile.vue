@@ -333,7 +333,7 @@ const {
               <!-- image of 3d model -->
               <div class="cp-img-wrap">
                 <img
-                  :src="c.preview_image_url ? `http://localhost:3000${c.preview_image_url}` : '/home/living-room.jpg'"
+                  :src="c.preview_image_url ? `${$apiBase}${c.preview_image_url}` : '/home/living-room.jpg'"
                   :alt="`${c.furniture_type} in ${c.area}`"
                   class="cp-img"
                 />

@@ -5,7 +5,7 @@ import { fetchUserOrdersApi } from "@/services/orderServices";
 import { reorderItemApi } from "@/services/cartServices";
 import { useCartStore } from "@/stores/cart";
 
-const API = "http://localhost:3000/api/auth";
+const API = `${import.meta.env.VITE_API_BASE_URL}/api/auth`;
 const SHIPPING_LABELS = {
   sea: "Sea Shipping (14–21 days)",
   air: "Air Shipping (3–7 days)",
@@ -101,7 +101,7 @@ export default function useUserProfile() {
 
   async function fetchContributions() {
     try {
-      const res = await axios.get("http://localhost:3000/api/showcase/mine", { headers: authHeader() });
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/showcase/mine`, { headers: authHeader() });
       contributions.value = res.data.contributions;
     } catch (err) {
       console.error("Failed to fetch contributions:", err);

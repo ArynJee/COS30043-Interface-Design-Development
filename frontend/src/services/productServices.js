@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE = 'http://localhost:3000/api/products'
+const BASE = `${import.meta.env.VITE_API_BASE_URL}/api/products`
 
 export const getProductsApi = async (params = {}) => {
   const res = await axios.get(BASE, { params })
