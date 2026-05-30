@@ -12,6 +12,7 @@ export const useCartStore = defineStore("cart", () => {
   const items = ref([]);
   const loading = ref(false);
   const selectedIds = ref([]);
+  const selectedShipping = ref("sea");
 
   const itemCount = computed(() =>
     items.value.reduce((sum, i) => sum + i.quantity, 0)
@@ -114,6 +115,7 @@ export const useCartStore = defineStore("cart", () => {
     items,
     loading,
     selectedIds,
+    selectedShipping,
     selectedItems,
     itemCount,
     subtotal,

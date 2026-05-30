@@ -1,4 +1,4 @@
-import { ref, computed, onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { useCartStore } from "@/stores/cart";
@@ -14,11 +14,8 @@ export default function useCart() {
   const router = useRouter();
   const cartStore = useCartStore();
 
-  const { items, loading, selectedIds, allSelected, subtotal } =
+  const { items, loading, selectedIds, allSelected, subtotal, selectedShipping } =
     storeToRefs(cartStore);
-
-  // ── Shipping ────────────────────────────────────────────────────────────────
-  const selectedShipping = ref("sea");
 
   const shippingOption = computed(() =>
     SHIPPING_OPTIONS.find((o) => o.id === selectedShipping.value),

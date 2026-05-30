@@ -16,6 +16,9 @@ const {
   handleCvc,
   selectedItems,
   subtotal,
+  shippingFee,
+  taxAmount,
+  orderTotal,
   formatPrice,
   getItemName,
   proceedToPayment,
@@ -159,7 +162,7 @@ const {
             {{
               submitting
                 ? "Processing…"
-                : `Place Order · ${formatPrice(subtotal)}`
+                : `Place Order · ${formatPrice(orderTotal)}`
             }}
           </button>
 
@@ -207,12 +210,18 @@ const {
         </div>
         <div class="summary-total-row">
           <span>Shipping</span>
-          <span class="free-ship">Free</span>
+          <span :class="shippingFee === 0 ? 'free-ship' : ''">
+            {{ shippingFee === 0 ? "Free" : formatPrice(shippingFee) }}
+          </span>
+        </div>
+        <div class="summary-total-row">
+          <span>SST (6%)</span>
+          <span>{{ formatPrice(taxAmount) }}</span>
         </div>
         <div class="summary-divider"></div>
         <div class="summary-total-row summary-grand-total">
           <span>Total</span>
-          <span>{{ formatPrice(subtotal) }}</span>
+          <span>{{ formatPrice(orderTotal) }}</span>
         </div>
       </div>
     </div>

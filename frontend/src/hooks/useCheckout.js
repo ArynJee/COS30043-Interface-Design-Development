@@ -7,6 +7,10 @@ import {
 } from "@/services/orderServices";
 import axios from "axios";
 
+const SHIPPING_FEE = { sea: 10, air: 15 };
+const FREE_THRESHOLD = { sea: 300, air: 1000 };
+const TAX_RATE = 0.06;
+
 export default function useCheckout() {
   const router = useRouter();
   const cartStore = useCartStore();
@@ -51,6 +55,14 @@ export default function useCheckout() {
   const selectedItems = computed(() => cartStore.selectedItems);
   const subtotal = computed(() => cartStore.subtotal);
   const selectedIds = computed(() => cartStore.selectedIds);
+
+  const shippingFee = computed(() => {
+    const method = cartStore.selectedShipping;
+    return subtotal.value >= FREE_THRESHOLD[method] ? 0 : SHIPPING_FEE[method];
+  });
+
+  const taxAmount = computed(() => (subtotal.value + shippingFee.value) * TAX_RATE);
+  const orderTotal = computed(() => subtotal.value + shippingFee.value + taxAmount.value);
 
   // format price
   const formatPrice = (val) => "RM " + parseFloat(val || 0).toFixed(2);
@@ -177,6 +189,9 @@ export default function useCheckout() {
     handleCvc,
     selectedItems,
     subtotal,
+    shippingFee,
+    taxAmount,
+    orderTotal,
     selectedIds,
     formatPrice,
     getItemName,
