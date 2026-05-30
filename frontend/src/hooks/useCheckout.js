@@ -1,6 +1,5 @@
-import { ref, computed, onMounted, nextTick } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { loadStripe } from "@stripe/stripe-js";
 import { useCartStore } from "@/stores/cart";
 import {
   createPaymentIntentApi,
@@ -12,12 +11,12 @@ export default function useCheckout() {
   const router = useRouter();
   const cartStore = useCartStore();
 
-  // ── Step state ───────────────────────────────────────────────────────────────
+  // payment steps states
   const step = ref(1);
   const submitting = ref(false);
   const paymentError = ref("");
 
-  // ── Shipping form ────────────────────────────────────────────────────────────
+  // shipping form state
   const form = ref({
     name: "",
     address: "",
@@ -26,17 +25,34 @@ export default function useCheckout() {
     zip: "",
   });
 
-  // ── Stripe ──────────────────────────────────────────────────────────────────
-  let stripe = null;
-  let cardElement = null;
-  const stripeReady = ref(false);
+  // card
+  const cardForm = ref({ number: "", expiry: "", cvc: "" });
+  const cardErrors = ref({ number: "", expiry: "", cvc: "" });
 
-  // ── Cart derived ─────────────────────────────────────────────────────────────
+  function handleCardNumber(e) {
+    const digits = e.target.value.replace(/\D/g, "").slice(0, 16);
+    cardForm.value.number = digits.replace(/(.{4})(?=.)/g, "$1 ");
+    cardErrors.value.number = "";
+  }
+
+  function handleExpiry(e) {
+    const digits = e.target.value.replace(/\D/g, "").slice(0, 4);
+    cardForm.value.expiry =
+      digits.length > 2 ? digits.slice(0, 2) + "/" + digits.slice(2) : digits;
+    cardErrors.value.expiry = "";
+  }
+
+  function handleCvc(e) {
+    cardForm.value.cvc = e.target.value.replace(/\D/g, "").slice(0, 3);
+    cardErrors.value.cvc = "";
+  }
+
+  // cart derived
   const selectedItems = computed(() => cartStore.selectedItems);
   const subtotal = computed(() => cartStore.subtotal);
   const selectedIds = computed(() => cartStore.selectedIds);
 
-  // ── Helpers ──────────────────────────────────────────────────────────────────
+  // format price
   const formatPrice = (val) => "RM " + parseFloat(val || 0).toFixed(2);
 
   function getItemName(item) {
@@ -48,7 +64,7 @@ export default function useCheckout() {
     return item.item_name || "Product";
   }
 
-  // ── Validation ───────────────────────────────────────────────────────────────
+  // error validation
   function validateShipping() {
     const { name, address, city, state, zip } = form.value;
     if (
@@ -63,75 +79,44 @@ export default function useCheckout() {
     return null;
   }
 
-  // ── Stripe init ──────────────────────────────────────────────────────────────
-  async function initStripe() {
-    try {
-      stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-      const elements = stripe.elements({ fonts: [{ cssSrc: "" }] });
-      cardElement = elements.create("card", {
-        style: {
-          base: {
-            fontFamily: "'Times New Roman', serif",
-            fontSize: "14px",
-            color: "#2c2218",
-            "::placeholder": { color: "#b8aaa0" },
-          },
-          invalid: { color: "#c0392b" },
-        },
-        hidePostalCode: true,
-        disableLink: true,
-      });
-      cardElement.mount("#stripe-card-element");
-      stripeReady.value = true;
-    } catch (e) {
-      paymentError.value =
-        "Failed to load payment form. Check your Stripe publishable key.";
-      console.error(e);
+  function validateCard() {
+    let valid = true;
+    const digits = cardForm.value.number.replace(/\s/g, "");
+    if (digits.length !== 16) {
+      cardErrors.value.number = "Card number must be 16 digits.";
+      valid = false;
     }
+    const parts = cardForm.value.expiry.split("/");
+    if (parts.length !== 2 || parts[0].length !== 2 || parts[1].length !== 2) {
+      cardErrors.value.expiry = "Enter a valid expiry date (MM/YY).";
+      valid = false;
+    }
+    if (cardForm.value.cvc.length !== 3) {
+      cardErrors.value.cvc = "CVC must be 3 digits.";
+      valid = false;
+    }
+    return valid;
   }
 
-  // ── Actions ──────────────────────────────────────────────────────────────────
-  async function proceedToPayment() {
+  // actions
+  function proceedToPayment() {
     const err = validateShipping();
     if (err) {
       alert(err);
       return;
     }
     step.value = 2;
-    await nextTick();
-    await initStripe();
   }
 
   async function placeOrder() {
-    if (!stripe || !cardElement) return;
+    if (!validateCard()) return;
+
     submitting.value = true;
     paymentError.value = "";
 
     try {
       const piRes = await createPaymentIntentApi(selectedIds.value);
-      const { clientSecret, paymentIntentId } = piRes.data;
-
-      const { error, paymentIntent } = await stripe.confirmCardPayment(
-        clientSecret,
-        {
-          payment_method: {
-            card: cardElement,
-            billing_details: { name: form.value.name },
-          },
-        },
-      );
-
-      if (error) {
-        paymentError.value = error.message;
-        submitting.value = false;
-        return;
-      }
-
-      if (paymentIntent.status !== "succeeded") {
-        paymentError.value = "Payment was not completed. Please try again.";
-        submitting.value = false;
-        return;
-      }
+      const { paymentIntentId } = piRes.data;
 
       const orderRes = await confirmOrderApi(
         paymentIntentId,
@@ -181,20 +166,20 @@ export default function useCheckout() {
   });
 
   return {
-    // state
     step,
     submitting,
     paymentError,
     form,
-    stripeReady,
-    // cart derived
+    cardForm,
+    cardErrors,
+    handleCardNumber,
+    handleExpiry,
+    handleCvc,
     selectedItems,
     subtotal,
     selectedIds,
-    // helpers
     formatPrice,
     getItemName,
-    // actions
     proceedToPayment,
     placeOrder,
   };

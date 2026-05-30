@@ -45,8 +45,15 @@ export const confirmOrder = async (req, res) => {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    // Verify payment with Stripe
-    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    // Confirm the payment intent with a test payment method if not already succeeded
+    let paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    if (paymentIntent.status === "requires_payment_method" || paymentIntent.status === "requires_confirmation") {
+      await stripe.paymentIntents.confirm(paymentIntentId, {
+        payment_method: "pm_card_visa",
+        return_url: "http://localhost:5173/order-confirmation",
+      });
+      paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    }
     if (paymentIntent.status !== "succeeded") {
       return res.status(400).json({ message: "Payment has not been completed" });
     }

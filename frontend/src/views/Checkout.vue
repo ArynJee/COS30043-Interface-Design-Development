@@ -9,7 +9,11 @@ const {
   submitting,
   paymentError,
   form,
-  stripeReady,
+  cardForm,
+  cardErrors,
+  handleCardNumber,
+  handleExpiry,
+  handleCvc,
   selectedItems,
   subtotal,
   formatPrice,
@@ -101,15 +105,46 @@ const {
             <button class="edit-link" @click="step = 1">Edit</button>
           </div>
 
-          <!-- Test card hint -->
-          <div class="test-hint">
-            <strong>Test card:</strong> 4242 4242 4242 4242 · Any future date ·
-            Any 3-digit CVC
-          </div>
-
           <div class="field-group">
-            <label class="field-label">Card Details</label>
-            <div id="stripe-card-element" class="stripe-input"></div>
+            <label class="field-label">Card Number</label>
+            <input
+              :value="cardForm.number"
+              @input="handleCardNumber"
+              type="text"
+              class="field-input"
+              :class="{ 'field-input--error': cardErrors.number }"
+              placeholder="4242 4242 4242 4242"
+              maxlength="19"
+            />
+            <span v-if="cardErrors.number" class="field-error">{{ cardErrors.number }}</span>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label">Expiry Date</label>
+              <input
+                :value="cardForm.expiry"
+                @input="handleExpiry"
+                type="text"
+                class="field-input"
+                :class="{ 'field-input--error': cardErrors.expiry }"
+                placeholder="MM / YY"
+                maxlength="5"
+              />
+              <span v-if="cardErrors.expiry" class="field-error">{{ cardErrors.expiry }}</span>
+            </div>
+            <div class="field-group">
+              <label class="field-label">CVC</label>
+              <input
+                :value="cardForm.cvc"
+                @input="handleCvc"
+                type="text"
+                class="field-input"
+                :class="{ 'field-input--error': cardErrors.cvc }"
+                placeholder="CVC"
+                maxlength="3"
+              />
+              <span v-if="cardErrors.cvc" class="field-error">{{ cardErrors.cvc }}</span>
+            </div>
           </div>
 
           <div v-if="paymentError" class="payment-error">
@@ -119,7 +154,7 @@ const {
           <button
             class="primary-btn"
             @click="placeOrder"
-            :disabled="submitting || !stripeReady"
+            :disabled="submitting"
           >
             {{
               submitting
@@ -252,6 +287,16 @@ const {
 .field-input:focus {
   border-color: var(--accent-hover);
 }
+/* error validation */
+.field-input--error {
+  border-color: var(--color-error);
+}
+.field-error {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: var(--fs-xs);
+  color: var(--color-error);
+}
 .field-input::placeholder {
   color: var(--color-muted);
 }
@@ -349,16 +394,6 @@ const {
   margin-bottom: 1.25rem;
 }
 
-/* ── Stripe card element ── */
-.stripe-input {
-  border: 1px solid var(--border-input);
-  padding: 0.75rem 0.85rem;
-  background: var(--bg-surface);
-  transition: border-color 0.2s;
-}
-.stripe-input:focus-within {
-  border-color: var(--accent-hover);
-}
 .payment-error {
   font-size: var(--fs-sm);
   color: var(--color-error-2);
