@@ -10,10 +10,10 @@ function authHeader() {
 export const createPaymentIntentApi = (itemIds) =>
   axios.post(`${BASE}/create-payment-intent`, { itemIds }, { headers: authHeader() });
 
-export const confirmOrderApi = (paymentIntentId, itemIds, shippingInfo) =>
+export const confirmOrderApi = (paymentIntentId, itemIds, shippingInfo, shippingMethod, shippingFee, taxAmount) =>
   axios.post(
     `${BASE}/confirm`,
-    { paymentIntentId, itemIds, shippingInfo },
+    { paymentIntentId, itemIds, shippingInfo, shippingMethod, shippingFee, taxAmount },
     { headers: authHeader() }
   );
 

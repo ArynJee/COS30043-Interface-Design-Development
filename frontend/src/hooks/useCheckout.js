@@ -134,6 +134,9 @@ export default function useCheckout() {
         paymentIntentId,
         selectedIds.value,
         form.value,
+        cartStore.selectedShipping,
+        shippingFee.value,
+        taxAmount.value,
       );
       const { order } = orderRes.data;
 

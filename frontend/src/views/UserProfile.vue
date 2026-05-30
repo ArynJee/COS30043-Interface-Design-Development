@@ -1,114 +1,29 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
 import { ChevronDown, ChevronUp, Package, User, LogOut } from "@lucide/vue";
-import axios from "axios";
-import { fetchUserOrdersApi } from "@/services/orderServices";
-import { useCartStore } from "@/stores/cart";
+import useUserProfile from "@/hooks/useUserProfile.js";
 
-const router = useRouter();
-const cartStore = useCartStore();
-
-const user = ref(null);
-const orders = ref([]);
-const loadingProfile = ref(true);
-const loadingOrders = ref(true);
-const editMode = ref(false);
-const saving = ref(false);
-const saveError = ref("");
-const saveSuccess = ref(false);
-const expandedOrders = ref([]);
-const activeTab = ref("orders"); // 'orders' | 'profile'
-
-const form = ref({ firstName: "", lastName: "", phone: "", address: "" });
-
-const API = "http://localhost:3000/api/auth";
-function authHeader() {
-  return { Authorization: `Bearer ${localStorage.getItem("token")}` };
-}
-
-const formatPrice = (val) => "$" + parseFloat(val || 0).toFixed(2);
-
-const formatDate = (dateStr) =>
-  new Date(dateStr).toLocaleDateString("en-AU", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-
-function toggleOrder(id) {
-  if (expandedOrders.value.includes(id)) {
-    expandedOrders.value = expandedOrders.value.filter((i) => i !== id);
-  } else {
-    expandedOrders.value.push(id);
-  }
-}
-
-function getItemName(item) {
-  return item.item_name || "Item";
-}
-
-async function fetchProfile() {
-  try {
-    const res = await axios.get(`${API}/me`, { headers: authHeader() });
-    user.value = res.data;
-    form.value = {
-      firstName: res.data.first_name || "",
-      lastName: res.data.last_name || "",
-      phone: res.data.phone_number || "",
-      address: res.data.address || "",
-    };
-  } catch {
-    router.push("/login");
-  } finally {
-    loadingProfile.value = false;
-  }
-}
-
-async function fetchOrders() {
-  try {
-    const res = await fetchUserOrdersApi();
-    orders.value = res.data.orders;
-  } catch (err) {
-    console.error("Failed to fetch orders:", err);
-  } finally {
-    loadingOrders.value = false;
-  }
-}
-
-async function saveProfile() {
-  saving.value = true;
-  saveError.value = "";
-  saveSuccess.value = false;
-  try {
-    const res = await axios.patch(`${API}/me`, form.value, {
-      headers: authHeader(),
-    });
-    user.value = { ...user.value, ...res.data };
-    editMode.value = false;
-    saveSuccess.value = true;
-    setTimeout(() => (saveSuccess.value = false), 3000);
-  } catch (err) {
-    saveError.value = err.response?.data?.message || "Failed to save changes.";
-  } finally {
-    saving.value = false;
-  }
-}
-
-function logout() {
-  localStorage.removeItem("token");
-  cartStore.items = [];
-  cartStore.selectedIds = [];
-  router.push("/login");
-}
-
-onMounted(async () => {
-  if (!localStorage.getItem("token")) {
-    router.push("/login");
-    return;
-  }
-  await Promise.all([fetchProfile(), fetchOrders()]);
-});
+const {
+  user,
+  orders,
+  loadingProfile,
+  loadingOrders,
+  editMode,
+  saving,
+  saveError,
+  saveSuccess,
+  expandedOrders,
+  activeTab,
+  reorderingId,
+  form,
+  formatPrice,
+  formatDate,
+  shippingLabel,
+  getItemName,
+  toggleOrder,
+  saveProfile,
+  logout,
+  orderAgain,
+} = useUserProfile();
 </script>
 
 <template>
@@ -222,6 +137,8 @@ onMounted(async () => {
                     {{ order.shipping_city }}, {{ order.shipping_state }}
                     {{ order.shipping_zip }}
                   </div>
+                  <div class="detail-label" style="margin-top:0.6rem">Shipping Method</div>
+                  <div class="detail-value">{{ shippingLabel(order.shipping_method) }}</div>
                 </div>
 
                 <div class="order-items">
@@ -253,12 +170,40 @@ onMounted(async () => {
                   </div>
                 </div>
 
-                <div class="order-summary-row">
-                  <span>Order Total</span>
-                  <span class="order-summary-total">{{
-                    formatPrice(order.total_amount)
-                  }}</span>
+                <div class="order-breakdown">
+                  <div class="breakdown-row">
+                    <span>Subtotal</span>
+                    <span>{{ formatPrice(order.subtotal) }}</span>
+                  </div>
+                  <div class="breakdown-row">
+                    <span>Shipping</span>
+                    <span :class="{ 'free-ship': order.shipping_fee == 0 }">
+                      {{
+                        order.shipping_fee == null
+                          ? "—"
+                          : order.shipping_fee == 0
+                          ? "Free"
+                          : formatPrice(order.shipping_fee)
+                      }}
+                    </span>
+                  </div>
+                  <div class="breakdown-row">
+                    <span>SST (6%)</span>
+                    <span>{{ order.tax_amount != null ? formatPrice(order.tax_amount) : "—" }}</span>
+                  </div>
+                  <div class="breakdown-row breakdown-total">
+                    <span>Order Total</span>
+                    <span>{{ formatPrice(order.total_amount) }}</span>
+                  </div>
                 </div>
+
+                <button
+                  class="reorder-btn"
+                  @click="orderAgain(order)"
+                  :disabled="reorderingId === order.id"
+                >
+                  {{ reorderingId === order.id ? "Adding to cart…" : "Order Again" }}
+                </button>
               </div>
             </div>
           </div>
@@ -571,7 +516,7 @@ onMounted(async () => {
   font-size: var(--fs-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  background: var(--color-success);
+  background: var(--color-secondary);
   color: #fff;
   padding: 0.15rem 0.5rem;
 }
@@ -652,17 +597,50 @@ onMounted(async () => {
   color: var(--color-primary);
   white-space: nowrap;
 }
-.order-summary-row {
+.order-breakdown {
+  border-top: 1px solid var(--border);
+  padding-top: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.breakdown-row {
   display: flex;
   justify-content: space-between;
+  font-size: var(--fs-sm);
+  color: var(--color-secondary);
+}
+.breakdown-total {
   font-size: var(--fs-base);
   font-weight: 700;
   color: var(--color-primary);
-  padding-top: 0.5rem;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border-light);
+  padding-top: 0.4rem;
+  margin-top: 0.2rem;
 }
-.order-summary-total {
-  color: var(--color-primary);
+.free-ship {
+  color: var(--color-free);
+  font-weight: 600;
+}
+.reorder-btn {
+  margin-top: 0.85rem;
+  width: 100%;
+  background: var(--btn-bg);
+  color: var(--btn-color);
+  border: none;
+  padding: 0.65rem 1rem;
+  font-family: var(--font-serif);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.reorder-btn:hover:not(:disabled) {
+  background: var(--btn-bg-hover);
+}
+.reorder-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 /* ── Profile view ── */

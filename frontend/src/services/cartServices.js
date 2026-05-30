@@ -31,3 +31,25 @@ export const removeCartItemApi = (id) =>
 
 export const clearCartApi = () =>
   axios.delete(BASE, { headers: authHeader() });
+
+export const reorderItemApi = (item) => {
+  const isCustom = item.item_type === "custom";
+  return axios.post(
+    BASE,
+    {
+      product_id: isCustom ? null : item.product_id,
+      item_name: isCustom ? null : item.item_name,
+      furniture_type: isCustom ? item.item_name : null,
+      unit_price: item.unit_price,
+      is_custom: isCustom,
+      preview_image: item.preview_image || null,
+      configuration: isCustom
+        ? (typeof item.configuration === "string"
+            ? JSON.parse(item.configuration)
+            : item.configuration) || {}
+        : null,
+      quantity: item.quantity,
+    },
+    { headers: authHeader() }
+  );
+};

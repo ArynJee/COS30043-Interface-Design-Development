@@ -41,8 +41,10 @@ export const addCartItem = async (req, res) => {
   try {
     const {
       furniture_type, skeleton_type, configuration, unit_price, preview_image,
-      product_id, item_name, is_custom,
+      product_id, item_name, is_custom, quantity,
     } = req.body;
+
+    const itemQuantity = Math.max(1, parseInt(quantity) || 1);
 
     if (unit_price == null) {
       return res.status(400).json({ message: "unit_price is required" });
@@ -67,9 +69,9 @@ export const addCartItem = async (req, res) => {
       );
       if (existing.rows.length > 0) {
         const updated = await db.query(
-          `UPDATE cart_items SET quantity = quantity + 1, updated_at = CURRENT_TIMESTAMP
-           WHERE id = $1 RETURNING id, item_name, unit_price, quantity, preview_image, created_at`,
-          [existing.rows[0].id]
+          `UPDATE cart_items SET quantity = quantity + $1, updated_at = CURRENT_TIMESTAMP
+           WHERE id = $2 RETURNING id, item_name, unit_price, quantity, preview_image, created_at`,
+          [itemQuantity, existing.rows[0].id]
         );
         return res.status(200).json({ item: updated.rows[0] });
       }
@@ -77,8 +79,8 @@ export const addCartItem = async (req, res) => {
 
     const result = await db.query(
       `INSERT INTO cart_items
-         (user_id, is_custom, furniture_type, skeleton_type, configuration, unit_price, preview_image, product_id, item_name)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+         (user_id, is_custom, furniture_type, skeleton_type, configuration, unit_price, preview_image, product_id, item_name, quantity)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
        RETURNING id, is_custom, furniture_type, unit_price, quantity, preview_image, product_id, item_name, created_at`,
       [
         req.userId,
@@ -90,6 +92,7 @@ export const addCartItem = async (req, res) => {
         imageUrl,
         product_id || null,
         item_name || null,
+        itemQuantity,
       ]
     );
 

@@ -39,11 +39,14 @@ export const createPaymentIntent = async (req, res) => {
 // POST /api/orders/confirm
 export const confirmOrder = async (req, res) => {
   try {
-    const { paymentIntentId, itemIds, shippingInfo } = req.body;
+    const { paymentIntentId, itemIds, shippingInfo, shippingMethod, shippingFee, taxAmount } = req.body;
 
     if (!paymentIntentId || !itemIds?.length || !shippingInfo) {
       return res.status(400).json({ message: "Missing required fields" });
     }
+
+    const parsedShippingFee = parseFloat(shippingFee) || 0;
+    const parsedTaxAmount   = parseFloat(taxAmount)   || 0;
 
     // Confirm the payment intent with a test payment method if not already succeeded
     let paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
@@ -72,17 +75,22 @@ export const confirmOrder = async (req, res) => {
       0
     );
 
+    const totalAmount = subtotal + parsedShippingFee + parsedTaxAmount;
+
     // Create the order record
     const orderResult = await db.query(
       `INSERT INTO orders
-         (user_id, status, subtotal, total_amount, shipping_name, shipping_address,
-          shipping_city, shipping_state, shipping_zip, stripe_payment_intent_id)
-       VALUES ($1, 'paid', $2, $3, $4, $5, $6, $7, $8, $9)
+         (user_id, status, subtotal, shipping_fee, tax_amount, total_amount, shipping_method,
+          shipping_name, shipping_address, shipping_city, shipping_state, shipping_zip, stripe_payment_intent_id)
+       VALUES ($1, 'paid', $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
        RETURNING *`,
       [
         req.userId,
         subtotal,
-        subtotal,
+        parsedShippingFee,
+        parsedTaxAmount,
+        totalAmount,
+        shippingMethod || "sea",
         shippingInfo.name,
         shippingInfo.address,
         shippingInfo.city,
@@ -130,7 +138,7 @@ export const confirmOrder = async (req, res) => {
       order: {
         id: order.id,
         status: order.status,
-        total: subtotal,
+        total: totalAmount,
         createdAt: order.created_at,
       },
     });
