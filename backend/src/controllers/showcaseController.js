@@ -51,6 +51,23 @@ export const createContribution = async (req, res) => {
   }
 };
 
+// GET /api/showcase/mine — contributions submitted by the logged-in user
+export const getMyContributions = async (req, res) => {
+  try {
+    const result = await db.query(
+      `SELECT id, area, furniture_type, description, preview_image_url, configuration, total_cost, created_at
+       FROM design_contributions
+       WHERE user_id = $1
+       ORDER BY created_at DESC`,
+      [req.userId]
+    );
+    res.json({ contributions: result.rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch contributions" });
+  }
+};
+
 // GET /api/showcase?area=Kitchen
 export const getContributions = async (req, res) => {
   try {

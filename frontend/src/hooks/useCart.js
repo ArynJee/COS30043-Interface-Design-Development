@@ -7,7 +7,7 @@ const SHIPPING_OPTIONS = [
   { id: "sea", label: "Sea Shipping", days: "14-21 days", fee: 10 },
   { id: "air", label: "Air Shipping", days: "3-7 days", fee: 15 },
 ];
-const FREE_THRESHOLD = { sea: 300, air: 1000 };
+const FREE_THRESHOLD = { sea: 300, air: 2000 };
 const TAX_RATE = 0.06;
 
 export default function useCart() {

@@ -30,10 +30,21 @@ export default function useUserProfile() {
   const expandedOrders = ref([]);
   const activeTab = ref("orders");
   const reorderingId = ref(null);
+  const contributions = ref([]);
+  const loadingContributions = ref(true);
 
   const form = ref({ firstName: "", lastName: "", phone: "", address: "" });
 
   const formatPrice = (val) => "RM " + parseFloat(val || 0).toFixed(2);
+
+  const configEntries = (cfg) => {
+    if (!cfg) return []
+    const obj = typeof cfg === 'string' ? JSON.parse(cfg) : cfg
+    return Object.entries(obj).map(([k, v]) => ({
+      label: k[0].toUpperCase() + k.slice(1),
+      ...v,
+    }))
+  }
 
   const formatDate = (dateStr) =>
     new Date(dateStr).toLocaleDateString("en-AU", {
@@ -88,6 +99,17 @@ export default function useUserProfile() {
     }
   }
 
+  async function fetchContributions() {
+    try {
+      const res = await axios.get("http://localhost:3000/api/showcase/mine", { headers: authHeader() });
+      contributions.value = res.data.contributions;
+    } catch (err) {
+      console.error("Failed to fetch contributions:", err);
+    } finally {
+      loadingContributions.value = false;
+    }
+  }
+
   async function saveProfile() {
     saving.value = true;
     saveError.value = "";
@@ -135,7 +157,7 @@ export default function useUserProfile() {
       router.push("/login");
       return;
     }
-    await Promise.all([fetchProfile(), fetchOrders()]);
+    await Promise.all([fetchProfile(), fetchOrders(), fetchContributions()]);
   });
 
   return {
@@ -158,8 +180,12 @@ export default function useUserProfile() {
     toggleOrder,
     fetchProfile,
     fetchOrders,
+    fetchContributions,
     saveProfile,
     logout,
     orderAgain,
+    contributions,
+    loadingContributions,
+    configEntries,
   };
 }

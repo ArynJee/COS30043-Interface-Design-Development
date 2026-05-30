@@ -1,12 +1,14 @@
 <script setup>
-import { ChevronDown, ChevronUp, Package, User, LogOut } from "@lucide/vue";
+import { ChevronDown, ChevronUp, Package, User, LogOut, Sparkles } from "@lucide/vue";
 import useUserProfile from "@/hooks/useUserProfile.js";
 
 const {
   user,
   orders,
+  contributions,
   loadingProfile,
   loadingOrders,
+  loadingContributions,
   editMode,
   saving,
   saveError,
@@ -23,6 +25,7 @@ const {
   saveProfile,
   logout,
   orderAgain,
+  configEntries,
 } = useUserProfile();
 </script>
 
@@ -30,11 +33,16 @@ const {
   <div class="profile-page">
     <!-- Hero -->
     <section class="profile-hero">
+      <img
+        src="/home/living-room.jpg"
+        alt=""
+        class="hero-img"
+      />
       <div class="hero-inner">
         <p class="hero-breadcrumb">
-          <a href="/">Home</a>&ensp;&rsaquo;&ensp;My Account
+          <a href="/">Home</a>&ensp;›&ensp;Profile
         </p>
-        <h1 class="hero-title">My Account</h1>
+        <h1 class="hero-title">My Profile</h1>
         <p class="hero-sub" v-if="user">
           Welcome back, {{ user.first_name }} {{ user.last_name }}
         </p>
@@ -70,6 +78,14 @@ const {
           >
             <User :size="16" class="sidebar-icon" />
             Profile Details
+          </button>
+          <button
+            class="sidebar-link"
+            :class="{ active: activeTab === 'contributions' }"
+            @click="activeTab = 'contributions'"
+          >
+            <Sparkles :size="16" class="sidebar-icon" />
+            My Contributions
           </button>
           <button class="sidebar-link logout-link" @click="logout">
             <LogOut :size="16" class="sidebar-icon" />
@@ -296,6 +312,61 @@ const {
             </div>
           </div>
         </div>
+
+        <!-- Contributions tab -->
+        <div v-if="activeTab === 'contributions'">
+          <div class="tab-header">
+            <h2 class="tab-title">My Contributions</h2>
+            <span class="tab-count">
+              {{ contributions.length }} design{{ contributions.length !== 1 ? 's' : '' }}
+            </span>
+          </div>
+
+          <div v-if="loadingContributions" class="state-msg">Loading contributions…</div>
+
+          <div v-else-if="contributions.length === 0" class="empty-state">
+            <p>You haven't submitted any design contributions yet.</p>
+            <a href="/customize" class="empty-cta">Start Designing →</a>
+          </div>
+
+          <div v-else class="cp-grid">
+            <article v-for="c in contributions" :key="c.id" class="cp-card">
+              <!-- Image -->
+              <div class="cp-img-wrap">
+                <img
+                  :src="c.preview_image_url ? `http://localhost:3000${c.preview_image_url}` : '/home/living-room.jpg'"
+                  :alt="`${c.furniture_type} in ${c.area}`"
+                  class="cp-img"
+                />
+                <div class="cp-img-grad"></div>
+                <span class="cp-area-badge">{{ c.area }}</span>
+              </div>
+
+              <!-- Body -->
+              <div class="cp-body">
+                <div class="cp-meta-row">
+                  <span class="cp-date">{{ formatDate(c.created_at) }}</span>
+                  <span class="cp-price">{{ formatPrice(c.total_cost) }}</span>
+                </div>
+                <div class="cp-type">
+                  {{ c.furniture_type.replace(/_/g, ' ') }}
+                </div>
+                <p class="cp-desc" v-if="c.description">{{ c.description }}</p>
+                <div class="cp-chips">
+                  <span
+                    v-for="entry in configEntries(c.configuration)"
+                    :key="entry.label"
+                    class="cp-chip"
+                  >
+                    <span class="cp-chip-key">{{ entry.label }}</span>
+                    <span class="cp-chip-sep">·</span>
+                    <span class="cp-chip-val">{{ entry.name }}</span>
+                  </span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -311,34 +382,66 @@ const {
   min-height: 100vh;
 }
 
-/* ── Hero (always dark) ── */
+/* ── Hero ── */
 .profile-hero {
-  background: #2c2218;
-  padding: 3rem 5rem;
+  height: 360px;
+  background: #1e1a14;
   position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+.profile-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(30, 26, 20, 0.88) 0%, rgba(30, 26, 20, 0) 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.hero-inner {
+  font-family: 'Times New Roman', serif;
+  padding: 0 5rem;
+  max-width: 700px;
+  position: relative;
+  z-index: 1;
 }
 .hero-breadcrumb {
-  font-size: var(--fs-xs);
-  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.04em;
+  color: #f0e1cc;
   margin-bottom: 0.75rem;
 }
 .hero-breadcrumb a {
-  color: var(--color-muted);
+  color: #f0e1cc;
   text-decoration: none;
+  transition: color 0.2s;
 }
 .hero-breadcrumb a:hover {
-  color: var(--accent);
+  color: #dbbea0;
 }
 .hero-title {
-  font-size: 2rem;
+  font-family: 'Times New Roman', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700;
   color: #f0e1cc;
-  margin-bottom: 0.35rem;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
 }
 .hero-sub {
   font-size: var(--fs-base);
-  color: var(--color-muted);
+  color: #f0e1cc;
+  letter-spacing: 0.04em;
   margin: 0;
+  line-height: 1.6;
 }
 
 /* ── Layout ── */
@@ -783,13 +886,132 @@ const {
   text-decoration: underline;
 }
 
+/* ── Contributions grid ── */
+.cp-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+.cp-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: box-shadow 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
+}
+.cp-card:hover {
+  box-shadow: 0 12px 36px rgba(30, 26, 20, 0.13);
+  transform: translateY(-4px);
+  border-color: #d0b896;
+}
+
+/* Image */
+.cp-img-wrap {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+.cp-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.65s ease;
+}
+.cp-card:hover .cp-img {
+  transform: scale(1.06);
+}
+.cp-img-grad {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 35%, rgba(18, 14, 10, 0.68) 100%);
+  pointer-events: none;
+}
+.cp-area-badge {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 0.75rem;
+  color: #fff;
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  font-weight: 600;
+  background: #c4a882;
+}
+
+/* Body */
+.cp-body {
+  padding: 1.1rem;
+}
+.cp-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.cp-date {
+  font-size: var(--fs-sm);
+  color: var(--accent-hover);
+}
+.cp-price {
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--color-secondary);
+}
+.cp-type {
+  font-size: var(--fs-sm);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-subtle);
+  margin-bottom: 0.4rem;
+}
+.cp-desc {
+  font-size: var(--fs-base);
+  color: var(--accent-dk);
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.cp-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+.cp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  border: 1px solid var(--color-muted);
+  padding: 0.15rem 0.5rem;
+  font-size: var(--fs-xs);
+  color: var(--color-secondary);
+  border-radius: 2px;
+}
+.cp-chip-key {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+.cp-chip-sep {
+  color: var(--accent);
+}
+.cp-chip-val {
+  color: var(--color-secondary);
+}
+
 /* ── Responsive ── */
 @media (max-width: 991px) {
   .profile-content {
     padding: 1.5rem 2.5rem;
   }
   .profile-hero {
-    padding: 2rem 2.5rem;
+    height: 280px;
+  }
+  .hero-inner {
+    padding: 0 2.5rem;
   }
 }
 @media (max-width: 767px) {
@@ -798,7 +1020,10 @@ const {
     flex-direction: column;
   }
   .profile-hero {
-    padding: 1.5rem 1.25rem;
+    height: 240px;
+  }
+  .hero-inner {
+    padding: 0 1.5rem;
   }
   .profile-sidebar {
     width: 100%;
@@ -808,6 +1033,9 @@ const {
   }
   .state-msg {
     padding: 2rem 1.25rem;
+  }
+  .cp-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>
