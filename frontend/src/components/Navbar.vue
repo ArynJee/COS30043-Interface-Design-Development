@@ -1,9 +1,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { MapPin, ShoppingCart, UserCircle, Search, ShoppingBag, LayoutGrid, Sliders, Info, ChevronLeft, ChevronRight, Sun, Moon } from '@lucide/vue'
 import { useDarkMode } from '@/hooks/useDarkMode'
 import { useCartStore } from '@/stores/cart'
+import SearchDropdown from '@/components/SearchDropdown.vue'
 
 const cartStore = useCartStore()
 onMounted(() => cartStore.fetchCart())
@@ -27,8 +28,27 @@ const navLinks = [
 const isLoggedIn = computed(() => !!localStorage.getItem('token'))
 const profileRoute = computed(() => isLoggedIn.value ? '/profile' : '/login')
 const route = useRoute()
+const router = useRouter()
 const sidebarOpen = ref(false)
 const searchQuery = ref('')
+const searchFocused = ref(false)
+const showDropdown = computed(() => searchFocused.value && searchQuery.value.length >= 2)
+
+function onSearchFocus() { searchFocused.value = true }
+function onSearchBlur() { setTimeout(() => { searchFocused.value = false }, 150) }
+function onSearchEnter() {
+  if (!searchQuery.value.trim()) return
+  router.push({ path: '/products', query: { search: searchQuery.value.trim() } })
+  searchFocused.value = false
+}
+function onSearchEscape() {
+  searchQuery.value = ''
+  searchFocused.value = false
+}
+function closeSearch() {
+  searchQuery.value = ''
+  searchFocused.value = false
+}
 </script>
 
 <template>
@@ -54,10 +74,21 @@ const searchQuery = ref('')
       <!-- right -->
       <div class="utility-icons d-flex align-items-center gap-3 ms-auto">
         <!-- search bar left of location -->
-        <label class="search-pill d-flex align-items-center gap-2 px-2 py-1 rounded-pill mt-2">
-          <Search :size="14" class="search-icon-inner" />
-          <input v-model="searchQuery" type="text" placeholder="Search…" />
-        </label>
+        <div class="search-wrap">
+          <label class="search-pill d-flex align-items-center gap-2 px-2 py-1 rounded-pill mt-2">
+            <Search :size="14" class="search-icon-inner" />
+            <input
+              v-model="searchQuery"
+              type="text"
+              placeholder="Search…"
+              @focus="onSearchFocus"
+              @blur="onSearchBlur"
+              @keydown.enter="onSearchEnter"
+              @keydown.escape="onSearchEscape"
+            />
+          </label>
+          <SearchDropdown v-if="showDropdown" :query="searchQuery" @close="closeSearch" />
+        </div>
 
         <router-link title="Locations" to="/locations" class="icon-btn">
           <MapPin :size="19" />
@@ -97,7 +128,7 @@ const searchQuery = ref('')
     <!-- expanded search bar -->
     <div class="sb-search d-flex align-items-center gap-2 rounded-pill mx-2 mt-3 mb-1 px-2 py-1 overflow-hidden">
       <Search :size="14" class="sb-search-icon" />
-      <input v-model="searchQuery" type="text" placeholder="Search…" class="sb-search-input border-0 w-100" />
+      <input v-model="searchQuery" type="text" placeholder="Search…" class="sb-search-input border-0 w-100" @keydown.enter="onSearchEnter" />
     </div>
 
     <!-- Nav links -->
@@ -234,6 +265,9 @@ const searchQuery = ref('')
 .icon-btn:hover {
   color: #8b6f47;
   transform: translateY(-1px);
+}
+.search-wrap {
+  position: relative;
 }
 .search-pill {
   background: #f5f2ee;

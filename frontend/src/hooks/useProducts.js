@@ -152,7 +152,14 @@ export default function useProducts() {
       if (cat) selectedCategories.value = [cat.id]
     }
 
+    // pre-fill search from global navbar search
+    if (route.query.search) searchQuery.value = route.query.search
+
     await fetchProducts()
+  })
+
+  watch(() => route.query.search, (q) => {
+    searchQuery.value = q || ''
   })
 
   // re-apply ?type= filter when navigating while already on this page

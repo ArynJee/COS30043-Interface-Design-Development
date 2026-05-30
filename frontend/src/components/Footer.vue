@@ -27,18 +27,26 @@ const footerLinks = [
                 <li><router-link to="/products?type=living-room">Living Room</router-link></li>
                 <li><router-link to="/products?type=study-room">Study Room</router-link></li>
                 <li><router-link to="/products?type=kitchen">Kitchen</router-link></li>
-                <li><router-link to="/products?type=bathroom">Bathroom</router-link></li>
-                <li><router-link to="/products?type=bedroom">Bedroom</router-link></li>
               </ul>
             </div>
 
             <div class="footer-links-col">
-              <h6 class="footer-col-title">Social Media</h6>
+              <h6 class="footer-col-title footer-col-title--hidden">Products</h6>
               <ul>
-                <li><a href="#" target="_blank">Instagram</a></li>
-                <li><a href="#" target="_blank">Facebook</a></li>
-                <li><a href="#" target="_blank">LinkedIn</a></li>
-                <li><a href="#" target="_blank">Pinterest</a></li>
+                <li><router-link to="/products?type=bathroom">Bathroom</router-link></li>
+                <li><router-link to="/products?type=bedroom">Bedroom</router-link></li>
+                <li><router-link to="/products">All Products</router-link></li>
+              </ul>
+            </div>
+
+            <div class="footer-links-col">
+              <h6 class="footer-col-title">Navigate</h6>
+              <ul>
+                <li><router-link to="/">Home</router-link></li>
+                <li><router-link to="/products">Products</router-link></li>
+                <li><router-link to="/showcase">Showcase</router-link></li>
+                <li><router-link to="/customize">Customize</router-link></li>
+                <li><router-link to="/profile">My Profile</router-link></li>
               </ul>
             </div>
           </div>
@@ -62,13 +70,14 @@ const footerLinks = [
   border-top: 1px solid var(--border);
 }
 .footer-top {
-  padding: 4rem 0 3rem;
+  padding: 2rem 0 1.5rem;
   border-bottom: 1px solid var(--border);
 }
 .footer-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 3rem;
+  gap: 2rem;
+  align-items: start;
 }
 .footer-brand {
   font-size: 1.6rem;
@@ -89,7 +98,10 @@ const footerLinks = [
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #c4a882;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
+}
+.footer-col-title--hidden {
+  visibility: hidden;
 }
 .footer-links-col ul {
   list-style: none;
@@ -97,7 +109,7 @@ const footerLinks = [
   margin: 0;
 }
 .footer-links-col ul li {
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.45rem;
 }
 .footer-links-col ul li a {
   color: rgba(255, 255, 255, 0.55);
