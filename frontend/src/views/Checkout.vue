@@ -2,6 +2,7 @@
 import { RouterLink } from "vue-router";
 import CheckoutSteps from "@/components/CheckoutSteps.vue";
 import useCheckout from "@/hooks/useCheckout.js";
+import { ArrowLeft } from "@lucide/vue";
 
 const {
   step,
@@ -56,7 +57,7 @@ const {
                 v-model="form.city"
                 type="text"
                 class="field-input"
-                placeholder="Melbourne"
+                placeholder="Kuching"
               />
             </div>
             <div class="field-group field-group-sm">
@@ -65,7 +66,7 @@ const {
                 v-model="form.state"
                 type="text"
                 class="field-input"
-                placeholder="VIC"
+                placeholder="Sarawak"
               />
             </div>
             <div class="field-group field-group-sm">
@@ -74,7 +75,7 @@ const {
                 v-model="form.zip"
                 type="text"
                 class="field-input"
-                placeholder="3000"
+                placeholder="93450"
               />
             </div>
           </div>
@@ -83,7 +84,7 @@ const {
             Continue to Payment
           </button>
 
-          <RouterLink to="/cart" class="back-link">← Back to Cart</RouterLink>
+          <RouterLink to="/cart" class="back-link"><ArrowLeft size="13"/> Back to Cart</RouterLink>
         </div>
 
         <!-- Step 2: Payment -->
@@ -128,7 +129,7 @@ const {
           </button>
 
           <button class="back-link-btn" @click="step = 1">
-            ← Back to Shipping
+            <ArrowLeft size="15"/> Back to Shipping
           </button>
         </div>
       </div>
@@ -451,7 +452,7 @@ const {
   margin-bottom: 0.4rem;
 }
 .free-ship {
-  color: var(--color-success);
+  color: var(--color-free);
 }
 .summary-grand-total {
   font-size: var(--fs-lg);

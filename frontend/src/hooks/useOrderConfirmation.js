@@ -7,7 +7,7 @@ export default function useOrderConfirmation() {
   const orderId = ref(route.query.orderId || "");
   const total = ref(parseFloat(route.query.total || 0));
 
-  const formatPrice = (val) => "$" + parseFloat(val || 0).toFixed(2);
+  const formatPrice = (val) => "RM " + parseFloat(val || 0).toFixed(2);
 
   const now = new Date();
   const orderDate = now.toLocaleDateString("en-AU", {

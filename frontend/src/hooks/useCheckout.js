@@ -37,7 +37,7 @@ export default function useCheckout() {
   const selectedIds = computed(() => cartStore.selectedIds);
 
   // ── Helpers ──────────────────────────────────────────────────────────────────
-  const formatPrice = (val) => "$" + parseFloat(val || 0).toFixed(2);
+  const formatPrice = (val) => "RM " + parseFloat(val || 0).toFixed(2);
 
   function getItemName(item) {
     if (item.is_custom) {
@@ -79,6 +79,7 @@ export default function useCheckout() {
           invalid: { color: "#c0392b" },
         },
         hidePostalCode: true,
+        disableLink: true,
       });
       cardElement.mount("#stripe-card-element");
       stripeReady.value = true;
