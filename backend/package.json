@@ -8,6 +8,7 @@
     "start": "node migrate.js up && node src/server.js",
     "dev": "node --watch src/server.js",
     "seed": "node src/db/seed.js",
+    "download-images": "node src/db/download-product-images.js",
     "migrate": "node migrate.js up",
     "migrate:create": "node migrate.js create",
     "migrate:down": "node migrate.js down"

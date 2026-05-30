@@ -6,6 +6,28 @@ import bcrypt from "bcrypt";
 const PASSWORD = "password";
 const HASHED_PASSWORD = bcrypt.hashSync(PASSWORD, 10);
 
+// maps each tag to its local image folder and filename prefix
+const TAG_IMAGE_CONFIG = {
+  "Sofa":            { folder: "sofas",            prefix: "sofa" },
+  "Coffee Table":    { folder: "coffee-table",     prefix: "coffee-table" },
+  "Armchair":        { folder: "armchair",         prefix: "armchair" },
+  "Bookshelf":       { folder: "bookshelf",        prefix: "bookshelf" },
+  "Bed Frame":       { folder: "bed-frame",        prefix: "bed-frame" },
+  "Wardrobe":        { folder: "wardrobe",         prefix: "wardrobe" },
+  "Nightstand":      { folder: "nightstand",       prefix: "nightstand" },
+  "Kitchen Counter": { folder: "kitchen-counter",  prefix: "kitchen-counter" },
+  "Bar Stool":       { folder: "bar-stool",        prefix: "bar-stool" },
+  "Dining Table":    { folder: "dining-table",     prefix: "dining-table" },
+  "Kitchen Cabinet": { folder: "kitchen-cabinet",  prefix: "kitchen-cabinet" },
+  "Sink":            { folder: "sink",             prefix: "sink" },
+  "Bathroom Shelf":  { folder: "bathroom-shelf",   prefix: "bathroom-shelf" },
+  "Vanity Cabinet":  { folder: "vanity-cabinet",   prefix: "vanity-cabinet" },
+  "Desk":            { folder: "desk",             prefix: "desk" },
+  "Office Chair":    { folder: "office-chair",     prefix: "office-chair" },
+  "Study Shelf":     { folder: "study-shelf",      prefix: "study-shelf" },
+  "Drawer Cabinet":  { folder: "drawer-cabinet",   prefix: "drawer-cabinet" },
+};
+
 // define categories and tags for each categories
 const CATEGORIES = [
   {
@@ -155,14 +177,15 @@ const seedDb = async () => {
 
     console.log("Users seeded");
 
-    // seed products
+    // seed products and their images (2 per product, local paths)
     const productIds = [];
 
     for (const cat of CATEGORIES) {
       for (const tag of cat.tags) {
         const tagId = tagMap[`${cat.name}-${tag}`];
+        const imgCfg = TAG_IMAGE_CONFIG[tag];
 
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 5; i++) {
           const name = productName(tag);
 
           const res = await db.query(
@@ -184,31 +207,23 @@ const seedDb = async () => {
             ]
           );
 
-          productIds.push(res.rows[0].id);
+          const productId = res.rows[0].id;
+          productIds.push(productId);
+
+          const n = i + 1;
+          await db.query(
+            `INSERT INTO product_images (product_id, image_url, display_order) VALUES ($1,$2,$3)`,
+            [productId, `/product/${imgCfg.folder}/${imgCfg.prefix}${n}-1.jpg`, 1]
+          );
+          await db.query(
+            `INSERT INTO product_images (product_id, image_url, display_order) VALUES ($1,$2,$3)`,
+            [productId, `/product/${imgCfg.folder}/${imgCfg.prefix}${n}-2.jpg`, 2]
+          );
         }
       }
     }
 
-    console.log("Products seeded");
-
-    // seed product images
-    for (const productId of productIds) {
-      const imageCount = faker.number.int({ min: 2, max: 4 });
-
-      for (let i = 0; i < imageCount; i++) {
-        await db.query(
-          `INSERT INTO product_images (product_id, image_url, display_order)
-           VALUES ($1,$2,$3)`,
-          [
-            productId,
-            `https://picsum.photos/seed/${productId}-${i}/800/600`,
-            i + 1,
-          ]
-        );
-      }
-    }
-
-    console.log("Product images seeded");
+    console.log("Products and product images seeded");
 
     // seed feedbacks
     const feedbackComments = [
@@ -255,7 +270,7 @@ const seedDb = async () => {
           furniture_type: "Kitchen Counter",
           description:
             "A minimalist kitchen counter featuring Calacatta marble surface and handleless sage-green cabinets. Round-edge detailing softens the overall silhouette while ceramic tile cladding keeps the look timeless and easy to maintain.",
-          preview_image_url: "https://picsum.photos/seed/comfy-kitchen-1/800/600",
+          preview_image_url: "/product/kitchen-counter/kitchen-counter1-1.jpg",
           configuration: {
             shape: { name: "Round Edges", price: 1000 },
             color: { name: "Sage White", price: 50 },
@@ -277,7 +292,7 @@ const seedDb = async () => {
           furniture_type: "Sofa",
           description:
             "Inspired by mid-century modern design, this tufted sofa is wrapped in deep forest-green velvet over a solid oak L-shaped frame. Paired with brushed brass accent legs, it makes a warm and sophisticated living room statement.",
-          preview_image_url: "https://picsum.photos/seed/comfy-sofa-1/800/600",
+          preview_image_url: "/product/sofas/sofa1-1.jpg",
           configuration: {
             shape: { name: "L-Shape Frame", price: 1500 },
             color: { name: "Forest Green", price: 100 },
