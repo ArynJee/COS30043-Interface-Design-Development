@@ -79,6 +79,27 @@ const initDb = async () => {
             comment TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
+
+        CREATE TABLE IF NOT EXISTS design_contributions (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER REFERENCES users(id),
+            area VARCHAR(100),
+            furniture_type VARCHAR(100),
+            description TEXT,
+            preview_image_url TEXT,
+            configuration JSONB,
+            total_cost NUMERIC(10,2),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+
+        CREATE TABLE IF NOT EXISTS contribution_reviews (
+            id SERIAL PRIMARY KEY,
+            contribution_id INTEGER REFERENCES design_contributions(id) ON DELETE CASCADE,
+            user_id INTEGER REFERENCES users(id),
+            rating INTEGER CHECK (rating >= 1 AND rating <= 5),
+            comment TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
     `);
 
     // add stock_count if it doesn't exist yet (safe for existing DBs)

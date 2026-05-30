@@ -8,6 +8,7 @@ import Login from '@/views/Login.vue'
 import Registration from '@/views/Registration.vue'
 import Products from '@/views/Products.vue'
 import Showcase from '@/views/Showcase.vue'
+import ContributionDetail from '@/views/ContributionDetail.vue'
 import Customize from '@/views/Customize.vue'
 import Cart from '@/views/Cart.vue'
 import Checkout from '@/views/Checkout.vue'
@@ -22,6 +23,7 @@ const routes = [
       { path: '', component: Home },
       { path: 'products', component: Products },
       { path: 'showcase', component: Showcase },
+      { path: 'showcase/:id', component: ContributionDetail },
       { path: 'customize', component: Customize },
       { path: 'cart', component: Cart },
       { path: 'checkout', component: Checkout },

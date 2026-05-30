@@ -1,5 +1,5 @@
 <script setup>
-import { ChevronDown, ChevronUp, Package, User, LogOut, Sparkles } from "@lucide/vue";
+import { ChevronDown, ChevronUp, Package, User, LogOut, Sparkles, ArrowRight } from "@lucide/vue";
 import useUserProfile from "@/hooks/useUserProfile.js";
 
 const {
@@ -100,10 +100,10 @@ const {
         <div v-if="activeTab === 'orders'">
           <div class="tab-header">
             <h2 class="tab-title">Order History</h2>
-            <span class="tab-count"
-              >{{ orders.length }} order{{
+            <span class="tab-count ms-3"
+              >( {{ orders.length }} order{{
                 orders.length !== 1 ? "s" : ""
-              }}</span
+              }} )</span
             >
           </div>
 
@@ -111,7 +111,7 @@ const {
 
           <div v-else-if="orders.length === 0" class="empty-state">
             <p>You haven't placed any orders yet.</p>
-            <a href="/products" class="empty-cta">Browse Products →</a>
+            <a href="/products" class="empty-cta">Browse Products <ArrowRight size="15"/></a>
           </div>
 
           <div v-else class="orders-list">
@@ -317,8 +317,8 @@ const {
         <div v-if="activeTab === 'contributions'">
           <div class="tab-header">
             <h2 class="tab-title">My Contributions</h2>
-            <span class="tab-count">
-              {{ contributions.length }} design{{ contributions.length !== 1 ? 's' : '' }}
+            <span class="tab-count ms-3">
+              ( {{ contributions.length }} design{{ contributions.length !== 1 ? 's' : '' }} )
             </span>
           </div>
 
@@ -326,7 +326,7 @@ const {
 
           <div v-else-if="contributions.length === 0" class="empty-state">
             <p>You haven't submitted any design contributions yet.</p>
-            <a href="/customize" class="empty-cta">Start Designing →</a>
+            <a href="/customize" class="empty-cta">Start Designing <ArrowRight size="15"/></a>
           </div>
 
           <div v-else class="cp-grid">
@@ -542,7 +542,7 @@ const {
 .tab-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: start;
   margin-bottom: 1.25rem;
 }
 .tab-title {

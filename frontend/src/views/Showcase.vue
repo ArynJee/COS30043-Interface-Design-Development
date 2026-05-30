@@ -189,9 +189,12 @@ const {
             </div>
 
             <!-- CTA -->
-            <button class="card-cta d-inline-flex align-items-center gap-2">
+            <RouterLink
+              :to="`/showcase/${c.id}`"
+              class="card-cta d-inline-flex align-items-center gap-2"
+            >
               View Detail &thinsp;<ArrowRight :size="13" />
-            </button>
+            </RouterLink>
           </div>
         </article>
       </TransitionGroup>

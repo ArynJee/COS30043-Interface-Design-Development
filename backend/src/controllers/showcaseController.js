@@ -68,6 +68,73 @@ export const getMyContributions = async (req, res) => {
   }
 };
 
+// GET /api/showcase/:id
+export const getContribution = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      `SELECT
+        dc.id, dc.area, dc.furniture_type, dc.description,
+        dc.preview_image_url, dc.configuration, dc.total_cost, dc.created_at,
+        u.first_name, u.last_name, u.email,
+        ROUND(AVG(cr.rating)::numeric, 1) AS avg_rating,
+        COUNT(cr.id)::int                  AS review_count
+       FROM design_contributions dc
+       LEFT JOIN users u ON u.id = dc.user_id
+       LEFT JOIN contribution_reviews cr ON cr.contribution_id = dc.id
+       WHERE dc.id = $1
+       GROUP BY dc.id, u.first_name, u.last_name, u.email`,
+      [id]
+    );
+    if (!result.rows.length) return res.status(404).json({ message: "Contribution not found" });
+    res.json({ contribution: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch contribution" });
+  }
+};
+
+// GET /api/showcase/:id/reviews
+export const getContributionReviews = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      `SELECT cr.id, cr.rating, cr.comment, cr.created_at,
+              u.first_name, u.last_name
+       FROM contribution_reviews cr
+       LEFT JOIN users u ON u.id = cr.user_id
+       WHERE cr.contribution_id = $1
+       ORDER BY cr.created_at DESC`,
+      [id]
+    );
+    res.json({ reviews: result.rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch reviews" });
+  }
+};
+
+// POST /api/showcase/:id/reviews
+export const addContributionReview = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { rating, comment } = req.body;
+    if (!rating || rating < 1 || rating > 5) {
+      return res.status(400).json({ message: "Rating must be between 1 and 5" });
+    }
+    const result = await db.query(
+      `INSERT INTO contribution_reviews (contribution_id, user_id, rating, comment)
+       VALUES ($1, $2, $3, $4)
+       RETURNING id, rating, comment, created_at`,
+      [id, req.userId, parseInt(rating), comment || ""]
+    );
+    res.status(201).json({ review: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to add review" });
+  }
+};
+
 // GET /api/showcase?area=Kitchen
 export const getContributions = async (req, res) => {
   try {

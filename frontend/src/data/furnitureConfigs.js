@@ -528,3 +528,9 @@ export const formatPrice = (price) =>
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })
+
+// Maps furniture type display name → { id, skeletonType }
+// Used by ContributionDetail to drive the 3D viewer
+export const FURNITURE_TYPE_MAP = Object.fromEntries(
+  FURNITURE_TYPES.map(f => [f.name, { id: f.id, skeletonType: f.skeletonType }])
+)

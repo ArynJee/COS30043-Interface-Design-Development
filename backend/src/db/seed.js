@@ -88,6 +88,7 @@ const seedDb = async () => {
 
     await db.query(`
       TRUNCATE TABLE
+        contribution_reviews,
         design_contributions,
         feedback,
         product_images,
@@ -320,6 +321,36 @@ const seedDb = async () => {
     }
 
     console.log("Showcase contributions seeded");
+
+    // seed contribution reviews (fetch the seeded contribution ids)
+    const contribRes = await db.query(`SELECT id FROM design_contributions`);
+    const contribIds = contribRes.rows.map((r) => r.id);
+
+    const contribReviewComments = [
+      "Love this design concept — would definitely order it!",
+      "Very creative configuration, the colour palette is stunning.",
+      "This inspired me to customize my own furniture. Great work!",
+      "Elegant and practical. I added this to my wishlist.",
+      "Beautiful design, the material choices complement each other well.",
+    ];
+
+    for (const contribId of contribIds) {
+      const reviewCount = faker.number.int({ min: 2, max: 4 });
+      for (let i = 0; i < reviewCount; i++) {
+        await db.query(
+          `INSERT INTO contribution_reviews (contribution_id, user_id, rating, comment)
+           VALUES ($1, $2, $3, $4)`,
+          [
+            contribId,
+            faker.helpers.arrayElement(userIds),
+            faker.number.int({ min: 4, max: 5 }),
+            faker.helpers.arrayElement(contribReviewComments),
+          ]
+        );
+      }
+    }
+
+    console.log("Contribution reviews seeded");
 
     // commit transaction
     await db.query("COMMIT");
