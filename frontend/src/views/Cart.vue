@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink } from "vue-router";
-import { X, Truck } from "@lucide/vue";
+import { X, Truck, ArrowRight } from "@lucide/vue";
 import CheckoutSteps from "@/components/CheckoutSteps.vue";
 import CtaBanner from "@/components/CtaBanner.vue";
 import useCart from "@/hooks/useCart.js";
@@ -60,9 +60,6 @@ const {
         <!-- Empty -->
         <div v-else-if="items.length === 0" class="empty-cart">
           <p>Your cart is empty.</p>
-          <RouterLink to="/products" class="continue-link"
-            >Continue shopping →</RouterLink
-          >
         </div>
 
         <!-- Table -->

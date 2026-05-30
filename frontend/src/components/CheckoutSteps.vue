@@ -80,6 +80,10 @@ function lineClass(fromStep) {
   flex-shrink: 0;
 }
 
+[data-theme="dark"] .step-dot {
+  border-color: var(--color-muted);
+}
+
 /* Active: solid filled square */
 .step-dot.filled {
   border-color: var(--color-primary);
@@ -121,19 +125,10 @@ function lineClass(fromStep) {
   position: relative;
   overflow: hidden;
 }
-.step-line::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 0;
-  background: var(--accent);
-  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.step-line.done-line::after {
-  width: 100%;
-}
+
+[data-theme="dark"] .step-line {
+  background: var(--color-muted);
+} 
 
 /* ── Responsive ── */
 @media (max-width: 991px) {
