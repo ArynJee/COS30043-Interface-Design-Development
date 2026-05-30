@@ -40,7 +40,7 @@ const {
       />
       <div class="hero-inner">
         <p class="hero-breadcrumb">
-          <a href="/">Home</a>&ensp;›&ensp;Profile
+          <a href="/">Home</a>&ensp;<ChevronRight size="10"/>&ensp;Profile
         </p>
         <h1 class="hero-title">My Profile</h1>
         <p class="hero-sub" v-if="user">

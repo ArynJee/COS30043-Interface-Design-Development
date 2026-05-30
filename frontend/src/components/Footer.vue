@@ -22,17 +22,6 @@ const footerLinks = [
             </div>
 
             <div class="footer-links-col">
-              <h6 class="footer-col-title">About</h6>
-              <ul>
-                <li><router-link to="/aboutus">Our Story</router-link></li>
-                <li><router-link to="/locations">Store Branch</router-link></li>
-                <li><router-link to="/aboutus#sustainability">Sustainability</router-link></li>
-                <li><router-link to="/careers"></router-link></li>
-                <li><router-link to="/contact">Contact</router-link></li>
-              </ul>
-            </div>
-
-            <div class="footer-links-col">
               <h6 class="footer-col-title">Products</h6>
               <ul>
                 <li><router-link to="/products?type=living-room">Living Room</router-link></li>

@@ -1,5 +1,6 @@
 <script setup>
 import { useRoute, RouterLink } from 'vue-router'
+import { ChevronRight } from '@lucide/vue'
 import ItemDetailPanel from '@/components/ItemDetailPanel.vue'
 import useContributionDetail from '@/hooks/useContributionDetail.js'
 
@@ -18,9 +19,9 @@ const {
     <!-- breadcrumb -->
     <div class="cd-breadcrumb">
       <RouterLink to="/">Home</RouterLink>
-      &ensp;›&ensp;
+      &ensp;<ChevronRight size="10"/>&ensp;
       <RouterLink to="/showcase">Showcase</RouterLink>
-      <span v-if="contribution">&ensp;›&ensp;{{ contribution.furniture_type }}</span>
+      <span v-if="contribution">&ensp;<ChevronRight size="10"/>&ensp;{{ contribution.furniture_type }}</span>
     </div>
 
     <!-- loading -->

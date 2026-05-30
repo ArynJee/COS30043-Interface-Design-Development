@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink } from "vue-router";
-import { ArrowRight, Sparkle } from "@lucide/vue";
+import { ArrowRight, Sparkle, ChevronRight} from "@lucide/vue";
 import CtaBanner from "@/components/CtaBanner.vue";
 import { useShowcase, AREAS } from "@/hooks/useShowcase.js";
 
@@ -30,7 +30,7 @@ const {
 
       <div class="hero-inner position-relative z-1">
         <p class="hero-crumb mb-4">
-          <RouterLink to="/">Home</RouterLink>&ensp;›&ensp;Showcase
+          <RouterLink to="/">Home</RouterLink>&ensp;<ChevronRight size="10"/>&ensp;Showcase
         </p>
 
         <div class="hero-eyebrow d-flex align-items-center gap-2 mb-3">

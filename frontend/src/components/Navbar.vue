@@ -22,7 +22,6 @@ const navLinks = [
   { name: 'Products', path: '/products', icon: ShoppingBag },
   { name: 'Showcase', path: '/showcase', icon: LayoutGrid },
   { name: 'Customize', path: '/customize', icon: Sliders },
-  { name: 'About Us', path: '/about', icon: Info },
 ]
 
 const isLoggedIn = computed(() => !!localStorage.getItem('token'))

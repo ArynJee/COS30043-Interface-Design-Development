@@ -111,7 +111,7 @@ onBeforeUnmount(() => {
       />
       <div class="hero-content position-relative z-1">
         <p class="hero-breadcrumb mb-3">
-          <RouterLink to="/">Home</RouterLink>&ensp;&rsaquo;&ensp;Products
+          <RouterLink to="/">Home</RouterLink>&ensp;<ChevronRight size="10"/>&ensp;Products
         </p>
         <h1 class="hero-title fw-bold mb-3">Our Collection</h1>
         <p class="hero-sub m-0">
