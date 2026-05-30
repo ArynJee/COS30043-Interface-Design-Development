@@ -33,43 +33,43 @@ function handleGoToShowcaseAll() { goToShowcaseAll(); emit('close') }
 </script>
 
 <template>
-  <div class="sd-wrap">
+  <div class="sd-wrap position-absolute right-0 overflow-hidden">
     <!-- loading -->
-    <div v-if="loading" class="sd-state">
-      <span class="sd-spinner" />
+    <div v-if="loading" class="sd-state d-flex align-items-center justify-content-center px-3 py-2 gap-3">
+      <span class="sd-spinner rounded-pill" />
       <span>Searching…</span>
     </div>
 
     <template v-else-if="hasSearched">
       <!-- products -->
-      <div v-if="products.length > 0" class="sd-section">
-        <p class="sd-section-label">Products</p>
+      <div v-if="products.length > 0" class="sd-section px-2 py-3">
+        <p class="sd-section-label text-uppercase px-3 mb-2">Products</p>
         <button
           v-for="p in products"
           :key="p.id"
-          class="sd-item"
+          class="sd-item d-flex align-items-center gap-3 w-100 px-3 py-2 border-0 text-left"
           @mousedown.prevent
           @click="handleGoToProducts"
         >
-          <img :src="p.images?.[0]" :alt="p.name" class="sd-thumb" />
-          <div class="sd-item-body">
-            <span class="sd-item-name">{{ p.name }}</span>
+          <img :src="p.images?.[0]" :alt="p.name" class="sd-thumb object-fit-cover" />
+          <div class="sd-item-body d-flex flex-column gap-1">
+            <span class="sd-item-name overflow-hidden">{{ p.name }}</span>
             <span class="sd-item-meta">{{ formatPrice(p.base_price) }}</span>
           </div>
         </button>
-        <button class="sd-see-all" @mousedown.prevent @click="handleGoToProducts">
+        <button class="sd-see-all d-flex align-items-center w-100 gap-2 border-0 text-left" @mousedown.prevent @click="handleGoToProducts">
           See all products for "{{ query }}"
           <ArrowRight :size="12" />
         </button>
       </div>
 
       <!-- showcase -->
-      <div v-if="showcaseResults.length > 0" class="sd-section">
-        <p class="sd-section-label">Showcase</p>
+      <div v-if="showcaseResults.length > 0" class="sd-section px-2 py-3">
+        <p class="sd-section-label text-uppercase px-3 mb-2">Showcase</p>
         <button
           v-for="c in showcaseResults"
           :key="c.id"
-          class="sd-item"
+          class="sd-item d-flex align-items-center gap-3 w-100 px-3 py-2 border-0 text-left"
           @mousedown.prevent
           @click="handleGoToShowcase(c.id)"
         >
@@ -80,12 +80,12 @@ function handleGoToShowcaseAll() { goToShowcaseAll(); emit('close') }
             class="sd-thumb"
           />
           <div v-else class="sd-thumb sd-thumb-placeholder" />
-          <div class="sd-item-body">
-            <span class="sd-item-name">{{ c.first_name }} {{ c.last_name }}</span>
+          <div class="sd-item-body d-flex flex-column gap-1">
+            <span class="sd-item-name overflow-hidden">{{ c.first_name }} {{ c.last_name }}</span>
             <span class="sd-item-meta">{{ c.area }} · {{ c.furniture_type }}</span>
           </div>
         </button>
-        <button class="sd-see-all" @mousedown.prevent @click="handleGoToShowcaseAll">
+        <button class="sd-see-all d-flex align-items-center w-100 gap-2 border-0 text-lef" @mousedown.prevent @click="handleGoToShowcaseAll">
           Browse all showcase
           <ArrowRight :size="12" />
         </button>
@@ -101,25 +101,16 @@ function handleGoToShowcaseAll() { goToShowcaseAll(); emit('close') }
 
 <style scoped>
 .sd-wrap {
-  position: absolute;
   top: calc(100% + 6px);
-  right: 0;
   width: 340px;
   background: #fff;
   border: 1px solid #e4ddd5;
-  border-radius: 10px;
   box-shadow: 0 8px 28px rgba(44, 34, 24, 0.12);
   z-index: 1200;
-  overflow: hidden;
   font-family: 'Times New Roman', Times, serif;
 }
 
 .sd-state {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 20px 16px;
   font-size: var(--fs-sm);
   color: #9b8b79;
 }
@@ -129,16 +120,11 @@ function handleGoToShowcaseAll() { goToShowcaseAll(); emit('close') }
   height: 14px;
   border: 2px solid #e4ddd5;
   border-top-color: #8b6f47;
-  border-radius: 50%;
   animation: spin 0.7s linear infinite;
   flex-shrink: 0;
 }
 @keyframes spin {
   to { transform: rotate(360deg); }
-}
-
-.sd-section {
-  padding: 10px 0 4px;
 }
 .sd-section + .sd-section {
   border-top: 1px solid #f0ebe4;
@@ -147,22 +133,12 @@ function handleGoToShowcaseAll() { goToShowcaseAll(); emit('close') }
 .sd-section-label {
   font-size: var(--fs-xs);
   letter-spacing: 0.16em;
-  text-transform: uppercase;
   color: #c4a882;
-  padding: 0 14px;
-  margin: 0 0 6px;
 }
 
 .sd-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  padding: 7px 14px;
   background: none;
-  border: none;
   cursor: pointer;
-  text-align: left;
   transition: background 0.15s;
 }
 .sd-item:hover {
@@ -173,7 +149,6 @@ function handleGoToShowcaseAll() { goToShowcaseAll(); emit('close') }
   width: 42px;
   height: 42px;
   object-fit: cover;
-  border-radius: 6px;
   flex-shrink: 0;
   background: #f0ebe4;
 }
@@ -182,16 +157,12 @@ function handleGoToShowcaseAll() { goToShowcaseAll(); emit('close') }
 }
 
 .sd-item-body {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
   min-width: 0;
 }
 .sd-item-name {
   font-size: var(--fs-sm);
   color: #2c2218;
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
 }
 .sd-item-meta {
@@ -200,18 +171,11 @@ function handleGoToShowcaseAll() { goToShowcaseAll(); emit('close') }
 }
 
 .sd-see-all {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  width: 100%;
-  padding: 8px 14px 10px;
   background: none;
-  border: none;
   cursor: pointer;
   font-size: var(--fs-xs);
   color: #8b6f47;
   transition: color 0.15s;
-  text-align: left;
 }
 .sd-see-all:hover {
   color: #5c4830;
