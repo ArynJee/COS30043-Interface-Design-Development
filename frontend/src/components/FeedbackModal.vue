@@ -5,6 +5,10 @@ defineProps({
   show: Boolean,
   userFeedback: Object,
   feedbackSubmitted: Boolean,
+  title: { type: String, default: 'Write a Review' },
+  submitLabel: { type: String, default: 'Submit Feedback' },
+  successMessage: { type: String, default: 'Thank you for your feedback!' },
+  showNameField: { type: Boolean, default: true },
 })
 
 const emit = defineEmits([
@@ -23,7 +27,7 @@ const emit = defineEmits([
     >
       <div class="modal-box">
         <div class="modal-box-header">
-          <h5>Write a Review</h5>
+          <h5>{{ title }}</h5>
 
           <button
             class="modal-close"
@@ -42,7 +46,7 @@ const emit = defineEmits([
             fill="currentColor"
             class="fb-star mb-2"
           />
-          <p>Thank you for your feedback!</p>
+          <p>{{ successMessage }}</p>
         </div>
 
         <div
@@ -50,7 +54,7 @@ const emit = defineEmits([
           class="modal-box-body"
         >
           <!-- name -->
-          <div class="mb-3">
+          <div v-if="showNameField" class="mb-3">
             <label class="modal-label">Name</label>
 
             <input
@@ -112,7 +116,7 @@ const emit = defineEmits([
             class="modal-submit"
             @click="$emit('submit')"
           >
-            Submit Feedback
+            {{ submitLabel }}
           </button>
         </div>
       </div>
@@ -121,6 +125,7 @@ const emit = defineEmits([
 </template>
 
 <style scoped>
+@import "@/styles/main.css";
 
 /* feedback modal */
 .modal-backdrop {
@@ -134,35 +139,39 @@ const emit = defineEmits([
   padding: 1rem;
 }
 .modal-box {
-  background: #faf7f2;
+  background: var(--bg-page);
   width: 100%;
   max-width: 480px;
   padding: 0;
   overflow: hidden;
+}
+
+[data-theme="dark"] .modal-box{
+  border: 1px solid var(--color-subtle);
 }
 .modal-box-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 1.75rem;
-  border-bottom: 1px solid #e0d5c5;
+  border-bottom: 1px solid var(--border);
 }
 .modal-box-header h5 {
   margin: 0;
   font-size: 1.1rem;
-  color: #2c2218;
+  color: var(--color-primary);
 }
 .modal-close {
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #7a6a58;
+  color: var(--color-secondary);
   cursor: pointer;
   line-height: 1;
   padding: 0;
 }
 .modal-close:hover {
-  color: #2c2218;
+  color: var(--color-primary);
 }
 
 .modal-box-body {
@@ -174,23 +183,23 @@ const emit = defineEmits([
   font-size: var(--fs-sm);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #7a6a58;
+  color: var(--color-secondary);
   margin-bottom: 0.5rem;
 }
 .modal-input {
   width: 100%;
-  border: 1px solid #e0d5c5;
-  background: #ffffff;
+  border: 1px solid var(--border-input);
+  background: var(--bg-surface);
   padding: 0.65rem 0.9rem;
-  font-family: 'Times New Roman', serif;
+  font-family: var(--font-serif);
   font-size: var(--fs-md);
-  color: #2c2218;
+  color: var(--color-primary);
   outline: none;
   transition: border-color 0.2s;
   border-radius: 0;
 }
 .modal-input:focus {
-  border-color: #c4a882;
+  border-color: var(--accent);
 }
 .modal-textarea {
   resize: vertical;
@@ -204,7 +213,7 @@ const emit = defineEmits([
   background: none;
   border: none;
   font-size: 1.4rem;
-  color: #e0d5c5;
+  color: var(--border);
   cursor: pointer;
   padding: 0;
   transition:
@@ -212,7 +221,7 @@ const emit = defineEmits([
     transform 0.15s;
 }
 .rating-star-btn.active {
-  color: #c4a882;
+  color: var(--accent);
 }
 .rating-star-btn:hover {
   transform: scale(1.2);
@@ -220,11 +229,11 @@ const emit = defineEmits([
 
 .modal-submit {
   width: 100%;
-  background: #1e1a14;
-  color: #ffffff;
+  background: var(--btn-bg);
+  color: var(--btn-color);
   border: none;
   padding: 0.85rem;
-  font-family: 'Times New Roman', serif;
+  font-family: var(--font-serif);
   font-size: var(--fs-base);
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -232,17 +241,17 @@ const emit = defineEmits([
   transition: background 0.25s;
 }
 .modal-submit:hover {
-  background: #8b6f47;
+  background: var(--btn-bg-hover);
 }
 
 .modal-success {
   padding: 3rem 1.75rem;
   text-align: center;
-  color: #c4a882;
+  color: var(--accent);
 }
 .modal-success p {
   font-size: var(--fs-lg);
-  color: #2c2218;
+  color: var(--color-primary);
   margin: 0;
 }
 </style>

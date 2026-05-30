@@ -24,14 +24,26 @@ const props = defineProps({
 const container = ref(null)
 const loading = ref(true)
 
-let scene, camera, renderer, controls, rafId, currentGroup
+let scene, camera, renderer, controls, rafId, currentGroup, floorMesh, themeObserver
+
+const SCENE_BG_LIGHT = 0xF5F0E8
+const SCENE_BG_DARK  = 0x4d4533
+const FLOOR_LIGHT    = 0xE8E0D5
+const FLOOR_DARK     = 0x2c2107
+
+function applyTheme() {
+  const isDark = document.documentElement.dataset.theme === 'dark'
+  const bg = isDark ? SCENE_BG_DARK : SCENE_BG_LIGHT
+  scene.background = new THREE.Color(bg)
+  scene.fog = new THREE.FogExp2(bg, 0.06)
+  if (floorMesh) floorMesh.material.color.setHex(isDark ? FLOOR_DARK : FLOOR_LIGHT)
+}
 
 // ─── scene bootstrap ────────────────────────────────────────────────────────
 function init() {
   const el = container.value
   scene = new THREE.Scene()
-  scene.background = new THREE.Color(0xF5F0E8)
-  scene.fog = new THREE.FogExp2(0xF5F0E8, 0.06)
+  applyTheme()
 
   camera = new THREE.PerspectiveCamera(45, el.clientWidth / el.clientHeight, 0.1, 100)
   camera.position.set(2.5, 2.2, 3.2)
@@ -63,13 +75,14 @@ function init() {
   scene.add(fill)
 
   // floor
-  const floorMesh = new THREE.Mesh(
+  floorMesh = new THREE.Mesh(
     new THREE.PlaneGeometry(10, 10),
     new THREE.MeshStandardMaterial({ color: 0xE8E0D5, roughness: 0.95 })
   )
   floorMesh.rotation.x = -Math.PI / 2
   floorMesh.receiveShadow = true
   scene.add(floorMesh)
+  applyTheme()
 
   // orbit controls
   controls = new OrbitControls(camera, renderer.domElement)
@@ -893,11 +906,14 @@ onMounted(() => {
   init()
   rebuildModel()
   loading.value = false
+  themeObserver = new MutationObserver(applyTheme)
+  themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
 })
 
 onUnmounted(() => {
   cancelAnimationFrame(rafId)
   window.removeEventListener('resize', onResize)
+  themeObserver?.disconnect()
   renderer?.dispose()
   controls?.dispose()
 })
@@ -926,6 +942,7 @@ defineExpose({ captureScreenshot })
   overflow: hidden;
   background: #F5F0E8;
 }
+[data-theme="dark"] .fv-wrap { background: #1e1b14; }
 
 .fv-wrap canvas {
   display: block;
@@ -947,6 +964,7 @@ defineExpose({ captureScreenshot })
   color: #8B7355;
   font-size: var(--fs-md);
 }
+[data-theme="dark"] .fv-loading { background: #1e1b14; color: #9a8875; }
 
 .fv-spinner {
   width: 32px;

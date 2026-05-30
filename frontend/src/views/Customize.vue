@@ -443,9 +443,7 @@ const priceBreakdown = computed(() => {
 
 .cu-area-tab {
   font-size: var(--fs-sm);
-  /* padding: 4px 12px; */
-  /* border-radius: 20px; */
-  border: 1px solid var(--cu-border);
+  border: 1px solid var(--color-secondary);
   background: transparent;
   color: var(--cu-text-2);
   cursor: pointer;
@@ -461,7 +459,7 @@ const priceBreakdown = computed(() => {
 }
 
 .cu-type-card {
-  border: 1.5px solid var(--cu-border);
+  border: 1.5px solid var(--color-muted);
   background: transparent;
   cursor: pointer;
   transition: all 0.18s;
@@ -488,7 +486,7 @@ const priceBreakdown = computed(() => {
 
 .cu-swatch {
   font-family: 'Times New Roman', serif;
-  border: 1.5px solid var(--cu-border);
+  border: 1.5px solid var(--color-muted);
   background: transparent;
   cursor: pointer;
   transition: all 0.15s;
@@ -510,7 +508,7 @@ const priceBreakdown = computed(() => {
 
 .cu-opt-card {
   font-family: 'Times New Roman', serif;
-  border: 1.5px solid var(--cu-border);
+  border: 1.5px solid var(--color-muted);
   background: transparent;
   cursor: pointer;
   transition: all 0.15s;
@@ -520,7 +518,7 @@ const priceBreakdown = computed(() => {
 .cu-opt-card.active { border-color: var(--cu-accent-dk); background: var(--cu-hover); }
 
 .cu-opt-name  { font-size: var(--fs-base); color: var(--cu-text); }
-.cu-opt-price { font-size: var(--fs-xs); color: var(--cu-muted); margin-left: auto; margin-right: 0.4rem; }
+.cu-opt-price { font-size: var(--fs-sm); color: var(--cu-muted); margin-left: auto; margin-right: 0.4rem; }
 .cu-opt-check { color: var(--cu-accent-dk); flex-shrink: 0; }
 
 /* empty hint */
@@ -537,12 +535,16 @@ const priceBreakdown = computed(() => {
 .cu-viewer-wrap {
   background: #f5f0e8;
   border: 1px solid var(--cu-border);
-  height: 609px;
+  height: 630px;
 }
 
 .cu-viewer-placeholder {
   inset: 0;
   background: #f5f0e8;
+}
+
+[data-theme="dark"] .cu-viewer-placeholder {
+  background: var(--border-light);
 }
 
 .cu-ph-icon  { color: #d4c4b0; margin-bottom: 0.5rem; }
@@ -568,7 +570,7 @@ const priceBreakdown = computed(() => {
 }
 
 .cu-price--add    { color: var(--cu-muted); }
-.cu-price--deduct { color: #7a9e7e; }
+.cu-price--deduct { color: var(--cu-muted); }
 
 .cu-price-divider { height: 1px; background: var(--cu-border); margin: 0.85rem 0; }
 
@@ -627,9 +629,7 @@ const priceBreakdown = computed(() => {
   justify-content: center;
   gap: 0.45rem;
   padding: 0.75rem 1rem;
-  border-radius: 10px;
   font-size: var(--fs-base);
-  font-weight: 600;
   cursor: pointer;
   border: none;
   transition: all 0.18s;
@@ -644,10 +644,24 @@ const priceBreakdown = computed(() => {
 
 .cu-btn--cart:hover:not(:disabled) { background: #3d3024; }
 
+[data-theme="dark"] .cu-btn--cart{
+  background: var(--btn-bg);
+  color: var(--btn-color);
+}
+
+[data-theme="dark"] .cu-btn--cart:hover{
+  background: var(--btn-bg-hover);
+}
+
 .cu-btn--contrib {
   background: transparent;
   color: var(--cu-text);
   border: 1.5px solid var(--cu-border);
+}
+
+[data-theme="dark"] .cu-btn--contrib{
+  border: 1px solid var(--color-subtle);
+  background: var(--bg-alt);
 }
 
 .cu-btn--contrib:hover { background: var(--cu-hover); border-color: var(--cu-accent); }

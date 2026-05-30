@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink } from "vue-router";
-import { ArrowRight, Sparkle, ChevronRight} from "@lucide/vue";
+import { ArrowRight, Sparkle, ChevronRight, Astroid} from "@lucide/vue";
 import CtaBanner from "@/components/CtaBanner.vue";
 import { useShowcase, AREAS } from "@/hooks/useShowcase.js";
 
@@ -20,7 +20,6 @@ const {
 
 <template>
   <div class="sc-page">
-    <!-- ── HERO ── -->
     <section class="sc-hero position-relative overflow-hidden">
       <img
         src="/showcase/showcase-hero.jpg"
@@ -66,7 +65,6 @@ const {
       <div class="hero-ornament-sm position-absolute" aria-hidden="true">✦</div>
     </section>
 
-    <!-- ── DIVIDER STRIP ── -->
     <div
       class="divider-strip d-flex align-items-center justify-content-center gap-3 py-5 mt-4"
     >
@@ -93,9 +91,9 @@ const {
       </button>
     </div>
 
-    <!-- ── MAIN CONTENT ── -->
+    <!-- main content -->
     <div class="sc-container">
-      <!-- Loading skeletons -->
+      <!-- loading 3d model skeletons -->
       <div v-if="loading" class="skeleton-grid">
         <div v-for="i in 3" :key="i" class="skeleton-card">
           <div class="sk-img"></div>
@@ -107,9 +105,9 @@ const {
         </div>
       </div>
 
-      <!-- Empty state -->
+      <!-- empty state -->
       <div v-else-if="filtered.length === 0" class="sc-empty text-center">
-        <div class="empty-orn">✦</div>
+        <div class="empty-orn"><Astroid size="20"/></div>
         <h3 class="empty-title">No Designs Yet</h3>
         <p class="empty-sub">
           Be the first to contribute a {{ selectedArea }} design to the
@@ -123,7 +121,7 @@ const {
         </RouterLink>
       </div>
 
-      <!-- Showcase grid -->
+      <!-- showcase grid -->
       <TransitionGroup v-else name="card-fade" tag="div" class="sc-grid">
         <article
           v-for="(c, idx) in filtered"
@@ -131,7 +129,7 @@ const {
           class="sc-card"
           :class="{ 'is-featured': idx === 0 && filtered.length > 1 }"
         >
-          <!-- Image -->
+          <!-- image -->
           <div class="card-img-wrap overflow-hidden position-relative">
             <img
               :src="c.preview_image_url"
@@ -145,9 +143,8 @@ const {
             </span>
           </div>
 
-          <!-- Body -->
           <div class="card-body-sc">
-            <!-- Contributor row -->
+            <!-- contributor row -->
             <div class="contrib-row d-flex align-items-center gap-2 mb-3">
               <div
                 class="contrib-avatar d-flex align-items-center justify-content-center flex-shrink-0"
@@ -169,13 +166,13 @@ const {
               </div>
             </div>
 
-            <!-- Furniture type label -->
+            <!-- furniture type label -->
             <div class="card-type-label mb-1">{{ c.furniture_type }}</div>
 
-            <!-- Description -->
+            <!-- description -->
             <p class="card-desc mb-3">{{ c.description }}</p>
 
-            <!-- Config chips -->
+            <!-- config chips -->
             <div class="config-chips d-flex flex-wrap gap-1 mb-4">
               <span
                 v-for="entry in configEntries(c.configuration)"
@@ -191,7 +188,7 @@ const {
             <!-- CTA -->
             <RouterLink
               :to="`/showcase/${c.id}`"
-              class="card-cta d-inline-flex align-items-center gap-2"
+              class="card-cta d-inline-flex align-items-center gap-2 border-0"
             >
               View Detail &thinsp;<ArrowRight :size="13" />
             </RouterLink>
@@ -217,13 +214,11 @@ const {
 <style scoped>
 @import "@/styles/main.css";
 
-/* ── PAGE ── */
 .sc-page {
   background: var(--bg-page);
   min-height: 100vh;
 }
 
-/* ── HERO ── */
 .sc-hero {
   height: 400px;
   background: #f0ebe2;
@@ -265,7 +260,6 @@ const {
   color: #dbbea0;
 }
 
-/* eyebrow */
 .hero-eyebrow {
   gap: 0.6rem;
 }
@@ -294,7 +288,6 @@ const {
   max-width: 360px;
 }
 
-/* stats */
 .hero-stats {
   gap: 0;
 }
@@ -326,7 +319,6 @@ const {
   flex-shrink: 0;
 }
 
-/* ornaments */
 .hero-ornament {
   right: 5rem;
   top: 50%;
@@ -346,8 +338,6 @@ const {
   user-select: none;
   line-height: 1;
 }
-
-/* ── DIVIDER STRIP ── */
 .divider-strip {
   padding: 0.6rem 5rem;
   gap: 1rem;
@@ -365,7 +355,6 @@ const {
   background: var(--border-input);
 }
 
-/* ── FILTER STRIP ── */
 .filter-strip {
   top: 80px;
   z-index: 50;
@@ -400,12 +389,11 @@ const {
   color: var(--color-cream);
 }
 
-/* ── CONTAINER ── */
 .sc-container {
   padding: 3rem 5rem 5rem;
 }
 
-/* ── SKELETON ── */
+/* skeleton */
 .skeleton-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -449,7 +437,6 @@ const {
   }
 }
 
-/* ── EMPTY ── */
 .sc-empty {
   padding: 5rem 2rem;
 }
@@ -488,14 +475,12 @@ const {
   color: var(--color-cream);
 }
 
-/* ── SHOWCASE GRID ── */
 .sc-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
 }
 
-/* ── CARD ── */
 .sc-card {
   background: var(--bg-surface);
   border: 1px solid var(--border);
@@ -519,7 +504,6 @@ const {
   aspect-ratio: 16 / 9;
 }
 
-/* Image wrapper */
 .card-img-wrap {
   aspect-ratio: 4 / 3;
   display: block;
@@ -542,7 +526,7 @@ const {
   pointer-events: none;
 }
 
-/* Area badge */
+/* area badge */
 .card-area-badge {
   bottom: 1rem;
   left: 1rem;
@@ -555,7 +539,6 @@ const {
   background: #c4a882;
 }
 
-/* Featured tag */
 .card-featured-tag {
   top: 1rem;
   right: 1rem;
@@ -568,12 +551,10 @@ const {
   backdrop-filter: blur(4px);
 }
 
-/* Card body */
 .card-body-sc {
   padding: 1.3rem;
 }
 
-/* Contributor */
 .contrib-avatar {
   width: 36px;
   height: 36px;
@@ -681,33 +662,22 @@ const {
   color: var(--color-secondary);
 }
 .card-cta {
-  border: 1px solid var(--color-subtle);
-  background: transparent;
-  color: var(--color-subtle);
+  background: var(--btn-bg);
+  color: var(--btn-color);
   font-family: var(--font-serif);
-  font-size: var(--fs-sm);
-  letter-spacing: 0.08em;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.06em;
   padding: 0.5rem 1rem;
   cursor: pointer;
-  transition:
-    background 0.22s,
-    color 0.22s;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s;
 }
-.card-cta:hover{
-  border-color: var(--btn-bg);
-  color: var(--btn-bg);
+.card-cta:hover {
+  background: var(--btn-bg-hover);
+  color: var(--btn-color);
 }
-
-[data-theme="dark"] .card-cta {
-  color: var(--color-cream);
-  border: 1px solid var(--color-cream);
-}
-[data-theme="dark"] .card-cta:hover {
-  background: var(--color-subtle);
-  color: var(--color-cream);
-}
-
-/* ── CARD TRANSITION ── */
+/* card transition */
 .card-fade-enter-active {
   transition:
     opacity 0.4s ease,
@@ -723,7 +693,6 @@ const {
   height: 5rem;
 }
 
-/* ── RESPONSIVE ── */
 @media (max-width: 1199px) {
   .sc-grid {
     grid-template-columns: repeat(2, 1fr);

@@ -59,10 +59,11 @@ const footerLinks = [
   background: #1e1a14;
   color: rgba(255, 255, 255, 0.7);
   font-family: 'Times New Roman', Times, serif;
+  border-top: 1px solid var(--border);
 }
 .footer-top {
   padding: 4rem 0 3rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--border);
 }
 .footer-grid {
   display: grid;

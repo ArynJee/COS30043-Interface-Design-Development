@@ -1,7 +1,8 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { ShoppingCart, Check, Box, User } from '@lucide/vue'
-import FurnitureViewer from '@/components/FurnitureViewer.vue'
+import { ref, computed, watch } from "vue";
+import { ShoppingCart, Check, Box, User } from "@lucide/vue";
+import FurnitureViewer from "@/components/FurnitureViewer.vue";
+import FeedbackModal from "@/components/FeedbackModal.vue";
 
 const props = defineProps({
   item: { type: Object, default: null },
@@ -11,65 +12,92 @@ const props = defineProps({
   submittingReview: Boolean,
   reviewError: { type: String, default: null },
   reviewSuccess: Boolean,
-  skeletonType: { type: String, default: '' },
-  furnitureTypeId: { type: String, default: '' },
+  skeletonType: { type: String, default: "" },
+  furnitureTypeId: { type: String, default: "" },
   parsedConfig: { type: Object, default: () => ({}) },
   configEntries: { type: Array, default: () => [] },
-})
+});
 
-const emit = defineEmits(['add-to-cart', 'submit-review'])
+const emit = defineEmits(["add-to-cart", "submit-review"]);
 
-// ── local UI state ────────────────────────────────────────────────────────────
-const show3D = ref(false)
-const newRating = ref(5)
-const newComment = ref('')
-const hoveredStar = ref(0)
-const isLoggedIn = computed(() => !!localStorage.getItem('token'))
+// local UI state
+const show3D = ref(false);
+const isLoggedIn = computed(() => !!localStorage.getItem("token"));
 
-// ── reviews computed ──────────────────────────────────────────────────────────
+// review modal state
+const showReviewModal = ref(false);
+const modalSubmitted = ref(false);
+const reviewData = ref({ rating: 5, comment: "" });
+
+watch(
+  () => props.reviewSuccess,
+  (val) => {
+    if (val) {
+      modalSubmitted.value = true;
+      setTimeout(() => {
+        showReviewModal.value = false;
+        modalSubmitted.value = false;
+      }, 1500);
+    }
+  },
+);
+
+function openReviewModal() {
+  reviewData.value = { rating: 5, comment: "" };
+  modalSubmitted.value = false;
+  showReviewModal.value = true;
+}
+
+function handleModalSubmit() {
+  if (!reviewData.value.rating) return;
+  emit("submit-review", {
+    rating: reviewData.value.rating,
+    comment: reviewData.value.comment,
+  });
+}
+
+// reviews computed
 const avgRating = computed(() => {
-  if (!props.reviews.length) return 0
-  return props.reviews.reduce((s, r) => s + r.rating, 0) / props.reviews.length
-})
+  if (!props.reviews.length) return 0;
+  return props.reviews.reduce((s, r) => s + r.rating, 0) / props.reviews.length;
+});
 
 function starsFor(rating) {
   return Array.from({ length: 5 }, (_, i) => {
-    const val = i + 1
-    if (rating >= val) return 'full'
-    if (rating >= val - 0.5) return 'half'
-    return 'empty'
-  })
+    const val = i + 1;
+    if (rating >= val) return "full";
+    if (rating >= val - 0.5) return "half";
+    return "empty";
+  });
 }
 
-const avgStars = computed(() => starsFor(avgRating.value))
+const avgStars = computed(() => starsFor(avgRating.value));
 
-// ── helpers ───────────────────────────────────────────────────────────────────
+// helpers 
 const formatDate = (d) =>
-  new Date(d).toLocaleDateString('en-MY', { year: 'numeric', month: 'short', day: 'numeric' })
+  new Date(d).toLocaleDateString("en-MY", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 
 const formatPrice = (p) =>
-  `RM ${parseFloat(p).toLocaleString('en-MY', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+  `RM ${parseFloat(p).toLocaleString("en-MY", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 
-const getInitials = (f, l) => `${f?.[0] ?? '?'}${l?.[0] ?? ''}`.toUpperCase()
+const getInitials = (f, l) => `${f?.[0] ?? "?"}${l?.[0] ?? ""}`.toUpperCase();
 
-// ── actions ───────────────────────────────────────────────────────────────────
-function handleAddToCart() { emit('add-to-cart') }
-
-function handleSubmit() {
-  if (!newRating.value) return
-  emit('submit-review', { rating: newRating.value, comment: newComment.value })
-  newComment.value = ''
-  newRating.value = 5
+// actions 
+function handleAddToCart() {
+  emit("add-to-cart");
 }
+
+
 </script>
 
 <template>
   <div v-if="item" class="idp-wrap">
-
-    <!-- ── TOP SECTION ───────────────────────────────────────────────────── -->
     <div class="idp-top">
-
-      <!-- LEFT: visual -->
+      <!-- left side: picture -->
       <div class="idp-visual">
         <div class="contrib-visual-wrap position-relative overflow-hidden">
           <template v-if="show3D && skeletonType">
@@ -95,39 +123,49 @@ function handleSubmit() {
           @click="show3D = !show3D"
         >
           <Box :size="15" />
-          {{ show3D ? 'View Photo' : 'View in 3D' }}
+          {{ show3D ? "View Photo" : "View in 3D" }}
         </button>
       </div>
 
-      <!-- RIGHT: info -->
+      <!-- right side: info -->
       <div class="idp-info">
-
-        <!-- Area badge -->
+        <!-- area badge -->
         <div class="info-badges mb-3">
           <span class="badge-area text-uppercase">{{ item.area }}</span>
         </div>
 
-        <!-- Furniture type (name) -->
+        <!-- furniture type (name) -->
         <h1 class="info-name mb-2">{{ item.furniture_type }}</h1>
 
-        <!-- Rating -->
+        <!-- rating -->
         <div class="info-rating d-flex align-items-center gap-2 mb-4">
           <span class="stars-row d-inline-flex gap-1">
-            <span v-for="(s, i) in avgStars" :key="i" class="star-icon" :class="`star-${s}`">★</span>
+            <span
+              v-for="(s, i) in avgStars"
+              :key="i"
+              class="star-icon"
+              :class="`star-${s}`"
+              >★</span
+            >
           </span>
-          <span class="rating-val">{{ avgRating > 0 ? avgRating.toFixed(1) : '—' }}</span>
-          <span class="rating-count">({{ reviews.length }} {{ reviews.length === 1 ? 'review' : 'reviews' }})</span>
+          <span class="rating-val">{{
+            avgRating > 0 ? avgRating.toFixed(1) : "—"
+          }}</span>
+          <span class="rating-count"
+            >({{ reviews.length }}
+            {{ reviews.length === 1 ? "review" : "reviews" }})</span
+          >
         </div>
 
-        <!-- Description -->
+        <!-- description -->
         <p class="info-desc mb-4">{{ item.description }}</p>
 
-        <!-- Price -->
+        <!-- price -->
         <div class="info-price-row mb-4">
           <span class="info-price">{{ formatPrice(item.total_cost) }}</span>
         </div>
 
-        <!-- Add to Cart -->
+        <!-- add to Cart -->
         <button
           class="add-cart-btn d-inline-flex align-items-center gap-2 mb-5"
           :class="{ 'btn-added': cartAdded }"
@@ -136,65 +174,106 @@ function handleSubmit() {
         >
           <Check v-if="cartAdded" :size="16" />
           <ShoppingCart v-else :size="16" />
-          {{ addingToCart ? 'Adding…' : cartAdded ? 'Added to Cart' : 'Add to Cart' }}
+          {{
+            addingToCart
+              ? "Adding…"
+              : cartAdded
+                ? "Added to Cart"
+                : "Add to Cart"
+          }}
         </button>
 
         <div class="info-divider mb-4"></div>
 
-        <!-- Configuration chips -->
-        <p class="spec-section-title mb-2">Configuration</p>
+        <!-- configuration chips -->
+        <p class="spec-section-title mb-2">Specification</p>
         <div class="cfg-chips d-flex flex-wrap gap-2 mb-4">
-          <span v-for="entry in configEntries" :key="entry.label" class="cfg-chip">
+          <span
+            v-for="entry in configEntries"
+            :key="entry.label"
+            class="cfg-chip"
+          >
             <span class="cfg-key">{{ entry.label }}</span>
             <span class="cfg-sep">·</span>
             <span class="cfg-val">{{ entry.name }}</span>
-            <span v-if="entry.price" class="cfg-price">+RM{{ entry.price }}</span>
+            <span v-if="entry.price" class="cfg-price"
+              >+RM{{ entry.price }}</span
+            >
           </span>
         </div>
 
-        <!-- Contributor -->
+        <!-- contributor -->
         <div class="contributor-row d-flex align-items-center gap-3">
-          <div class="contrib-avatar d-flex align-items-center justify-content-center flex-shrink-0">
+          <div
+            class="contrib-avatar d-flex align-items-center justify-content-center flex-shrink-0"
+          >
             {{ getInitials(item.first_name, item.last_name) }}
           </div>
           <div>
             <div class="contrib-name">
-              {{ item.first_name ? `${item.first_name} ${item.last_name}` : 'Anonymous' }}
+              {{
+                item.first_name
+                  ? `${item.first_name} ${item.last_name}`
+                  : "Anonymous"
+              }}
             </div>
-            <div class="contrib-date">Designed {{ formatDate(item.created_at) }}</div>
+            <div class="contrib-date">
+              Designed {{ formatDate(item.created_at) }}
+            </div>
           </div>
         </div>
-
       </div>
     </div>
 
-    <!-- ── REVIEWS SECTION ────────────────────────────────────────────────── -->
+    <!--reviews section -->
     <div class="reviews-section">
       <div class="rev-header d-flex align-items-center gap-3 mb-5">
         <h2 class="rev-title mb-0">Reviews</h2>
-        <div v-if="reviews.length" class="rev-avg d-flex align-items-center gap-2">
+        <div
+          v-if="reviews.length"
+          class="rev-avg d-flex align-items-center gap-2"
+        >
           <span class="rev-avg-num">{{ avgRating.toFixed(1) }}</span>
           <span class="stars-row d-inline-flex gap-1">
-            <span v-for="(s, i) in avgStars" :key="i" class="star-icon star-lg" :class="`star-${s}`">★</span>
+            <span
+              v-for="(s, i) in avgStars"
+              :key="i"
+              class="star-icon star-lg"
+              :class="`star-${s}`"
+              >★</span
+            >
           </span>
-          <span class="rev-count">{{ reviews.length }} {{ reviews.length === 1 ? 'review' : 'reviews' }}</span>
+          <span class="rev-count"
+            >{{ reviews.length }}
+            {{ reviews.length === 1 ? "review" : "reviews" }}</span
+          >
         </div>
       </div>
 
       <div v-if="reviews.length" class="rev-list mb-6">
         <div v-for="r in reviews" :key="r.id" class="rev-card">
           <div class="rev-card-top d-flex align-items-start gap-3">
-            <div class="rev-avatar d-flex align-items-center justify-content-center flex-shrink-0">
+            <div
+              class="rev-avatar d-flex align-items-center justify-content-center flex-shrink-0"
+            >
               <User :size="14" />
             </div>
             <div class="rev-meta flex-grow-1">
               <div class="rev-author">
-                {{ r.first_name ? `${r.first_name} ${r.last_name}` : 'Anonymous' }}
+                {{
+                  r.first_name ? `${r.first_name} ${r.last_name}` : "Anonymous"
+                }}
               </div>
               <div class="rev-date">{{ formatDate(r.created_at) }}</div>
             </div>
             <div class="rev-stars d-flex gap-1">
-              <span v-for="(s, i) in starsFor(r.rating)" :key="i" class="star-icon" :class="`star-${s}`">★</span>
+              <span
+                v-for="(s, i) in starsFor(r.rating)"
+                :key="i"
+                class="star-icon"
+                :class="`star-${s}`"
+                >★</span
+              >
             </div>
           </div>
           <p v-if="r.comment" class="rev-comment mt-2 mb-0">{{ r.comment }}</p>
@@ -202,46 +281,31 @@ function handleSubmit() {
       </div>
       <p v-else class="rev-empty">No reviews yet. Be the first to leave one!</p>
 
-      <!-- Write review (logged-in only) -->
-      <div v-if="isLoggedIn" class="rev-form-wrap">
-        <h3 class="rev-form-title mb-3">Write a Review</h3>
-
-        <div class="star-picker d-flex gap-1 mb-3">
-          <button
-            v-for="n in 5"
-            :key="n"
-            class="star-pick-btn"
-            :class="{ 'is-filled': n <= (hoveredStar || newRating) }"
-            @mouseenter="hoveredStar = n"
-            @mouseleave="hoveredStar = 0"
-            @click="newRating = n"
-          >★</button>
-        </div>
-
-        <textarea
-          v-model="newComment"
-          class="rev-textarea w-100 mb-3"
-          rows="3"
-          placeholder="Share your thoughts about this design…"
-        ></textarea>
-
-        <p v-if="reviewError" class="rev-error mb-2">{{ reviewError }}</p>
-        <p v-if="reviewSuccess" class="rev-success mb-2">Review submitted successfully!</p>
-
-        <button
-          class="rev-submit-btn"
-          :disabled="submittingReview"
-          @click="handleSubmit"
-        >
-          {{ submittingReview ? 'Submitting…' : 'Submit Review' }}
+      <!-- write review button -->
+      <div v-if="isLoggedIn" class="rev-cta-wrap text-center">
+        <button class="rev-write-btn" @click="openReviewModal">
+          Write a Review
         </button>
       </div>
       <p v-else class="rev-login-prompt">
         <a href="/login">Sign in</a> to leave a review.
       </p>
     </div>
-
   </div>
+
+  <!-- review modal -->
+  <FeedbackModal
+    :show="showReviewModal"
+    :userFeedback="reviewData"
+    :feedbackSubmitted="modalSubmitted"
+    title="Review this Design"
+    submitLabel="Submit Review"
+    successMessage="Thank you for your review!"
+    :showNameField="false"
+    @close="showReviewModal = false"
+    @submit="handleModalSubmit"
+    @update:userFeedback="reviewData = $event"
+  />
 </template>
 
 <style scoped>
@@ -284,7 +348,9 @@ function handleSubmit() {
   letter-spacing: 0.06em;
   padding: 0.45rem 1rem;
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
 }
 .view3d-btn:hover {
   border-color: var(--accent-dk);
@@ -299,7 +365,9 @@ function handleSubmit() {
   color: #fff;
   padding: 0.18rem 0.6rem;
 }
-[data-theme="dark"] .badge-area { color: #1e1a14; }
+[data-theme="dark"] .badge-area {
+  color: #1e1a14;
+}
 
 .info-name {
   font-size: clamp(1.6rem, 3vw, 2.4rem);
@@ -308,15 +376,26 @@ function handleSubmit() {
   font-weight: 700;
 }
 
-.stars-row { gap: 2px; }
+.stars-row {
+  gap: 2px;
+}
 .star-icon {
   font-size: 1rem;
   line-height: 1;
 }
-.star-full  { color: #c4a050; }
-.star-half  { color: #c4a050; opacity: 0.6; }
-.star-empty { color: var(--border-input); }
-.star-lg    { font-size: 1.15rem; }
+.star-full {
+  color: #c4a050;
+}
+.star-half {
+  color: #c4a050;
+  opacity: 0.6;
+}
+.star-empty {
+  color: var(--border-input);
+}
+.star-lg {
+  font-size: 1.15rem;
+}
 
 .rating-val {
   font-weight: 700;
@@ -334,9 +413,14 @@ function handleSubmit() {
   line-height: 1.7;
   max-width: 480px;
 }
-[data-theme="dark"] .info-desc { color: var(--color-cream); }
+[data-theme="dark"] .info-desc {
+  color: var(--color-cream);
+}
 
-.info-price-row { display: flex; align-items: baseline; }
+.info-price-row {
+  display: flex;
+  align-items: baseline;
+}
 .info-price {
   font-size: 2rem;
   font-weight: 700;
@@ -358,9 +442,16 @@ function handleSubmit() {
   max-width: 320px;
   justify-content: center;
 }
-.add-cart-btn:hover:not(:disabled) { background: var(--btn-bg-hover); }
-.add-cart-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-.add-cart-btn.btn-added { background: #5a8a5a; }
+.add-cart-btn:hover:not(:disabled) {
+  background: var(--btn-bg-hover);
+}
+.add-cart-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.add-cart-btn.btn-added {
+  background: #5a8a5a;
+}
 
 .info-divider {
   height: 1px;
@@ -383,10 +474,20 @@ function handleSubmit() {
   font-size: var(--fs-xs);
   border-radius: 2px;
 }
-.cfg-key { font-weight: 600; color: var(--color-primary); }
-.cfg-sep { color: var(--accent); }
-.cfg-val { color: var(--color-secondary); }
-.cfg-price { color: var(--color-subtle); margin-left: 2px; }
+.cfg-key {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+.cfg-sep {
+  color: var(--accent);
+}
+.cfg-val {
+  color: var(--color-secondary);
+}
+.cfg-price {
+  color: var(--color-subtle);
+  margin-left: 2px;
+}
 
 .contrib-avatar {
   width: 40px;
@@ -458,73 +559,41 @@ function handleSubmit() {
   font-size: var(--fs-xs);
   color: var(--color-secondary);
 }
-.rev-stars { flex-shrink: 0; }
+.rev-stars {
+  flex-shrink: 0;
+}
 .rev-comment {
   font-size: var(--fs-base);
   color: var(--accent-dk);
   line-height: 1.6;
 }
-[data-theme="dark"] .rev-comment { color: var(--color-cream); }
+[data-theme="dark"] .rev-comment {
+  color: var(--color-cream);
+}
 .rev-empty {
   font-size: var(--fs-base);
   color: var(--color-secondary);
   margin-bottom: 3rem;
 }
 
-.rev-form-wrap {
-  max-width: 560px;
-  padding-top: 1rem;
+.rev-cta-wrap {
+  padding-top: 2rem;
   border-top: 1px solid var(--border);
 }
-.rev-form-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--color-primary);
-}
-.star-picker { gap: 4px; }
-.star-pick-btn {
-  background: none;
-  border: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-  color: var(--border-input);
-  line-height: 1;
-  padding: 0 2px;
-  transition: color 0.15s, transform 0.12s;
-}
-.star-pick-btn.is-filled { color: #c4a050; }
-.star-pick-btn:hover { transform: scale(1.15); }
-
-.rev-textarea {
-  border: 1px solid var(--border-input);
-  background: transparent;
-  color: var(--color-primary);
-  font-family: var(--font-serif);
-  font-size: var(--fs-base);
-  padding: 0.65rem 0.9rem;
-  resize: vertical;
-  outline: none;
-  transition: border-color 0.2s;
-}
-.rev-textarea:focus { border-color: var(--accent-hover); }
-.rev-textarea::placeholder { color: var(--color-muted); }
-
-.rev-error   { font-size: var(--fs-sm); color: #c0392b; }
-.rev-success { font-size: var(--fs-sm); color: #5a8a5a; }
-
-.rev-submit-btn {
+.rev-write-btn {
   background: var(--btn-bg);
   color: var(--btn-color);
   border: none;
   font-family: var(--font-serif);
   font-size: var(--fs-sm);
   letter-spacing: 0.08em;
-  padding: 0.6rem 1.6rem;
+  padding: 0.65rem 2rem;
   cursor: pointer;
   transition: background 0.2s;
 }
-.rev-submit-btn:hover:not(:disabled) { background: var(--btn-bg-hover); }
-.rev-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.rev-write-btn:hover {
+  background: var(--btn-bg-hover);
+}
 
 .rev-login-prompt {
   font-size: var(--fs-base);
@@ -540,8 +609,13 @@ function handleSubmit() {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1199px) {
-  .idp-top { padding: 3rem 2.5rem; gap: 3rem; }
-  .reviews-section { padding: 3rem 2.5rem 4rem; }
+  .idp-top {
+    padding: 3rem 2.5rem;
+    gap: 3rem;
+  }
+  .reviews-section {
+    padding: 3rem 2.5rem 4rem;
+  }
 }
 @media (max-width: 991px) {
   .idp-top {
@@ -549,13 +623,25 @@ function handleSubmit() {
     gap: 2rem;
     padding: 2rem 2.5rem;
   }
-  .idp-visual { position: static; }
-  .reviews-section { padding: 2.5rem 2.5rem 3.5rem; }
+  .idp-visual {
+    position: static;
+  }
+  .reviews-section {
+    padding: 2.5rem 2.5rem 3.5rem;
+  }
 }
 @media (max-width: 767px) {
-  .idp-top { padding: 1.5rem 1.25rem; }
-  .reviews-section { padding: 2rem 1.25rem 3rem; }
-  .rev-list { grid-template-columns: 1fr; }
-  .add-cart-btn { max-width: 100%; }
+  .idp-top {
+    padding: 1.5rem 1.25rem;
+  }
+  .reviews-section {
+    padding: 2rem 1.25rem 3rem;
+  }
+  .rev-list {
+    grid-template-columns: 1fr;
+  }
+  .add-cart-btn {
+    max-width: 100%;
+  }
 }
 </style>

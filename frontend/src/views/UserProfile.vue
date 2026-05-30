@@ -31,7 +31,6 @@ const {
 
 <template>
   <div class="profile-page">
-    <!-- Hero -->
     <section class="profile-hero">
       <img
         src="/home/living-room.jpg"
@@ -50,7 +49,7 @@ const {
     </section>
 
     <div class="profile-content" v-if="!loadingProfile">
-      <!-- Sidebar -->
+      <!-- sidebar -->
       <aside class="profile-sidebar">
         <div class="sidebar-user">
           <div class="avatar-circle">
@@ -94,9 +93,9 @@ const {
         </nav>
       </aside>
 
-      <!-- Main content -->
+      <!-- main content -->
       <div class="profile-main">
-        <!-- Orders tab -->
+        <!-- orders tab -->
         <div v-if="activeTab === 'orders'">
           <div class="tab-header">
             <h2 class="tab-title">Order History</h2>
@@ -116,7 +115,7 @@ const {
 
           <div v-else class="orders-list">
             <div v-for="order in orders" :key="order.id" class="order-card">
-              <!-- Order header (always visible) -->
+              <!-- order header -->
               <div class="order-header" @click="toggleOrder(order.id)">
                 <div class="order-meta">
                   <span class="order-id">#{{ order.id }}</span>
@@ -141,7 +140,7 @@ const {
                 </div>
               </div>
 
-              <!-- Shipping info + items (expanded) -->
+              <!-- shipping info + items (expanded) -->
               <div
                 v-if="expandedOrders.includes(order.id)"
                 class="order-detail"
@@ -225,9 +224,9 @@ const {
           </div>
         </div>
 
-        <!-- Profile tab -->
+        <!-- profile tab -->
         <div v-if="activeTab === 'profile'">
-          <div class="tab-header">
+          <div class="tab-header justify-content-between">
             <h2 class="tab-title">Profile Details</h2>
             <button v-if="!editMode" class="edit-btn" @click="editMode = true">
               Edit
@@ -297,11 +296,11 @@ const {
             </div>
 
             <div class="edit-actions">
-              <button class="save-btn" @click="saveProfile" :disabled="saving">
+              <button class="save-btn px-3 py-2 border-0" @click="saveProfile" :disabled="saving">
                 {{ saving ? "Saving…" : "Save Changes" }}
               </button>
               <button
-                class="cancel-btn"
+                class="cancel-btn px-3 py-2"
                 @click="
                   editMode = false;
                   saveError = '';
@@ -313,7 +312,7 @@ const {
           </div>
         </div>
 
-        <!-- Contributions tab -->
+        <!-- contributions tab -->
         <div v-if="activeTab === 'contributions'">
           <div class="tab-header">
             <h2 class="tab-title">My Contributions</h2>
@@ -331,7 +330,7 @@ const {
 
           <div v-else class="cp-grid">
             <article v-for="c in contributions" :key="c.id" class="cp-card">
-              <!-- Image -->
+              <!-- image of 3d model -->
               <div class="cp-img-wrap">
                 <img
                   :src="c.preview_image_url ? `http://localhost:3000${c.preview_image_url}` : '/home/living-room.jpg'"
@@ -342,7 +341,7 @@ const {
                 <span class="cp-area-badge">{{ c.area }}</span>
               </div>
 
-              <!-- Body -->
+              <!-- body -->
               <div class="cp-body">
                 <div class="cp-meta-row">
                   <span class="cp-date">{{ formatDate(c.created_at) }}</span>
@@ -363,6 +362,12 @@ const {
                     <span class="cp-chip-val">{{ entry.name }}</span>
                   </span>
                 </div>
+                <RouterLink
+                  :to="`/showcase/${c.id}`"
+                  class="card-cta d-inline-flex align-items-center gap-2 border-0 mt-4"
+                >
+                  View Detail &thinsp;<ArrowRight :size="13" />
+                </RouterLink>
               </div>
             </article>
           </div>
@@ -752,12 +757,19 @@ const {
   border: 1px solid var(--border);
   padding: 0;
 }
+[data-theme="dark"] .profile-view{
+  border: 1px solid var(--color-muted);
+}
+
 .profile-row {
   display: flex;
   align-items: baseline;
   gap: 1rem;
   padding: 0.85rem 1.25rem;
   border-bottom: 1px solid var(--border-light);
+}
+[data-theme="dark"] .profile-row{
+  border-bottom: 1px solid var(--color-subtle);
 }
 .profile-row:last-child {
   border-bottom: none;
@@ -781,6 +793,11 @@ const {
   border: 1px solid var(--border);
   padding: 1.5rem;
 }
+
+[data-theme="dark"] .profile-edit-form{
+  border: 1px solid var(--color-muted);
+}
+
 .field-row {
   display: flex;
   gap: 1rem;
@@ -812,6 +829,9 @@ const {
   box-sizing: border-box;
   transition: border-color 0.2s;
 }
+[data-theme="dark"] .field-input {
+  border: 1px solid var(--color-subtle);
+}
 .field-input:focus {
   border-color: var(--accent-hover);
 }
@@ -832,8 +852,6 @@ const {
 .save-btn {
   background: var(--btn-bg);
   color: var(--btn-color);
-  border: none;
-  padding: 0.65rem 1.5rem;
   font-family: var(--font-serif);
   font-size: var(--fs-base);
   cursor: pointer;
@@ -847,14 +865,17 @@ const {
   cursor: not-allowed;
 }
 .cancel-btn {
-  background: none;
-  border: 1px solid var(--border-input);
-  color: var(--color-secondary);
-  padding: 0.65rem 1.5rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--color-primary);
   font-family: var(--font-serif);
   font-size: var(--fs-base);
   cursor: pointer;
   transition: background 0.2s;
+}
+[data-theme="dark"] .cancel-btn {
+  border: 1px solid var(--color-subtle);
+  background: var(--bg-alt);
 }
 .cancel-btn:hover {
   background: var(--bg-elevated);
@@ -894,7 +915,7 @@ const {
 }
 .cp-card {
   background: var(--bg-surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-subtle);
   overflow: hidden;
   transition: box-shadow 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
 }
@@ -1000,6 +1021,22 @@ const {
 }
 .cp-chip-val {
   color: var(--color-secondary);
+}
+.card-cta {
+  background: var(--btn-bg);
+  color: var(--btn-color);
+  font-family: var(--font-serif);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.06em;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+.card-cta:hover {
+  background: var(--btn-bg-hover);
+  color: var(--btn-color);
 }
 
 /* ── Responsive ── */
