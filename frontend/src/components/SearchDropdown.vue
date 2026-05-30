@@ -92,7 +92,7 @@ function handleGoToShowcaseAll() { goToShowcaseAll(); emit('close') }
       </div>
 
       <!-- empty -->
-      <div v-if="!hasResults" class="sd-state">
+      <div v-if="!hasResults" class="sd-state d-flex align-items-center justify-content-center px-3 py-2 gap-3">
         No results for "{{ query }}"
       </div>
     </template>
