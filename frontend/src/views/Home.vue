@@ -658,6 +658,7 @@ onMounted(async () => {
 /* about us */
 .about-section {
   background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
 }
 
 .about-layout {
@@ -723,6 +724,7 @@ onMounted(async () => {
 /* explore products */
 .explore-section {
   background: var(--bg-page);
+  border-bottom: 1px solid var(--border);
 }
 
 .explore-header {

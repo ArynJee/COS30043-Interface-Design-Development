@@ -25,8 +25,8 @@
 
   /* Accent */
   --accent: #c4a882;
-  --accent-dk: #8b6f47;
-  --accent-hover: #b09070;
+  --accent-dk: #8a7b65;
+  --accent-hover: #ab9e90;
 
   /* Borders */
   --border: #e0d5c5; /* standard card / table border  */
@@ -60,7 +60,7 @@
 [data-theme="dark"] {
   --bg-page: #1a1610;
   --bg-alt: #1e1b14;
-  --bg-surface: #1e1b14;
+  --bg-surface: #2e2923;
   --bg-elevated: #2a2418;
 
   --color-primary: #e8ddd0;
@@ -75,9 +75,9 @@
   --border-light: #2e2820;
   --border-input: #3a3025;
 
-  --btn-bg: #e8ddd0;
+  --btn-bg: #8c785f;
   --btn-bg-hover: #c4a882;
-  --btn-color: #1a1610;
+  --btn-color: #16130d;
 
   --btn-alt-bg: #e8ddd0;
   --btn-alt-hover: #c4a882;
