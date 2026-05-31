@@ -12,7 +12,7 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 
 function saveBase64Image(base64Data) {
   if (!base64Data) return null;
-  if (base64Data.startsWith("/uploads/") || base64Data.startsWith("http")) return base64Data;
+  if (base64Data.startsWith("/") || base64Data.startsWith("http")) return base64Data;
   const data = base64Data.replace(/^data:image\/\w+;base64,/, "");
   const filename = `cart_${Date.now()}_${Math.random().toString(36).slice(2, 9)}.png`;
   const filepath = path.join(UPLOADS_DIR, filename);

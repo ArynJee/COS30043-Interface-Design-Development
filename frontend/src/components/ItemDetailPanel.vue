@@ -449,9 +449,9 @@ function handleAddToCart() {
   opacity: 0.6;
   cursor: not-allowed;
 }
-.add-cart-btn.btn-added {
+/* .add-cart-btn.btn-added {
   background: #5a8a5a;
-}
+} */
 
 .info-divider {
   height: 1px;

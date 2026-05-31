@@ -26,6 +26,7 @@ const {
   formatPrice,
   getItemName,
   getItemVariant,
+  getItemImage,
   handleClearCart,
   goToCheckout,
 } = useCart();
@@ -100,7 +101,7 @@ const {
                 <div class="product-info">
                   <div class="product-img-wrap">
                     <img
-                      :src="item.preview_image || '/product/placeholder.jpg'"
+                      :src="getItemImage(item)"
                       :alt="getItemName(item)"
                       class="product-img"
                     />

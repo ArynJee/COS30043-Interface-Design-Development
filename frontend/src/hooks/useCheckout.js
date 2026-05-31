@@ -6,21 +6,16 @@ import {
   confirmOrderApi,
 } from "@/services/orderServices";
 import axios from "axios";
-
-const SHIPPING_FEE = { sea: 10, air: 15 };
-const FREE_THRESHOLD = { sea: 300, air: 1000 };
-const TAX_RATE = 0.06;
+import useOrderSummary, { formatPrice, getItemName } from "@/hooks/useOrderSummary";
 
 export default function useCheckout() {
   const router = useRouter();
   const cartStore = useCartStore();
 
-  // payment steps states
   const step = ref(1);
   const submitting = ref(false);
   const paymentError = ref("");
 
-  // shipping form state
   const form = ref({
     name: "",
     address: "",
@@ -29,7 +24,6 @@ export default function useCheckout() {
     zip: "",
   });
 
-  // card
   const cardForm = ref({ number: "", expiry: "", cvc: "" });
   const cardErrors = ref({ number: "", expiry: "", cvc: "" });
 
@@ -51,41 +45,15 @@ export default function useCheckout() {
     cardErrors.value.cvc = "";
   }
 
-  // cart derived
   const selectedItems = computed(() => cartStore.selectedItems);
   const subtotal = computed(() => cartStore.subtotal);
   const selectedIds = computed(() => cartStore.selectedIds);
 
-  const shippingFee = computed(() => {
-    const method = cartStore.selectedShipping;
-    return subtotal.value >= FREE_THRESHOLD[method] ? 0 : SHIPPING_FEE[method];
-  });
+  const { shippingFee, taxAmount, orderTotal } = useOrderSummary(cartStore);
 
-  const taxAmount = computed(() => (subtotal.value + shippingFee.value) * TAX_RATE);
-  const orderTotal = computed(() => subtotal.value + shippingFee.value + taxAmount.value);
-
-  // format price
-  const formatPrice = (val) => "RM " + parseFloat(val || 0).toFixed(2);
-
-  function getItemName(item) {
-    if (item.is_custom) {
-      return (item.furniture_type || "Custom Item")
-        .replace(/_/g, " ")
-        .replace(/\b\w/g, (c) => c.toUpperCase());
-    }
-    return item.item_name || "Product";
-  }
-
-  // error validation
   function validateShipping() {
     const { name, address, city, state, zip } = form.value;
-    if (
-      !name.trim() ||
-      !address.trim() ||
-      !city.trim() ||
-      !state.trim() ||
-      !zip.trim()
-    ) {
+    if (!name.trim() || !address.trim() || !city.trim() || !state.trim() || !zip.trim()) {
       return "Please fill in all shipping fields.";
     }
     return null;
@@ -110,7 +78,6 @@ export default function useCheckout() {
     return valid;
   }
 
-  // actions
   function proceedToPayment() {
     const err = validateShipping();
     if (err) {
@@ -141,13 +108,10 @@ export default function useCheckout() {
       const { order } = orderRes.data;
 
       await cartStore.fetchCart();
-      router.push(
-        `/order-confirmation?orderId=${order.id}&total=${order.total}`,
-      );
+      router.push(`/order-confirmation?orderId=${order.id}&total=${order.total}`);
     } catch (err) {
       paymentError.value =
-        err.response?.data?.message ||
-        "Something went wrong. Please try again.";
+        err.response?.data?.message || "Something went wrong. Please try again.";
       submitting.value = false;
     }
   }
@@ -160,8 +124,7 @@ export default function useCheckout() {
         headers: { Authorization: `Bearer ${token}` },
       });
       const u = res.data;
-      if (u.first_name)
-        form.value.name = `${u.first_name} ${u.last_name}`.trim();
+      if (u.first_name) form.value.name = `${u.first_name} ${u.last_name}`.trim();
       if (u.address) form.value.address = u.address;
     } catch {
       // silently ignore

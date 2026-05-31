@@ -1,6 +1,7 @@
 <script setup>
 import { ChevronDown, ChevronUp, Package, User, LogOut, Sparkles, ArrowRight } from "@lucide/vue";
 import useUserProfile from "@/hooks/useUserProfile.js";
+import ContributionCard from "@/components/ContributionCard.vue";
 
 const {
   user,
@@ -25,7 +26,6 @@ const {
   saveProfile,
   logout,
   orderAgain,
-  configEntries,
 } = useUserProfile();
 </script>
 
@@ -329,47 +329,11 @@ const {
           </div>
 
           <div v-else class="cp-grid">
-            <article v-for="c in contributions" :key="c.id" class="cp-card">
-              <!-- image of 3d model -->
-              <div class="cp-img-wrap">
-                <img
-                  :src="c.preview_image_url ? `${$apiBase}${c.preview_image_url}` : '/home/living-room.jpg'"
-                  :alt="`${c.furniture_type} in ${c.area}`"
-                  class="cp-img"
-                />
-                <div class="cp-img-grad"></div>
-                <span class="cp-area-badge">{{ c.area }}</span>
-              </div>
-
-              <!-- body -->
-              <div class="cp-body">
-                <div class="cp-meta-row">
-                  <span class="cp-date">{{ formatDate(c.created_at) }}</span>
-                  <span class="cp-price">{{ formatPrice(c.total_cost) }}</span>
-                </div>
-                <div class="cp-type">
-                  {{ c.furniture_type.replace(/_/g, ' ') }}
-                </div>
-                <p class="cp-desc" v-if="c.description">{{ c.description }}</p>
-                <div class="cp-chips">
-                  <span
-                    v-for="entry in configEntries(c.configuration)"
-                    :key="entry.label"
-                    class="cp-chip"
-                  >
-                    <span class="cp-chip-key">{{ entry.label }}</span>
-                    <span class="cp-chip-sep">·</span>
-                    <span class="cp-chip-val">{{ entry.name }}</span>
-                  </span>
-                </div>
-                <RouterLink
-                  :to="`/showcase/${c.id}`"
-                  class="card-cta d-inline-flex align-items-center gap-2 border-0 mt-4"
-                >
-                  View Detail &thinsp;<ArrowRight :size="13" />
-                </RouterLink>
-              </div>
-            </article>
+            <ContributionCard
+              v-for="c in contributions"
+              :key="c.id"
+              :contribution="c"
+            />
           </div>
         </div>
       </div>
@@ -912,131 +876,6 @@ const {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.25rem;
-}
-.cp-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--color-subtle);
-  overflow: hidden;
-  transition: box-shadow 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
-}
-.cp-card:hover {
-  box-shadow: 0 12px 36px rgba(30, 26, 20, 0.13);
-  transform: translateY(-4px);
-  border-color: #d0b896;
-}
-
-/* Image */
-.cp-img-wrap {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-}
-.cp-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.65s ease;
-}
-.cp-card:hover .cp-img {
-  transform: scale(1.06);
-}
-.cp-img-grad {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, transparent 35%, rgba(18, 14, 10, 0.68) 100%);
-  pointer-events: none;
-}
-.cp-area-badge {
-  position: absolute;
-  bottom: 0.75rem;
-  left: 0.75rem;
-  color: #fff;
-  font-size: var(--fs-2xs);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  padding: 0.2rem 0.6rem;
-  font-weight: 600;
-  background: #c4a882;
-}
-
-/* Body */
-.cp-body {
-  padding: 1.1rem;
-}
-.cp-meta-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-.cp-date {
-  font-size: var(--fs-sm);
-  color: var(--accent-hover);
-}
-.cp-price {
-  font-size: var(--fs-md);
-  font-weight: 700;
-  color: var(--color-secondary);
-}
-.cp-type {
-  font-size: var(--fs-sm);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-subtle);
-  margin-bottom: 0.4rem;
-}
-.cp-desc {
-  font-size: var(--fs-base);
-  color: var(--accent-dk);
-  line-height: 1.6;
-  margin-bottom: 0.75rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.cp-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-}
-.cp-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.2rem;
-  border: 1px solid var(--color-muted);
-  padding: 0.15rem 0.5rem;
-  font-size: var(--fs-xs);
-  color: var(--color-secondary);
-  border-radius: 2px;
-}
-.cp-chip-key {
-  font-weight: 600;
-  color: var(--color-primary);
-}
-.cp-chip-sep {
-  color: var(--accent);
-}
-.cp-chip-val {
-  color: var(--color-secondary);
-}
-.card-cta {
-  background: var(--btn-bg);
-  color: var(--btn-color);
-  font-family: var(--font-serif);
-  font-size: var(--fs-xs);
-  letter-spacing: 0.06em;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: background 0.2s;
-}
-.card-cta:hover {
-  background: var(--btn-bg-hover);
-  color: var(--btn-color);
 }
 
 /* ── Responsive ── */

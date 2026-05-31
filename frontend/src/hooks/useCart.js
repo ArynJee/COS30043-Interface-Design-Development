@@ -1,14 +1,13 @@
-import { computed, onMounted } from "vue";
+import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { useCartStore } from "@/stores/cart";
-
-const SHIPPING_OPTIONS = [
-  { id: "sea", label: "Sea Shipping", days: "14-21 days", fee: 10 },
-  { id: "air", label: "Air Shipping", days: "3-7 days", fee: 15 },
-];
-const FREE_THRESHOLD = { sea: 300, air: 2000 };
-const TAX_RATE = 0.06;
+import useOrderSummary, {
+  SHIPPING_OPTIONS,
+  FREE_THRESHOLD,
+  formatPrice,
+  getItemName,
+} from "@/hooks/useOrderSummary";
 
 export default function useCart() {
   const router = useRouter();
@@ -17,50 +16,23 @@ export default function useCart() {
   const { items, loading, selectedIds, allSelected, subtotal, selectedShipping } =
     storeToRefs(cartStore);
 
-  const shippingOption = computed(() =>
-    SHIPPING_OPTIONS.find((o) => o.id === selectedShipping.value),
-  );
+  const {
+    shippingOption,
+    shippingFee,
+    freeShippingThreshold,
+    amountToFreeShipping,
+    freeShippingProgress,
+    freeShippingUnlocked,
+    taxAmount,
+    orderTotal,
+  } = useOrderSummary(cartStore);
 
-  const shippingFee = computed(() => {
-    const threshold = FREE_THRESHOLD[selectedShipping.value];
-    return subtotal.value >= threshold ? 0 : shippingOption.value.fee;
-  });
-
-  const freeShippingThreshold = computed(
-    () => FREE_THRESHOLD[selectedShipping.value],
-  );
-
-  const amountToFreeShipping = computed(() =>
-    Math.max(0, freeShippingThreshold.value - subtotal.value),
-  );
-
-  const freeShippingProgress = computed(() =>
-    Math.min(100, (subtotal.value / freeShippingThreshold.value) * 100),
-  );
-
-  const freeShippingUnlocked = computed(
-    () => subtotal.value >= freeShippingThreshold.value,
-  );
-
-  // ── Tax & totals ────────────────────────────────────────────────────────────
-  const taxAmount = computed(
-    () => (subtotal.value + shippingFee.value) * TAX_RATE,
-  );
-
-  const orderTotal = computed(
-    () => subtotal.value + shippingFee.value + taxAmount.value,
-  );
-
-  // ── Helpers ─────────────────────────────────────────────────────────────────
-  const formatPrice = (val) => "RM " + parseFloat(val || 0).toFixed(2);
-
-  function getItemName(item) {
-    if (item.is_custom) {
-      return (item.furniture_type || "Custom Item")
-        .replace(/_/g, " ")
-        .replace(/\b\w/g, (c) => c.toUpperCase());
-    }
-    return item.item_name || "Product";
+  function getItemImage(item) {
+    const src = item.preview_image;
+    if (!src) return "/product/placeholder.jpg";
+    if (src.startsWith("/uploads/"))
+      return `${import.meta.env.VITE_API_BASE_URL}${src}`;
+    return src;
   }
 
   function getItemVariant(item) {
@@ -79,7 +51,6 @@ export default function useCart() {
     return "";
   }
 
-  // ── Actions ─────────────────────────────────────────────────────────────────
   async function handleClearCart() {
     if (!confirm("Remove all items from your cart?")) return;
     await cartStore.clearCart();
@@ -99,15 +70,12 @@ export default function useCart() {
   });
 
   return {
-    // store (for direct method calls in template)
     cartStore,
-    // store refs
     items,
     loading,
     selectedIds,
     allSelected,
     subtotal,
-    // shipping
     SHIPPING_OPTIONS,
     FREE_THRESHOLD,
     selectedShipping,
@@ -117,14 +85,12 @@ export default function useCart() {
     amountToFreeShipping,
     freeShippingProgress,
     freeShippingUnlocked,
-    // totals
     taxAmount,
     orderTotal,
-    // helpers
     formatPrice,
     getItemName,
     getItemVariant,
-    // actions
+    getItemImage,
     handleClearCart,
     goToCheckout,
   };

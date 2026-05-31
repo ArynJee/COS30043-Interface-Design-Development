@@ -2,6 +2,7 @@
 import { RouterLink } from "vue-router";
 import { ArrowRight, Sparkle, ChevronRight, Astroid} from "@lucide/vue";
 import CtaBanner from "@/components/CtaBanner.vue";
+import ContributionCard from "@/components/ContributionCard.vue";
 import { useShowcase, AREAS } from "@/hooks/useShowcase.js";
 
 const {
@@ -11,10 +12,6 @@ const {
   totalContributors,
   totalAreas,
   filtered,
-  formatPrice,
-  formatDate,
-  getInitials,
-  configEntries,
 } = useShowcase();
 </script>
 
@@ -123,77 +120,13 @@ const {
 
       <!-- showcase grid -->
       <TransitionGroup v-else name="card-fade" tag="div" class="sc-grid">
-        <article
+        <ContributionCard
           v-for="(c, idx) in filtered"
           :key="c.id"
-          class="sc-card"
-          :class="{ 'is-featured': idx === 0 && filtered.length > 1 }"
-        >
-          <!-- image -->
-          <div class="card-img-wrap overflow-hidden position-relative">
-            <img
-              :src="c.preview_image_url"
-              :alt="`${c.furniture_type} by ${c.first_name ?? 'Community'}`"
-              class="card-img w-100 h-100 object-fit-cover"
-            />
-            <div class="card-img-grad position-absolute inset-0"></div>
-
-            <span class="card-area-badge position-absolute">
-              {{ c.area }}
-            </span>
-          </div>
-
-          <div class="card-body-sc">
-            <!-- contributor row -->
-            <div class="contrib-row d-flex align-items-center gap-2 mb-3">
-              <div
-                class="contrib-avatar d-flex align-items-center justify-content-center flex-shrink-0"
-              >
-                {{ getInitials(c.first_name, c.last_name) }}
-              </div>
-              <div class="contrib-info">
-                <div class="contrib-name">
-                  {{
-                    c.first_name
-                      ? `${c.first_name} ${c.last_name}`
-                      : "Anonymous"
-                  }}
-                </div>
-                <div class="contrib-date">{{ formatDate(c.created_at) }}</div>
-              </div>
-              <div class="card-price ms-auto">
-                {{ formatPrice(c.total_cost) }}
-              </div>
-            </div>
-
-            <!-- furniture type label -->
-            <div class="card-type-label mb-1">{{ c.furniture_type }}</div>
-
-            <!-- description -->
-            <p class="card-desc mb-3">{{ c.description }}</p>
-
-            <!-- config chips -->
-            <div class="config-chips d-flex flex-wrap gap-1 mb-4">
-              <span
-                v-for="entry in configEntries(c.configuration)"
-                :key="entry.label"
-                class="cfg-chip"
-              >
-                <span class="cfg-key">{{ entry.label }}</span>
-                <span class="cfg-sep">·</span>
-                <span class="cfg-val">{{ entry.name }}</span>
-              </span>
-            </div>
-
-            <!-- CTA -->
-            <RouterLink
-              :to="`/showcase/${c.id}`"
-              class="card-cta d-inline-flex align-items-center gap-2 border-0"
-            >
-              View Detail &thinsp;<ArrowRight :size="13" />
-            </RouterLink>
-          </div>
-        </article>
+          :contribution="c"
+          :show-contributor="true"
+          :featured="idx === 0 && filtered.length > 1"
+        />
       </TransitionGroup>
     </div>
 
@@ -481,202 +414,6 @@ const {
   gap: 1.5rem;
 }
 
-.sc-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  overflow: hidden;
-  transition:
-    box-shadow 0.35s ease,
-    transform 0.35s ease,
-    border-color 0.35s ease;
-}
-.sc-card:hover {
-  box-shadow: 0 16px 48px rgba(30, 26, 20, 0.13);
-  transform: translateY(-5px);
-  border-color: #d0b896;
-}
-
-/* Featured card takes first 2 columns */
-.sc-card.is-featured {
-  grid-column: span 2;
-}
-.sc-card.is-featured .card-img-wrap {
-  aspect-ratio: 16 / 9;
-}
-
-.card-img-wrap {
-  aspect-ratio: 4 / 3;
-  display: block;
-}
-.card-img {
-  transition: transform 0.65s ease;
-  display: block;
-}
-.sc-card:hover .card-img {
-  transform: scale(1.06);
-}
-
-/* gradient overlay */
-.card-img-grad {
-  background: linear-gradient(
-    to bottom,
-    transparent 35%,
-    rgba(18, 14, 10, 0.72) 100%
-  );
-  pointer-events: none;
-}
-
-/* area badge */
-.card-area-badge {
-  bottom: 1rem;
-  left: 1rem;
-  color: #fff;
-  font-size: var(--fs-2xs);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  padding: 0.25rem 0.7rem;
-  font-weight: 600;
-  background: #c4a882;
-}
-
-.card-featured-tag {
-  top: 1rem;
-  right: 1rem;
-  background: rgba(18, 14, 10, 0.72);
-  color: #c4a882;
-  font-size: var(--fs-2xs);
-  letter-spacing: 0.1em;
-  padding: 0.3rem 0.8rem;
-  border: 1px solid rgba(196, 168, 130, 0.35);
-  backdrop-filter: blur(4px);
-}
-
-.card-body-sc {
-  padding: 1.3rem;
-}
-
-.contrib-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  color: #fff;
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  flex-shrink: 0;
-  background: #c4a882;
-}
-.contrib-name {
-  font-size: var(--fs-md);
-  font-weight: 700;
-  color: var(--color-primary);
-  line-height: 1.3;
-}
-.contrib-date {
-  font-size: var(--fs-sm);
-  color: var(--accent-hover);
-}
-.card-price {
-  font-size: var(--fs-md);
-  font-weight: 700;
-  color: var(--color-secondary);
-  white-space: nowrap;
-}
-.card-type-label {
-  font-size: var(--fs-sm);
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  color: var(--color-subtle);
-}
-.card-desc {
-  font-size: var(--fs-base);
-  color: var(--accent-dk);
-  line-height: 1.6;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.cfg-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.2rem;
-  border: 1px solid var(--color-muted);
-  padding: 0.15rem 0.55rem;
-  font-size: var(--fs-xs);
-  color: var(--color-secondary);
-  border-radius: 2px;
-}
-
-[data-theme="dark"] .contrib-name {
-  font-size: var(--fs-md);
-  font-weight: 700;
-  color: var(--color-primary);
-  line-height: 1.3;
-}
-[data-theme="dark"] .contrib-date {
-  font-size: var(--fs-sm);
-  color: var(--accent-hover);
-}
-[data-theme="dark"] .card-price {
-  font-size: var(--fs-md);
-  font-weight: 700;
-  color: var(--accent-hover);
-  white-space: nowrap;
-}
-[data-theme="dark"] .card-type-label {
-  font-size: var(--fs-sm);
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  color: var(--accent-dk);
-}
-[data-theme="dark"] .card-desc {
-  font-size: var(--fs-base);
-  color: var(--color-cream);
-  line-height: 1.6;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-[data-theme="dark"] .cfg-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.2rem;
-  border: 1px solid var(--color-muted);
-  padding: 0.15rem 0.55rem;
-  font-size: var(--fs-xs);
-  color: var(--color-secondary);
-  border-radius: 2px;
-}
-.cfg-key {
-  font-weight: 600;
-  color: var(--color-primary);
-}
-.cfg-sep {
-  color: var(--accent);
-}
-.cfg-val {
-  color: var(--color-secondary);
-}
-.card-cta {
-  background: var(--btn-bg);
-  color: var(--btn-color);
-  font-family: var(--font-serif);
-  font-size: var(--fs-xs);
-  letter-spacing: 0.06em;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: background 0.2s;
-}
-.card-cta:hover {
-  background: var(--btn-bg-hover);
-  color: var(--btn-color);
-}
 /* card transition */
 .card-fade-enter-active {
   transition:
@@ -696,9 +433,6 @@ const {
 @media (max-width: 1199px) {
   .sc-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-  .sc-card.is-featured {
-    grid-column: span 2;
   }
   .skeleton-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -750,12 +484,6 @@ const {
   }
   .sc-grid {
     grid-template-columns: 1fr;
-  }
-  .sc-card.is-featured {
-    grid-column: span 1;
-  }
-  .sc-card.is-featured .card-img-wrap {
-    aspect-ratio: 4 / 3;
   }
   .skeleton-grid {
     grid-template-columns: 1fr;
