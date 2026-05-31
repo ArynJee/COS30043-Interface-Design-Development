@@ -993,12 +993,37 @@ onMounted(async () => {
   }
 }
 
+@media (max-width: 1260px) {
+  .hero {
+    display: flex;
+    flex-direction: column;
+  }
+  .hero-headline {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+  .hero-card {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    align-self: flex-start;
+    margin: 0 2rem 2.5rem;
+    max-width: 360px;
+  }
+}
 @media (max-width: 575px) {
   .hero-card {
-    left: 1.25rem;
-    right: 1.25rem;
+    margin: 0 1.25rem 1.5rem;
     max-width: none;
-    bottom: 2rem;
+    align-self: stretch;
   }
   .fg-cards {
     grid-template-columns: 1fr;

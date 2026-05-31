@@ -285,7 +285,7 @@ const {
 .cart-content {
   display: flex;
   gap: 2rem;
-  padding: 2.5rem 5rem;
+  padding: 2.5rem clamp(1.25rem, 5vw, 5rem);
   align-items: stretch;
 }
 
@@ -719,7 +719,7 @@ const {
 }
 
 /* ── Responsive ── */
-@media (max-width: 991px) {
+@media (max-width: 1066px) {
   .cart-content {
     padding: 1.5rem 2.5rem;
     flex-direction: column;
