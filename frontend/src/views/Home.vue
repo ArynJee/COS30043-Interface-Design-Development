@@ -4,6 +4,8 @@ import { RouterLink } from "vue-router";
 import { ArrowUpRight, MessageSquare, Star } from "@lucide/vue";
 import FeedbackModal from "@/components/FeedbackModal.vue";
 import useFeedback from "@/hooks/useFeedback";
+import { getProductsApi } from "@/services/productServices";
+import { getContributionsApi } from "@/services/showcaseServices";
 
 const productCount = ref("-");
 const projectCount = ref("-");
@@ -59,21 +61,17 @@ const productCategories = ref([
 
 /* ── Fetch data on mount ── */
 onMounted(async () => {
-  const [pRes, prRes, fbRes] = await Promise.allSettled([
-    fetch("/api/product"),
-    fetch("/api/project"),
+  const [pRes, scRes] = await Promise.allSettled([
+    getProductsApi({ limit: 1 }),
+    getContributionsApi(),
   ]);
 
-  if (pRes.status === "fulfilled" && pRes.value.ok) {
-    const d = await pRes.value.json();
-    productCount.value =
-      (Array.isArray(d) ? d.length : (d.count ?? d.total ?? 0)) + "+";
+  if (pRes.status === "fulfilled") {
+    productCount.value = (pRes.value.total ?? pRes.value.products?.length ?? 0);
   }
 
-  if (prRes.status === "fulfilled" && prRes.value.ok) {
-    const d = await prRes.value.json();
-    projectCount.value =
-      (Array.isArray(d) ? d.length : (d.count ?? d.total ?? 0)) + "+";
+  if (scRes.status === "fulfilled") {
+    projectCount.value = (scRes.value.contributions?.length ?? 0);
   }
 });
 </script>
@@ -224,9 +222,6 @@ onMounted(async () => {
               never in conflict, every piece we create carries a quiet
               confidence meant to outlast trends.
             </p>
-            <router-link to="/aboutus" class="about-btn">
-              About Us <ArrowUpRight :size="16" class="ms-1" />
-            </router-link>
           </div>
         </div>
       </div>
