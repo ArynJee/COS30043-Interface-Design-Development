@@ -10,6 +10,7 @@ import Products from '@/views/Products.vue'
 import Showcase from '@/views/Showcase.vue'
 import ContributionDetail from '@/views/ContributionDetail.vue'
 import Customize from '@/views/Customize.vue'
+import LocationView from '@/views/Location.vue'
 import Cart from '@/views/Cart.vue'
 import Checkout from '@/views/Checkout.vue'
 import OrderConfirmation from '@/views/OrderConfirmation.vue'
@@ -25,6 +26,7 @@ const routes = [
       { path: 'showcase', component: Showcase },
       { path: 'showcase/:id', component: ContributionDetail },
       { path: 'customize', component: Customize },
+      { path: 'locations', component: LocationView },
       { path: 'cart', component: Cart },
       { path: 'checkout', component: Checkout },
       { path: 'order-confirmation', component: OrderConfirmation },

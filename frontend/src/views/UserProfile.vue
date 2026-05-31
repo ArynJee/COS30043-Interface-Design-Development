@@ -350,8 +350,6 @@ const {
   background: var(--bg-page);
   min-height: 100vh;
 }
-
-/* ── Hero ── */
 .profile-hero {
   height: 360px;
   background: #1e1a14;
@@ -413,7 +411,7 @@ const {
   line-height: 1.6;
 }
 
-/* ── Layout ── */
+/* layout */
 .profile-content {
   display: flex;
   gap: 2rem;
@@ -432,7 +430,7 @@ const {
   min-width: 0;
 }
 
-/* ── Sidebar ── */
+/*sidebar */
 .sidebar-user {
   padding: 1.5rem;
   text-align: center;
@@ -507,7 +505,10 @@ const {
   background: #fff5f5;
 }
 
-/* ── Tab header ── */
+[data-theme="dark"] .logout-link:hover{
+  background: var(--bg-alt);
+}
+
 .tab-header {
   display: flex;
   align-items: center;
@@ -538,7 +539,7 @@ const {
   background: var(--bg-elevated);
 }
 
-/* ── Orders list ── */
+/* order list */
 .orders-list {
   display: flex;
   flex-direction: column;
@@ -715,7 +716,7 @@ const {
   cursor: not-allowed;
 }
 
-/* ── Profile view ── */
+/* profile view */
 .profile-view {
   background: var(--bg-surface);
   border: 1px solid var(--border);
@@ -751,7 +752,7 @@ const {
   color: var(--color-primary);
 }
 
-/* ── Profile edit ── */
+/* profile edit */
 .profile-edit-form {
   background: var(--bg-surface);
   border: 1px solid var(--border);
@@ -845,7 +846,7 @@ const {
   background: var(--bg-elevated);
 }
 
-/* ── States ── */
+/* states */
 .state-msg {
   padding: 3rem 5rem;
   text-align: center;
@@ -871,14 +872,14 @@ const {
   text-decoration: underline;
 }
 
-/* ── Contributions grid ── */
+/* contributions grid */
 .cp-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.25rem;
 }
 
-/* ── Responsive ── */
+/* responsive */
 @media (max-width: 991px) {
   .profile-content {
     padding: 1.5rem 2.5rem;
