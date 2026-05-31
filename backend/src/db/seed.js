@@ -118,7 +118,6 @@ const seedDb = async () => {
         products,
         product_tags,
         categories,
-        otp_requests,
         users
       RESTART IDENTITY CASCADE;
     `);

@@ -9,25 +9,6 @@ const {
   errors,
   loading,
   handleLogin,
-  fpStep,
-  fpEmail,
-  fpEmailError,
-  fpOtp,
-  fpOtpError,
-  fpNewPassword,
-  fpConfirmPassword,
-  fpPasswordError,
-  fpConfirmError,
-  showNewPw,
-  showConfirmPw,
-  fpLoading,
-  resendCooldown,
-  openForgotPassword,
-  closeFpModal,
-  sendOtp,
-  resendOtp,
-  verifyOtp,
-  resetPassword,
 } = useLogin();
 </script>
 
@@ -80,9 +61,7 @@ const {
 
         <!-- password -->
         <div class="auth-field">
-          <div class="auth-label-row">
-            <label class="auth-label">Password</label>
-          </div>
+          <label class="auth-label">Password</label>
           <div class="auth-input-wrap">
             <input
               v-model="form.password"
@@ -99,15 +78,6 @@ const {
             >
               <EyeOff v-if="showPassword" :size="16" />
               <Eye v-else :size="16" />
-            </button>
-          </div>
-          <div class="auth-forgot-row">
-            <button
-              type="button"
-              class="auth-forgot-link"
-              @click="openForgotPassword"
-            >
-              Forgot password?
             </button>
           </div>
           <span v-if="errors.password" class="auth-field-error">{{
@@ -132,167 +102,6 @@ const {
       </div>
     </div>
 
-    <!-- ── Forgot Password Modals ── -->
-    <Teleport to="body">
-      <Transition name="fp-fade">
-        <div v-if="fpStep" class="fp-backdrop" @click.self="closeFpModal">
-          <div class="fp-modal">
-            <!-- close -->
-            <button class="fp-close" @click="closeFpModal">✕</button>
-
-            <!-- STEP 1: Email -->
-            <template v-if="fpStep === 'email'">
-              <span class="fp-eyebrow">Reset Password</span>
-              <h3 class="fp-title">Enter Your Email</h3>
-              <p class="fp-body">
-                We'll send a one-time code to your registered email address.
-              </p>
-              <div class="auth-field">
-                <label class="auth-label">Email</label>
-                <input
-                  v-model="fpEmail"
-                  type="email"
-                  class="auth-input"
-                  :class="{ 'auth-input-error': fpEmailError }"
-                  placeholder="you@example.com"
-                  @keyup.enter="sendOtp"
-                />
-                <span v-if="fpEmailError" class="auth-field-error">{{
-                  fpEmailError
-                }}</span>
-              </div>
-              <button
-                class="auth-submit"
-                :disabled="fpLoading"
-                @click="sendOtp"
-              >
-                <span v-if="!fpLoading"
-                  >Send OTP <ArrowRight :size="15" class="ms-1"
-                /></span>
-                <span v-else class="auth-spinner"></span>
-              </button>
-            </template>
-
-            <!-- STEP 2: OTP -->
-            <template v-if="fpStep === 'otp'">
-              <span class="fp-eyebrow">Verify OTP</span>
-              <h3 class="fp-title">Enter OTP Code</h3>
-              <p class="fp-body">
-                A code was sent to <strong>{{ fpEmail }}</strong
-                >. Please check your inbox.
-              </p>
-              <div class="auth-field">
-                <label class="auth-label">OTP Code</label>
-                <input
-                  v-model="fpOtp"
-                  type="text"
-                  inputmode="numeric"
-                  maxlength="6"
-                  class="auth-input otp-input"
-                  :class="{ 'auth-input-error': fpOtpError }"
-                  placeholder="• • • • • •"
-                  @keyup.enter="verifyOtp"
-                />
-                <span v-if="fpOtpError" class="auth-field-error">{{
-                  fpOtpError
-                }}</span>
-              </div>
-              <button
-                class="auth-submit"
-                :disabled="fpLoading"
-                @click="verifyOtp"
-              >
-                <span v-if="!fpLoading"
-                  >Verify <ArrowRight :size="15" class="ms-1"
-                /></span>
-                <span v-else class="auth-spinner"></span>
-              </button>
-              <div class="fp-resend">
-                <button
-                  class="fp-resend-link"
-                  :disabled="resendCooldown > 0 || fpLoading"
-                  @click="resendOtp"
-                >
-                  {{
-                    resendCooldown > 0
-                      ? `Resend OTP (${resendCooldown}s)`
-                      : "Resend OTP"
-                  }}
-                </button>
-              </div>
-            </template>
-
-            <!-- STEP 3: New Password -->
-            <template v-if="fpStep === 'reset'">
-              <span class="fp-eyebrow">New Password</span>
-              <h3 class="fp-title">Set New Password</h3>
-              <p class="fp-body">Choose a strong password for your account.</p>
-              <div class="auth-field">
-                <label class="auth-label">New Password</label>
-                <div class="auth-input-wrap">
-                  <input
-                    v-model="fpNewPassword"
-                    :type="showNewPw ? 'text' : 'password'"
-                    class="auth-input auth-input-pw"
-                    :class="{ 'auth-input-error': fpPasswordError }"
-                    placeholder="••••••••"
-                  />
-                  <button
-                    type="button"
-                    class="pw-toggle"
-                    @click="showNewPw = !showNewPw"
-                  >
-                    <EyeOff v-if="showNewPw" :size="16" /><Eye
-                      v-else
-                      :size="16"
-                    />
-                  </button>
-                </div>
-                <span v-if="fpPasswordError" class="auth-field-error">{{
-                  fpPasswordError
-                }}</span>
-              </div>
-              <div class="auth-field">
-                <label class="auth-label">Confirm Password</label>
-                <div class="auth-input-wrap">
-                  <input
-                    v-model="fpConfirmPassword"
-                    :type="showConfirmPw ? 'text' : 'password'"
-                    class="auth-input auth-input-pw"
-                    :class="{ 'auth-input-error': fpConfirmError }"
-                    placeholder="••••••••"
-                    @keyup.enter="resetPassword"
-                  />
-                  <button
-                    type="button"
-                    class="pw-toggle"
-                    @click="showConfirmPw = !showConfirmPw"
-                  >
-                    <EyeOff v-if="showConfirmPw" :size="16" /><Eye
-                      v-else
-                      :size="16"
-                    />
-                  </button>
-                </div>
-                <span v-if="fpConfirmError" class="auth-field-error">{{
-                  fpConfirmError
-                }}</span>
-              </div>
-              <button
-                class="auth-submit"
-                :disabled="fpLoading"
-                @click="resetPassword"
-              >
-                <span v-if="!fpLoading"
-                  >Reset Password <ArrowRight :size="15" class="ms-1"
-                /></span>
-                <span v-else class="auth-spinner"></span>
-              </button>
-            </template>
-          </div>
-        </div>
-      </Transition>
-    </Teleport>
   </div>
 </template>
 
@@ -400,12 +209,6 @@ const {
   color: var(--color-secondary);
   margin-bottom: 0.45rem;
 }
-.auth-label-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 0.45rem;
-}
 .auth-input {
   width: 100%;
   padding: 0.7rem 1rem;
@@ -449,26 +252,6 @@ const {
 }
 .pw-toggle:hover {
   color: var(--color-primary);
-}
-.auth-forgot-row {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 0.4rem;
-}
-.auth-forgot-link {
-  background: none;
-  border: none;
-  font-family: var(--font-serif);
-  font-size: var(--fs-sm);
-  color: var(--color-secondary);
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  transition: color 0.2s;
-}
-.auth-forgot-link:hover {
-  color: var(--accent);
 }
 .auth-field-error {
   display: block;
@@ -546,100 +329,6 @@ const {
   font-size: var(--fs-base);
   padding: 0.75rem 1rem;
   margin-bottom: 1.25rem;
-}
-
-/* ── Forgot Password Modal ── */
-.fp-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(30, 26, 20, 0.65);
-  backdrop-filter: blur(6px);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-}
-.fp-modal {
-  background: var(--bg-page);
-  width: 100%;
-  max-width: 420px;
-  padding: 2.5rem;
-  position: relative;
-}
-.fp-close {
-  position: absolute;
-  top: 1rem;
-  right: 1.25rem;
-  background: none;
-  border: none;
-  font-size: var(--fs-lg);
-  color: var(--color-secondary);
-  cursor: pointer;
-  transition: color 0.2s;
-  font-family: var(--font-serif);
-}
-.fp-close:hover {
-  color: var(--color-primary);
-}
-.fp-eyebrow {
-  display: block;
-  font-size: var(--fs-xs);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 0.4rem;
-}
-.fp-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--color-primary);
-  margin: 0 0 0.75rem;
-}
-.fp-body {
-  font-size: var(--fs-base);
-  line-height: 1.65;
-  color: var(--color-secondary);
-  margin-bottom: 1.5rem;
-}
-.fp-resend {
-  text-align: center;
-  margin-top: 1rem;
-}
-.fp-resend-link {
-  background: none;
-  border: none;
-  font-family: "Times New Roman", serif;
-  font-size: var(--fs-sm);
-  color: #7a6a58;
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  transition: color 0.2s;
-  padding: 0;
-}
-.fp-resend-link:hover:not(:disabled) {
-  color: #c4a882;
-}
-.fp-resend-link:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-.otp-input {
-  font-size: 1.3rem;
-  letter-spacing: 0.4em;
-  text-align: center;
-}
-
-/* modal transition */
-.fp-fade-enter-active,
-.fp-fade-leave-active {
-  transition: opacity 0.25s ease;
-}
-.fp-fade-enter-from,
-.fp-fade-leave-to {
-  opacity: 0;
 }
 
 /* ── responsive ── */

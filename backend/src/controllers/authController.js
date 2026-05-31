@@ -155,7 +155,6 @@ export const updateMe = async (req, res) => {
 // DELETE /api/auth/me
 export const deleteMe = async (req, res) => {
   try {
-    await db.query("DELETE FROM otp_requests WHERE user_id = $1", [req.userId]);
     await db.query("DELETE FROM feedback WHERE user_id = $1", [req.userId]);
     await db.query("DELETE FROM users WHERE id = $1", [req.userId]);
 

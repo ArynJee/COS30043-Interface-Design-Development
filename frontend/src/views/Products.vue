@@ -299,10 +299,7 @@ onBeforeUnmount(() => {
           class="product-card overflow-hidden"
         >
           <!-- image with hover swap -->
-          <router-link
-            :to="`/products/${product.id}`"
-            class="card-img-wrapper position-relative d-block overflow-hidden"
-          >
+          <div class="card-img-wrapper position-relative overflow-hidden">
             <img
               :src="product.images[0]"
               :alt="product.name"
@@ -313,7 +310,7 @@ onBeforeUnmount(() => {
               :alt="product.name"
               class="img-secondary position-absolute inset-0 w-100 h-100 object-fit-cover"
             />
-          </router-link>
+          </div>
 
           <!-- card info -->
           <div class="card-body">
