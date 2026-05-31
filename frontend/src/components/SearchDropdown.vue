@@ -1,6 +1,6 @@
 <script setup>
 import { watch } from 'vue'
-import { ArrowRight } from '@lucide/vue'
+import { ArrowRight, MapPin } from '@lucide/vue'
 import { useSearch } from '@/hooks/useSearch.js'
 
 const props = defineProps({
@@ -12,6 +12,7 @@ const {
   query,
   products,
   showcaseResults,
+  branchResults,
   loading,
   hasSearched,
   hasResults,
@@ -19,6 +20,7 @@ const {
   goToProducts,
   goToShowcase,
   goToShowcaseAll,
+  goToBranch,
 } = useSearch()
 
 watch(
@@ -30,10 +32,11 @@ watch(
 function handleGoToProducts() { goToProducts(); emit('close') }
 function handleGoToShowcase(id) { goToShowcase(id); emit('close') }
 function handleGoToShowcaseAll() { goToShowcaseAll(); emit('close') }
+function handleGoToBranch() { goToBranch(); emit('close') }
 </script>
 
 <template>
-  <div class="sd-wrap position-absolute right-0 overflow-hidden">
+  <div class="sd-wrap position-absolute right-0">
     <!-- loading -->
     <div v-if="loading" class="sd-state d-flex align-items-center justify-content-center px-3 py-2 gap-3">
       <span class="sd-spinner rounded-pill" />
@@ -63,6 +66,30 @@ function handleGoToShowcaseAll() { goToShowcaseAll(); emit('close') }
         </button>
       </div>
 
+      <!-- branches -->
+      <div v-if="branchResults.length > 0" class="sd-section px-2 py-3">
+        <p class="sd-section-label text-uppercase px-3 mb-2">Branches</p>
+        <button
+          v-for="b in branchResults"
+          :key="b.id"
+          class="sd-item d-flex align-items-center gap-3 w-100 px-3 py-2 border-0 text-left"
+          @mousedown.prevent
+          @click="handleGoToBranch"
+        >
+          <div class="sd-thumb sd-thumb-branch d-flex align-items-center justify-content-center flex-shrink-0">
+            <MapPin :size="18" class="sd-branch-pin" />
+          </div>
+          <div class="sd-item-body d-flex flex-column gap-1">
+            <span class="sd-item-name overflow-hidden">{{ b.name }}</span>
+            <span class="sd-item-meta">{{ b.state }} · {{ b.address }}</span>
+          </div>
+        </button>
+        <button class="sd-see-all d-flex align-items-center w-100 gap-2 border-0 text-left" @mousedown.prevent @click="handleGoToBranch">
+          View all branches
+          <ArrowRight :size="12" />
+        </button>
+      </div>
+
       <!-- showcase -->
       <div v-if="showcaseResults.length > 0" class="sd-section px-2 py-3">
         <p class="sd-section-label text-uppercase px-3 mb-2">Showcase</p>
@@ -77,9 +104,9 @@ function handleGoToShowcaseAll() { goToShowcaseAll(); emit('close') }
             v-if="c.preview_image_url"
             :src="c.preview_image_url"
             :alt="c.area"
-            class="sd-thumb"
+            class="sd-thumb object-fit-cover"
           />
-          <div v-else class="sd-thumb sd-thumb-placeholder" />
+          <div v-else class="sd-thumb sd-thumb-placeholder object-fit-cover" />
           <div class="sd-item-body d-flex flex-column gap-1">
             <span class="sd-item-name overflow-hidden">{{ c.first_name }} {{ c.last_name }}</span>
             <span class="sd-item-meta">{{ c.area }} · {{ c.furniture_type }}</span>
@@ -103,6 +130,8 @@ function handleGoToShowcaseAll() { goToShowcaseAll(); emit('close') }
 .sd-wrap {
   top: calc(100% + 6px);
   width: 340px;
+  max-height: calc(100vh - 110px);
+  overflow-y: auto;
   background: #fff;
   border: 1px solid #e4ddd5;
   box-shadow: 0 8px 28px rgba(44, 34, 24, 0.12);
@@ -155,6 +184,12 @@ function handleGoToShowcaseAll() { goToShowcaseAll(); emit('close') }
 .sd-thumb-placeholder {
   background: #ede8e1;
 }
+.sd-thumb-branch {
+  background: #f0ebe4;
+}
+.sd-branch-pin {
+  color: #8b6f47;
+}
 
 .sd-item-body {
   min-width: 0;
@@ -192,6 +227,8 @@ function handleGoToShowcaseAll() { goToShowcaseAll(); emit('close') }
 [data-theme='dark'] .sd-item-name { color: #e8ddd0; }
 [data-theme='dark'] .sd-item-meta { color: #7a6a5a; }
 [data-theme='dark'] .sd-thumb-placeholder { background: #2a2418; }
+[data-theme='dark'] .sd-thumb-branch { background: #2a2418; }
+[data-theme='dark'] .sd-branch-pin { color: #c4a882; }
 [data-theme='dark'] .sd-state { color: #7a6a5a; }
 [data-theme='dark'] .sd-see-all { color: #c4a882; }
 [data-theme='dark'] .sd-see-all:hover { color: #e0c99a; }

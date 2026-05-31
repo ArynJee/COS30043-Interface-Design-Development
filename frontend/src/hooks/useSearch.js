@@ -2,6 +2,7 @@ import { ref, watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { getProductsApi } from '@/services/productServices.js'
 import { getContributionsApi } from '@/services/showcaseServices.js'
+import { branches } from '@/hooks/useLocation.js'
 
 export function useSearch() {
   const router = useRouter()
@@ -24,8 +25,21 @@ export function useSearch() {
       .slice(0, 3)
   })
 
+  const branchResults = computed(() => {
+    if (query.value.length < 2) return []
+    const q = query.value.toLowerCase()
+    return branches
+      .filter(
+        (b) =>
+          b.name.toLowerCase().includes(q) ||
+          b.state.toLowerCase().includes(q) ||
+          b.address.toLowerCase().includes(q),
+      )
+      .slice(0, 3)
+  })
+
   const hasResults = computed(
-    () => products.value.length > 0 || showcaseResults.value.length > 0,
+    () => products.value.length > 0 || showcaseResults.value.length > 0 || branchResults.value.length > 0,
   )
 
   const formatPrice = (p) =>
@@ -79,6 +93,11 @@ export function useSearch() {
     clear()
   }
 
+  function goToBranch() {
+    router.push('/locations')
+    clear()
+  }
+
   function clear() {
     query.value = ''
     hasSearched.value = false
@@ -90,6 +109,7 @@ export function useSearch() {
     query,
     products,
     showcaseResults,
+    branchResults,
     loading,
     hasSearched,
     hasResults,
@@ -97,6 +117,7 @@ export function useSearch() {
     goToProducts,
     goToShowcase,
     goToShowcaseAll,
+    goToBranch,
     clear,
   }
 }

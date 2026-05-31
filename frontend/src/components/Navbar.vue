@@ -1,9 +1,10 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch, nextTick, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { MapPin, ShoppingCart, UserCircle, Search, ShoppingBag, LayoutGrid, Sliders, Info, ChevronLeft, ChevronRight, Sun, Moon } from '@lucide/vue'
+import { MapPin, ShoppingCart, UserCircle, Search, ShoppingBag, LayoutGrid, Sliders, Info, ChevronLeft, ChevronRight, Sun, Moon, ArrowRight, X } from '@lucide/vue'
 import { useDarkMode } from '@/hooks/useDarkMode'
 import { useCartStore } from '@/stores/cart'
+import { useSearch } from '@/hooks/useSearch.js'
 import SearchDropdown from '@/components/SearchDropdown.vue'
 
 const cartStore = useCartStore()
@@ -49,6 +50,37 @@ function closeSearch() {
   searchQuery.value = ''
   searchFocused.value = false
 }
+
+// mobile sidebar search
+const mobileSearchRef = ref(null)
+const {
+  query: sbQuery,
+  products: sbProducts,
+  showcaseResults: sbShowcase,
+  branchResults: sbBranches,
+  loading: sbLoading,
+  hasSearched: sbHasSearched,
+  hasResults: sbHasResults,
+  formatPrice,
+  goToProducts: sbGoToProducts,
+  goToShowcase: sbGoToShowcase,
+  goToShowcaseAll: sbGoToShowcaseAll,
+  goToBranch: sbGoToBranch,
+} = useSearch()
+
+watch(searchQuery, (q) => { sbQuery.value = q })
+watch(sidebarOpen, (open) => { if (!open) closeSearch() })
+const sbShowResults = computed(() => sidebarOpen.value && searchQuery.value.length >= 2)
+
+async function openSidebarSearch() {
+  sidebarOpen.value = true
+  await nextTick()
+  mobileSearchRef.value?.focus()
+}
+function sbHandleGoToProducts() { sbGoToProducts(); sidebarOpen.value = false }
+function sbHandleGoToShowcase(id) { sbGoToShowcase(id); sidebarOpen.value = false }
+function sbHandleGoToShowcaseAll() { sbGoToShowcaseAll(); sidebarOpen.value = false }
+function sbHandleGoToBranch() { sbGoToBranch(); sidebarOpen.value = false }
 </script>
 
 <template>
@@ -125,10 +157,16 @@ function closeSearch() {
       </button>
     </div>
 
-    <!-- expanded search bar -->
-    <div class="sb-search d-flex align-items-center gap-2 rounded-pill mx-2 mt-3 mb-1 px-2 py-1 overflow-hidden">
+    <!-- search icon trigger (collapsed state only) -->
+    <button class="sb-search-trigger position-relative d-flex align-items-center justify-content-center rounded-2 mx-auto my-2" @click="openSidebarSearch" title="Search">
+      <Search :size="19" class="sb-icon" />
+      <span class="sb-tooltip">Search</span>
+    </button>
+
+    <!-- expanded search bar (open state) -->
+    <div class="sb-search d-flex align-items-center gap-2 rounded-pill overflow-hidden">
       <Search :size="14" class="sb-search-icon" />
-      <input v-model="searchQuery" type="text" placeholder="Search…" class="sb-search-input border-0 w-100" @keydown.enter="onSearchEnter" />
+      <input ref="mobileSearchRef" v-model="searchQuery" type="text" placeholder="Search…" class="sb-search-input border-0 w-100" @keydown.enter="onSearchEnter" @keydown.escape="onSearchEscape" />
     </div>
 
     <!-- Nav links -->
@@ -182,6 +220,71 @@ function closeSearch() {
     :class="{ visible: sidebarOpen }"
     @click="sidebarOpen = false"
   ></div>
+
+  <!-- mobile search results panel (slides in beside open sidebar) -->
+  <div class="sb-result-panel d-lg-none position-fixed d-flex flex-column" :class="{ 'is-visible': sbShowResults }">
+    <!-- header -->
+    <div class="sb-rp-header d-flex align-items-center justify-content-between px-3 flex-shrink-0">
+      <p class="sb-rp-title mb-0">Results for "{{ searchQuery }}"</p>
+      <button class="sb-rp-close d-flex align-items-center justify-content-center border-0 rounded-2" @click="closeSearch">
+        <X :size="15" />
+      </button>
+    </div>
+
+    <!-- scrollable body -->
+    <div class="sb-rp-body overflow-y-auto">
+      <div v-if="sbLoading" class="sb-result-state px-3 py-3">Searching…</div>
+      <template v-else-if="sbHasSearched">
+        <!-- products -->
+        <div v-if="sbProducts.length > 0" class="sb-result-section">
+          <p class="sb-result-label px-3 pt-3 pb-1 mb-0">Products</p>
+          <button v-for="p in sbProducts" :key="p.id" class="sb-result-item d-flex align-items-center gap-2 w-100 px-3 py-2 border-0 text-left" @click="sbHandleGoToProducts">
+            <img :src="p.images?.[0]" :alt="p.name" class="sb-result-thumb object-fit-cover flex-shrink-0" />
+            <div class="flex-fill overflow-hidden">
+              <p class="sb-result-name mb-0 text-truncate">{{ p.name }}</p>
+              <p class="sb-result-meta mb-0">{{ formatPrice(p.base_price) }}</p>
+            </div>
+          </button>
+          <button class="sb-result-seeall d-flex align-items-center gap-1 w-100 px-3 py-2 border-0 text-left" @click="sbHandleGoToProducts">
+            All products <ArrowRight :size="11" />
+          </button>
+        </div>
+        <!-- branches -->
+        <div v-if="sbBranches.length > 0" class="sb-result-section">
+          <p class="sb-result-label px-3 pt-3 pb-1 mb-0">Branches</p>
+          <button v-for="b in sbBranches" :key="b.id" class="sb-result-item d-flex align-items-center gap-2 w-100 px-3 py-2 border-0 text-left" @click="sbHandleGoToBranch">
+            <div class="sb-result-thumb sb-result-thumb--branch d-flex align-items-center justify-content-center flex-shrink-0">
+              <MapPin :size="15" class="sb-result-pin" />
+            </div>
+            <div class="flex-fill overflow-hidden">
+              <p class="sb-result-name mb-0 text-truncate">{{ b.name }}</p>
+              <p class="sb-result-meta mb-0 text-truncate">{{ b.state }}</p>
+            </div>
+          </button>
+          <button class="sb-result-seeall d-flex align-items-center gap-1 w-100 px-3 py-2 border-0 text-left" @click="sbHandleGoToBranch">
+            All branches <ArrowRight :size="11" />
+          </button>
+        </div>
+        <!-- showcase -->
+        <div v-if="sbShowcase.length > 0" class="sb-result-section">
+          <p class="sb-result-label px-3 pt-3 pb-1 mb-0">Showcase</p>
+          <button v-for="c in sbShowcase" :key="c.id" class="sb-result-item d-flex align-items-center gap-2 w-100 px-3 py-2 border-0 text-left" @click="sbHandleGoToShowcase(c.id)">
+            <img v-if="c.preview_image_url" :src="c.preview_image_url" :alt="c.area" class="sb-result-thumb object-fit-cover flex-shrink-0" />
+            <div v-else class="sb-result-thumb sb-result-thumb--blank flex-shrink-0" />
+            <div class="flex-fill overflow-hidden">
+              <p class="sb-result-name mb-0 text-truncate">{{ c.first_name }} {{ c.last_name }}</p>
+              <p class="sb-result-meta mb-0 text-truncate">{{ c.area }}</p>
+            </div>
+          </button>
+          <button class="sb-result-seeall d-flex align-items-center gap-1 w-100 px-3 py-2 border-0 text-left" @click="sbHandleGoToShowcaseAll">
+            Browse showcase <ArrowRight :size="11" />
+          </button>
+        </div>
+        <!-- empty -->
+        <div v-if="!sbHasResults" class="sb-result-state px-3 py-4 text-center">No results for "{{ searchQuery }}"</div>
+      </template>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -347,6 +450,24 @@ function closeSearch() {
   background: #f5f2ee;
 }
 
+/* search icon trigger (collapsed only) */
+.sb-search-trigger {
+  width: 38px;
+  height: 38px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #4a3c30;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.sb-search-trigger:hover {
+  background: #f5f2ee;
+  color: #2c2218;
+}
+.mobile-sidebar.is-open .sb-search-trigger {
+  display: none !important;
+}
+
 /* sidebar search */
 .sb-search {
   background: #f5f2ee;
@@ -375,6 +496,115 @@ function closeSearch() {
 }
 .sb-search-input::placeholder {
   color: #b8a99a;
+}
+
+/* mobile search results panel */
+.sb-result-panel {
+  top: 0;
+  left: 220px;
+  right: 0;
+  height: 100vh;
+  background: #fff;
+  border-left: 1px solid #e8e3dc;
+  box-shadow: 4px 0 20px rgba(44, 34, 24, 0.08);
+  z-index: 1099;
+  transform: translateX(16px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+  font-family: 'Times New Roman', Times, serif;
+}
+.sb-result-panel.is-visible {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.sb-rp-header {
+  min-height: 62px;
+  border-bottom: 1px solid #f0ebe4;
+  gap: 8px;
+}
+.sb-rp-title {
+  font-size: var(--fs-xs);
+  letter-spacing: 0.08em;
+  color: #9b8b79;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sb-rp-close {
+  width: 26px;
+  height: 26px;
+  background: none;
+  color: #6b5d52;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.sb-rp-close:hover { background: #f5f2ee; }
+.sb-rp-body { flex: 1; overflow-y: auto; }
+
+.sb-result-section + .sb-result-section {
+  border-top: 1px solid #f0ebe4;
+}
+.sb-result-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #c4a882;
+  font-family: 'Times New Roman', Times, serif;
+}
+.sb-result-item {
+  background: none;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.sb-result-item:hover {
+  background: #f5f2ee;
+}
+.sb-result-thumb {
+  width: 32px;
+  height: 32px;
+  background: #f0ebe4;
+}
+.sb-result-thumb--branch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sb-result-thumb--blank {
+  background: #ede8e1;
+}
+.sb-result-pin {
+  color: #8b6f47;
+}
+.sb-result-name {
+  font-size: var(--fs-sm);
+  color: #2c2218;
+  font-family: 'Times New Roman', Times, serif;
+}
+.sb-result-meta {
+  font-size: 0.7rem;
+  color: #9b8b79;
+  font-family: 'Times New Roman', Times, serif;
+}
+.sb-result-seeall {
+  background: none;
+  cursor: pointer;
+  font-size: 0.7rem;
+  color: #8b6f47;
+  font-family: 'Times New Roman', Times, serif;
+  padding-bottom: 6px;
+  transition: color 0.15s;
+}
+.sb-result-seeall:hover {
+  color: #5c4830;
+}
+.sb-result-state {
+  font-size: var(--fs-sm);
+  color: #9b8b79;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 /* sidebar navlinks */
@@ -541,6 +771,23 @@ function closeSearch() {
   color: #c8bdb0;
 }
 [data-theme="dark"] .sb-toggle:hover { background: #3a3025; }
+[data-theme="dark"] .sb-search-trigger { color: #c8bdb0; }
+[data-theme="dark"] .sb-search-trigger:hover { background: #2a2418; color: #e8ddd0; }
+[data-theme="dark"] .sb-result-panel { background: #1e1b14; border-left-color: #3a3025; }
+[data-theme="dark"] .sb-rp-header { border-bottom-color: #3a3025; }
+[data-theme="dark"] .sb-rp-title { color: #7a6a5a; }
+[data-theme="dark"] .sb-rp-close { color: #c8bdb0; }
+[data-theme="dark"] .sb-rp-close:hover { background: #2a2418; }
+[data-theme="dark"] .sb-result-section + .sb-result-section { border-top-color: #3a3025; }
+[data-theme="dark"] .sb-result-item:hover { background: #2a2418; }
+[data-theme="dark"] .sb-result-thumb { background: #2a2418; }
+[data-theme="dark"] .sb-result-thumb--blank { background: #2a2418; }
+[data-theme="dark"] .sb-result-pin { color: #c4a882; }
+[data-theme="dark"] .sb-result-name { color: #e8ddd0; }
+[data-theme="dark"] .sb-result-meta { color: #7a6a5a; }
+[data-theme="dark"] .sb-result-seeall { color: #c4a882; }
+[data-theme="dark"] .sb-result-seeall:hover { color: #e0c99a; }
+[data-theme="dark"] .sb-result-state { color: #7a6a5a; }
 [data-theme="dark"] .sb-search {
   background: #2a2418;
   border-color: #3a3025;

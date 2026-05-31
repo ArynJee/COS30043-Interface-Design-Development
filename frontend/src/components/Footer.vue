@@ -1,11 +1,5 @@
 <script setup>
 import { RouterLink } from 'vue-router'
-const footerLinks = [
-  { name: 'Products', path: '/products' },
-  { name: 'Showcase', path: '/showcase' },
-  { name: 'Customize', path: '/customize' },
-  { name: 'About Us', path: '/about' },
-]
 </script>
 
 <template>
@@ -78,6 +72,31 @@ const footerLinks = [
   grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 2rem;
   align-items: start;
+}
+
+@media (max-width: 991px) {
+  .comfy-footer {
+    padding-left: 62px;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .footer-brand-col {
+    grid-column: 1 / -1;
+  }
+  .footer-brand-tagline {
+    max-width: none;
+  }
+  .footer-col-title--hidden {
+    visibility: visible;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 }
 .footer-brand {
   font-size: 1.6rem;

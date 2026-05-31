@@ -24,7 +24,7 @@ const props = defineProps({
 const container = ref(null)
 const loading = ref(true)
 
-let scene, camera, renderer, controls, rafId, currentGroup, floorMesh, themeObserver
+let scene, camera, renderer, controls, rafId, currentGroup, floorMesh, themeObserver, resizeObserver
 
 const SCENE_BG_LIGHT = 0xF5F0E8
 const SCENE_BG_DARK  = 0x4d4533
@@ -908,11 +908,19 @@ onMounted(() => {
   loading.value = false
   themeObserver = new MutationObserver(applyTheme)
   themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+
+  // Pick up the settled CSS grid dimensions after first paint (fixes stale layout on first visit)
+  requestAnimationFrame(onResize)
+
+  // Re-sync whenever the container is resized (responsive grid reflow, sidebar open/close, etc.)
+  resizeObserver = new ResizeObserver(onResize)
+  resizeObserver.observe(container.value)
 })
 
 onUnmounted(() => {
   cancelAnimationFrame(rafId)
   window.removeEventListener('resize', onResize)
+  resizeObserver?.disconnect()
   themeObserver?.disconnect()
   renderer?.dispose()
   controls?.dispose()

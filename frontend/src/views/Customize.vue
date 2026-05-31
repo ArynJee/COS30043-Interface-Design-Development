@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import {
   Sofa as SofaIcon,
   ShoppingCart,
@@ -31,6 +31,14 @@ import ContributionModal from '@/components/ContributionModal.vue'
 import useCustomize from '@/hooks/useCustomize.js'
 
 const viewerRef = ref(null)
+
+// JS-driven breakpoint — initialised from window.innerWidth immediately so the
+// correct single-column layout renders on the FIRST visit (CSS injection timing
+// in Vite dev mode can lag behind onMounted, causing the wrong grid on first render).
+const isNarrow = ref(window.innerWidth <= 992)
+function syncNarrow() { isNarrow.value = window.innerWidth <= 992 }
+onMounted(() => window.addEventListener('resize', syncNarrow))
+onUnmounted(() => window.removeEventListener('resize', syncNarrow))
 
 const {
   selectedArea, selectedTypeId, selectedConfig,
@@ -116,10 +124,10 @@ const priceBreakdown = computed(() => {
     </section>
 
     <!-- workspace -->
-    <div class="cu-workspace container mx-auto mt-5 d-grid align-items-start gap-4">
+    <div class="cu-workspace container-fluid mt-5 d-grid align-items-start gap-4" :class="{ 'cu-workspace--mobile': isNarrow }">
 
       <!--configuration panel -->
-      <aside class="cu-panel cu-panel--left overflow-hidden position-sticky overflow-y-auto">
+      <aside class="cu-panel cu-panel--left overflow-hidden overflow-y-auto" :class="{ 'position-sticky': !isNarrow, 'cu-panel--left-mobile': isNarrow }">
 
         <!-- STEP 1: furniture type -->
         <div class="cu-step p-4">
@@ -394,8 +402,14 @@ const priceBreakdown = computed(() => {
 
 /* workspace layout */
 .cu-workspace {
-  padding: 0 1.5rem 4rem;
+  padding: 0 1.25rem 4rem;
   grid-template-columns: 380px 1fr;
+}
+
+@media (min-width: 1200px) {
+  .cu-workspace {
+    padding: 0 3rem 4rem;
+  }
 }
 
 /* left panel */
@@ -679,15 +693,22 @@ const priceBreakdown = computed(() => {
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── responsive ─────────────────────────────────────────────────────────── */
+
+/* JS-driven classes (set from window.innerWidth on first render — bypasses
+   CSS injection timing lag in Vite dev mode that caused wrong layout on first visit) */
+.cu-workspace--mobile {
+  grid-template-columns: 1fr;
+}
+.cu-panel--left-mobile {
+  position: static;
+  max-height: none;
+  overflow-y: visible;
+}
+
+/* CSS media queries kept as fallback and for non-grid responsive tweaks */
 @media (max-width: 992px) {
-  .cu-workspace {
-    grid-template-columns: 1fr;
-  }
-  .cu-panel--left {
-    position: static;
-    max-height: none;
-    overflow-y: visible;
-  }
+  .cu-workspace { grid-template-columns: 1fr; }
+  .cu-panel--left { position: static; max-height: none; overflow-y: visible; }
   .cu-viewer-wrap { height: 380px; }
   .cu-hero-inner  { padding: 0 2.5rem; }
   .cu-hero-orn, .cu-hero-orn-sm { display: none; }
