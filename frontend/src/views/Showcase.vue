@@ -75,7 +75,7 @@ const {
 
     <!-- area filter -->
     <div
-      class="filter-strip d-flex align-items-center gap-5 overflow-x-auto justify-content-center position-sticky px-2 py-4"
+      class="filter-strip d-flex align-items-center position-sticky px-2 py-4"
     >
       <button
         v-for="area in AREAS"
@@ -291,8 +291,11 @@ const {
 .filter-strip {
   top: 80px;
   z-index: 50;
+  overflow-x: auto;
   scrollbar-width: none;
   background: var(--bg-page);
+  justify-content: center;
+  gap: 1.25rem;
 }
 .filter-strip::-webkit-scrollbar {
   display: none;
@@ -447,6 +450,8 @@ const {
   }
   .filter-strip {
     padding: 0.9rem 2.5rem;
+    top: 0;
+    gap: 0.875rem;
   }
   .sc-container {
     padding: 2rem 2.5rem 4rem;
@@ -475,6 +480,7 @@ const {
   .filter-strip {
     padding: 0.75rem 1.25rem;
     top: 0;
+    gap: 0.5rem;
   }
   .sc-container {
     padding: 1.5rem 1.25rem 3rem;
@@ -493,6 +499,18 @@ const {
   }
   .stat-col:first-child {
     padding-left: 0;
+  }
+}
+@media (max-width: 670px) {
+  .filter-strip {
+    overflow-x: visible;
+    flex-wrap: wrap;
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
+  }
+  .area-pill {
+    flex: 0 0 calc(50% - 0.25rem);
+    text-align: center;
   }
 }
 @media (max-width: 480px) {

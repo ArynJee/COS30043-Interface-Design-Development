@@ -1,5 +1,5 @@
 <script setup>
-import { ChevronDown, ChevronUp, Package, User, LogOut, Sparkles, ArrowRight } from "@lucide/vue";
+import { ChevronDown, ChevronUp, Package, User, LogOut, Sparkles, ArrowRight, ChevronRight } from "@lucide/vue";
 import useUserProfile from "@/hooks/useUserProfile.js";
 import ContributionCard from "@/components/ContributionCard.vue";
 
@@ -718,6 +718,7 @@ const {
 
 /* profile view */
 .profile-view {
+  width: 100%;
   background: var(--bg-surface);
   border: 1px solid var(--border);
   padding: 0;
