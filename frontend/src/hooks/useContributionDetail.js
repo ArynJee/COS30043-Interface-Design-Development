@@ -1,12 +1,10 @@
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { getContributionApi, getContributionReviewsApi, addContributionReviewApi } from '@/services/showcaseServices'
 import { addToCartApi } from '@/services/customizeServices'
 import { FURNITURE_TYPE_MAP } from '@/data/furnitureConfigs'
 import { useCartStore } from '@/stores/cart'
 
 export default function useContributionDetail(contributionId) {
-  const router = useRouter()
   const cartStore = useCartStore()
 
   const contribution = ref(null)
@@ -15,6 +13,7 @@ export default function useContributionDetail(contributionId) {
   const error = ref(null)
   const addingToCart = ref(false)
   const cartAdded = ref(false)
+  const cartError = ref(null)
   const submittingReview = ref(false)
   const reviewError = ref(null)
   const reviewSuccess = ref(false)
@@ -70,9 +69,16 @@ export default function useContributionDetail(contributionId) {
     }
   }
 
+  let cartErrorTimer = null
+  function showCartError(msg) {
+    cartError.value = msg
+    clearTimeout(cartErrorTimer)
+    cartErrorTimer = setTimeout(() => { cartError.value = null }, 4000)
+  }
+
   async function addToCart() {
     if (!localStorage.getItem('token')) {
-      router.push('/login')
+      showCartError('Please log in to add items to your cart.')
       return
     }
     addingToCart.value = true
@@ -87,8 +93,9 @@ export default function useContributionDetail(contributionId) {
       await cartStore.fetchCart()
       cartAdded.value = true
       setTimeout(() => { cartAdded.value = false }, 2000)
-    } catch {
-      // cart store logs errors
+    } catch (err) {
+      const msg = err.response?.data?.message
+      showCartError(msg || 'Please log in to add items to your cart.')
     } finally {
       addingToCart.value = false
     }
@@ -118,7 +125,7 @@ export default function useContributionDetail(contributionId) {
   return {
     contribution, reviews, loading, error,
     skeletonType, furnitureTypeId, parsedConfig, configEntries,
-    addingToCart, cartAdded,
+    addingToCart, cartAdded, cartError,
     submittingReview, reviewError, reviewSuccess,
     formatPrice, formatDate, getInitials,
     addToCart, submitReview,

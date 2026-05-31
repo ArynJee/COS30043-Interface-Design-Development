@@ -100,6 +100,22 @@ const initDb = async () => {
             comment TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
+
+        CREATE TABLE IF NOT EXISTS cart_items (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+            is_custom BOOLEAN DEFAULT TRUE,
+            furniture_type VARCHAR(100),
+            skeleton_type VARCHAR(100),
+            configuration JSONB,
+            quantity INTEGER DEFAULT 1,
+            unit_price NUMERIC(10,2) NOT NULL,
+            preview_image TEXT,
+            product_id INTEGER REFERENCES products(id) ON DELETE SET NULL,
+            item_name VARCHAR(255),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
     `);
 
     // add stock_count if it doesn't exist yet (safe for existing DBs)

@@ -98,6 +98,9 @@ export const addCartItem = async (req, res) => {
 
     res.status(201).json({ item: result.rows[0] });
   } catch (err) {
+    if (err.code === "23503" && err.constraint === "cart_items_user_id_fkey") {
+      return res.status(401).json({ message: "User account not found. Please log in first." });
+    }
     console.error(err);
     res.status(500).json({ message: "Failed to add to cart" });
   }

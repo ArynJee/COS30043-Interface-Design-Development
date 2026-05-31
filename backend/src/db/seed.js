@@ -110,6 +110,7 @@ const seedDb = async () => {
 
     await db.query(`
       TRUNCATE TABLE
+        cart_items,
         contribution_reviews,
         design_contributions,
         feedback,

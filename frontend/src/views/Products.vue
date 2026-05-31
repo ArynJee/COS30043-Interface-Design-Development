@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, onBeforeUnmount } from "vue";
-import { RouterLink, useRouter } from "vue-router";
+import { RouterLink } from "vue-router";
 import {
   ChevronLeft,
   ChevronRight,
@@ -12,26 +12,36 @@ import {
 import useProducts from "@/hooks/useProducts.js";
 import { useCartStore } from "@/stores/cart.js";
 
-const router = useRouter();
 const cartStore = useCartStore();
 
 // Tracks per-product feedback: null | 'adding' | 'added'
 const addingStates = ref({});
+const loginError = ref(null);
+let loginErrorTimer = null;
+
+function showLoginError(msg) {
+  loginError.value = msg;
+  clearTimeout(loginErrorTimer);
+  loginErrorTimer = setTimeout(() => { loginError.value = null; }, 4000);
+}
 
 async function addToCart(product) {
   if (!localStorage.getItem("token")) {
-    router.push("/login");
+    showLoginError("Please log in to add items to your cart.");
     return;
   }
   addingStates.value[product.id] = "adding";
   const ok = await cartStore.addProduct(product);
-  addingStates.value[product.id] = ok ? "added" : null;
   if (ok) {
+    addingStates.value[product.id] = "added";
     // Update sold_count display locally so it feels responsive
     product.sold_count = (product.sold_count || 0) + 1;
     setTimeout(() => {
       addingStates.value[product.id] = null;
     }, 1800);
+  } else {
+    addingStates.value[product.id] = null;
+    showLoginError("Please log in to add items to your cart.");
   }
 }
 
@@ -265,6 +275,14 @@ onBeforeUnmount(() => {
         </div>
       </div>
     </div>
+
+    <!-- login error banner -->
+    <Transition name="fade">
+      <div v-if="loginError" class="login-error-banner d-flex align-items-center justify-content-between">
+        <span>{{ loginError }}</span>
+        <RouterLink to="/login" class="login-error-link">Log in</RouterLink>
+      </div>
+    </Transition>
 
     <!-- products -->
     <div class="products-container">
@@ -625,6 +643,32 @@ onBeforeUnmount(() => {
   opacity: 0;
 }
 
+/* ── login error banner ── */
+.login-error-banner {
+  margin: 1rem 5rem 0;
+  padding: 0.6rem 1rem;
+  background: #fdf4f4;
+  border: 1px solid #e0b0b0;
+  color: #8b2020;
+  font-size: var(--fs-sm);
+}
+[data-theme="dark"] .login-error-banner {
+  background: #2e1a1a;
+  border-color: #7a3030;
+  color: #f0a0a0;
+}
+.login-error-link {
+  color: #8b2020;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+  margin-left: 1rem;
+}
+[data-theme="dark"] .login-error-link {
+  color: #f0a0a0;
+}
+
 /* ── products area ── */
 .products-container {
   padding: 2rem 5rem 4rem;
@@ -705,6 +749,9 @@ onBeforeUnmount(() => {
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+  .login-error-banner {
+    margin: 1rem 2.5rem 0;
+  }
 }
 @media (max-width: 767px) {
   .filter-bar {
@@ -724,6 +771,9 @@ onBeforeUnmount(() => {
   }
   .shop-hero {
     height: 220px;
+  }
+  .login-error-banner {
+    margin: 1rem 1.25rem 0;
   }
 }
 @media (max-width: 480px) {

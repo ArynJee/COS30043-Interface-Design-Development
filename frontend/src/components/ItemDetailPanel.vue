@@ -9,6 +9,7 @@ const props = defineProps({
   reviews: { type: Array, default: () => [] },
   addingToCart: Boolean,
   cartAdded: Boolean,
+  cartError: { type: String, default: null },
   submittingReview: Boolean,
   reviewError: { type: String, default: null },
   reviewSuccess: Boolean,
@@ -167,7 +168,7 @@ function handleAddToCart() {
 
         <!-- add to Cart -->
         <button
-          class="add-cart-btn d-inline-flex align-items-center gap-2 mb-5"
+          class="add-cart-btn d-inline-flex align-items-center gap-2"
           :class="{ 'btn-added': cartAdded }"
           :disabled="addingToCart"
           @click="handleAddToCart"
@@ -182,6 +183,14 @@ function handleAddToCart() {
                 : "Add to Cart"
           }}
         </button>
+
+        <Transition name="cart-err">
+          <p v-if="cartError" class="cart-error-msg mb-5">
+            {{ cartError }}
+            <a href="/login" class="cart-error-link">Log in</a>
+          </p>
+          <div v-else class="mb-5" />
+        </Transition>
 
         <div class="info-divider mb-4"></div>
 
@@ -449,6 +458,30 @@ function handleAddToCart() {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.cart-error-msg {
+  margin-top: 0.5rem;
+  font-size: var(--fs-sm);
+  color: #8b2020;
+}
+[data-theme="dark"] .cart-error-msg {
+  color: #f0a0a0;
+}
+.cart-error-link {
+  color: #8b2020;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  margin-left: 0.3rem;
+}
+[data-theme="dark"] .cart-error-link {
+  color: #f0a0a0;
+}
+
+.cart-err-enter-active { transition: opacity 0.2s ease; }
+.cart-err-leave-active { transition: opacity 0.15s ease; }
+.cart-err-enter-from,
+.cart-err-leave-to { opacity: 0; }
 /* .add-cart-btn.btn-added {
   background: #5a8a5a;
 } */

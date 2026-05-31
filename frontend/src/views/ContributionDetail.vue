@@ -8,7 +8,7 @@ const route = useRoute()
 const {
   contribution, reviews, loading, error,
   skeletonType, furnitureTypeId, parsedConfig, configEntries,
-  addingToCart, cartAdded,
+  addingToCart, cartAdded, cartError,
   submittingReview, reviewError, reviewSuccess,
   addToCart, submitReview,
 } = useContributionDetail(route.params.id)
@@ -38,6 +38,7 @@ const {
       :reviews="reviews"
       :addingToCart="addingToCart"
       :cartAdded="cartAdded"
+      :cartError="cartError"
       :submittingReview="submittingReview"
       :reviewError="reviewError"
       :reviewSuccess="reviewSuccess"
