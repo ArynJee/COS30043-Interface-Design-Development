@@ -1,7 +1,7 @@
 <script setup>
-import { computed } from "vue";
 import { RouterLink } from "vue-router";
 import { ArrowRight } from "@lucide/vue";
+import useContributionCard from "@/hooks/useContributionCard";
 
 const props = defineProps({
   contribution: { type: Object, required: true },
@@ -9,43 +9,8 @@ const props = defineProps({
   featured: { type: Boolean, default: false },
 });
 
-const c = computed(() => props.contribution);
-
-const imageSrc = computed(() => {
-  const url = c.value.preview_image_url;
-  if (!url) return "/home/living-room.jpg";
-  if (url.startsWith("/uploads/")) return `${import.meta.env.VITE_API_BASE_URL}${url}`;
-  return url;
-});
-
-const typeName = computed(() =>
-  (c.value.furniture_type || "").replace(/_/g, " "),
-);
-
-const configEntries = computed(() => {
-  const cfg = c.value.configuration;
-  if (!cfg) return [];
-  const obj = typeof cfg === "string" ? JSON.parse(cfg) : cfg;
-  return Object.entries(obj).map(([k, v]) => ({
-    label: k[0].toUpperCase() + k.slice(1),
-    name: typeof v === "object" ? v.name : String(v),
-  }));
-});
-
-const formattedDate = computed(() =>
-  new Date(c.value.created_at).toLocaleDateString("en-MY", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }),
-);
-
-const formattedPrice = computed(() =>
-  `RM ${parseFloat(c.value.total_cost).toLocaleString("en-MY", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
-);
-
-const getInitials = (first, last) =>
-  `${first?.[0] ?? "?"}${last?.[0] ?? ""}`.toUpperCase();
+const { imageSrc, typeName, configEntries, formattedDate, formattedPrice, getInitials } =
+  useContributionCard(() => props.contribution);
 </script>
 
 <template>
@@ -53,22 +18,22 @@ const getInitials = (first, last) =>
     <div class="cc-img-wrap">
       <img
         :src="imageSrc"
-        :alt="`${c.furniture_type} in ${c.area}`"
+        :alt="`${contribution.furniture_type} in ${contribution.area}`"
         class="cc-img"
       />
       <div class="cc-img-grad"></div>
-      <span class="cc-area-badge">{{ c.area }}</span>
+      <span class="cc-area-badge">{{ contribution.area }}</span>
     </div>
 
     <div class="cc-body">
       <!-- contributor row — shown in Showcase -->
       <div v-if="showContributor" class="cc-contrib-row">
         <div class="cc-avatar">
-          {{ getInitials(c.first_name, c.last_name) }}
+          {{ getInitials(contribution.first_name, contribution.last_name) }}
         </div>
         <div class="cc-contrib-info">
           <div class="cc-contrib-name">
-            {{ c.first_name ? `${c.first_name} ${c.last_name}` : "Anonymous" }}
+            {{ contribution.first_name ? `${contribution.first_name} ${contribution.last_name}` : "Anonymous" }}
           </div>
           <div class="cc-contrib-date">{{ formattedDate }}</div>
         </div>
@@ -82,7 +47,7 @@ const getInitials = (first, last) =>
       </div>
 
       <div class="cc-type">{{ typeName }}</div>
-      <p v-if="c.description" class="cc-desc">{{ c.description }}</p>
+      <p v-if="contribution.description" class="cc-desc">{{ contribution.description }}</p>
 
       <div class="cc-chips">
         <span
@@ -97,7 +62,7 @@ const getInitials = (first, last) =>
       </div>
 
       <RouterLink
-        :to="`/showcase/${c.id}`"
+        :to="`/showcase/${contribution.id}`"
         class="cc-cta d-inline-flex align-items-center gap-2 mt-4"
       >
         View Detail &thinsp;<ArrowRight :size="13" />
