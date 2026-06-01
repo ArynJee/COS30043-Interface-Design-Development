@@ -132,6 +132,7 @@ const emit = defineEmits([
   position: fixed;
   inset: 0;
   background: rgba(20, 16, 10, 0.65);
+  backdrop-filter: blur(3px);
   z-index: 2000;
   display: flex;
   align-items: center;

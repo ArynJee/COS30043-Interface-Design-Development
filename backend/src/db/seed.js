@@ -256,6 +256,10 @@ const seedDb = async () => {
     console.log("Feedback seeded");
 
     // seed design contributions (showcase page)
+    // preview_image_url points to 3D-renderer screenshots — drop files into
+    // frontend/public/showcase/3d/ before running the app.
+    // configuration keys + option objects must match furnitureConfigs.js exactly
+    // so FurnitureViewer can reconstruct the 3D model via cfg.<key>?.id / ?.hex.
     const SHOWCASE_CONTRIBUTIONS = [
       {
         user: {
@@ -269,14 +273,14 @@ const seedDb = async () => {
           area: "Kitchen",
           furniture_type: "Kitchen Counter",
           description:
-            "A minimalist kitchen counter featuring Calacatta marble surface and handleless sage-green cabinets. Round-edge detailing softens the overall silhouette while ceramic tile cladding keeps the look timeless and easy to maintain.",
-          preview_image_url: "/product/kitchen-counter/kitchen-counter1-1.jpg",
+            "A minimalist L-shaped kitchen counter clad in polished marble with sage-green handleless cabinets. Clean lines and a warm earthy palette make this kitchen the centrepiece of modern Malaysian living.",
+          preview_image_url: "/showcase/3d/kitchen-counter.jpg",
           configuration: {
-            shape: { name: "Round Edges", price: 1000 },
-            color: { name: "Sage White", price: 50 },
-            texture: { name: "Calacatta Ceramic", price: 1000 },
+            shape:      { id: "l_shape",    name: "L-Shape (2.4m)",  price: 500 },
+            countertop: { id: "marble",     name: "Marble",          price: 900 },
+            color:      { id: "sage_green", name: "Sage Green",      hex: "#7A9E7E", price: 50 },
           },
-          total_cost: 2050.0,
+          total_cost: 3250.0,
         },
       },
       {
@@ -291,15 +295,150 @@ const seedDb = async () => {
           area: "Living Room",
           furniture_type: "Sofa",
           description:
-            "Inspired by mid-century modern design, this tufted sofa is wrapped in deep forest-green velvet over a solid oak L-shaped frame. Paired with brushed brass accent legs, it makes a warm and sophisticated living room statement.",
-          preview_image_url: "/product/sofas/sofa1-1.jpg",
+            "A forest-green velvet L-shaped sectional sofa with low metal block legs. Inspired by mid-century modern design, it anchors the living room with warmth and a bold, sophisticated colour statement.",
+          preview_image_url: "/showcase/3d/sofa.jpg",
           configuration: {
-            shape: { name: "L-Shape Frame", price: 1500 },
-            color: { name: "Forest Green", price: 100 },
-            fabric: { name: "Premium Velvet", price: 2000 },
-            accent: { name: "Brass Legs", price: 250 },
+            shape:  { id: "l_shaped",     name: "L-Shaped Sectional", price: 500 },
+            fabric: { id: "velvet",       name: "Velvet",             price: 200 },
+            color:  { id: "forest_green", name: "Forest Green",       hex: "#3A5C45", price: 50 },
+            legs:   { id: "low_metal",    name: "Low Metal Block",    price: 50 },
           },
-          total_cost: 3850.0,
+          total_cost: 2000.0,
+        },
+      },
+      {
+        user: {
+          first_name: "Priya",
+          last_name: "Nair",
+          email: "priya.nair@comfyhome.my",
+          phone_number: "0112233445",
+          address: "8 Jalan Sri Hartamas, Kuala Lumpur",
+        },
+        contribution: {
+          area: "Bedroom",
+          furniture_type: "Bed Frame",
+          description:
+            "A queen-sized platform bed in warm walnut solid wood with an upholstered padded headboard. The low-profile silhouette and rich timber finish give the master bedroom a calm, hotel-inspired elegance.",
+          preview_image_url: "/showcase/3d/bedframe.jpg",
+          configuration: {
+            shape:     { id: "queen",        name: "Queen (160×200cm)",  price: 350 },
+            material:  { id: "solid_wood",   name: "Solid Wood",         price: 300 },
+            color:     { id: "walnut",       name: "Walnut Brown",       hex: "#6B4226", price: 50 },
+            headboard: { id: "upholstered",  name: "Upholstered Padded", price: 300 },
+          },
+          total_cost: 1950.0,
+        },
+      },
+      {
+        user: {
+          first_name: "Jordan",
+          last_name: "Lee",
+          email: "jordan.lee@comfyhome.my",
+          phone_number: "0198877665",
+          address: "77 Taman Desa Setapak, Kuala Lumpur",
+        },
+        contribution: {
+          area: "Bathroom",
+          furniture_type: "Vanity Cabinet",
+          description:
+            "A floating wall-mount vanity cabinet in matte black with moisture-resistant board construction. Soft-close drawers and a minimalist profile transform any bathroom into a sleek, spa-inspired retreat.",
+          preview_image_url: "/showcase/3d/vanity-cabinet.jpg",
+          configuration: {
+            shape:    { id: "floating",  name: "Floating Wall-Mount",   price: 150 },
+            material: { id: "laminate",  name: "Moisture-Res. Board",   price: 0   },
+            color:    { id: "black",     name: "Matte Black",           hex: "#1C1C1C", price: 30 },
+          },
+          total_cost: 800.0,
+        },
+      },
+      {
+        user: {
+          first_name: "Amir",
+          last_name: "Rahman",
+          email: "amir.rahman@comfyhome.my",
+          phone_number: "0134455667",
+          address: "22 Persiaran Utama, Shah Alam, Selangor",
+        },
+        contribution: {
+          area: "Study Room",
+          furniture_type: "Desk",
+          description:
+            "A standing-height desk with a solid oak surface on a hairpin metal frame. The adjustable ergonomic setup paired with natural wood tones creates a bright, productive workspace that feels equally at home in a studio or study.",
+          preview_image_url: "/showcase/3d/desk.jpg",
+          configuration: {
+            shape:    { id: "standing",      name: "Standing Desk Frame", price: 400 },
+            material: { id: "solid_wood",    name: "Solid Wood",          price: 300 },
+            color:    { id: "natural_oak",   name: "Natural Oak",         hex: "#C8A87A", price: 0 },
+            legs:     { id: "hairpin_metal", name: "Hairpin Metal",       price: 50 },
+          },
+          total_cost: 1330.0,
+        },
+      },
+      {
+        user: {
+          first_name: "Sofia",
+          last_name: "Wong",
+          email: "sofia.wong@comfyhome.my",
+          phone_number: "0165544332",
+          address: "3 Jalan Ampang Hilir, Ampang, Selangor",
+        },
+        contribution: {
+          area: "Living Room",
+          furniture_type: "Armchair",
+          description:
+            "A barrel-back armchair upholstered in cream-white cotton linen on tapered wood legs. Its generous seat depth and softly curved arms create the perfect reading nook for a Scandinavian-inspired living room.",
+          preview_image_url: "/showcase/3d/armchair.jpg",
+          configuration: {
+            shape:  { id: "barrel",       name: "Barrel Chair",   price: 80 },
+            fabric: { id: "cotton_linen", name: "Cotton Linen",   price: 0  },
+            color:  { id: "cream",        name: "Cream White",    hex: "#F5F0E8", price: 0 },
+            legs:   { id: "tapered_wood", name: "Tapered Wood",   price: 0  },
+          },
+          total_cost: 780.0,
+        },
+      },
+      {
+        user: {
+          first_name: "Daniel",
+          last_name: "Ooi",
+          email: "daniel.ooi@comfyhome.my",
+          phone_number: "0176677889",
+          address: "56 Taman Bukit Indah, Johor Bahru, Johor",
+        },
+        contribution: {
+          area: "Bedroom",
+          furniture_type: "Wardrobe",
+          description:
+            "A 3-door sliding wardrobe in white MDF finish with a clean flush-panel front. Understated hardware and floor-to-ceiling height maximise storage while keeping the bedroom looking airy and uncluttered.",
+          preview_image_url: "/showcase/3d/wardrobe.jpg",
+          configuration: {
+            shape:    { id: "3_door_sliding", name: "3-Door Sliding", price: 200 },
+            material: { id: "mdf",            name: "MDF",            price: 50  },
+            color:    { id: "white",          name: "White",          hex: "#F5F0E8", price: 0 },
+          },
+          total_cost: 1650.0,
+        },
+      },
+      {
+        user: {
+          first_name: "Layla",
+          last_name: "Hassan",
+          email: "layla.hassan@comfyhome.my",
+          phone_number: "0149988776",
+          address: "11 Jalan PJS 10/9, Subang Jaya, Selangor",
+        },
+        contribution: {
+          area: "Study Room",
+          furniture_type: "Office Chair",
+          description:
+            "A black ergonomic mesh-back office chair designed for marathon work sessions. The high-back contour, adjustable lumbar zone, and breathable material make long study hours noticeably more comfortable.",
+          preview_image_url: "/showcase/3d/office-chair.jpg",
+          configuration: {
+            shape:    { id: "ergonomic", name: "Ergonomic Mesh",  price: 300 },
+            material: { id: "mesh",      name: "Mesh Back",       price: 0   },
+            color:    { id: "black",     name: "Black",           hex: "#1C1C1C", price: 0 },
+          },
+          total_cost: 780.0,
         },
       },
     ];

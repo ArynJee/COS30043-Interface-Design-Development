@@ -1,15 +1,11 @@
 <script setup>
-import { ref, onMounted } from "vue";
 import { RouterLink } from "vue-router";
 import { ArrowUpRight, MessageSquare, Star } from "@lucide/vue";
 import FeedbackModal from "@/components/FeedbackModal.vue";
 import useFeedback from "@/hooks/useFeedback";
-import { getProductsApi } from "@/services/productServices";
-import { getContributionsApi } from "@/services/showcaseServices";
+import useHome from "@/hooks/useHome";
 
-const productCount = ref("-");
-const projectCount = ref("-");
-
+const { productCount, projectCount, productCategories } = useHome();
 const {
   feedbacks,
   feedbackCount,
@@ -19,61 +15,6 @@ const {
   fetchFeedbacks,
   submitFeedback,
 } = useFeedback();
-
-/* ── explore our products grid categories ── */
-const productCategories = ref([
-  {
-    id: 1,
-    name: "Living Room",
-    category: "living-room",
-    size: "tall",
-    img: "/home/living-room.jpg",
-  },
-  {
-    id: 2,
-    name: "Study Room",
-    category: "study-room",
-    size: "wide",
-    img: "/home/study-room.png",
-  },
-  {
-    id: 3,
-    name: "Kitchen",
-    category: "kitchen",
-    size: "small",
-    img: "/home/kitchen-counter.jpeg",
-  },
-  {
-    id: 4,
-    name: "Bathroom",
-    category: "bathroom",
-    size: "tall",
-    img: "/home/bathroom.jpeg",
-  },
-  {
-    id: 5,
-    name: "Bedroom",
-    category: "bedroom",
-    size: "wide",
-    img: "/home/bed.jpeg",
-  },
-]);
-
-/* ── Fetch data on mount ── */
-onMounted(async () => {
-  const [pRes, scRes] = await Promise.allSettled([
-    getProductsApi({ limit: 1 }),
-    getContributionsApi(),
-  ]);
-
-  if (pRes.status === "fulfilled") {
-    productCount.value = (pRes.value.total ?? pRes.value.products?.length ?? 0);
-  }
-
-  if (scRes.status === "fulfilled") {
-    projectCount.value = (scRes.value.contributions?.length ?? 0);
-  }
-});
 </script>
 
 <template>
@@ -105,14 +46,16 @@ onMounted(async () => {
       <div class="hero-headline">
         <h1>Comfortable Living.</h1>
         <p class="hero-sub">Crafting spaces that define how you live.</p>
-        <router-link to="/products" class="hero-cta"
+        <router-link
+          to="/products"
+          class="hero-cta d-inline-block text-decoration-none text-uppercase"
           >View Collection</router-link
         >
       </div>
 
-      <!-- community showcase hard in hero -->
+      <!-- community showcase card in hero -->
       <div class="hero-card rounded-3">
-        <span class="hero-card-badge">Community Showcase</span>
+        <span class="hero-card-badge d-inline-block text-uppercase">Community Showcase</span>
         <p class="hero-card-text">
           See where your creativity takes you when ComfyHome provides the
           freedom to our dearest customers to design their own furniture. Many
@@ -120,7 +63,10 @@ onMounted(async () => {
           design platform — from intimate reading nooks to statement dining
           rooms.
         </p>
-        <router-link to="/showcase" class="hero-card-link">
+        <router-link
+          to="/showcase"
+          class="hero-card-link d-inline-flex align-items-center text-decoration-none text-uppercase"
+        >
           View More <ArrowUpRight :size="14" class="ms-1" />
         </router-link>
       </div>
@@ -133,21 +79,19 @@ onMounted(async () => {
           <!-- big image left -->
           <div class="fg-main-img">
             <img src="/home/couch.jpg" alt="Modern interior couch" />
-            <div class="fg-img-label">Gorgeous Interior</div>
+            <div class="fg-img-label text-uppercase">Gorgeous Interior</div>
           </div>
 
-          <!-- Right column -->
+          <!-- right column -->
           <div class="fg-right">
-            <!-- Top heading block -->
             <div class="fg-heading-block">
               <h2 class="fg-main-title">Modern<br />Minimalist</h2>
             </div>
 
-            <!-- Two small cards -->
             <div class="fg-cards">
               <!-- Card 1: Into a Gallery -->
               <div class="fg-card fg-card-light">
-                <span class="fg-card-tag">Aesthetic</span>
+                <span class="fg-card-tag d-inline-block text-uppercase">Aesthetic</span>
                 <h3 class="fg-card-title">Into a gallery<br />of elegance</h3>
                 <p class="fg-card-body">
                   Aesthetic furniture where every piece tells a story of refined
@@ -157,7 +101,7 @@ onMounted(async () => {
 
               <!-- Card 2: Customize Furniture -->
               <div class="fg-card fg-card-dark">
-                <span class="fg-card-tag fg-tag-light"
+                <span class="fg-card-tag fg-tag-light d-inline-block text-uppercase"
                   >Customize Furniture</span
                 >
                 <p class="fg-card-body fg-body-light">
@@ -165,7 +109,7 @@ onMounted(async () => {
                   fabric, finish, and form.
                 </p>
                 <router-link to="/customize">
-                  <div class="fg-card-arrow">
+                  <div class="fg-card-arrow d-flex align-items-center justify-content-center">
                     <ArrowUpRight :size="18" />
                   </div>
                 </router-link>
@@ -182,28 +126,28 @@ onMounted(async () => {
         <div class="stats-grid">
           <div class="stat-item">
             <span class="stat-number">{{ productCount }}</span>
-            <span class="stat-label">Products</span>
+            <span class="stat-label text-uppercase">Products</span>
           </div>
           <div class="stat-divider"></div>
           <div class="stat-item">
             <span class="stat-number">{{ projectCount }}</span>
-            <span class="stat-label">Projects</span>
+            <span class="stat-label text-uppercase">Projects</span>
           </div>
           <div class="stat-divider"></div>
           <div class="stat-item">
             <span class="stat-number">{{ feedbackCount }}</span>
-            <span class="stat-label">Satisfied Customers</span>
+            <span class="stat-label text-uppercase">Satisfied Customers</span>
           </div>
           <div class="stat-divider"></div>
           <div class="stat-item">
             <span class="stat-number">1<sup>st</sup></span>
-            <span class="stat-label">Top in Malaysia</span>
+            <span class="stat-label text-uppercase">Top in Malaysia</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- about us-->
+    <!-- about us -->
     <section class="about-section py-5">
       <div class="container-fluid px-4 px-lg-5">
         <div class="about-layout">
@@ -212,7 +156,7 @@ onMounted(async () => {
           </div>
 
           <div class="about-content">
-            <p class="about-eyebrow">Elegance · Timeless</p>
+            <p class="about-eyebrow text-uppercase">Elegance · Timeless</p>
             <h2 class="about-title">Modern Style<br />Timeless Charm</h2>
             <p class="about-body">
               Discover ComfyHome's latest collection, featuring sofas, chairs,
@@ -238,7 +182,9 @@ onMounted(async () => {
               ComfyHome will showcase its vision of contemporary architecture
               and interior design through every carefully curated category.
             </p>
-            <router-link to="/products" class="explore-view-more"
+            <router-link
+              to="/products"
+              class="explore-view-more d-inline-block text-decoration-none text-uppercase"
               >View More</router-link
             >
           </div>
@@ -250,13 +196,15 @@ onMounted(async () => {
             v-for="cat in productCategories"
             :key="cat.id"
             :to="`/products?type=${cat.category}`"
-            :class="['bento-card', `bento-${cat.size}`]"
+            :class="['bento-card', `bento-${cat.size}`, 'd-block', 'text-decoration-none']"
           >
             <img :src="cat.img" :alt="cat.name" class="bento-img" />
             <div class="bento-overlay"></div>
             <div class="bento-footer">
               <span class="bento-name">{{ cat.name }}</span>
-              <span class="bento-arrow"><ArrowUpRight :size="16" /></span>
+              <span class="bento-arrow d-flex align-items-center justify-content-center"
+                ><ArrowUpRight :size="16"
+              /></span>
             </div>
           </router-link>
         </div>
@@ -266,7 +214,7 @@ onMounted(async () => {
     <!-- feedback -->
     <section class="feedback-section py-5">
       <div class="container">
-        <h2 class="feedback-title mb-5">What Our Clients Say</h2>
+        <h2 class="feedback-title fw-bold text-center mb-5">What Our Clients Say</h2>
 
         <!-- Feedback cards -->
         <div class="row mb-5" v-if="feedbacks.length > 0">
@@ -285,14 +233,17 @@ onMounted(async () => {
                   class="fb-star"
                 />
               </div>
-              <p class="fb-comment">"{{ fb.comment }}"</p>
+              <p class="fb-comment fst-italic">"{{ fb.comment }}"</p>
               <footer class="fb-user">— {{ fb.user || fb.name }}</footer>
             </div>
           </div>
         </div>
 
         <div class="text-center">
-          <button class="fb-cta-btn" @click="showFeedbackModal = true">
+          <button
+            class="fb-cta-btn d-inline-flex align-items-center text-uppercase"
+            @click="showFeedbackModal = true"
+          >
             <MessageSquare :size="16" class="me-2" /> Share Your Feedback
           </button>
         </div>
@@ -320,7 +271,7 @@ onMounted(async () => {
   height: 100vh;
   min-height: 600px;
   overflow: hidden;
-  background: #1e1a14;
+  background: var(--btn-alt-bg);
 }
 
 .hero-video {
@@ -380,19 +331,16 @@ onMounted(async () => {
 }
 
 .hero-cta {
-  display: inline-block;
   padding: 0.75rem 2.5rem;
   border: 1px solid rgba(255, 255, 255, 0.7);
   color: #ffffff;
-  text-decoration: none;
   font-size: var(--fs-sm);
   letter-spacing: 0.15em;
-  text-transform: uppercase;
   transition: 0.3s;
 }
 .hero-cta:hover {
-  background: #dbc5a6;
-  color: #1e1a14;
+  background: var(--accent);
+  color: var(--btn-alt-bg);
   border: 1px solid rgba(109, 98, 84, 0.7);
 }
 
@@ -409,10 +357,8 @@ onMounted(async () => {
 }
 
 .hero-card-badge {
-  display: inline-block;
   font-size: var(--fs-xs);
   letter-spacing: 0.15em;
-  text-transform: uppercase;
   background: rgba(196, 168, 130, 0.6);
   padding: 0.25rem 0.75rem;
   margin-bottom: 0.9rem;
@@ -427,44 +373,15 @@ onMounted(async () => {
 }
 
 .hero-card-link {
-  display: inline-flex;
-  align-items: center;
-  color: #c4a882;
-  text-decoration: none;
+  color: var(--accent);
   font-size: var(--fs-sm);
   letter-spacing: 0.1em;
-  text-transform: uppercase;
-  border-bottom: 1px solid #c4a882;
+  border-bottom: 1px solid var(--accent);
   padding-bottom: 2px;
   transition: opacity 0.2s;
 }
 .hero-card-link:hover {
   opacity: 0.7;
-}
-
-.hero-scroll-hint {
-  position: absolute;
-  bottom: 2rem;
-  right: 3rem;
-  z-index: 3;
-}
-.hero-scroll-hint span {
-  display: block;
-  width: 1px;
-  height: 60px;
-  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.6));
-  animation: scrollPulse 2s ease-in-out infinite;
-}
-@keyframes scrollPulse {
-  0%,
-  100% {
-    opacity: 0.3;
-    transform: scaleY(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scaleY(1.15);
-  }
 }
 
 /* feature grid */
@@ -503,7 +420,6 @@ onMounted(async () => {
   backdrop-filter: blur(8px);
   font-size: var(--fs-xs);
   letter-spacing: 0.12em;
-  text-transform: uppercase;
   color: var(--color-primary);
   padding: 0.4rem 0.9rem;
 }
@@ -540,27 +456,22 @@ onMounted(async () => {
   text-decoration: none;
   transition: transform 0.3s ease;
 }
-/* .fg-card:hover {
-  transform: translateY(-4px);
-} */
 
 .fg-card-light {
   background: var(--bg-alt);
   border: 1px solid var(--border);
 }
 .fg-card-dark {
-  background: #1e1a14;
+  background: var(--btn-alt-bg);
   position: relative;
   overflow: hidden;
 }
 
 .fg-card-tag {
-  display: inline-block;
   font-size: var(--fs-2xs);
   letter-spacing: 0.15em;
-  text-transform: uppercase;
-  background: #e0d5c5;
-  color: #2c2218;
+  background: var(--border);
+  color: var(--color-primary);
   padding: 0.2rem 0.7rem;
   margin-bottom: 0.75rem;
   border-radius: 20px;
@@ -571,7 +482,7 @@ onMounted(async () => {
 }
 
 .fg-card-title {
-  font-size: 1.15rem;
+  font-size: var(--fs-md);
   font-weight: 600;
   color: var(--color-primary);
   line-height: 1.3;
@@ -594,14 +505,10 @@ onMounted(async () => {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #c4a882;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
+  background: var(--accent);
+  color: var(--btn-color);
   transition: 0.3s;
 }
-
 .fg-card-arrow:hover {
   transform: scale(1.07);
 }
@@ -641,7 +548,6 @@ onMounted(async () => {
 .stat-label {
   font-size: var(--fs-sm);
   letter-spacing: 0.08em;
-  text-transform: uppercase;
   color: var(--color-secondary);
 }
 .stat-divider {
@@ -680,8 +586,7 @@ onMounted(async () => {
 .about-eyebrow {
   font-size: var(--fs-sm);
   letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #c4a882;
+  color: var(--accent);
   margin-bottom: 0.75rem;
 }
 .about-title {
@@ -696,24 +601,6 @@ onMounted(async () => {
   line-height: 1.8;
   color: var(--color-secondary);
   margin-bottom: 2rem;
-}
-.about-btn {
-  display: inline-flex;
-  align-items: center;
-  font-size: var(--fs-sm);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-primary);
-  text-decoration: none;
-  border-bottom: 1px solid var(--color-primary);
-  padding-bottom: 3px;
-  transition:
-    color 0.2s,
-    border-color 0.2s;
-}
-.about-btn:hover {
-  color: var(--accent);
-  border-color: var(--accent);
 }
 
 /* explore products */
@@ -749,18 +636,15 @@ onMounted(async () => {
   max-width: 340px;
 }
 .explore-view-more {
-  display: inline-block;
   font-size: var(--fs-xs);
   letter-spacing: 0.15em;
-  text-transform: uppercase;
   color: #ffffff;
-  background: #1e1a14;
+  background: var(--btn-alt-bg);
   padding: 0.5rem 1.25rem;
-  text-decoration: none;
   transition: background 0.2s;
 }
 .explore-view-more:hover {
-  background: #8b6f47;
+  background: var(--accent-dk);
 }
 
 /* bento grid */
@@ -774,8 +658,6 @@ onMounted(async () => {
 .bento-card {
   position: relative;
   overflow: hidden;
-  display: block;
-  text-decoration: none;
   cursor: pointer;
 }
 .bento-card.bento-tall {
@@ -788,30 +670,14 @@ onMounted(async () => {
   grid-column: span 1;
 }
 
-/* Layout positioning for visual variety */
-.bento-card:nth-child(1) {
-  grid-row: 1;
-}
-.bento-card:nth-child(2) {
-  grid-column: 2;
-  grid-row: 1 / 3;
-}
-.bento-card:nth-child(3) {
-  grid-column: 3;
-  grid-row: 1;
-}
-.bento-card:nth-child(4) {
-  grid-column: 1;
-  grid-row: 2;
-}
-.bento-card:nth-child(5) {
-  grid-column: 3;
-  grid-row: 2;
-}
-.bento-card:nth-child(6) {
-  display: none;
-}
-/* 5 card layout */
+/* layout positioning for visual variety */
+.bento-card:nth-child(1) { grid-row: 1; }
+.bento-card:nth-child(2) { grid-column: 2; grid-row: 1 / 3; }
+.bento-card:nth-child(3) { grid-column: 3; grid-row: 1; }
+.bento-card:nth-child(4) { grid-column: 1; grid-row: 2; }
+.bento-card:nth-child(5) { grid-column: 3; grid-row: 2; }
+.bento-card:nth-child(6) { display: none; }
+
 .bento-img {
   width: 100%;
   height: 100%;
@@ -856,35 +722,27 @@ onMounted(async () => {
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   color: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.3);
   transition: background 0.2s;
 }
 .bento-card:hover .bento-arrow {
-  background: #c4a882;
-  border-color: #c4a882;
+  background: var(--accent);
+  border-color: var(--accent);
 }
 
-/* feedback content */
+/* feedback */
 .feedback-section {
   background: var(--bg-surface);
 }
 .feedback-title {
   font-size: clamp(1.6rem, 3vw, 2.4rem);
-  font-weight: 700;
   color: var(--color-primary);
-  text-align: center;
 }
 .fb-card {
   background: var(--bg-alt);
   padding: 1.75rem;
   position: relative;
-}
-.fb-card.fb-placeholder {
-  opacity: 0.6;
 }
 .fb-stars {
   display: flex;
@@ -897,7 +755,6 @@ onMounted(async () => {
   font-size: var(--fs-md);
   line-height: 1.7;
   color: var(--color-primary);
-  font-style: italic;
   margin-bottom: 1rem;
 }
 .fb-user {
@@ -906,21 +763,17 @@ onMounted(async () => {
   color: var(--color-secondary);
 }
 .fb-cta-btn {
-  display: inline-flex;
-  align-items: center;
   background: transparent;
   border: 1px solid var(--btn-alt-bg);
   color: var(--btn-alt-bg);
   font-family: var(--font-serif);
   font-size: var(--fs-base);
   letter-spacing: 0.12em;
-  text-transform: uppercase;
   padding: 0.75rem 2rem;
   cursor: pointer;
   transition:
     background 0.25s,
     color 0.25s;
-  justify-content: space-between;
   gap: 15px;
 }
 .fb-cta-btn:hover {

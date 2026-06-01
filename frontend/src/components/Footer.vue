@@ -78,6 +78,11 @@ import { RouterLink } from 'vue-router'
   .comfy-footer {
     padding-left: 62px;
   }
+}
+@media (max-width: 420px) {
+  .comfy-footer {
+    padding-left: 48px;
+  }
   .footer-grid {
     grid-template-columns: 1fr 1fr;
   }

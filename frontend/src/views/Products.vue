@@ -690,18 +690,8 @@ onBeforeUnmount(() => {
 .card-img-wrapper {
   aspect-ratio: 4 / 3;
 }
-.img-primary,
 .img-secondary {
-  transition: opacity 0.4s ease;
-}
-.img-secondary {
-  opacity: 0;
-}
-.product-card:hover .img-primary {
-  opacity: 0;
-}
-.product-card:hover .img-secondary {
-  opacity: 1;
+  display: none;
 }
 
 .card-body {

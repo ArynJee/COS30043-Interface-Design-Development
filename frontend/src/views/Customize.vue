@@ -315,7 +315,7 @@ const priceBreakdown = computed(() => {
           >
             <SofaIcon :size="56" stroke-width="1" class="cu-ph-icon mb-2" />
             <p class="cu-ph-text m-0 fs-5">Your 3D preview will appear here</p>
-            <p class="cu-ph-sub">Select a furniture type to begin</p>
+            <p class="cu-ph-sub m-0">Select a furniture type to begin</p>
           </div>
         </div>
 
@@ -707,7 +707,6 @@ const priceBreakdown = computed(() => {
   font-family: "Times New Roman", serif;
   font-size: var(--fs-base);
   color: var(--cu-muted);
-  margin: 0;
 }
 
 /* price card */

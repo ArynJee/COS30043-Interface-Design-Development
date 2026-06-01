@@ -15,10 +15,15 @@ import { RouterView } from 'vue-router'
 </template>
 
 <style scoped>
-/* On mobile push content right to clear the 62px collapsed sidebar */
+/* On mobile push content right to clear the collapsed sidebar */
 @media (max-width: 991.98px) {
   .main-content {
     padding-left: 62px;
+  }
+}
+@media (max-width: 420px) {
+  .main-content {
+    padding-left: 48px;
   }
 }
 </style>

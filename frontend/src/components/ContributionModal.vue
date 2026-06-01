@@ -101,7 +101,7 @@ function handleSubmit() {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1050;
+  z-index: 1200;
   padding: 1rem;
   animation: fadeIn 0.18s ease;
 }
@@ -306,11 +306,13 @@ function handleSubmit() {
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-[data-theme="dark"] .cm-modal       { background: #1e1a14; }
+[data-theme="dark"] .cm-modal       { background: #1e1a14; border: 1px solid var(--color-subtle); }
 [data-theme="dark"] .cm-title       { color: #f0ebe2; }
 [data-theme="dark"] .cm-badge       { background: #2a241c; color: #c8b89a; border-color: #3a3028; }
 [data-theme="dark"] .cm-badge--area { background: #241e18; }
 [data-theme="dark"] .cm-textarea    { background: #231e18; color: #f0ebe2; border-color: #3a3028; }
-[data-theme="dark"] .cm-btn--ghost  { border-color: #3a3028; color: #c8b89a; }
-[data-theme="dark"] .cm-btn--ghost:hover { background: #2a241c; }
+[data-theme="dark"] .cm-btn--ghost        { border-color: #6a5a48; color: #d4c4b0; }
+[data-theme="dark"] .cm-btn--ghost:hover:not(:disabled)  { background: #2a241c; }
+[data-theme="dark"] .cm-btn--primary     { background: var(--btn-bg); color: var(--btn-color); }
+[data-theme="dark"] .cm-btn--primary:hover:not(:disabled) { background: var(--btn-bg-hover); }
 </style>
