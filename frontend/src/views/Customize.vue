@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import {
   Sofa as SofaIcon,
   ShoppingCart,
@@ -25,83 +25,100 @@ import {
   Briefcase,
   GraduationCap,
   Archive,
-} from '@lucide/vue'
-import FurnitureViewer from '@/components/FurnitureViewer.vue'
-import ContributionModal from '@/components/ContributionModal.vue'
-import useCustomize from '@/hooks/useCustomize.js'
+} from "@lucide/vue";
+import FurnitureViewer from "@/components/FurnitureViewer.vue";
+import ContributionModal from "@/components/ContributionModal.vue";
+import useCustomize from "@/hooks/useCustomize.js";
 
-const viewerRef = ref(null)
+const viewerRef = ref(null);
 
-// JS-driven breakpoint — initialised from window.innerWidth immediately so the
-// correct single-column layout renders on the FIRST visit (CSS injection timing
-// in Vite dev mode can lag behind onMounted, causing the wrong grid on first render).
-const isNarrow = ref(window.innerWidth <= 992)
-function syncNarrow() { isNarrow.value = window.innerWidth <= 992 }
-onMounted(() => window.addEventListener('resize', syncNarrow))
-onUnmounted(() => window.removeEventListener('resize', syncNarrow))
+const isNarrow = ref(window.innerWidth <= 992);
+function syncNarrow() {
+  isNarrow.value = window.innerWidth <= 992;
+}
+onMounted(() => window.addEventListener("resize", syncNarrow));
+onUnmounted(() => window.removeEventListener("resize", syncNarrow));
 
 const {
-  selectedArea, selectedTypeId, selectedConfig,
-  AREAS, furnitureInArea, currentType, configKeys, totalPrice,
-  selectArea, selectType, selectOption,
-  cartLoading, cartSuccess, cartError, addToCart,
-  contribOpen, contribSubmitting, contribError, contribSuccess,
-  contribPreview, openContribModal, submitContribution,
+  selectedArea,
+  selectedTypeId,
+  selectedConfig,
+  AREAS,
+  furnitureInArea,
+  currentType,
+  configKeys,
+  totalPrice,
+  selectArea,
+  selectType,
+  selectOption,
+  cartLoading,
+  cartSuccess,
+  cartError,
+  addToCart,
+  contribOpen,
+  contribSubmitting,
+  contribError,
+  contribSuccess,
+  contribPreview,
+  openContribModal,
+  submitContribution,
   formatPrice,
-} = useCustomize(viewerRef)
+} = useCustomize(viewerRef);
 
 const FURNITURE_ICONS = {
-  sofa:             SofaIcon,
-  armchair:         Armchair,
-  coffee_table:     Coffee,
-  dining_table:     UtensilsCrossed,
-  bookshelf:        BookOpen,
-  study_shelf:      GraduationCap,
-  bathroom_shelf:   ShowerHead,
-  bed_frame:        BedDouble,
-  wardrobe:         Shirt,
-  nightstand:       Lamp,
-  kitchen_counter:  ChefHat,
-  kitchen_cabinet:  CookingPot,
-  sink:             Droplets,
-  vanity_cabinet:   Glasses,
-  bar_stool:        GlassWater,
-  desk:             PenLine,
-  office_chair:     Briefcase,
-  drawer_cabinet:   Archive,
-}
+  sofa: SofaIcon,
+  armchair: Armchair,
+  coffee_table: Coffee,
+  dining_table: UtensilsCrossed,
+  bookshelf: BookOpen,
+  study_shelf: GraduationCap,
+  bathroom_shelf: ShowerHead,
+  bed_frame: BedDouble,
+  wardrobe: Shirt,
+  nightstand: Lamp,
+  kitchen_counter: ChefHat,
+  kitchen_cabinet: CookingPot,
+  sink: Droplets,
+  vanity_cabinet: Glasses,
+  bar_stool: GlassWater,
+  desk: PenLine,
+  office_chair: Briefcase,
+  drawer_cabinet: Archive,
+};
 
 // friendly label map for config section headings
 const CONFIG_LABELS = {
-  shape:     'Shape / Form',
-  fabric:    'Fabric',
-  material:  'Material',
-  color:     'Colour',
-  legs:      'Leg Style',
-  headboard: 'Headboard Style',
-  countertop:'Countertop Material',
-}
+  shape: "Shape / Form",
+  fabric: "Fabric",
+  material: "Material",
+  color: "Colour",
+  legs: "Leg Style",
+  headboard: "Headboard Style",
+  countertop: "Countertop Material",
+};
 
-const configLabel = (key) => CONFIG_LABELS[key] || key.charAt(0).toUpperCase() + key.slice(1)
+const configLabel = (key) =>
+  CONFIG_LABELS[key] || key.charAt(0).toUpperCase() + key.slice(1);
 
 // price breakdown lines (skip base — shown separately)
 const priceBreakdown = computed(() => {
-  if (!currentType.value) return []
+  if (!currentType.value) return [];
   return configKeys.value
-    .filter(k => selectedConfig.value[k]?.price != null)
-    .map(k => ({
+    .filter((k) => selectedConfig.value[k]?.price != null)
+    .map((k) => ({
       label: configLabel(k),
-      name:  selectedConfig.value[k].name,
+      name: selectedConfig.value[k].name,
       price: selectedConfig.value[k].price,
-    }))
-})
+    }));
+});
 </script>
 
 <template>
   <div class="cu-page">
-
     <!-- hero -->
-    <section class="cu-hero d-flex align-items-center overflow-hidden position-relative">
+    <section
+      class="cu-hero d-flex align-items-center overflow-hidden position-relative"
+    >
       <img
         src="/showcase/customize-hero.jpg"
         alt=""
@@ -110,29 +127,44 @@ const priceBreakdown = computed(() => {
 
       <div class="cu-hero-inner position-relative z-1">
         <p class="cu-crumb mb-4">
-          <RouterLink to="/">Home</RouterLink>&ensp;<ChevronRight size="10"/>&ensp;
-          <RouterLink to="/showcase">Showcase</RouterLink>&ensp;<ChevronRight size="10"/>&ensp;
+          <RouterLink to="/">Home</RouterLink>&ensp;<ChevronRight
+            size="10"
+          />&ensp;
+          <RouterLink to="/showcase">Showcase</RouterLink>&ensp;<ChevronRight
+            size="10"
+          />&ensp;
           <span>Customize</span>
         </p>
 
         <h1 class="cu-hero-title fw-bold pb-4">Design Your Furniture</h1>
         <p class="cu-hero-sub">
-          Craft something uniquely yours — choose shape, material, colour, fabric and watch
-          your design come to life in real-time 3D.
+          Craft something uniquely yours — choose shape, material, colour,
+          fabric and watch your design come to life in real-time 3D.
         </p>
       </div>
     </section>
 
     <!-- workspace -->
-    <div class="cu-workspace container-fluid mt-5 d-grid align-items-start gap-4" :class="{ 'cu-workspace--mobile': isNarrow }">
-
+    <div
+      class="cu-workspace container-fluid mt-5 d-grid align-items-start gap-4"
+      :class="{ 'cu-workspace--mobile': isNarrow }"
+    >
       <!--configuration panel -->
-      <aside class="cu-panel cu-panel--left overflow-hidden overflow-y-auto" :class="{ 'position-sticky': !isNarrow, 'cu-panel--left-mobile': isNarrow }">
-
+      <aside
+        class="cu-panel cu-panel--left overflow-hidden overflow-y-auto"
+        :class="{
+          'position-sticky': !isNarrow,
+          'cu-panel--left-mobile': isNarrow,
+        }"
+      >
         <!-- STEP 1: furniture type -->
         <div class="cu-step p-4">
           <h2 class="cu-step-title mb-4 d-flex align-items-center gap-2">
-            <span class="cu-step-num rounded-pill d-inline-flex align-items-center justify-content-center">1</span> Select Furniture
+            <span
+              class="cu-step-num rounded-pill d-inline-flex align-items-center justify-content-center"
+              >1</span
+            >
+            Select Furniture
           </h2>
 
           <!-- area tabs -->
@@ -144,7 +176,9 @@ const priceBreakdown = computed(() => {
               :class="{ active: selectedArea === area }"
               @click="selectArea(area)"
               role="tab"
-            >{{ area }}</button>
+            >
+              {{ area }}
+            </button>
           </div>
 
           <!-- furniture type grid -->
@@ -157,10 +191,15 @@ const priceBreakdown = computed(() => {
               @click="selectType(ft.id)"
             >
               <div class="cu-type-icon">
-                <component :is="FURNITURE_ICONS[ft.id] || SofaIcon" :size="22" />
+                <component
+                  :is="FURNITURE_ICONS[ft.id] || SofaIcon"
+                  :size="22"
+                />
               </div>
               <span class="cu-type-name">{{ ft.name }}</span>
-              <span class="cu-type-price">from {{ formatPrice(ft.basePrice) }}</span>
+              <span class="cu-type-price"
+                >from {{ formatPrice(ft.basePrice) }}</span
+              >
             </button>
           </div>
         </div>
@@ -169,7 +208,11 @@ const priceBreakdown = computed(() => {
         <template v-if="currentType">
           <div class="cu-step cu-step--config p-4 border-0">
             <h2 class="cu-step-title mb-4 d-flex align-items-center gap-2">
-              <span class="cu-step-num rounded-pill d-inline-flex align-items-center justify-content-center">2</span> Customise
+              <span
+                class="cu-step-num rounded-pill d-inline-flex align-items-center justify-content-center"
+                >2</span
+              >
+              Customise
               <span class="cu-step-sub">{{ currentType.name }}</span>
             </h2>
 
@@ -178,24 +221,41 @@ const priceBreakdown = computed(() => {
               :key="key"
               class="cu-config-section mb-4"
             >
-              <h3 class="cu-config-heading fw-bold text-uppercase mb-2">{{ configLabel(key) }}</h3>
+              <h3 class="cu-config-heading fw-bold text-uppercase mb-2">
+                {{ configLabel(key) }}
+              </h3>
 
               <!-- colour swatches -->
-              <div v-if="key === 'color'" class="cu-color-grid d-flex flex-wrap gap-2">
+              <div
+                v-if="key === 'color'"
+                class="cu-color-grid d-flex flex-wrap gap-2"
+              >
                 <button
                   v-for="opt in currentType.configs[key]"
                   :key="opt.id"
                   class="cu-swatch d-flex align-items-center gap-1 px-2 py-1 border-1 rounded-pill"
                   :class="{ active: selectedConfig[key]?.id === opt.id }"
-                  :title="opt.name + (opt.price ? ' +' + formatPrice(opt.price) : ' (included)')"
+                  :title="
+                    opt.name +
+                    (opt.price ? ' +' + formatPrice(opt.price) : ' (included)')
+                  "
                   @click="selectOption(key, opt)"
                 >
-                  <span class="cu-swatch-dot rounded-pill" :style="{ background: opt.hex }"></span>
+                  <span
+                    class="cu-swatch-dot rounded-pill"
+                    :style="{ background: opt.hex }"
+                  ></span>
                   <span class="cu-swatch-label d-flex align-items-center gap-1">
                     {{ opt.name }}
-                    <span v-if="opt.price" class="cu-opt-price">+{{ formatPrice(opt.price) }}</span>
+                    <span v-if="opt.price" class="cu-opt-price ms-auto"
+                      >+{{ formatPrice(opt.price) }}</span
+                    >
                   </span>
-                  <CheckCircle2 v-if="selectedConfig[key]?.id === opt.id" :size="12" class="cu-swatch-check" />
+                  <CheckCircle2
+                    v-if="selectedConfig[key]?.id === opt.id"
+                    :size="12"
+                    class="cu-swatch-check"
+                  />
                 </button>
               </div>
 
@@ -209,12 +269,20 @@ const priceBreakdown = computed(() => {
                   @click="selectOption(key, opt)"
                 >
                   <span class="cu-opt-name">{{ opt.name }}</span>
-                  <span class="cu-opt-price">
-                    {{ opt.price === 0 ? 'included'
-                     : opt.price < 0  ? '− ' + formatPrice(Math.abs(opt.price))
-                     :                  '+ ' + formatPrice(opt.price) }}
+                  <span class="cu-opt-price ms-auto">
+                    {{
+                      opt.price === 0
+                        ? "included"
+                        : opt.price < 0
+                          ? "− " + formatPrice(Math.abs(opt.price))
+                          : "+ " + formatPrice(opt.price)
+                    }}
                   </span>
-                  <CheckCircle2 v-if="selectedConfig[key]?.id === opt.id" :size="12" class="cu-opt-check" />
+                  <CheckCircle2
+                    v-if="selectedConfig[key]?.id === opt.id"
+                    :size="12"
+                    class="cu-opt-check"
+                  />
                 </button>
               </div>
             </div>
@@ -222,15 +290,13 @@ const priceBreakdown = computed(() => {
         </template>
 
         <div v-else class="cu-empty-hint px-2 py-5 text-center">
-          <SofaIcon :size="40" stroke-width="1" class="cu-empty-icon" />
-          <p>Select a furniture type above<br>to start customising.</p>
+          <SofaIcon :size="40" stroke-width="1" class="cu-empty-icon mb-2" />
+          <p>Select a furniture type above<br />to start customising.</p>
         </div>
-
       </aside>
 
       <!-- 3d viewer -->
       <main class="cu-panel cu-panel--right d-flex flex-column gap-2">
-
         <!-- 3D viewer -->
         <div class="cu-viewer-wrap position-relative overflow-hidden">
           <!-- call FurnitureViewer.vue -->
@@ -243,16 +309,21 @@ const priceBreakdown = computed(() => {
           />
 
           <!-- no-selection overlay -->
-          <div v-if="!currentType" class="cu-viewer-placeholder position-absolute d-flex flex-column align-items-center justify-content-center gap-2 text-center p-4">
-            <SofaIcon :size="56" stroke-width="1" class="cu-ph-icon" />
-            <p class="cu-ph-text">Your 3D preview will appear here</p>
+          <div
+            v-if="!currentType"
+            class="cu-viewer-placeholder position-absolute d-flex flex-column align-items-center justify-content-center gap-2 text-center p-4"
+          >
+            <SofaIcon :size="56" stroke-width="1" class="cu-ph-icon mb-2" />
+            <p class="cu-ph-text m-0 fs-5">Your 3D preview will appear here</p>
             <p class="cu-ph-sub">Select a furniture type to begin</p>
           </div>
         </div>
 
         <!-- price summary -->
         <div v-if="currentType" class="cu-price-card p-4">
-          <h3 class="cu-price-title mb-4 fw-semibold border-bottom">Price Summary</h3>
+          <h3 class="cu-price-title mb-4 fw-semibold border-bottom fs-5">
+            Price Summary
+          </h3>
           <div class="cu-price-rows d-flex flex-column gap-2">
             <div class="cu-price-row d-flex justify-content-between">
               <span>Base ({{ currentType.name }})</span>
@@ -264,53 +335,62 @@ const priceBreakdown = computed(() => {
               class="cu-price-row d-flex justify-content-between"
             >
               <span>{{ line.label }}: {{ line.name }}</span>
-              <span :class="line.price < 0 ? 'cu-price--deduct' : 'cu-price--add'">
-                {{ line.price === 0 ? '—'
-                 : line.price < 0  ? '− ' + formatPrice(Math.abs(line.price))
-                 :                   '+ ' + formatPrice(line.price) }}
+              <span
+                :class="line.price < 0 ? 'cu-price--deduct' : 'cu-price--add'"
+              >
+                {{
+                  line.price === 0
+                    ? "—"
+                    : line.price < 0
+                      ? "− " + formatPrice(Math.abs(line.price))
+                      : "+ " + formatPrice(line.price)
+                }}
               </span>
             </div>
           </div>
           <div class="cu-price-divider"></div>
-          <div class="cu-price-total d-flex justify-content-between align-items-baseline mb-2">
+          <div
+            class="cu-price-total d-flex justify-content-between align-items-baseline mb-2"
+          >
             <span>Total Estimated</span>
-            <span class="cu-price-amount fw-bold">{{ formatPrice(totalPrice) }}</span>
+            <span class="cu-price-amount fw-bold">{{
+              formatPrice(totalPrice)
+            }}</span>
           </div>
 
           <!-- toast messages -->
           <Transition name="toast">
-            <div v-if="cartSuccess" class="cu-toast cu-toast--success">
+            <div v-if="cartSuccess" class="cu-toast cu-toast--success d-flex align-items-center gap-1 px-3 py-2 rounded-3 mb-2">
               <CheckCircle2 :size="16" />
               Added to cart successfully!
             </div>
-            <div v-else-if="cartError" class="cu-toast cu-toast--error">
+            <div v-else-if="cartError" class="cu-toast cu-toast--error d-flex align-items-center gap-1 px-3 py-2 rounded-3 mb-2">
               <AlertCircle :size="16" />
               {{ cartError }}
             </div>
-            <div v-else-if="contribSuccess" class="cu-toast cu-toast--success">
+            <div v-else-if="contribSuccess" class="cu-toast cu-toast--success d-flex align-items-center gap-1 px-3 py-2 rounded-3 mb-2">
               <CheckCircle2 :size="16" />
               Design contributed to Showcase!
             </div>
           </Transition>
 
           <!-- CTA buttons -->
-          <div class="cu-cta">
+          <div class="cu-cta d-grid gap-2">
             <button
-              class="cu-btn cu-btn--cart"
+              class="cu-btn cu-btn--cart d-flex align-items-center justify-content-center gap-2   py-3 border-0"
               @click="addToCart"
               :disabled="cartLoading"
             >
               <span v-if="cartLoading" class="cu-btn-spinner"></span>
               <ShoppingCart v-else :size="17" />
-              {{ cartLoading ? 'Adding…' : 'Add to Cart' }}
+              {{ cartLoading ? "Adding…" : "Add to Cart" }}
             </button>
-            <button class="cu-btn cu-btn--contrib" @click="openContribModal">
+            <button class="cu-btn cu-btn--contrib d-flex align-items-center justify-content-center gap-2   py-3 border-0" @click="openContribModal">
               <Sparkles :size="17" />
               Contribute Work
             </button>
           </div>
         </div>
-
       </main>
     </div>
 
@@ -325,28 +405,25 @@ const priceBreakdown = computed(() => {
       :submit-error="contribError"
       @submit="submitContribution"
     />
-
   </div>
 </template>
 
 <style scoped>
-@import '@/styles/main.css';
+@import "@/styles/main.css";
 
 .cu-page {
-  --cu-bg:        var(--bg-page);
-  --cu-card:      var(--bg-surface);
-  --cu-border:    var(--border);
-  --cu-text:      var(--color-primary);
-  --cu-text-2:    var(--color-secondary);
-  --cu-muted:     var(--accent-dk);
-  --cu-accent:    var(--accent);
+  --cu-bg: var(--bg-page);
+  --cu-card: var(--bg-surface);
+  --cu-border: var(--border);
+  --cu-text: var(--color-primary);
+  --cu-text-2: var(--color-secondary);
+  --cu-muted: var(--accent-dk);
+  --cu-accent: var(--accent);
   --cu-accent-dk: var(--btn-bg);
-  --cu-hover:     var(--bg-elevated);
+  --cu-hover: var(--bg-elevated);
   min-height: 100vh;
   background: var(--cu-bg);
 }
-
-/* ── hero ─────────────────────────────────────────────────────────────────── */
 .cu-hero {
   height: 400px;
   background: #1e1a14;
@@ -370,23 +447,29 @@ const priceBreakdown = computed(() => {
 }
 
 .cu-hero-inner {
-  font-family: 'Times New Roman', serif;
+  font-family: "Times New Roman", serif;
   padding: 0 5rem;
   max-width: 700px;
 }
 
 .cu-crumb {
-  font-family: 'Times New Roman', serif;
+  font-family: "Times New Roman", serif;
   font-size: var(--fs-sm);
   letter-spacing: 0.04em;
   color: #f0e1cc;
 }
 
-.cu-crumb a { color: #f0e1cc; text-decoration: none; transition: color 0.2s; }
-.cu-crumb a:hover { color: #dbbea0; }
+.cu-crumb a {
+  color: #f0e1cc;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.cu-crumb a:hover {
+  color: #dbbea0;
+}
 
 .cu-hero-title {
-  font-family: 'Times New Roman', serif;
+  font-family: "Times New Roman", serif;
   font-size: clamp(2.2rem, 4vw, 3.2rem);
   color: #f0e1cc;
   line-height: 1.1;
@@ -427,7 +510,7 @@ const priceBreakdown = computed(() => {
 }
 
 .cu-step-title {
-  font-family: 'Times New Roman', serif;
+  font-family: "Times New Roman", serif;
   font-size: 1.05rem;
   color: var(--cu-text);
 }
@@ -446,12 +529,12 @@ const priceBreakdown = computed(() => {
   font-size: var(--fs-base);
   color: var(--cu-muted);
   font-style: italic;
-  font-family: 'Times New Roman', serif;
+  font-family: "Times New Roman", serif;
 }
 
 /* area tabs */
 .cu-area-tabs {
-  font-family: 'Times New Roman', serif;
+  font-family: "Times New Roman", serif;
   flex-wrap: wrap;
 }
 
@@ -465,7 +548,11 @@ const priceBreakdown = computed(() => {
 }
 
 .cu-area-tab.active,
-.cu-area-tab:hover { background: var(--cu-accent-dk); color: #f0ebe2; border-color: var(--cu-accent-dk); }
+.cu-area-tab:hover {
+  background: var(--cu-accent-dk);
+  color: #f0ebe2;
+  border-color: var(--cu-accent-dk);
+}
 
 /* furniture type grid */
 .cu-type-grid {
@@ -479,27 +566,50 @@ const priceBreakdown = computed(() => {
   transition: all 0.18s;
 }
 
-.cu-type-card:hover  { border-color: var(--cu-accent); background: var(--cu-hover); }
-.cu-type-card.active { border-color: var(--cu-accent-dk); background: #2c2218; color: #f0ebe2; }
+.cu-type-card:hover {
+  border-color: var(--cu-accent);
+  background: var(--cu-hover);
+}
+.cu-type-card.active {
+  border-color: var(--cu-accent-dk);
+  background: #2c2218;
+  color: #f0ebe2;
+}
 .cu-type-card.active .cu-type-name,
-.cu-type-card.active .cu-type-price { color: #f0ebe2; }
-.cu-type-card.active .cu-type-icon  { color: #c4a882; }
+.cu-type-card.active .cu-type-price {
+  color: #f0ebe2;
+}
+.cu-type-card.active .cu-type-icon {
+  color: #c4a882;
+}
 
-.cu-type-icon  { color: var(--cu-muted); }
-.cu-type-name  { font-family: 'Times New Roman', serif; font-size: var(--fs-sm); font-weight: 600; color: var(--cu-text); line-height: 1.2; }
-.cu-type-price { font-family: 'Times New Roman', serif; font-size: var(--fs-xs); color: var(--cu-muted); }
+.cu-type-icon {
+  color: var(--cu-muted);
+}
+.cu-type-name {
+  font-family: "Times New Roman", serif;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--cu-text);
+  line-height: 1.2;
+}
+.cu-type-price {
+  font-family: "Times New Roman", serif;
+  font-size: var(--fs-xs);
+  color: var(--cu-muted);
+}
 
 /* config sections */
 
 .cu-config-heading {
-  font-family: 'Times New Roman', serif;
+  font-family: "Times New Roman", serif;
   font-size: var(--fs-sm);
   letter-spacing: 0.08em;
   color: var(--cu-muted);
 }
 
 .cu-swatch {
-  font-family: 'Times New Roman', serif;
+  font-family: "Times New Roman", serif;
   border: 1.5px solid var(--color-muted);
   background: transparent;
   cursor: pointer;
@@ -508,42 +618,67 @@ const priceBreakdown = computed(() => {
   color: var(--cu-text-2);
 }
 
-.cu-swatch.active { border-color: var(--cu-accent-dk); background: var(--cu-hover); }
-.cu-swatch:hover  { border-color: var(--cu-accent); }
+.cu-swatch.active {
+  border-color: var(--cu-accent-dk);
+  background: var(--cu-hover);
+}
+.cu-swatch:hover {
+  border-color: var(--cu-accent);
+}
 
 .cu-swatch-dot {
   width: 14px;
   height: 14px;
-  border: 1px solid rgba(0,0,0,0.12);
+  border: 1px solid rgba(0, 0, 0, 0.12);
   flex-shrink: 0;
 }
 
-.cu-swatch-check { color: var(--cu-accent-dk); flex-shrink: 0; }
+.cu-swatch-check {
+  color: var(--cu-accent-dk);
+  flex-shrink: 0;
+}
 
 .cu-opt-card {
-  font-family: 'Times New Roman', serif;
+  font-family: "Times New Roman", serif;
   border: 1.5px solid var(--color-muted);
   background: transparent;
   cursor: pointer;
   transition: all 0.15s;
 }
 
-.cu-opt-card:hover  { border-color: var(--cu-accent); background: var(--cu-hover); }
-.cu-opt-card.active { border-color: var(--cu-accent-dk); background: var(--cu-hover); }
+.cu-opt-card:hover {
+  border-color: var(--cu-accent);
+  background: var(--cu-hover);
+}
+.cu-opt-card.active {
+  border-color: var(--cu-accent-dk);
+  background: var(--cu-hover);
+}
 
-.cu-opt-name  { font-size: var(--fs-base); color: var(--cu-text); }
-.cu-opt-price { font-size: var(--fs-sm); color: var(--cu-muted); margin-left: auto; margin-right: 0.4rem; }
-.cu-opt-check { color: var(--cu-accent-dk); flex-shrink: 0; }
+.cu-opt-name {
+  font-size: var(--fs-base);
+  color: var(--cu-text);
+}
+.cu-opt-price {
+  font-size: var(--fs-sm);
+  color: var(--cu-muted);
+}
+.cu-opt-check {
+  color: var(--cu-accent-dk);
+  flex-shrink: 0;
+}
 
 /* empty hint */
 .cu-empty-hint {
-  font-family: 'Times New Roman', serif;
+  font-family: "Times New Roman", serif;
   color: var(--cu-muted);
   font-size: var(--fs-base);
   line-height: 1.6;
 }
 
-.cu-empty-icon { color: #d4c4b0; margin-bottom: 0.75rem; }
+.cu-empty-icon {
+  color: #d4c4b0;
+}
 
 /* 3D viewer */
 .cu-viewer-wrap {
@@ -561,20 +696,29 @@ const priceBreakdown = computed(() => {
   background: var(--border-light);
 }
 
-.cu-ph-icon  { color: #d4c4b0; margin-bottom: 0.5rem; }
-.cu-ph-text  { font-family: 'Times New Roman', serif; font-size: 1.1rem; color: var(--cu-text); margin: 0; }
-.cu-ph-sub   { font-family: 'Times New Roman', serif; font-size: var(--fs-base); color: var(--cu-muted); margin: 0; }
+.cu-ph-icon {
+  color: #d4c4b0;
+}
+.cu-ph-text {
+  font-family: "Times New Roman", serif;
+  color: var(--cu-text);
+}
+.cu-ph-sub {
+  font-family: "Times New Roman", serif;
+  font-size: var(--fs-base);
+  color: var(--cu-muted);
+  margin: 0;
+}
 
 /* price card */
 .cu-price-card {
-  font-family: 'Times New Roman', serif;
+  font-family: "Times New Roman", serif;
   background: var(--cu-card);
   border: 1px solid var(--cu-border);
 }
 
 .cu-price-title {
-  font-family: 'Times New Roman', serif;
-  font-size: 1.05rem;
+  font-family: "Times New Roman", serif;
   color: var(--cu-text);
 }
 
@@ -583,87 +727,88 @@ const priceBreakdown = computed(() => {
   color: var(--cu-text-2);
 }
 
-.cu-price--add    { color: var(--cu-muted); }
-.cu-price--deduct { color: var(--cu-muted); }
+.cu-price--add {
+  color: var(--cu-muted);
+}
+.cu-price--deduct {
+  color: var(--cu-muted);
+}
 
-.cu-price-divider { height: 1px; background: var(--cu-border); margin: 0.85rem 0; }
+.cu-price-divider {
+  height: 1px;
+  background: var(--cu-border);
+  margin: 0.85rem 0;
+}
 
-.cu-price-total > span:first-child { font-size: var(--fs-base); color: var(--cu-text-2); font-weight: 600; }
+.cu-price-total > span:first-child {
+  font-size: var(--fs-base);
+  color: var(--cu-text-2);
+  font-weight: 600;
+}
 
 .cu-price-amount {
-  font-family: 'Times New Roman', serif;
+  font-family: "Times New Roman", serif;
   font-size: 1.6rem;
   color: var(--cu-text);
 }
 
-/* config summary chips */
-.cu-config-summary {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-bottom: 1rem;
-}
-
-.cu-config-chip {
-  font-size: var(--fs-xs);
-  background: #f0ebe2;
-  color: #5a4a3a;
-  border: 1px solid #e0d8cc;
-  padding: 3px 9px;
-  border-radius: 20px;
-}
-
 /* toasts */
 .cu-toast {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 0.9rem;
-  border-radius: 8px;
   font-size: var(--fs-base);
-  margin-bottom: 0.85rem;
 }
 
-.cu-toast--success { background: #edf7ed; color: #3a6b3a; border: 1px solid #b8dab8; }
-.cu-toast--error   { background: #fdf0ed; color: #9b4030; border: 1px solid #e8a090; }
+.cu-toast--success {
+  background: #edf7ed;
+  color: #3a6b3a;
+  border: 1px solid #b8dab8;
+}
+.cu-toast--error {
+  background: #fdf0ed;
+  color: #9b4030;
+  border: 1px solid #e8a090;
+}
 
-.toast-enter-active, .toast-leave-active { transition: all 0.25s ease; }
-.toast-enter-from, .toast-leave-to       { opacity: 0; transform: translateY(-8px); }
+.toast-enter-active,
+.toast-leave-active {
+  transition: all 0.25s ease;
+}
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
 
 /* CTA buttons */
 .cu-cta {
-  display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
 }
 
 .cu-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-  padding: 0.75rem 1rem;
   font-size: var(--fs-base);
   cursor: pointer;
-  border: none;
   transition: all 0.18s;
 }
 
-.cu-btn:disabled { opacity: 0.65; cursor: not-allowed; }
+.cu-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
 
 .cu-btn--cart {
   background: #2c2218;
   color: #f0ebe2;
 }
 
-.cu-btn--cart:hover:not(:disabled) { background: #3d3024; }
+.cu-btn--cart:hover:not(:disabled) {
+  background: #3d3024;
+}
 
-[data-theme="dark"] .cu-btn--cart{
+[data-theme="dark"] .cu-btn--cart {
   background: var(--btn-bg);
   color: var(--btn-color);
 }
 
-[data-theme="dark"] .cu-btn--cart:hover{
+[data-theme="dark"] .cu-btn--cart:hover {
   background: var(--btn-bg-hover);
 }
 
@@ -673,29 +818,33 @@ const priceBreakdown = computed(() => {
   border: 1.5px solid var(--cu-border);
 }
 
-[data-theme="dark"] .cu-btn--contrib{
+[data-theme="dark"] .cu-btn--contrib {
   border: 1px solid var(--color-subtle);
   background: var(--bg-alt);
 }
 
-.cu-btn--contrib:hover { background: var(--cu-hover); border-color: var(--cu-accent); }
+.cu-btn--contrib:hover {
+  background: var(--cu-hover);
+  border-color: var(--cu-accent);
+}
 
 .cu-btn-spinner {
   width: 14px;
   height: 14px;
-  border: 2px solid rgba(240,235,226,0.3);
+  border: 2px solid rgba(240, 235, 226, 0.3);
   border-top-color: #f0ebe2;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
   flex-shrink: 0;
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
-/* ── responsive ─────────────────────────────────────────────────────────── */
-
-/* JS-driven classes (set from window.innerWidth on first render — bypasses
-   CSS injection timing lag in Vite dev mode that caused wrong layout on first visit) */
+/* responsive */
 .cu-workspace--mobile {
   grid-template-columns: 1fr;
 }
@@ -705,24 +854,71 @@ const priceBreakdown = computed(() => {
   overflow-y: visible;
 }
 
-/* CSS media queries kept as fallback and for non-grid responsive tweaks */
 @media (max-width: 992px) {
-  .cu-workspace { grid-template-columns: 1fr; }
-  .cu-panel--left { position: static; max-height: none; overflow-y: visible; }
-  .cu-viewer-wrap { height: 380px; }
-  .cu-hero-inner  { padding: 0 2.5rem; }
-  .cu-hero-orn, .cu-hero-orn-sm { display: none; }
+  .cu-workspace {
+    grid-template-columns: 1fr;
+  }
+  .cu-panel--left {
+    position: static;
+    max-height: none;
+    overflow-y: visible;
+  }
+  .cu-viewer-wrap {
+    height: 380px;
+  }
+  .cu-hero-inner {
+    padding: 0 2.5rem;
+  }
+  .cu-hero-orn,
+  .cu-hero-orn-sm {
+    display: none;
+  }
 }
 
 @media (max-width: 767px) {
-  .cu-hero { height: auto; min-height: 300px; }
-  .cu-hero-inner { padding: 2rem 1.5rem; }
+  .cu-hero {
+    height: auto;
+    min-height: 300px;
+  }
+  .cu-hero-inner {
+    padding: 2rem 1.5rem;
+  }
 }
 
 @media (max-width: 576px) {
-  .cu-type-grid { grid-template-columns: 1fr 1fr 1fr; }
-  .cu-cta       { grid-template-columns: 1fr; }
-  .cu-viewer-wrap { height: 300px; }
+  .cu-type-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .cu-cta {
+    grid-template-columns: 1fr;
+  }
+  .cu-viewer-wrap {
+    height: 300px;
+  }
 }
 
+@media (max-width: 430px) {
+  .cu-type-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cu-workspace {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  .cu-step {
+    padding: 1rem !important;
+  }
+  .cu-price-card {
+    padding: 1rem !important;
+  }
+  .cu-price-amount {
+    font-size: 1.2rem;
+  }
+  .cu-price-row {
+    font-size: var(--fs-sm);
+  }
+  .cu-area-tabs {
+    gap: 0.35rem !important;
+  }
+}
 </style>
