@@ -385,7 +385,7 @@ const priceBreakdown = computed(() => {
               <ShoppingCart v-else :size="17" />
               {{ cartLoading ? "Adding…" : "Add to Cart" }}
             </button>
-            <button class="cu-btn cu-btn--contrib d-flex align-items-center justify-content-center gap-2   py-3 border-0" @click="openContribModal">
+            <button class="cu-btn cu-btn--contrib d-flex align-items-center justify-content-center gap-2   py-3" @click="openContribModal">
               <Sparkles :size="17" />
               Contribute Work
             </button>
