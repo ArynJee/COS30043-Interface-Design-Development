@@ -517,5 +517,21 @@ const {
   .hero-stats {
     gap: 0;
   }
+  .stat-n {
+    font-size: 1.4rem;
+  }
+  .stat-l {
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+  }
+  .stat-col {
+    padding: 0 0.75rem;
+  }
+  .stat-col:first-child {
+    padding-left: 0;
+  }
+  .stat-div {
+    height: 30px;
+  }
 }
 </style>
