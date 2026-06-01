@@ -1,7 +1,9 @@
 <script setup>
 import { RouterLink } from "vue-router";
 import CheckoutSteps from "@/components/CheckoutSteps.vue";
+import CtaBanner from "@/components/CtaBanner.vue";
 import useOrderConfirmation from "@/hooks/useOrderConfirmation.js";
+import { CircleCheckBig } from "@lucide/vue";
 
 const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
 </script>
@@ -10,75 +12,65 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
   <div class="confirmation-page">
     <CheckoutSteps current-step="confirmation" />
 
-    <div class="confirmation-content">
-      <!-- Success icon -->
-      <div class="success-icon">
-        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-          <circle cx="24" cy="24" r="23" stroke="#c4a882" stroke-width="2" />
-          <path
-            d="M14 24l7 7 13-13"
-            stroke="#c4a882"
-            stroke-width="2.5"
-            stroke-linecap="square"
-          />
-        </svg>
+    <div class="confirmation-content mx-auto my-0 py-5 px-3 text-center">
+      <!-- success icon -->
+      <div class="success-icon d-flex justify-content-center mb-4">
+        <CircleCheckBig size="50" />
       </div>
 
-      <h1 class="confirmation-title">Order Confirmed</h1>
-      <p class="confirmation-sub">
+      <h1 class="confirmation-title fw-bold mb-2 fs-2">Order Confirmed</h1>
+      <p class="confirmation-sub mb-4">
         Thank you for your purchase. Your order has been placed successfully.
       </p>
 
-      <!-- Order card -->
-      <div class="order-card">
-        <div class="order-row">
-          <span class="order-label">Order Number</span>
+      <!-- order card -->
+      <div class="order-card p-3 text-left mb-3">
+        <div class="order-row d-flex justify-content-between align-items-center px-2 py-2">
+          <span class="order-label text-uppercase">Order Number</span>
           <span class="order-value">#{{ orderId }}</span>
         </div>
         <div class="order-divider"></div>
-        <div class="order-row">
-          <span class="order-label">Date</span>
+        <div class="order-row  d-flex justify-content-between align-items-center px-2 py-2">
+          <span class="order-label text-uppercase">Date</span>
           <span class="order-value">{{ orderDate }}</span>
         </div>
         <div class="order-divider"></div>
-        <div class="order-row">
-          <span class="order-label">Total Paid</span>
-          <span class="order-value order-total">{{ formatPrice(total) }}</span>
+        <div class="order-row  d-flex justify-content-between align-items-center px-2 py-2">
+          <span class="order-label text-uppercase">Total Paid</span>
+          <span class="order-value order-total fw-bold">{{ formatPrice(total) }}</span>
         </div>
         <div class="order-divider"></div>
-        <div class="order-row">
-          <span class="order-label">Status</span>
-          <span class="order-value order-status">Paid</span>
+        <div class="order-row  d-flex justify-content-between align-items-center px-2 py-2">
+          <span class="order-label text-uppercase">Status</span>
+          <span class="order-value order-status fw-bold text-uppercase">Paid</span>
         </div>
       </div>
 
-      <p class="delivery-note">
+      <p class="delivery-note my-4">
         Your order is being processed. You can view your order history in your
-        <RouterLink to="/profile" class="profile-link">profile</RouterLink>.
+        <RouterLink to="/profile" class="profile-link text-decoration-none">profile</RouterLink>.
       </p>
 
-      <div class="cta-actions">
-        <RouterLink to="/products" class="btn-primary"
+      <div class="cta-actions d-flex justify-content-center gap-3">
+        <RouterLink to="/products" class="btn-primary d-inline-block text-uppercase text-decoration-none px-4 py-3"
           >Continue Shopping</RouterLink
         >
-        <RouterLink to="/profile" class="btn-secondary"
+        <RouterLink to="/profile" class="btn-secondary d-inline-block text-uppercase text-decoration-none px-4 py-3"
           >View My Orders</RouterLink
         >
       </div>
     </div>
 
-    <!-- Bottom CTA banner -->
-    <div class="cta-banner">
-      <div class="cta-text">
-        <p class="cta-eyebrow">What's next?</p>
-        <h3 class="cta-heading">Customize your own furniture</h3>
-        <p class="cta-sub">Design a unique piece tailored to your space</p>
-        <RouterLink to="/customize" class="cta-btn">Start Designing</RouterLink>
-      </div>
-      <div class="cta-img-wrap">
-        <img src="/product/product-hero.png" alt="" class="cta-img" />
-      </div>
-    </div>
+    <CtaBanner
+      eyebrow="Keep Exploring"
+      title="Discover our full<br>collection"
+      body="Browse hundreds of handcrafted furniture pieces for every room — or design something entirely your own."
+      pill="Shop Now!"
+      link-to="/products"
+      aria-label="Go to Products"
+    />
+
+    <div class="cb-bridge"></div>
   </div>
 </template>
 
@@ -89,49 +81,26 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
   background: var(--bg-page);
   min-height: 100vh;
 }
-
-/* ── Content ── */
 .confirmation-content {
   max-width: 560px;
-  margin: 0 auto;
-  padding: 3.5rem 2rem 4rem;
-  text-align: center;
 }
-.success-icon {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1.5rem;
+.success-icon{
+  color: var(--accent-dk);
 }
 .confirmation-title {
-  font-size: 1.8rem;
-  font-weight: 700;
   color: var(--color-primary);
-  margin-bottom: 0.5rem;
 }
 .confirmation-sub {
   font-size: var(--fs-md);
   color: var(--color-secondary);
-  margin-bottom: 2rem;
 }
-
-/* ── Order card ── */
 .order-card {
   background: var(--bg-surface);
   border: 1px solid var(--border);
-  padding: 1.5rem;
-  text-align: left;
-  margin-bottom: 1.5rem;
-}
-.order-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 0;
 }
 .order-label {
   font-size: var(--fs-sm);
   letter-spacing: 0.07em;
-  text-transform: uppercase;
   color: var(--color-secondary);
 }
 .order-value {
@@ -139,13 +108,10 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
   color: var(--color-primary);
 }
 .order-total {
-  font-weight: 700;
   font-size: var(--fs-lg);
 }
 .order-status {
-  color: var(--color-success);
-  font-weight: 600;
-  text-transform: uppercase;
+  color: var(--color-secondary);
   font-size: var(--fs-sm);
   letter-spacing: 0.08em;
 }
@@ -157,131 +123,64 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
 .delivery-note {
   font-size: var(--fs-base);
   color: var(--color-secondary);
-  margin-bottom: 2rem;
   line-height: 1.6;
 }
 .profile-link {
   color: var(--accent);
-  text-decoration: none;
 }
 .profile-link:hover {
-  text-decoration: underline;
+  text-decoration: underline !important;
 }
 
-/* ── CTA actions ── */
-.cta-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-}
+/* CTA actions — styled to match Customize page buttons */
 .btn-primary {
-  display: inline-block;
-  background: var(--btn-bg);
-  color: var(--btn-color);
+  background: #2c2218;
+  color: #f0ebe2;
   font-family: var(--font-serif);
   font-size: var(--fs-base);
   letter-spacing: 0.07em;
-  text-transform: uppercase;
-  padding: 0.75rem 1.75rem;
-  text-decoration: none;
-  transition: background 0.2s;
+  transition: background 0.18s;
 }
 .btn-primary:hover {
-  background: var(--btn-bg-hover);
+  background: #3d3024;
 }
-.btn-secondary {
-  display: inline-block;
-  background: transparent;
-  border: 1px solid var(--btn-bg);
-  color: var(--btn-bg);
-  font-family: var(--font-serif);
-  font-size: var(--fs-base);
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  padding: 0.75rem 1.75rem;
-  text-decoration: none;
-  transition:
-    background 0.2s,
-    color 0.2s;
-}
-.btn-secondary:hover {
+[data-theme="dark"] .btn-primary {
   background: var(--btn-bg);
   color: var(--btn-color);
 }
+[data-theme="dark"] .btn-primary:hover {
+  background: var(--btn-bg-hover);
+}
 
-/* ── CTA Banner (always dark) ── */
-.cta-banner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #2c2218;
-  margin: 0 5rem 4rem;
-  overflow: hidden;
-  min-height: 140px;
-}
-.cta-text {
-  padding: 2rem 2.5rem;
-  flex: 1;
-}
-.cta-eyebrow {
-  font-size: var(--fs-2xs);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 0.35rem;
-}
-.cta-heading {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #f0e1cc;
-  margin-bottom: 0.3rem;
-  line-height: 1.25;
-}
-.cta-sub {
-  font-size: var(--fs-sm);
-  color: #a09080;
-  margin-bottom: 0.9rem;
-}
-.cta-btn {
-  display: inline-block;
-  background: var(--accent);
-  color: #fff;
+.btn-secondary {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--color-primary);
   font-family: var(--font-serif);
-  font-size: var(--fs-sm);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.5rem 1.3rem;
-  text-decoration: none;
-  transition: background 0.2s;
-}
-.cta-btn:hover {
-  background: var(--accent-dk);
-}
-.cta-img-wrap {
-  width: 240px;
-  height: 140px;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-.cta-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.4;
+  font-size: var(--fs-base);
+  letter-spacing: 0.07em;
+  transition: background 0.18s, border-color 0.18s;
 }
 
-/* ── Responsive ── */
+[data-theme="dark"] .btn-secondary {
+  border-color: var(--color-subtle);
+  background: var(--bg-alt);
+}
+
+.btn-secondary:hover {
+  background: var(--cu-hover);
+  border-color: var(--cu-accent);
+}
+
+.cb-bridge {
+  background: var(--bg-page);
+  height: 5rem;
+}
+
+/* ── responsive ── */
 @media (max-width: 767px) {
   .confirmation-content {
     padding: 2.5rem 1.25rem;
-  }
-  .cta-banner {
-    margin: 0 1.25rem 3rem;
-    flex-direction: column;
-  }
-  .cta-img-wrap {
-    width: 100%;
-    height: 100px;
   }
   .cta-actions {
     flex-direction: column;
