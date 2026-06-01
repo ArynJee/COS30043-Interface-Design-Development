@@ -343,6 +343,7 @@ function handleAddToCart() {
 .contrib-visual-wrap {
   aspect-ratio: 4 / 3;
   background: var(--bg-alt);
+  border: 1px solid var(--border);
 }
 .contrib-viewer {
   width: 100%;
@@ -675,6 +676,26 @@ function handleAddToCart() {
   }
   .add-cart-btn {
     max-width: 100%;
+  }
+  .contrib-visual-wrap :deep(.fv-wrap) {
+    min-height: 0;
+    height: 100%;
+  }
+}
+@media (max-width: 390px) {
+  .rev-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .rev-avg {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 0.5rem;
+  }
+  .rev-count {
+    flex: 0 0 100%;
+    text-align: center;
   }
 }
 </style>

@@ -877,7 +877,7 @@ function fitCamera(group) {
 
   camera.position.set(
     center.x + dist * 0.70,
-    center.y + dist * 0.55,
+    center.y + size.y * 0.55,
     center.z + dist * 0.85,
   )
   controls.target.copy(center)
