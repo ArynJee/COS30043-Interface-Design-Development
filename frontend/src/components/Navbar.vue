@@ -402,7 +402,8 @@ function sbHandleGoToBranch() { sbGoToBranch(); sidebarOpen.value = false }
 
 /* mobile sidebar */
 .mobile-sidebar {
-  height: 100vh;
+  top: 0;
+  bottom: 0;
   width: 62px;
   background: #fff;
   border-right: 1px solid #e8e3dc;
@@ -501,9 +502,9 @@ function sbHandleGoToBranch() { sbGoToBranch(); sidebarOpen.value = false }
 /* mobile search results panel */
 .sb-result-panel {
   top: 0;
+  bottom: 0;
   left: 220px;
   right: 0;
-  height: 100vh;
   background: #fff;
   border-left: 1px solid #e8e3dc;
   box-shadow: 4px 0 20px rgba(44, 34, 24, 0.08);

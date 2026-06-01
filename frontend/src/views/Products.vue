@@ -135,7 +135,7 @@ onBeforeUnmount(() => {
       class="filter-bar d-flex align-items-center justify-content-between position-sticky mt-5"
     >
       <!-- left: dropdowns -->
-      <div class="d-flex align-items-center gap-2">
+      <div class="filter-left d-flex align-items-center gap-2">
         <span class="filter-label pe-2 text-uppercase">Filter by</span>
 
         <!-- Category dropdown -->
@@ -230,7 +230,7 @@ onBeforeUnmount(() => {
 
       <!-- right: search + count + sort -->
       <div class="filter-right d-flex align-items-center gap-3">
-        <div class="position-relative d-flex align-items-center">
+        <div class="filter-search position-relative d-flex align-items-center">
           <Search :size="13" class="search-icon position-absolute pe-none" />
           <input
             v-model="searchQuery"
@@ -681,6 +681,7 @@ onBeforeUnmount(() => {
   background: var(--bg-surface);
   border: 1px solid var(--border);
   transition: box-shadow 0.3s;
+  min-width: 0;
 }
 .product-card:hover {
   box-shadow: 0 6px 24px rgba(30, 26, 20, 0.1);
@@ -776,6 +777,39 @@ onBeforeUnmount(() => {
 @media (max-width: 480px) {
   .product-grid {
     grid-template-columns: 1fr;
+  }
+  .filter-label {
+    display: none;
+  }
+  /* allow "clear all" to wrap to a new line when it appears */
+  .filter-left {
+    flex-wrap: wrap;
+  }
+
+  /* filter-right: search+count on row 1, sort full-width on row 2 */
+  .filter-right {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .filter-search {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .search-input {
+    width: 100%;
+    min-width: 0;
+  }
+  .filter-right .filter-dropdown {
+    flex: 0 0 100%;
+  }
+  .filter-right .filter-btn {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .filter-right .sort-panel {
+    left: 0;
+    right: 0;
+    min-width: unset;
   }
 }
 </style>
