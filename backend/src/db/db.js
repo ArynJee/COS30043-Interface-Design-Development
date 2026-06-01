@@ -18,8 +18,15 @@ const pool = new Pool(
       }
 );
 
+pool.on("error", (err) => {
+  console.error("Idle database client error", err.message);
+});
+
 pool.connect()
-  .then(() => console.log("Database connected"))
-  .catch(err => console.log(err));
+  .then((client) => {
+    console.log("Database connected");
+    client.release();
+  })
+  .catch((err) => console.error("Database connection failed", err));
 
 export default pool;

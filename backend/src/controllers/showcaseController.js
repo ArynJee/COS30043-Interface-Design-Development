@@ -1,23 +1,5 @@
 import db from "../db/db.js";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const UPLOADS_DIR = path.join(__dirname, "..", "..", "uploads");
-
-if (!fs.existsSync(UPLOADS_DIR)) {
-  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-}
-
-function saveBase64Image(base64Data) {
-  if (!base64Data) return null;
-  const data = base64Data.replace(/^data:image\/\w+;base64,/, "");
-  const filename = `showcase_${Date.now()}_${Math.random().toString(36).slice(2, 9)}.png`;
-  const filepath = path.join(UPLOADS_DIR, filename);
-  fs.writeFileSync(filepath, Buffer.from(data, "base64"));
-  return `/uploads/${filename}`;
-}
+import { uploadBase64Image } from "../utils/cloudinary.js";
 
 // POST /api/showcase  — submit a custom design contribution
 export const createContribution = async (req, res) => {
@@ -27,7 +9,7 @@ export const createContribution = async (req, res) => {
       return res.status(400).json({ message: "area and furniture_type are required" });
     }
 
-    const imageUrl = saveBase64Image(preview_image);
+    const imageUrl = await uploadBase64Image(preview_image, "comfyhome/showcase");
 
     const result = await db.query(
       `INSERT INTO design_contributions (user_id, area, furniture_type, description, preview_image_url, configuration, total_cost)

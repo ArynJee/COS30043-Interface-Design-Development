@@ -1,24 +1,5 @@
 import db from "../db/db.js";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const UPLOADS_DIR = path.join(__dirname, "..", "..", "uploads");
-
-if (!fs.existsSync(UPLOADS_DIR)) {
-  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-}
-
-function saveBase64Image(base64Data) {
-  if (!base64Data) return null;
-  if (base64Data.startsWith("/") || base64Data.startsWith("http")) return base64Data;
-  const data = base64Data.replace(/^data:image\/\w+;base64,/, "");
-  const filename = `cart_${Date.now()}_${Math.random().toString(36).slice(2, 9)}.png`;
-  const filepath = path.join(UPLOADS_DIR, filename);
-  fs.writeFileSync(filepath, Buffer.from(data, "base64"));
-  return `/uploads/${filename}`;
-}
+import { uploadBase64Image } from "../utils/cloudinary.js";
 
 // GET /api/cart
 export const getCartItems = async (req, res) => {
@@ -59,7 +40,7 @@ export const addCartItem = async (req, res) => {
       return res.status(400).json({ message: "product_id and item_name are required for product items" });
     }
 
-    const imageUrl = isCustomItem ? saveBase64Image(preview_image) : (preview_image || null);
+    const imageUrl = isCustomItem ? await uploadBase64Image(preview_image, "comfyhome/cart") : (preview_image || null);
 
     // Upsert: if same product already in cart, increment quantity
     if (!isCustomItem && product_id) {
