@@ -114,6 +114,7 @@ const {
                     <div class="product-custom-badge" v-if="item.is_custom">
                       Custom
                     </div>
+                    <div class="product-mobile-price">{{ formatPrice(item.unit_price * item.quantity) }}</div>
                   </div>
                 </div>
               </td>
@@ -735,6 +736,61 @@ const {
   .th-count,
   .td-count {
     display: none;
+  }
+}
+
+.product-mobile-price { display: none; }
+
+@media (max-width: 440px) {
+  .th-price,
+  .td-price {
+    display: none;
+  }
+  .product-mobile-price {
+    display: block;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-top: 0.3rem;
+  }
+  .product-img-wrap {
+    width: 56px;
+    height: 56px;
+  }
+  .product-variant {
+    max-width: 140px;
+  }
+}
+
+@media (max-width: 400px) {
+  .cart-content {
+    padding: 0.75rem;
+  }
+  .cart-table thead th,
+  .cart-table tbody td {
+    padding: 0.6rem 0.35rem;
+  }
+  .th-check,
+  .td-check {
+    width: 24px;
+  }
+  .th-remove,
+  .td-remove {
+    width: 28px;
+  }
+  .product-info {
+    gap: 0.5rem;
+  }
+  .product-img-wrap {
+    width: 52px;
+    height: 52px;
+  }
+  .product-name {
+    font-size: var(--fs-sm);
+  }
+  .product-variant {
+    max-width: 120px;
+    white-space: normal;
   }
 }
 </style>

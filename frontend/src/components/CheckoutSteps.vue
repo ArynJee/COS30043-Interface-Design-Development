@@ -118,17 +118,17 @@ function lineClass(fromStep) {
 
 /* ── Progress line with animated fill ── */
 .step-line {
-  width: 80px;
-  height: 1px;
+  flex: 1;
+  min-width: 8px;
+  height: 2px;
   background: var(--border);
   margin: 0 0.5rem;
   position: relative;
-  overflow: hidden;
 }
 
 [data-theme="dark"] .step-line {
   background: var(--color-muted);
-} 
+}
 
 /* ── Responsive ── */
 @media (max-width: 991px) {
@@ -136,6 +136,21 @@ function lineClass(fromStep) {
 }
 @media (max-width: 767px) {
   .steps-bar { padding: 1rem 1.25rem; }
-  .step-line { width: 40px; }
+}
+@media (max-width: 480px) {
+  .steps-bar {
+    padding: 1rem 0.75rem;
+    gap: 0;
+  }
+  .step {
+    gap: 0.3rem;
+  }
+  .step-label {
+    font-size: var(--fs-2xs);
+    letter-spacing: 0.03em;
+  }
+  .step-line {
+    margin: 0 0.25rem;
+  }
 }
 </style>
