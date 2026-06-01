@@ -50,4 +50,22 @@ const router = createRouter({
   scrollBehavior: () => ({ top: 0 }),
 })
 
+let tokenValidated = false
+
+router.beforeEach(async (_to, _from, next) => {
+  if (!tokenValidated) {
+    tokenValidated = true
+    const token = localStorage.getItem('token')
+    if (token) {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      }).catch(() => null)
+      if (res?.status === 401 || res?.status === 403) {
+        localStorage.removeItem('token')
+      }
+    }
+  }
+  next()
+})
+
 export default router
