@@ -1,5 +1,6 @@
 <script setup>
-import { ref, watch, onBeforeUnmount } from "vue";
+import { ref, computed, watch, onBeforeUnmount } from "vue";
+import { useI18n } from "vue-i18n";
 import { RouterLink } from "vue-router";
 import {
   ChevronLeft,
@@ -13,6 +14,7 @@ import useProducts from "@/hooks/useProducts.js";
 import { useCartStore } from "@/stores/cart.js";
 
 const cartStore = useCartStore();
+const { t } = useI18n();
 
 // Tracks per-product feedback: null | 'adding' | 'added'
 const addingStates = ref({});
@@ -27,7 +29,7 @@ function showLoginError(msg) {
 
 async function addToCart(product) {
   if (!localStorage.getItem("token")) {
-    showLoginError("Please log in to add items to your cart.");
+    showLoginError(t('products.loginToAdd'));
     return;
   }
   addingStates.value[product.id] = "adding";
@@ -41,7 +43,7 @@ async function addToCart(product) {
     }, 1800);
   } else {
     addingStates.value[product.id] = null;
-    showLoginError("Please log in to add items to your cart.");
+    showLoginError(t('products.loginToAdd'));
   }
 }
 
@@ -73,12 +75,12 @@ const categoryDropdownRef = ref(null);
 const tagDropdownRef = ref(null);
 const sortDropdownRef = ref(null);
 
-const sortLabels = {
-  default: "Default Sorting",
-  price_asc: "Price: Low to High",
-  price_desc: "Price: High to Low",
-  most_sold: "Most Sold",
-};
+const sortLabels = computed(() => ({
+  default: t('products.sort.default'),
+  price_asc: t('products.sort.priceLow'),
+  price_desc: t('products.sort.priceHigh'),
+  most_sold: t('products.sort.mostSold'),
+}));
 
 const toggleDropdown = (name) => {
   openDropdown.value = openDropdown.value === name ? null : name;
@@ -121,12 +123,10 @@ onBeforeUnmount(() => {
       />
       <div class="hero-content position-relative z-1">
         <p class="hero-breadcrumb mb-3">
-          <RouterLink to="/">Home</RouterLink>&ensp;<ChevronRight size="10"/>&ensp;Products
+          <RouterLink to="/">{{ $t('products.breadcrumb.home') }}</RouterLink>&ensp;<ChevronRight size="10"/>&ensp;{{ $t('products.breadcrumb.products') }}
         </p>
-        <h1 class="hero-title fw-bold mb-3">Our Collection</h1>
-        <p class="hero-sub m-0">
-          Curated furniture for every room in your home
-        </p>
+        <h1 class="hero-title fw-bold mb-3">{{ $t('products.title') }}</h1>
+        <p class="hero-sub m-0">{{ $t('products.subtitle') }}</p>
       </div>
     </section>
 
@@ -136,7 +136,7 @@ onBeforeUnmount(() => {
     >
       <!-- left: dropdowns -->
       <div class="filter-left d-flex align-items-center gap-2">
-        <span class="filter-label pe-2 text-uppercase">Filter by</span>
+        <span class="filter-label pe-2 text-uppercase">{{ $t('products.filterBy') }}</span>
 
         <!-- Category dropdown -->
         <div class="filter-dropdown" ref="categoryDropdownRef">
@@ -150,7 +150,7 @@ onBeforeUnmount(() => {
                 class="active-dot d-inline-block rounded-3 me-2"
                 v-if="selectedCategories.length"
               />
-              Categories
+              {{ $t('products.categories') }}
             </span>
             <ChevronDown :size="13" class="btn-chevron" />
           </button>
@@ -189,7 +189,7 @@ onBeforeUnmount(() => {
                 class="active-dot d-inline-block rounded-3 me-2"
                 v-if="selectedTags.length"
               />
-              Product Type
+              {{ $t('products.productType') }}
             </span>
             <ChevronDown :size="13" class="btn-chevron" />
           </button>
@@ -223,7 +223,7 @@ onBeforeUnmount(() => {
             class="clear-all-btn border-0 text-decoration-underline px-2"
             @click="clearFilters"
           >
-            &times; Clear All
+            {{ $t('products.clearAll') }}
           </button>
         </Transition>
       </div>
@@ -235,11 +235,11 @@ onBeforeUnmount(() => {
           <input
             v-model="searchQuery"
             type="text"
-            placeholder="Search products…"
+            :placeholder="$t('products.searchPlaceholder')"
             class="search-input rounded-pill"
           />
         </div>
-        <span class="result-count">{{ total }} items</span>
+        <span class="result-count">{{ total }} {{ $t('products.items') }}</span>
 
         <!-- custom sort dropdown -->
         <div class="filter-dropdown" ref="sortDropdownRef">
@@ -286,10 +286,10 @@ onBeforeUnmount(() => {
 
     <!-- products -->
     <div class="products-container">
-      <div v-if="loading" class="state-msg">Loading products…</div>
+      <div v-if="loading" class="state-msg">{{ $t('products.loading') }}</div>
 
       <div v-else-if="products.length === 0" class="state-msg">
-        No products found. Try adjusting your filters.
+        {{ $t('products.noResults') }}
       </div>
 
       <div v-else class="product-grid d-grid gap-4 mb-5">
@@ -320,7 +320,7 @@ onBeforeUnmount(() => {
               <span class="card-category-badge text-uppercase">{{
                 product.category
               }}</span>
-              <span class="card-sold">{{ product.sold_count }} sold</span>
+              <span class="card-sold">{{ product.sold_count }} {{ $t('products.sold') }}</span>
             </div>
             <h3 class="card-name fw-bold mb-2 overflow-hidden">
               {{ product.name }}
@@ -352,10 +352,10 @@ onBeforeUnmount(() => {
                 />
                 {{
                   addingStates[product.id] === "adding"
-                    ? "Adding…"
+                    ? $t('products.adding')
                     : addingStates[product.id] === "added"
-                      ? "Added"
-                      : "Add to Cart"
+                      ? $t('products.added')
+                      : $t('products.addToCart')
                 }}
               </button>
             </div>

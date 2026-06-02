@@ -31,34 +31,32 @@ const {
 
       <div class="hero-inner position-relative z-1">
         <p class="hero-crumb mb-4">
-          <RouterLink to="/">Home</RouterLink>&ensp;<ChevronRight size="10"/>&ensp;Showcase
+          <RouterLink to="/">{{ $t('showcase.breadcrumb.home') }}</RouterLink>&ensp;<ChevronRight size="10"/>&ensp;{{ $t('showcase.breadcrumb.showcase') }}
         </p>
 
         <div class="hero-eyebrow d-flex align-items-center gap-2 mb-3">
           <span class="ey-line"></span>
-          <span class="ey-text">COMMUNITY</span>
+          <span class="ey-text">{{ $t('showcase.community') }}</span>
           <span class="ey-line"></span>
         </div>
 
-        <h1 class="hero-title mb-3">Design Showcase</h1>
-        <p class="hero-sub mb-5">
-          Handcrafted furniture visions from our creative community
-        </p>
+        <h1 class="hero-title mb-3">{{ $t('showcase.title') }}</h1>
+        <p class="hero-sub mb-5">{{ $t('showcase.subtitle') }}</p>
 
         <div class="hero-stats d-flex align-items-center flex-wrap">
           <div class="stat-col">
             <span class="stat-n">{{ contributions.length }}</span>
-            <span class="stat-l">Designs</span>
+            <span class="stat-l">{{ $t('showcase.stats.designs') }}</span>
           </div>
           <div class="stat-div"></div>
           <div class="stat-col">
             <span class="stat-n">{{ totalContributors }}</span>
-            <span class="stat-l">Contributors</span>
+            <span class="stat-l">{{ $t('showcase.stats.contributors') }}</span>
           </div>
           <div class="stat-div"></div>
           <div class="stat-col">
             <span class="stat-n">{{ totalAreas }}</span>
-            <span class="stat-l">Areas</span>
+            <span class="stat-l">{{ $t('showcase.stats.areas') }}</span>
           </div>
         </div>
       </div>
@@ -72,7 +70,7 @@ const {
     >
       <span class="ds-line"></span>
       <span class="ds-text text-uppercase"
-        ><Sparkle size="11" />&nbsp; CRAFTED WITH PASSION &nbsp;<Sparkle
+        ><Sparkle size="11" />&nbsp; {{ $t('showcase.crafted') }} &nbsp;<Sparkle
           size="11"
       /></span>
       <span class="ds-line"></span>
@@ -110,16 +108,13 @@ const {
       <!-- empty state -->
       <div v-else-if="filtered.length === 0" class="sc-empty text-center">
         <div class="empty-orn"><Astroid size="20"/></div>
-        <h3 class="empty-title">No Designs Yet</h3>
-        <p class="empty-sub">
-          Be the first to contribute a {{ selectedArea }} design to the
-          community.
-        </p>
+        <h3 class="empty-title">{{ $t('showcase.noDesigns') }}</h3>
+        <p class="empty-sub">{{ $t('showcase.noDesignsBody', { area: selectedArea }) }}</p>
         <RouterLink
           to="/customize"
           class="empty-cta d-inline-flex align-items-center gap-2"
         >
-          Start Designing <ArrowRight :size="14" />
+          {{ $t('showcase.startDesigning') }} <ArrowRight :size="14" />
         </RouterLink>
       </div>
 

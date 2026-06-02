@@ -26,9 +26,9 @@ export default function useNavbar(mobileSearchRef) {
 
   // nav links definition
   const navLinks = [
-    { name: "Products", path: "/products", icon: ShoppingBag },
-    { name: "Showcase", path: "/showcase", icon: LayoutGrid },
-    { name: "Customize", path: "/customize", icon: Sliders },
+    { key: "products", path: "/products", icon: ShoppingBag },
+    { key: "showcase", path: "/showcase", icon: LayoutGrid },
+    { key: "customize", path: "/customize", icon: Sliders },
   ];
 
   // auth state

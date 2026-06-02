@@ -1,8 +1,11 @@
 <script setup>
 import { ref, computed, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { ShoppingCart, Check, Box, User } from "@lucide/vue";
 import FurnitureViewer from "@/components/FurnitureViewer.vue";
 import FeedbackModal from "@/components/FeedbackModal.vue";
+
+const { t } = useI18n();
 
 const props = defineProps({
   item: { type: Object, default: null },
@@ -124,7 +127,7 @@ function handleAddToCart() {
           @click="show3D = !show3D"
         >
           <Box :size="15" />
-          {{ show3D ? "View Photo" : "View in 3D" }}
+          {{ show3D ? $t('components.itemDetail.viewPhoto') : $t('components.itemDetail.view3D') }}
         </button>
       </div>
 
@@ -154,7 +157,7 @@ function handleAddToCart() {
           }}</span>
           <span class="rating-count"
             >({{ reviews.length }}
-            {{ reviews.length === 1 ? "review" : "reviews" }})</span
+            {{ reviews.length === 1 ? $t('components.itemDetail.review_one') : $t('components.itemDetail.review_other') }})</span
           >
         </div>
 
@@ -177,17 +180,17 @@ function handleAddToCart() {
           <ShoppingCart v-else :size="16" />
           {{
             addingToCart
-              ? "Adding…"
+              ? $t('components.itemDetail.adding')
               : cartAdded
-                ? "Added to Cart"
-                : "Add to Cart"
+                ? $t('components.itemDetail.added')
+                : $t('components.itemDetail.addToCart')
           }}
         </button>
 
         <Transition name="cart-err">
           <p v-if="cartError" class="cart-error-msg mb-5">
             {{ cartError }}
-            <a href="/login" class="cart-error-link">Log in</a>
+            <a href="/login" class="cart-error-link">{{ $t('components.itemDetail.login') }}</a>
           </p>
           <div v-else class="mb-5" />
         </Transition>
@@ -195,7 +198,7 @@ function handleAddToCart() {
         <div class="info-divider mb-4"></div>
 
         <!-- configuration chips -->
-        <p class="spec-section-title mb-2">Specification</p>
+        <p class="spec-section-title mb-2">{{ $t('components.itemDetail.specification') }}</p>
         <div class="cfg-chips d-flex flex-wrap gap-2 mb-4">
           <span
             v-for="entry in configEntries"
@@ -227,7 +230,7 @@ function handleAddToCart() {
               }}
             </div>
             <div class="contrib-date">
-              Designed {{ formatDate(item.created_at) }}
+              {{ $t('components.itemDetail.designed') }} {{ formatDate(item.created_at) }}
             </div>
           </div>
         </div>
@@ -237,7 +240,7 @@ function handleAddToCart() {
     <!--reviews section -->
     <div class="reviews-section">
       <div class="rev-header d-flex align-items-center gap-3 mb-5">
-        <h2 class="rev-title mb-0">Reviews</h2>
+        <h2 class="rev-title mb-0">{{ $t('components.itemDetail.reviews') }}</h2>
         <div
           v-if="reviews.length"
           class="rev-avg d-flex align-items-center gap-2"
@@ -254,7 +257,7 @@ function handleAddToCart() {
           </span>
           <span class="rev-count"
             >{{ reviews.length }}
-            {{ reviews.length === 1 ? "review" : "reviews" }}</span
+            {{ reviews.length === 1 ? $t('components.itemDetail.review_one') : $t('components.itemDetail.review_other') }}</span
           >
         </div>
       </div>
@@ -288,16 +291,16 @@ function handleAddToCart() {
           <p v-if="r.comment" class="rev-comment mt-2 mb-0">{{ r.comment }}</p>
         </div>
       </div>
-      <p v-else class="rev-empty">No reviews yet. Be the first to leave one!</p>
+      <p v-else class="rev-empty">{{ $t('components.itemDetail.noReviews') }}</p>
 
       <!-- write review button -->
       <div v-if="isLoggedIn" class="rev-cta-wrap text-center">
         <button class="rev-write-btn" @click="openReviewModal">
-          Write a Review
+          {{ $t('components.itemDetail.writeReview') }}
         </button>
       </div>
       <p v-else class="rev-login-prompt">
-        <a href="/login">Sign in</a> to leave a review.
+        <a href="/login">{{ $t('components.itemDetail.signIn') }}</a> {{ $t('components.itemDetail.toLeaveReview') }}
       </p>
     </div>
   </div>
@@ -307,9 +310,9 @@ function handleAddToCart() {
     :show="showReviewModal"
     :userFeedback="reviewData"
     :feedbackSubmitted="modalSubmitted"
-    title="Review this Design"
-    submitLabel="Submit Review"
-    successMessage="Thank you for your review!"
+    :title="t('components.itemDetail.reviewTitle')"
+    :submitLabel="t('components.itemDetail.submitReview')"
+    :successMessage="t('components.itemDetail.reviewThanks')"
     :showNameField="false"
     @close="showReviewModal = false"
     @submit="handleModalSubmit"

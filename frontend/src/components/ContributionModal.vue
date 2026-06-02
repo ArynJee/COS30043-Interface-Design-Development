@@ -6,8 +6,8 @@
         <!-- header -->
         <div class="cm-header">
           <div>
-            <h2 class="cm-title">Contribute Your Design</h2>
-            <p class="cm-sub">Share your creation with the ComfyHome community</p>
+            <h2 class="cm-title">{{ $t('components.contributionModal.title') }}</h2>
+            <p class="cm-sub">{{ $t('components.contributionModal.subtitle') }}</p>
           </div>
           <button class="cm-close" @click="$emit('update:modelValue', false)" aria-label="Close">
             <XIcon :size="20" />
@@ -23,13 +23,13 @@
         <div class="cm-info-row">
           <span class="cm-badge">{{ furnitureName }}</span>
           <span class="cm-badge cm-badge--area">{{ area }}</span>
-          <span class="cm-price">Total: <strong>{{ formattedPrice }}</strong></span>
+          <span class="cm-price">{{ $t('components.contributionModal.total') }} <strong>{{ formattedPrice }}</strong></span>
         </div>
 
         <!-- description input -->
         <div class="cm-field">
           <label class="cm-label" for="contrib-desc">
-            Design Description <span class="cm-required">*</span>
+            {{ $t('components.contributionModal.description') }} <span class="cm-required">*</span>
           </label>
           <textarea
             id="contrib-desc"
@@ -37,7 +37,7 @@
             class="cm-textarea"
             rows="4"
             maxlength="500"
-            placeholder="Describe your design vision — materials, intended space, inspiration…"
+            :placeholder="$t('components.contributionModal.descriptionPlaceholder')"
           />
           <span class="cm-char-count">{{ description.length }} / 500</span>
         </div>
@@ -48,11 +48,11 @@
         <!-- actions -->
         <div class="cm-actions">
           <button class="cm-btn cm-btn--ghost" @click="$emit('update:modelValue', false)" :disabled="submitting">
-            Cancel
+            {{ $t('components.contributionModal.cancel') }}
           </button>
           <button class="cm-btn cm-btn--primary" @click="handleSubmit" :disabled="submitting || !description.trim()">
             <span v-if="submitting" class="cm-spinner"></span>
-            <span>{{ submitting ? 'Submitting…' : 'Submit Contribution' }}</span>
+            <span>{{ submitting ? $t('components.contributionModal.submitting') : $t('components.contributionModal.submit') }}</span>
           </button>
         </div>
 

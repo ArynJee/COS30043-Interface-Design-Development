@@ -22,12 +22,8 @@ const {
       <!-- left branding text -->
       <div class="auth-brand">
         <span class="auth-brand-eyebrow">ComfyHome</span>
-        <h1 class="auth-brand-title">Beautiful<br />Creations<br />Await.</h1>
-        <p class="auth-brand-sub">
-          Sign in to manage your projects,<br />
-          explore collections, and craft<br />
-          the furniture you've always imagined.
-        </p>
+        <h1 class="auth-brand-title">{{ $t('login.tagline1') }}<br />{{ $t('login.tagline2') }}<br />{{ $t('login.tagline3') }}</h1>
+        <p class="auth-brand-sub">{{ $t('login.subtitle') }}</p>
       </div>
     </div>
 
@@ -35,8 +31,8 @@ const {
     <div class="auth-panel">
       <div class="auth-form-wrap">
         <div class="auth-form-header">
-          <span class="auth-form-eyebrow">Welcome back</span>
-          <h2 class="auth-form-title">Sign In</h2>
+          <span class="auth-form-eyebrow">{{ $t('login.welcome') }}</span>
+          <h2 class="auth-form-title">{{ $t('login.title') }}</h2>
         </div>
 
         <div v-if="errors.general" class="auth-error-banner">
@@ -45,7 +41,7 @@ const {
 
         <!-- email -->
         <div class="auth-field">
-          <label class="auth-label">Email</label>
+          <label class="auth-label">{{ $t('login.email') }}</label>
           <input
             v-model="form.email"
             type="email"
@@ -61,7 +57,7 @@ const {
 
         <!-- password -->
         <div class="auth-field">
-          <label class="auth-label">Password</label>
+          <label class="auth-label">{{ $t('login.password') }}</label>
           <div class="auth-input-wrap">
             <input
               v-model="form.password"
@@ -88,15 +84,15 @@ const {
         <!-- submit -->
         <button class="auth-submit" :disabled="loading" @click="handleLogin">
           <span v-if="!loading"
-            >Sign In <ArrowRight :size="16" class="ms-1"
+            >{{ $t('login.submit') }} <ArrowRight :size="16" class="ms-1"
           /></span>
           <span v-else class="auth-spinner"></span>
         </button>
 
         <p class="auth-switch">
-          Don't have an account?
+          {{ $t('login.noAccount') }}
           <router-link to="/registration" class="auth-switch-link"
-            >Create one</router-link
+            >{{ $t('login.createOne') }}</router-link
           >
         </p>
       </div>

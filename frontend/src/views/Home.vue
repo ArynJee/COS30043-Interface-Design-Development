@@ -44,30 +44,24 @@ const {
       <div class="hero-overlay"></div>
 
       <div class="hero-headline">
-        <h1>Comfortable Living.</h1>
-        <p class="hero-sub">Crafting spaces that define how you live.</p>
+        <h1>{{ $t('home.hero.title') }}</h1>
+        <p class="hero-sub">{{ $t('home.hero.subtitle') }}</p>
         <router-link
           to="/products"
           class="hero-cta d-inline-block text-decoration-none text-uppercase"
-          >View Collection</router-link
+          >{{ $t('home.hero.cta') }}</router-link
         >
       </div>
 
       <!-- community showcase card in hero -->
       <div class="hero-card rounded-3">
-        <span class="hero-card-badge d-inline-block text-uppercase">Community Showcase</span>
-        <p class="hero-card-text">
-          See where your creativity takes you when ComfyHome provides the
-          freedom to our dearest customers to design their own furniture. Many
-          great contributions to the community have been made through our open
-          design platform — from intimate reading nooks to statement dining
-          rooms.
-        </p>
+        <span class="hero-card-badge d-inline-block text-uppercase">{{ $t('home.showcase.title') }}</span>
+        <p class="hero-card-text">{{ $t('home.showcase.body') }}</p>
         <router-link
           to="/showcase"
           class="hero-card-link d-inline-flex align-items-center text-decoration-none text-uppercase"
         >
-          View More <ArrowUpRight :size="14" class="ms-1" />
+          {{ $t('home.showcase.cta') }} <ArrowUpRight :size="14" class="ms-1" />
         </router-link>
       </div>
     </section>
@@ -79,35 +73,29 @@ const {
           <!-- big image left -->
           <div class="fg-main-img">
             <img src="/home/couch.jpg" alt="Modern interior couch" />
-            <div class="fg-img-label text-uppercase">Gorgeous Interior</div>
+            <div class="fg-img-label text-uppercase">{{ $t('home.interior.title') }}</div>
           </div>
 
           <!-- right column -->
           <div class="fg-right">
             <div class="fg-heading-block">
-              <h2 class="fg-main-title">Modern<br />Minimalist</h2>
+              <h2 class="fg-main-title">{{ $t('home.interior.modern') }}<br />{{ $t('home.interior.minimalist') }}</h2>
             </div>
 
             <div class="fg-cards">
               <!-- Card 1: Into a Gallery -->
               <div class="fg-card fg-card-light">
-                <span class="fg-card-tag d-inline-block text-uppercase">Aesthetic</span>
-                <h3 class="fg-card-title">Into a gallery<br />of elegance</h3>
-                <p class="fg-card-body">
-                  Aesthetic furniture where every piece tells a story of refined
-                  taste and timeless craftsmanship.
-                </p>
+                <span class="fg-card-tag d-inline-block text-uppercase">{{ $t('home.interior.aesthetic') }}</span>
+                <h3 class="fg-card-title">{{ $t('home.gallery.line1') }}<br />{{ $t('home.gallery.line2') }}</h3>
+                <p class="fg-card-body">{{ $t('home.gallery.body') }}</p>
               </div>
 
               <!-- Card 2: Customize Furniture -->
               <div class="fg-card fg-card-dark">
                 <span class="fg-card-tag fg-tag-light d-inline-block text-uppercase"
-                  >Customize Furniture</span
+                  >{{ $t('home.feature.customize') }}</span
                 >
-                <p class="fg-card-body fg-body-light">
-                  Indulge in the artistry of bespoke living — choose your
-                  fabric, finish, and form.
-                </p>
+                <p class="fg-card-body fg-body-light">{{ $t('home.feature.body') }}</p>
                 <router-link to="/customize">
                   <div class="fg-card-arrow d-flex align-items-center justify-content-center">
                     <ArrowUpRight :size="18" />
@@ -126,22 +114,22 @@ const {
         <div class="stats-grid">
           <div class="stat-item">
             <span class="stat-number">{{ productCount }}</span>
-            <span class="stat-label text-uppercase">Products</span>
+            <span class="stat-label text-uppercase">{{ $t('home.stats.products') }}</span>
           </div>
           <div class="stat-divider"></div>
           <div class="stat-item">
             <span class="stat-number">{{ projectCount }}</span>
-            <span class="stat-label text-uppercase">Projects</span>
+            <span class="stat-label text-uppercase">{{ $t('home.stats.projects') }}</span>
           </div>
           <div class="stat-divider"></div>
           <div class="stat-item">
             <span class="stat-number">{{ feedbackCount }}</span>
-            <span class="stat-label text-uppercase">Satisfied Customers</span>
+            <span class="stat-label text-uppercase">{{ $t('home.stats.customers') }}</span>
           </div>
           <div class="stat-divider"></div>
           <div class="stat-item">
             <span class="stat-number">1<sup>st</sup></span>
-            <span class="stat-label text-uppercase">Top in Malaysia</span>
+            <span class="stat-label text-uppercase">{{ $t('home.stats.rank') }}</span>
           </div>
         </div>
       </div>
@@ -156,16 +144,9 @@ const {
           </div>
 
           <div class="about-content">
-            <p class="about-eyebrow text-uppercase">Elegance · Timeless</p>
-            <h2 class="about-title">Modern Style<br />Timeless Charm</h2>
-            <p class="about-body">
-              Discover ComfyHome's latest collection, featuring sofas, chairs,
-              and armchairs embodying diverse lifestyle concepts — alongside
-              striking tables, coffee tables, and sideboards crafted for the
-              discerning home. Founded on the belief that beauty and comfort are
-              never in conflict, every piece we create carries a quiet
-              confidence meant to outlast trends.
-            </p>
+            <p class="about-eyebrow text-uppercase">{{ $t('home.about.eyebrow') }}</p>
+            <h2 class="about-title">{{ $t('home.about.title') }}<br />{{ $t('home.about.title2') }}</h2>
+            <p class="about-body">{{ $t('home.about.body') }}</p>
           </div>
         </div>
       </div>
@@ -176,16 +157,13 @@ const {
       <div class="container-fluid px-4 px-lg-5">
         <!-- header row -->
         <div class="explore-header mb-4">
-          <h2 class="explore-title">Explore Our Products</h2>
+          <h2 class="explore-title">{{ $t('home.explore.title') }}</h2>
           <div class="explore-header-right">
-            <p class="explore-sub">
-              ComfyHome will showcase its vision of contemporary architecture
-              and interior design through every carefully curated category.
-            </p>
+            <p class="explore-sub">{{ $t('home.explore.body') }}</p>
             <router-link
               to="/products"
               class="explore-view-more d-inline-block text-decoration-none text-uppercase"
-              >View More</router-link
+              >{{ $t('home.explore.viewMore') }}</router-link
             >
           </div>
         </div>
@@ -214,7 +192,7 @@ const {
     <!-- feedback -->
     <section class="feedback-section py-5">
       <div class="container">
-        <h2 class="feedback-title fw-bold text-center mb-5">What Our Clients Say</h2>
+        <h2 class="feedback-title fw-bold text-center mb-5">{{ $t('home.testimonials.title') }}</h2>
 
         <!-- Feedback cards -->
         <div class="row mb-5" v-if="feedbacks.length > 0">
@@ -244,7 +222,7 @@ const {
             class="fb-cta-btn d-inline-flex align-items-center text-uppercase"
             @click="showFeedbackModal = true"
           >
-            <MessageSquare :size="16" class="me-2" /> Share Your Feedback
+            <MessageSquare :size="16" class="me-2" /> {{ $t('home.testimonials.cta') }}
           </button>
         </div>
       </div>

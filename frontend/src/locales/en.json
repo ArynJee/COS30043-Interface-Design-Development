@@ -1,0 +1,417 @@
+{
+  "nav": {
+    "search": "Search…",
+    "locations": "Locations",
+    "cart": "Cart",
+    "profile": "Profile",
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode",
+    "resultsFor": "Results for \"{query}\"",
+    "searching": "Searching…",
+    "products": "Products",
+    "allProducts": "All products",
+    "branches": "Branches",
+    "allBranches": "All branches",
+    "showcase": "Showcase",
+    "browseShowcase": "Browse showcase",
+    "noResults": "No results for \"{query}\"",
+    "language": "Language",
+    "links": {
+      "products": "Products",
+      "showcase": "Showcase",
+      "customize": "Customize"
+    }
+  },
+  "footer": {
+    "tagline": "Crafting spaces that reflect who you are. In a world defined by the spaces we inhabit, we believe every room should be a statement of self.",
+    "products": "Products",
+    "livingRoom": "Living Room",
+    "studyRoom": "Study Room",
+    "kitchen": "Kitchen",
+    "bathroom": "Bathroom",
+    "bedroom": "Bedroom",
+    "allProducts": "All Products",
+    "navigate": "Navigate",
+    "home": "Home",
+    "myProfile": "My Profile",
+    "copyright": "© {year} ComfyHome. All rights reserved."
+  },
+  "home": {
+    "hero": {
+      "title": "Comfortable Living.",
+      "subtitle": "Crafting spaces that define how you live.",
+      "cta": "View Collection"
+    },
+    "showcase": {
+      "title": "Community Showcase",
+      "body": "See where your creativity takes you when ComfyHome provides the freedom to our dearest customers to design their own furniture. Many great contributions to the community have been made through our open design platform — from intimate reading nooks to statement dining rooms.",
+      "cta": "View More"
+    },
+    "interior": {
+      "title": "Gorgeous Interior",
+      "modern": "Modern",
+      "minimalist": "Minimalist",
+      "aesthetic": "Aesthetic"
+    },
+    "gallery": {
+      "line1": "Into a gallery",
+      "line2": "of elegance",
+      "body": "Aesthetic furniture where every piece tells a story of refined taste and timeless craftsmanship."
+    },
+    "feature": {
+      "customize": "Customize Furniture",
+      "body": "Indulge in the artistry of bespoke living — choose your fabric, finish, and form."
+    },
+    "stats": {
+      "products": "Products",
+      "projects": "Projects",
+      "customers": "Satisfied Customers",
+      "rank": "Top in Malaysia"
+    },
+    "about": {
+      "eyebrow": "Elegance · Timeless",
+      "title": "Modern Style",
+      "title2": "Timeless Charm",
+      "body": "Discover ComfyHome's latest collection, featuring sofas, chairs, and armchairs embodying diverse lifestyle concepts — alongside striking tables, coffee tables, and sideboards crafted for the discerning home. Founded on the belief that beauty and comfort are never in conflict, every piece we create carries a quiet confidence meant to outlast trends."
+    },
+    "explore": {
+      "title": "Explore Our Products",
+      "body": "ComfyHome will showcase its vision of contemporary architecture and interior design through every carefully curated category.",
+      "viewMore": "View More"
+    },
+    "testimonials": {
+      "title": "What Our Clients Say",
+      "cta": "Share Your Feedback"
+    },
+    "sold": "sold"
+  },
+  "products": {
+    "breadcrumb": {
+      "home": "Home",
+      "products": "Products"
+    },
+    "title": "Our Collection",
+    "subtitle": "Curated furniture for every room in your home",
+    "filterBy": "Filter by",
+    "categories": "Categories",
+    "productType": "Product Type",
+    "searchPlaceholder": "Search products…",
+    "items": "items",
+    "sort": {
+      "default": "Default Sorting",
+      "priceLow": "Price: Low to High",
+      "priceHigh": "Price: High to Low",
+      "mostSold": "Most Sold"
+    },
+    "loginToAdd": "Please log in to add items to your cart.",
+    "clearAll": "× Clear All",
+    "loading": "Loading products…",
+    "noResults": "No products found. Try adjusting your filters.",
+    "addToCart": "Add to Cart",
+    "adding": "Adding…",
+    "added": "Added",
+    "sold": "sold"
+  },
+  "showcase": {
+    "breadcrumb": {
+      "home": "Home",
+      "showcase": "Showcase"
+    },
+    "community": "COMMUNITY",
+    "title": "Design Showcase",
+    "subtitle": "Handcrafted furniture visions from our creative community",
+    "stats": {
+      "designs": "Designs",
+      "contributors": "Contributors",
+      "areas": "Areas"
+    },
+    "crafted": "CRAFTED WITH PASSION",
+    "noDesigns": "No Designs Yet",
+    "noDesignsBody": "Be the first to contribute a {area} design to the community.",
+    "startDesigning": "Start Designing",
+    "cta": {
+      "eyebrow": "Your Vision. Your Space.",
+      "title": "Design your own<br>furniture",
+      "body": "Choose from 18 furniture types and fully customize materials, finishes, and dimensions — then share it with the community.",
+      "pill": "Design Now!"
+    }
+  },
+  "customize": {
+    "breadcrumb": {
+      "home": "Home",
+      "showcase": "Showcase",
+      "customize": "Customize"
+    },
+    "title": "Design Your Furniture",
+    "subtitle": "Craft something uniquely yours — choose shape, material, colour, fabric and watch your design come to life in real-time 3D.",
+    "step1": "Select Furniture",
+    "step2": "Customise",
+    "options": {
+      "shape": "Shape / Form",
+      "fabric": "Fabric",
+      "material": "Material",
+      "colour": "Colour",
+      "legStyle": "Leg Style",
+      "headboard": "Headboard Style",
+      "countertop": "Countertop Material",
+      "included": "(included)",
+      "includedBare": "included"
+    },
+    "selectPrompt": "Select a furniture type above to start customising.",
+    "previewTitle": "Your 3D preview will appear here",
+    "previewSub": "Select a furniture type to begin",
+    "price": {
+      "summary": "Price Summary",
+      "base": "Base ({name})",
+      "total": "Total Estimated"
+    },
+    "toast": {
+      "cartSuccess": "Added to cart successfully!",
+      "contribSuccess": "Design contributed to Showcase!"
+    },
+    "addToCart": "Add to Cart",
+    "adding": "Adding…",
+    "contribute": "Contribute Work"
+  },
+  "locations": {
+    "breadcrumb": {
+      "home": "Home",
+      "locations": "Locations"
+    },
+    "title": "Find a Branch Near You",
+    "subtitle": "Visit one of our showrooms across Malaysia. Experience ComfyHome furniture in person with expert guidance from our in-store team.",
+    "viewHours": "View working hours",
+    "viewLocation": "View location",
+    "mapError": "Map could not be loaded.",
+    "mapHint": "Set VITE_GOOGLE_MAPS_API_KEY in your .env and restart the dev server."
+  },
+  "cart": {
+    "title": "My Cart",
+    "clear": "Clear cart",
+    "loading": "Loading cart…",
+    "empty": "Your cart is empty.",
+    "product": "Product",
+    "count": "Count",
+    "price": "Price",
+    "custom": "Custom",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "sst": "SST (6%)",
+    "total": "Total",
+    "spendMore": "Spend {amount} more for free {method}",
+    "freeShipping": "Free shipping unlocked!",
+    "shippingMethod": "Shipping Method",
+    "free": "FREE",
+    "checkout": "Continue to checkout",
+    "selected": "{selected} of {total} items selected",
+    "product_one": "product",
+    "product_other": "products",
+    "ctaEyebrow": "Keep Exploring",
+    "ctaTitle": "Discover our full<br>collection",
+    "ctaBody": "Browse hundreds of handcrafted furniture pieces for every room — or design something entirely your own.",
+    "ctaPill": "Shop Now!"
+  },
+  "checkout": {
+    "shipping": {
+      "title": "Shipping Information",
+      "fullName": "Full Name",
+      "address": "Delivery Address",
+      "city": "City",
+      "state": "State",
+      "zip": "ZIP / Post Code",
+      "continue": "Continue to Payment",
+      "back": "Back to Cart"
+    },
+    "payment": {
+      "title": "Payment",
+      "shippingTo": "Shipping to",
+      "edit": "Edit",
+      "cardNumber": "Card Number",
+      "expiry": "Expiry Date",
+      "cvc": "CVC",
+      "processing": "Processing…",
+      "placeOrder": "Place Order · {total}",
+      "back": "Back to Shipping"
+    },
+    "summary": {
+      "title": "Order Summary",
+      "custom": "Custom",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "sst": "SST (6%)",
+      "total": "Total",
+      "free": "Free"
+    }
+  },
+  "orderConfirmation": {
+    "title": "Order Confirmed",
+    "subtitle": "Thank you for your purchase. Your order has been placed successfully.",
+    "orderNumber": "Order Number",
+    "date": "Date",
+    "shippingMethod": "Shipping Method",
+    "totalPaid": "Total Paid",
+    "status": "Status",
+    "paid": "Paid",
+    "message": "Your order is being processed. You can view your order history in your profile.",
+    "continueShopping": "Continue Shopping",
+    "viewOrders": "View My Orders"
+  },
+  "login": {
+    "tagline1": "Beautiful",
+    "tagline2": "Creations",
+    "tagline3": "Await.",
+    "subtitle": "Sign in to manage your projects, explore collections, and craft the furniture you've always imagined.",
+    "welcome": "Welcome back",
+    "title": "Sign In",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign In",
+    "noAccount": "Don't have an account?",
+    "createOne": "Create one"
+  },
+  "register": {
+    "tagline1": "Your Home.",
+    "tagline2": "Your Vision.",
+    "tagline3": "Your Story.",
+    "subtitle": "Join thousands of homeowners who design their perfect living space with ComfyHome.",
+    "started": "Get started",
+    "title": "Create Account",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone Number",
+    "address": "Address",
+    "password": "Password",
+    "passwordHint": "Min 8 characters, one uppercase letter and one number.",
+    "confirm": "Confirm Password",
+    "submit": "Create Account",
+    "hasAccount": "Already have an account?",
+    "signIn": "Sign In"
+  },
+  "profile": {
+    "title": "My Profile",
+    "breadcrumb": {
+      "home": "Home",
+      "profile": "Profile"
+    },
+    "welcome": "Welcome back, {name}",
+    "tabs": {
+      "orders": "My Orders",
+      "details": "Profile Details",
+      "contributions": "My Contributions"
+    },
+    "signOut": "Sign Out",
+    "orders": {
+      "title": "Order History",
+      "loading": "Loading orders…",
+      "empty": "You haven't placed any orders yet.",
+      "browseProducts": "Browse Products",
+      "shippedTo": "Shipped to",
+      "shippingMethod": "Shipping Method",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "sst": "SST (6%)",
+      "orderTotal": "Order Total",
+      "free": "Free",
+      "orderAgain": "Order Again",
+      "addingToCart": "Adding to cart…"
+    },
+    "details": {
+      "title": "Profile Details",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address",
+      "memberSince": "Member Since",
+      "saving": "Saving…",
+      "save": "Save Changes",
+      "cancel": "Cancel",
+      "saved": "Changes saved successfully.",
+      "edit": "Edit"
+    },
+    "contributions": {
+      "title": "My Contributions",
+      "loading": "Loading contributions…",
+      "empty": "You haven't submitted any design contributions yet.",
+      "startDesigning": "Start Designing"
+    },
+    "loading": "Loading profile…",
+    "order_one": "order",
+    "order_other": "orders",
+    "design_one": "design",
+    "design_other": "designs"
+  },
+  "contributionDetail": {
+    "breadcrumb": {
+      "home": "Home",
+      "showcase": "Showcase"
+    },
+    "loading": "Loading design…"
+  },
+  "components": {
+    "searchDropdown": {
+      "searching": "Searching…",
+      "products": "Products",
+      "seeAll": "See all products for \"{query}\"",
+      "branches": "Branches",
+      "viewAll": "View all branches",
+      "showcase": "Showcase",
+      "browseAll": "Browse all showcase",
+      "noResults": "No results for \"{query}\""
+    },
+    "feedbackModal": {
+      "title": "Write a Review",
+      "submit": "Submit Feedback",
+      "thanks": "Thank you for your feedback!",
+      "name": "Name",
+      "rating": "Rating",
+      "comment": "Comment",
+      "commentPlaceholder": "Tell us about your experience…"
+    },
+    "contributionModal": {
+      "title": "Contribute Your Design",
+      "subtitle": "Share your creation with the ComfyHome community",
+      "total": "Total:",
+      "description": "Design Description",
+      "descriptionPlaceholder": "Describe your design vision — materials, intended space, inspiration…",
+      "cancel": "Cancel",
+      "submitting": "Submitting…",
+      "submit": "Submit Contribution"
+    },
+    "itemDetail": {
+      "specification": "Specification",
+      "viewPhoto": "View Photo",
+      "view3D": "View in 3D",
+      "reviews": "Reviews",
+      "review_one": "review",
+      "review_other": "reviews",
+      "adding": "Adding…",
+      "added": "Added to Cart",
+      "addToCart": "Add to Cart",
+      "login": "Log in",
+      "noReviews": "No reviews yet. Be the first to leave one!",
+      "writeReview": "Write a Review",
+      "signIn": "Sign in",
+      "toLeaveReview": "to leave a review.",
+      "designed": "Designed",
+      "anonymous": "Anonymous",
+      "reviewTitle": "Review this Design",
+      "submitReview": "Submit Review",
+      "reviewThanks": "Thank you for your review!"
+    },
+    "checkoutSteps": {
+      "cart": "Cart",
+      "checkout": "Checkout",
+      "payment": "Payment"
+    },
+    "contributionCard": {
+      "viewDetail": "View Detail"
+    }
+  },
+  "language": {
+    "en": "English",
+    "ms": "Melayu",
+    "zh": "中文"
+  }
+}

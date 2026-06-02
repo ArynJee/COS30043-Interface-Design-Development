@@ -18,15 +18,13 @@ const { orderId, total, formatPrice, orderDate, orderShippingMethod } = useOrder
         <CircleCheckBig size="50" />
       </div>
 
-      <h1 class="confirmation-title fw-bold mb-2 fs-2">Order Confirmed</h1>
-      <p class="confirmation-sub mb-4">
-        Thank you for your purchase. Your order has been placed successfully.
-      </p>
+      <h1 class="confirmation-title fw-bold mb-2 fs-2">{{ $t('orderConfirmation.title') }}</h1>
+      <p class="confirmation-sub mb-4">{{ $t('orderConfirmation.subtitle') }}</p>
 
       <!-- order card -->
       <div class="order-card p-3 text-left mb-3">
         <div class="order-row d-flex justify-content-between align-items-center px-2 py-2">
-          <span class="order-label text-uppercase">Order Number</span>
+          <span class="order-label text-uppercase">{{ $t('orderConfirmation.orderNumber') }}</span>
           <span class="order-value">#{{ orderId }}</span>
         </div>
 
@@ -34,7 +32,7 @@ const { orderId, total, formatPrice, orderDate, orderShippingMethod } = useOrder
 
         <!-- order date -->
         <div class="order-row  d-flex justify-content-between align-items-center px-2 py-2">
-          <span class="order-label text-uppercase">Date</span>
+          <span class="order-label text-uppercase">{{ $t('orderConfirmation.date') }}</span>
           <span class="order-value">{{ orderDate }}</span>
         </div>
 
@@ -42,7 +40,7 @@ const { orderId, total, formatPrice, orderDate, orderShippingMethod } = useOrder
 
         <!-- shipping method -->
         <div class="order-row d-flex justify-content-between align-items-center px-2 py-2">
-          <span class="order-label text-uppercase">Shipping Method</span>
+          <span class="order-label text-uppercase">{{ $t('orderConfirmation.shippingMethod') }}</span>
           <span class="order-value">{{ orderShippingMethod }}</span>
         </div>
 
@@ -50,7 +48,7 @@ const { orderId, total, formatPrice, orderDate, orderShippingMethod } = useOrder
 
         <!-- total paid -->
         <div class="order-row  d-flex justify-content-between align-items-center px-2 py-2">
-          <span class="order-label text-uppercase">Total Paid</span>
+          <span class="order-label text-uppercase">{{ $t('orderConfirmation.totalPaid') }}</span>
           <span class="order-value order-total fw-bold">{{ formatPrice(total) }}</span>
         </div>
 
@@ -58,22 +56,19 @@ const { orderId, total, formatPrice, orderDate, orderShippingMethod } = useOrder
 
         <!-- order status -->
         <div class="order-row  d-flex justify-content-between align-items-center px-2 py-2">
-          <span class="order-label text-uppercase">Status</span>
-          <span class="order-value order-status fw-bold text-uppercase">Paid</span>
+          <span class="order-label text-uppercase">{{ $t('orderConfirmation.status') }}</span>
+          <span class="order-value order-status fw-bold text-uppercase">{{ $t('orderConfirmation.paid') }}</span>
         </div>
       </div>
 
-      <p class="delivery-note my-4">
-        Your order is being processed. You can view your order history in your
-        <RouterLink to="/profile" class="profile-link text-decoration-none">profile</RouterLink>.
-      </p>
+      <p class="delivery-note my-4">{{ $t('orderConfirmation.message') }}</p>
 
       <div class="cta-actions d-flex justify-content-center gap-3">
         <RouterLink to="/products" class="btn-primary d-inline-block text-uppercase text-decoration-none px-4 py-3"
-          >Continue Shopping</RouterLink
+          >{{ $t('orderConfirmation.continueShopping') }}</RouterLink
         >
         <RouterLink to="/profile" class="btn-secondary d-inline-block text-uppercase text-decoration-none px-4 py-3"
-          >View My Orders</RouterLink
+          >{{ $t('orderConfirmation.viewOrders') }}</RouterLink
         >
       </div>
     </div>

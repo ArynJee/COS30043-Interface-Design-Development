@@ -34,17 +34,17 @@ function lineClass(fromStep) {
   <div class="steps-bar">
     <div class="step" :class="stepClass('cart')">
       <div class="step-dot" :class="dotClass('cart')"></div>
-      <span class="step-label">Cart</span>
+      <span class="step-label">{{ $t('components.checkoutSteps.cart') }}</span>
     </div>
     <div class="step-line" :class="lineClass('cart')"></div>
     <div class="step" :class="stepClass('checkout')">
       <div class="step-dot" :class="dotClass('checkout')"></div>
-      <span class="step-label">Checkout</span>
+      <span class="step-label">{{ $t('components.checkoutSteps.checkout') }}</span>
     </div>
     <div class="step-line" :class="lineClass('checkout')"></div>
     <div class="step" :class="stepClass('payment')">
       <div class="step-dot" :class="dotClass('payment')"></div>
-      <span class="step-label">Payment</span>
+      <span class="step-label">{{ $t('components.checkoutSteps.payment') }}</span>
     </div>
   </div>
 </template>

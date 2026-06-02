@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
+import { useI18n } from "vue-i18n";
 import {
   Sofa as SofaIcon,
   ShoppingCart,
@@ -30,6 +31,7 @@ import FurnitureViewer from "@/components/FurnitureViewer.vue";
 import ContributionModal from "@/components/ContributionModal.vue";
 import useCustomize from "@/hooks/useCustomize.js";
 
+const { t } = useI18n();
 const viewerRef = ref(null);
 
 const isNarrow = ref(window.innerWidth <= 992);
@@ -87,18 +89,18 @@ const FURNITURE_ICONS = {
 };
 
 // friendly label map for config section headings
-const CONFIG_LABELS = {
-  shape: "Shape / Form",
-  fabric: "Fabric",
-  material: "Material",
-  color: "Colour",
-  legs: "Leg Style",
-  headboard: "Headboard Style",
-  countertop: "Countertop Material",
+const CONFIG_LABEL_KEYS = {
+  shape: "customize.options.shape",
+  fabric: "customize.options.fabric",
+  material: "customize.options.material",
+  color: "customize.options.colour",
+  legs: "customize.options.legStyle",
+  headboard: "customize.options.headboard",
+  countertop: "customize.options.countertop",
 };
 
 const configLabel = (key) =>
-  CONFIG_LABELS[key] || key.charAt(0).toUpperCase() + key.slice(1);
+  CONFIG_LABEL_KEYS[key] ? t(CONFIG_LABEL_KEYS[key]) : key.charAt(0).toUpperCase() + key.slice(1);
 
 // price breakdown lines (skip base — shown separately)
 const priceBreakdown = computed(() => {
@@ -127,20 +129,17 @@ const priceBreakdown = computed(() => {
 
       <div class="cu-hero-inner position-relative z-1">
         <p class="cu-crumb mb-4">
-          <RouterLink to="/">Home</RouterLink>&ensp;<ChevronRight
+          <RouterLink to="/">{{ $t('customize.breadcrumb.home') }}</RouterLink>&ensp;<ChevronRight
             size="10"
           />&ensp;
-          <RouterLink to="/showcase">Showcase</RouterLink>&ensp;<ChevronRight
+          <RouterLink to="/showcase">{{ $t('customize.breadcrumb.showcase') }}</RouterLink>&ensp;<ChevronRight
             size="10"
           />&ensp;
-          <span>Customize</span>
+          <span>{{ $t('customize.breadcrumb.customize') }}</span>
         </p>
 
-        <h1 class="cu-hero-title fw-bold pb-4">Design Your Furniture</h1>
-        <p class="cu-hero-sub">
-          Craft something uniquely yours — choose shape, material, colour,
-          fabric and watch your design come to life in real-time 3D.
-        </p>
+        <h1 class="cu-hero-title fw-bold pb-4">{{ $t('customize.title') }}</h1>
+        <p class="cu-hero-sub">{{ $t('customize.subtitle') }}</p>
       </div>
     </section>
 
@@ -164,7 +163,7 @@ const priceBreakdown = computed(() => {
               class="cu-step-num rounded-pill d-inline-flex align-items-center justify-content-center"
               >1</span
             >
-            Select Furniture
+            {{ $t('customize.step1') }}
           </h2>
 
           <!-- area tabs -->
@@ -212,7 +211,7 @@ const priceBreakdown = computed(() => {
                 class="cu-step-num rounded-pill d-inline-flex align-items-center justify-content-center"
                 >2</span
               >
-              Customise
+              {{ $t('customize.step2') }}
               <span class="cu-step-sub">{{ currentType.name }}</span>
             </h2>
 
@@ -237,7 +236,7 @@ const priceBreakdown = computed(() => {
                   :class="{ active: selectedConfig[key]?.id === opt.id }"
                   :title="
                     opt.name +
-                    (opt.price ? ' +' + formatPrice(opt.price) : ' (included)')
+                    (opt.price ? ' +' + formatPrice(opt.price) : ' ' + $t('customize.options.included'))
                   "
                   @click="selectOption(key, opt)"
                 >
@@ -272,7 +271,7 @@ const priceBreakdown = computed(() => {
                   <span class="cu-opt-price ms-auto">
                     {{
                       opt.price === 0
-                        ? "included"
+                        ? $t('customize.options.includedBare')
                         : opt.price < 0
                           ? "− " + formatPrice(Math.abs(opt.price))
                           : "+ " + formatPrice(opt.price)
@@ -291,7 +290,7 @@ const priceBreakdown = computed(() => {
 
         <div v-else class="cu-empty-hint px-2 py-5 text-center">
           <SofaIcon :size="40" stroke-width="1" class="cu-empty-icon mb-2" />
-          <p>Select a furniture type above<br />to start customising.</p>
+          <p>{{ $t('customize.selectPrompt') }}</p>
         </div>
       </aside>
 
@@ -314,19 +313,19 @@ const priceBreakdown = computed(() => {
             class="cu-viewer-placeholder position-absolute d-flex flex-column align-items-center justify-content-center gap-2 text-center p-4"
           >
             <SofaIcon :size="56" stroke-width="1" class="cu-ph-icon mb-2" />
-            <p class="cu-ph-text m-0 fs-5">Your 3D preview will appear here</p>
-            <p class="cu-ph-sub m-0">Select a furniture type to begin</p>
+            <p class="cu-ph-text m-0 fs-5">{{ $t('customize.previewTitle') }}</p>
+            <p class="cu-ph-sub m-0">{{ $t('customize.previewSub') }}</p>
           </div>
         </div>
 
         <!-- price summary -->
         <div v-if="currentType" class="cu-price-card p-4">
           <h3 class="cu-price-title mb-4 fw-semibold border-bottom fs-5">
-            Price Summary
+            {{ $t('customize.price.summary') }}
           </h3>
           <div class="cu-price-rows d-flex flex-column gap-2">
             <div class="cu-price-row d-flex justify-content-between">
-              <span>Base ({{ currentType.name }})</span>
+              <span>{{ $t('customize.price.base', { name: currentType.name }) }}</span>
               <span>{{ formatPrice(currentType.basePrice) }}</span>
             </div>
             <div
@@ -352,7 +351,7 @@ const priceBreakdown = computed(() => {
           <div
             class="cu-price-total d-flex justify-content-between align-items-baseline mb-2"
           >
-            <span>Total Estimated</span>
+            <span>{{ $t('customize.price.total') }}</span>
             <span class="cu-price-amount fw-bold">{{
               formatPrice(totalPrice)
             }}</span>
@@ -362,7 +361,7 @@ const priceBreakdown = computed(() => {
           <Transition name="toast">
             <div v-if="cartSuccess" class="cu-toast cu-toast--success d-flex align-items-center gap-1 px-3 py-2 rounded-3 mb-2">
               <CheckCircle2 :size="16" />
-              Added to cart successfully!
+              {{ $t('customize.toast.cartSuccess') }}
             </div>
             <div v-else-if="cartError" class="cu-toast cu-toast--error d-flex align-items-center gap-1 px-3 py-2 rounded-3 mb-2">
               <AlertCircle :size="16" />
@@ -370,7 +369,7 @@ const priceBreakdown = computed(() => {
             </div>
             <div v-else-if="contribSuccess" class="cu-toast cu-toast--success d-flex align-items-center gap-1 px-3 py-2 rounded-3 mb-2">
               <CheckCircle2 :size="16" />
-              Design contributed to Showcase!
+              {{ $t('customize.toast.contribSuccess') }}
             </div>
           </Transition>
 
@@ -383,11 +382,11 @@ const priceBreakdown = computed(() => {
             >
               <span v-if="cartLoading" class="cu-btn-spinner"></span>
               <ShoppingCart v-else :size="17" />
-              {{ cartLoading ? "Adding…" : "Add to Cart" }}
+              {{ cartLoading ? $t('customize.adding') : $t('customize.addToCart') }}
             </button>
             <button class="cu-btn cu-btn--contrib d-flex align-items-center justify-content-center gap-2   py-3" @click="openContribModal">
               <Sparkles :size="17" />
-              Contribute Work
+              {{ $t('customize.contribute') }}
             </button>
           </div>
         </div>

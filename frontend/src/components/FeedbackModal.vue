@@ -1,15 +1,23 @@
 <script setup>
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { Star } from '@lucide/vue'
 
-defineProps({
+const { t } = useI18n()
+
+const props = defineProps({
   show: Boolean,
   userFeedback: Object,
   feedbackSubmitted: Boolean,
-  title: { type: String, default: 'Write a Review' },
-  submitLabel: { type: String, default: 'Submit Feedback' },
-  successMessage: { type: String, default: 'Thank you for your feedback!' },
+  title: { type: String, default: undefined },
+  submitLabel: { type: String, default: undefined },
+  successMessage: { type: String, default: undefined },
   showNameField: { type: Boolean, default: true },
 })
+
+const displayTitle = computed(() => props.title ?? t('components.feedbackModal.title'))
+const displaySubmitLabel = computed(() => props.submitLabel ?? t('components.feedbackModal.submit'))
+const displaySuccessMessage = computed(() => props.successMessage ?? t('components.feedbackModal.thanks'))
 
 const emit = defineEmits([
   'close',
@@ -27,7 +35,7 @@ const emit = defineEmits([
     >
       <div class="modal-box">
         <div class="modal-box-header">
-          <h5>{{ title }}</h5>
+          <h5>{{ displayTitle }}</h5>
 
           <button
             class="modal-close"
@@ -46,7 +54,7 @@ const emit = defineEmits([
             fill="currentColor"
             class="fb-star mb-2"
           />
-          <p>{{ successMessage }}</p>
+          <p>{{ displaySuccessMessage }}</p>
         </div>
 
         <div
@@ -55,7 +63,7 @@ const emit = defineEmits([
         >
           <!-- name -->
           <div v-if="showNameField" class="mb-3">
-            <label class="modal-label">Name</label>
+            <label class="modal-label">{{ $t('components.feedbackModal.name') }}</label>
 
             <input
               :value="userFeedback.name"
@@ -73,7 +81,7 @@ const emit = defineEmits([
 
           <!-- rating -->
           <div class="mb-3">
-            <label class="modal-label">Rating</label>
+            <label class="modal-label">{{ $t('components.feedbackModal.rating') }}</label>
 
             <div class="rating-picker">
               <button
@@ -96,13 +104,13 @@ const emit = defineEmits([
 
           <!-- comment -->
           <div class="mb-4">
-            <label class="modal-label">Comment</label>
+            <label class="modal-label">{{ $t('components.feedbackModal.comment') }}</label>
 
             <textarea
               :value="userFeedback.comment"
               class="modal-input modal-textarea"
               rows="4"
-              placeholder="Tell us about your experience..."
+              :placeholder="$t('components.feedbackModal.commentPlaceholder')"
               @input="
                 $emit('update:userFeedback', {
                   ...userFeedback,
@@ -116,7 +124,7 @@ const emit = defineEmits([
             class="modal-submit"
             @click="$emit('submit')"
           >
-            {{ submitLabel }}
+            {{ displaySubmitLabel }}
           </button>
         </div>
       </div>

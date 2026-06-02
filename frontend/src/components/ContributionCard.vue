@@ -65,7 +65,7 @@ const { imageSrc, typeName, configEntries, formattedDate, formattedPrice, getIni
         :to="`/showcase/${contribution.id}`"
         class="cc-cta d-inline-flex align-items-center gap-2 mt-4"
       >
-        View Detail &thinsp;<ArrowRight :size="13" />
+        {{ $t('components.contributionCard.viewDetail') }} &thinsp;<ArrowRight :size="13" />
       </RouterLink>
     </div>
   </article>

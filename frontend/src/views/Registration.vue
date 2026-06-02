@@ -15,12 +15,8 @@ const { form, errors, showPassword, showConfirm, loading, handleRegister } = use
 
       <div class="auth-brand">
         <span class="auth-brand-eyebrow">ComfyHome</span>
-        <h1 class="auth-brand-title">Your Home.<br />Your Vision.<br />Your Story.</h1>
-        <p class="auth-brand-sub">
-          Join thousands of homeowners who<br />
-          design their perfect living space<br />
-          with ComfyHome.
-        </p>
+        <h1 class="auth-brand-title">{{ $t('register.tagline1') }}<br />{{ $t('register.tagline2') }}<br />{{ $t('register.tagline3') }}</h1>
+        <p class="auth-brand-sub">{{ $t('register.subtitle') }}</p>
       </div>
     </div>
 
@@ -28,8 +24,8 @@ const { form, errors, showPassword, showConfirm, loading, handleRegister } = use
     <div class="auth-panel">
       <div class="auth-form-wrap">
         <div class="auth-form-header">
-          <span class="auth-form-eyebrow">Get started</span>
-          <h2 class="auth-form-title">Create Account</h2>
+          <span class="auth-form-eyebrow">{{ $t('register.started') }}</span>
+          <h2 class="auth-form-title">{{ $t('register.title') }}</h2>
         </div>
 
         <div v-if="errors.general" class="auth-error-banner">{{ errors.general }}</div>
@@ -37,7 +33,7 @@ const { form, errors, showPassword, showConfirm, loading, handleRegister } = use
         <!-- Name row -->
         <div class="auth-row">
           <div class="auth-field">
-            <label class="auth-label">First Name</label>
+            <label class="auth-label">{{ $t('register.firstName') }}</label>
             <input
               v-model="form.firstName"
               type="text"
@@ -48,7 +44,7 @@ const { form, errors, showPassword, showConfirm, loading, handleRegister } = use
             <span v-if="errors.firstName" class="auth-field-error">{{ errors.firstName }}</span>
           </div>
           <div class="auth-field">
-            <label class="auth-label">Last Name</label>
+            <label class="auth-label">{{ $t('register.lastName') }}</label>
             <input
               v-model="form.lastName"
               type="text"
@@ -62,7 +58,7 @@ const { form, errors, showPassword, showConfirm, loading, handleRegister } = use
 
         <!-- Email -->
         <div class="auth-field">
-          <label class="auth-label">Email</label>
+          <label class="auth-label">{{ $t('register.email') }}</label>
           <input
             v-model="form.email"
             type="email"
@@ -75,7 +71,7 @@ const { form, errors, showPassword, showConfirm, loading, handleRegister } = use
 
         <!-- Phone -->
         <div class="auth-field">
-          <label class="auth-label">Phone Number</label>
+          <label class="auth-label">{{ $t('register.phone') }}</label>
           <input
             v-model="form.phone"
             type="tel"
@@ -88,7 +84,7 @@ const { form, errors, showPassword, showConfirm, loading, handleRegister } = use
 
         <!-- Address -->
         <div class="auth-field">
-          <label class="auth-label">Address</label>
+          <label class="auth-label">{{ $t('register.address') }}</label>
           <input
             v-model="form.address"
             type="text"
@@ -102,7 +98,7 @@ const { form, errors, showPassword, showConfirm, loading, handleRegister } = use
         <!-- Password row -->
         <div class="auth-row">
           <div class="auth-field">
-            <label class="auth-label">Password</label>
+            <label class="auth-label">{{ $t('register.password') }}</label>
             <div class="auth-input-wrap">
               <input
                 v-model="form.password"
@@ -118,7 +114,7 @@ const { form, errors, showPassword, showConfirm, loading, handleRegister } = use
             <span v-if="errors.password" class="auth-field-error">{{ errors.password }}</span>
           </div>
           <div class="auth-field">
-            <label class="auth-label">Confirm Password</label>
+            <label class="auth-label">{{ $t('register.confirm') }}</label>
             <div class="auth-input-wrap">
               <input
                 v-model="form.confirmPassword"
@@ -139,17 +135,17 @@ const { form, errors, showPassword, showConfirm, loading, handleRegister } = use
         </div>
 
         <!-- password hint -->
-        <p class="auth-pw-hint">Min 8 characters, one uppercase letter and one number.</p>
+        <p class="auth-pw-hint">{{ $t('register.passwordHint') }}</p>
 
         <!-- submit -->
         <button class="auth-submit" :disabled="loading" @click="handleRegister">
-          <span v-if="!loading">Create Account <ArrowRight :size="16" class="ms-1" /></span>
+          <span v-if="!loading">{{ $t('register.submit') }} <ArrowRight :size="16" class="ms-1" /></span>
           <span v-else class="auth-spinner"></span>
         </button>
 
         <p class="auth-switch">
-          Already have an account?
-          <router-link to="/login" class="auth-switch-link">Sign In</router-link>
+          {{ $t('register.hasAccount') }}
+          <router-link to="/login" class="auth-switch-link">{{ $t('register.signIn') }}</router-link>
         </p>
       </div>
     </div>

@@ -40,13 +40,13 @@ function handleGoToBranch() { goToBranch(); emit('close') }
     <!-- loading -->
     <div v-if="loading" class="sd-state d-flex align-items-center justify-content-center px-3 py-2 gap-3">
       <span class="sd-spinner rounded-pill" />
-      <span>Searching…</span>
+      <span>{{ $t('components.searchDropdown.searching') }}</span>
     </div>
 
     <template v-else-if="hasSearched">
       <!-- products -->
       <div v-if="products.length > 0" class="sd-section px-2 py-3">
-        <p class="sd-section-label text-uppercase px-3 mb-2">Products</p>
+        <p class="sd-section-label text-uppercase px-3 mb-2">{{ $t('components.searchDropdown.products') }}</p>
         <button
           v-for="p in products"
           :key="p.id"
@@ -61,14 +61,14 @@ function handleGoToBranch() { goToBranch(); emit('close') }
           </div>
         </button>
         <button class="sd-see-all d-flex align-items-center w-100 gap-2 border-0 text-left" @mousedown.prevent @click="handleGoToProducts">
-          See all products for "{{ query }}"
+          {{ $t('components.searchDropdown.seeAll', { query }) }}
           <ArrowRight :size="12" />
         </button>
       </div>
 
       <!-- branches -->
       <div v-if="branchResults.length > 0" class="sd-section px-2 py-3">
-        <p class="sd-section-label text-uppercase px-3 mb-2">Branches</p>
+        <p class="sd-section-label text-uppercase px-3 mb-2">{{ $t('components.searchDropdown.branches') }}</p>
         <button
           v-for="b in branchResults"
           :key="b.id"
@@ -85,14 +85,14 @@ function handleGoToBranch() { goToBranch(); emit('close') }
           </div>
         </button>
         <button class="sd-see-all d-flex align-items-center w-100 gap-2 border-0 text-left" @mousedown.prevent @click="handleGoToBranch">
-          View all branches
+          {{ $t('components.searchDropdown.viewAll') }}
           <ArrowRight :size="12" />
         </button>
       </div>
 
       <!-- showcase -->
       <div v-if="showcaseResults.length > 0" class="sd-section px-2 py-3">
-        <p class="sd-section-label text-uppercase px-3 mb-2">Showcase</p>
+        <p class="sd-section-label text-uppercase px-3 mb-2">{{ $t('components.searchDropdown.showcase') }}</p>
         <button
           v-for="c in showcaseResults"
           :key="c.id"
@@ -113,14 +113,14 @@ function handleGoToBranch() { goToBranch(); emit('close') }
           </div>
         </button>
         <button class="sd-see-all d-flex align-items-center w-100 gap-2 border-0 text-lef" @mousedown.prevent @click="handleGoToShowcaseAll">
-          Browse all showcase
+          {{ $t('components.searchDropdown.browseAll') }}
           <ArrowRight :size="12" />
         </button>
       </div>
 
       <!-- empty -->
       <div v-if="!hasResults" class="sd-state d-flex align-items-center justify-content-center px-3 py-2 gap-3">
-        No results for "{{ query }}"
+        {{ $t('components.searchDropdown.noResults', { query }) }}
       </div>
     </template>
   </div>

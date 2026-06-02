@@ -28,14 +28,11 @@ const {
       />
       <div class="loc-hero-inner position-relative z-1">
         <p class="loc-crumb mb-4">
-          <RouterLink to="/">Home</RouterLink>&ensp;<ChevronRight :size="10" />&ensp;
-          <span>Locations</span>
+          <RouterLink to="/">{{ $t('locations.breadcrumb.home') }}</RouterLink>&ensp;<ChevronRight :size="10" />&ensp;
+          <span>{{ $t('locations.breadcrumb.locations') }}</span>
         </p>
-        <h1 class="loc-hero-title fw-bold pb-4">Find a Branch Near You</h1>
-        <p class="loc-hero-sub">
-          Visit one of our showrooms across Malaysia. Experience ComfyHome furniture in person
-          with expert guidance from our in-store team.
-        </p>
+        <h1 class="loc-hero-title fw-bold pb-4">{{ $t('locations.title') }}</h1>
+        <p class="loc-hero-sub">{{ $t('locations.subtitle') }}</p>
       </div>
     </section>
 
@@ -62,11 +59,11 @@ const {
           <div class="loc-branch-actions d-flex gap-2 flex-wrap">
             <button class="loc-btn loc-btn--hours d-inline-flex align-items-center gap-1 px-3 py-2 rounded-pill" @click.stop="openModal(branch)">
               <Clock :size="14" />
-              View working hours
+              {{ $t('locations.viewHours') }}
             </button>
             <button class="loc-btn loc-btn--maps d-inline-flex align-items-center gap-1 px-3 py-2 rounded-pill" @click.stop="openGoogleMaps(branch)">
               <ExternalLink :size="14" />
-              View location
+              {{ $t('locations.viewLocation') }}
             </button>
           </div>
         </div>
@@ -80,11 +77,8 @@ const {
           class="loc-map-error d-flex flex-column align-items-center justify-content-center gap-3 text-center p-4 w-100 h-100"
         >
           <MapPin :size="44" stroke-width="1" />
-          <p>Map could not be loaded.</p>
-          <p class="loc-map-hint">
-            Set <code>VITE_GOOGLE_MAPS_API_KEY</code> in your <code>.env</code> and restart the dev
-            server.
-          </p>
+          <p>{{ $t('locations.mapError') }}</p>
+          <p class="loc-map-hint">{{ $t('locations.mapHint') }}</p>
         </div>
       </main>
     </div>

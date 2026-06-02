@@ -9,38 +9,35 @@ import { RouterLink } from 'vue-router'
           <div class="footer-grid">
             <div class="footer-brand-col">
               <h2 class="footer-brand">ComfyHome</h2>
-              <p class="footer-brand-tagline">
-                Crafting spaces that reflect who you are. In a world defined by the spaces we
-                inhabit, we believe every room should be a statement of self.
-              </p>
+              <p class="footer-brand-tagline">{{ $t('footer.tagline') }}</p>
             </div>
 
             <div class="footer-links-col">
-              <h6 class="footer-col-title">Products</h6>
+              <h6 class="footer-col-title">{{ $t('footer.products') }}</h6>
               <ul>
-                <li><router-link to="/products?type=living-room">Living Room</router-link></li>
-                <li><router-link to="/products?type=study-room">Study Room</router-link></li>
-                <li><router-link to="/products?type=kitchen">Kitchen</router-link></li>
+                <li><router-link to="/products?type=living-room">{{ $t('footer.livingRoom') }}</router-link></li>
+                <li><router-link to="/products?type=study-room">{{ $t('footer.studyRoom') }}</router-link></li>
+                <li><router-link to="/products?type=kitchen">{{ $t('footer.kitchen') }}</router-link></li>
               </ul>
             </div>
 
             <div class="footer-links-col">
-              <h6 class="footer-col-title footer-col-title--hidden">Products</h6>
+              <h6 class="footer-col-title footer-col-title--hidden">{{ $t('footer.products') }}</h6>
               <ul>
-                <li><router-link to="/products?type=bathroom">Bathroom</router-link></li>
-                <li><router-link to="/products?type=bedroom">Bedroom</router-link></li>
-                <li><router-link to="/products">All Products</router-link></li>
+                <li><router-link to="/products?type=bathroom">{{ $t('footer.bathroom') }}</router-link></li>
+                <li><router-link to="/products?type=bedroom">{{ $t('footer.bedroom') }}</router-link></li>
+                <li><router-link to="/products">{{ $t('footer.allProducts') }}</router-link></li>
               </ul>
             </div>
 
             <div class="footer-links-col">
-              <h6 class="footer-col-title">Navigate</h6>
+              <h6 class="footer-col-title">{{ $t('footer.navigate') }}</h6>
               <ul>
-                <li><router-link to="/">Home</router-link></li>
-                <li><router-link to="/products">Products</router-link></li>
-                <li><router-link to="/showcase">Showcase</router-link></li>
-                <li><router-link to="/customize">Customize</router-link></li>
-                <li><router-link to="/profile">My Profile</router-link></li>
+                <li><router-link to="/">{{ $t('footer.home') }}</router-link></li>
+                <li><router-link to="/products">{{ $t('nav.links.products') }}</router-link></li>
+                <li><router-link to="/showcase">{{ $t('nav.links.showcase') }}</router-link></li>
+                <li><router-link to="/customize">{{ $t('nav.links.customize') }}</router-link></li>
+                <li><router-link to="/profile">{{ $t('footer.myProfile') }}</router-link></li>
               </ul>
             </div>
           </div>
@@ -48,9 +45,7 @@ import { RouterLink } from 'vue-router'
       </div>
       <div class="footer-bottom">
         <div class="container-fluid px-4 px-lg-5 d-flex justify-content-center flex-wrap gap-2">
-          <span class="footer-copy"
-            >© {{ new Date().getFullYear() }} ComfyHome. All rights reserved.</span
-          >
+          <span class="footer-copy">{{ $t('footer.copyright', { year: new Date().getFullYear() }) }}</span>
         </div>
       </div>
     </footer>

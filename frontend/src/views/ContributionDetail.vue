@@ -18,14 +18,14 @@ const {
   <div class="cd-page">
     <!-- breadcrumb -->
     <div class="cd-breadcrumb">
-      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/">{{ $t('contributionDetail.breadcrumb.home') }}</RouterLink>
       &ensp;<ChevronRight size="10"/>&ensp;
-      <RouterLink to="/showcase">Showcase</RouterLink>
+      <RouterLink to="/showcase">{{ $t('contributionDetail.breadcrumb.showcase') }}</RouterLink>
       <span v-if="contribution">&ensp;<ChevronRight size="10"/>&ensp;{{ contribution.furniture_type }}</span>
     </div>
 
     <!-- loading -->
-    <div v-if="loading" class="cd-state">Loading design…</div>
+    <div v-if="loading" class="cd-state">{{ $t('contributionDetail.loading') }}</div>
 
     <!-- error -->
     <div v-else-if="error" class="cd-state cd-error">{{ error }}</div>

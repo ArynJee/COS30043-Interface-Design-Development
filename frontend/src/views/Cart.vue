@@ -43,24 +43,22 @@ const {
         <!-- Header -->
         <div class="cart-header">
           <h2 class="cart-title">
-            My Cart
+            {{ $t('cart.title') }}
             <span class="cart-count"
-              >({{ cartStore.itemCount }} product{{
-                cartStore.itemCount !== 1 ? "s" : ""
-              }})</span
+              >({{ cartStore.itemCount }} {{ cartStore.itemCount !== 1 ? $t('cart.product_other') : $t('cart.product_one') }})</span
             >
           </h2>
           <button class="clear-btn" @click="handleClearCart">
-            <X :size="13" class="me-1" />Clear cart
+            <X :size="13" class="me-1" />{{ $t('cart.clear') }}
           </button>
         </div>
 
         <!-- Loading -->
-        <div v-if="loading" class="state-msg">Loading cart…</div>
+        <div v-if="loading" class="state-msg">{{ $t('cart.loading') }}</div>
 
         <!-- Empty -->
         <div v-else-if="items.length === 0" class="empty-cart">
-          <p>Your cart is empty.</p>
+          <p>{{ $t('cart.empty') }}</p>
         </div>
 
         <!-- Table -->
@@ -75,9 +73,9 @@ const {
                   @change="cartStore.toggleSelectAll()"
                 />
               </th>
-              <th class="th-product">Product</th>
-              <th class="th-count">Count</th>
-              <th class="th-price">Price</th>
+              <th class="th-product">{{ $t('cart.product') }}</th>
+              <th class="th-count">{{ $t('cart.count') }}</th>
+              <th class="th-price">{{ $t('cart.price') }}</th>
               <th class="th-remove"></th>
             </tr>
           </thead>
@@ -112,7 +110,7 @@ const {
                       {{ getItemVariant(item) }}
                     </div>
                     <div class="product-custom-badge" v-if="item.is_custom">
-                      Custom
+                      {{ $t('cart.custom') }}
                     </div>
                     <div class="product-mobile-price">{{ formatPrice(item.unit_price * item.quantity) }}</div>
                   </div>
@@ -164,12 +162,10 @@ const {
         <!-- Free-shipping progress slider -->
         <div class="fs-slider-wrap">
           <div v-if="freeShippingUnlocked" class="fs-unlocked-msg">
-            Free shipping unlocked!
+            {{ $t('cart.freeShipping') }}
           </div>
           <div v-else class="fs-progress-msg">
-            Spend <strong>{{ formatPrice(amountToFreeShipping) }}</strong> more
-            for free
-            {{ shippingOption.label.toLowerCase() }}
+            {{ $t('cart.spendMore', { amount: formatPrice(amountToFreeShipping), method: shippingOption.label.toLowerCase() }) }}
           </div>
           <div class="fs-track">
             <div
@@ -188,7 +184,7 @@ const {
 
         <!-- Shipping method -->
         <div class="shipping-section">
-          <p class="shipping-title">Shipping Method</p>
+          <p class="shipping-title">{{ $t('cart.shippingMethod') }}</p>
           <label
             v-for="opt in SHIPPING_OPTIONS"
             :key="opt.id"
@@ -211,7 +207,7 @@ const {
             >
               {{
                 subtotal >= FREE_THRESHOLD[opt.id]
-                  ? "FREE"
+                  ? $t('cart.free')
                   : formatPrice(opt.fee)
               }}
             </span>
@@ -221,25 +217,25 @@ const {
         <!-- Order breakdown -->
         <div class="summary-section">
           <div class="total-row">
-            <span class="total-label">Subtotal</span>
+            <span class="total-label">{{ $t('cart.subtotal') }}</span>
             <span class="total-value">{{ formatPrice(subtotal) }}</span>
           </div>
           <div class="total-row">
-            <span class="total-label">Shipping</span>
+            <span class="total-label">{{ $t('cart.shipping') }}</span>
             <span
               class="total-value"
               :class="{ 'free-tag': shippingFee === 0 }"
             >
-              {{ shippingFee === 0 ? "FREE" : formatPrice(shippingFee) }}
+              {{ shippingFee === 0 ? $t('cart.free') : formatPrice(shippingFee) }}
             </span>
           </div>
           <div class="total-row">
-            <span class="total-label">SST (6%)</span>
+            <span class="total-label">{{ $t('cart.sst') }}</span>
             <span class="total-value">{{ formatPrice(taxAmount) }}</span>
           </div>
           <div class="summary-divider"></div>
           <div class="total-row total-final">
-            <span class="total-label">Total</span>
+            <span class="total-label">{{ $t('cart.total') }}</span>
             <span class="total-value">{{ formatPrice(orderTotal) }}</span>
           </div>
         </div>
@@ -249,14 +245,14 @@ const {
           @click="goToCheckout"
           :disabled="selectedIds.length === 0"
         >
-          Continue to checkout
+          {{ $t('cart.checkout') }}
         </button>
 
         <div
           class="selection-hint"
           v-if="selectedIds.length < items.length && items.length > 0"
         >
-          {{ selectedIds.length }} of {{ items.length }} items selected
+          {{ $t('cart.selected', { selected: selectedIds.length, total: items.length }) }}
         </div>
       </div>
     </div>

@@ -1,0 +1,417 @@
+{
+  "nav": {
+    "search": "搜索…",
+    "locations": "门店位置",
+    "cart": "购物车",
+    "profile": "个人资料",
+    "lightMode": "浅色模式",
+    "darkMode": "深色模式",
+    "resultsFor": "\"{query}\" 的结果",
+    "searching": "搜索中…",
+    "products": "产品",
+    "allProducts": "所有产品",
+    "branches": "门店",
+    "allBranches": "所有门店",
+    "showcase": "作品展示",
+    "browseShowcase": "浏览展示",
+    "noResults": "\"{query}\" 无结果",
+    "language": "语言",
+    "links": {
+      "products": "产品",
+      "showcase": "展示",
+      "customize": "定制"
+    }
+  },
+  "footer": {
+    "tagline": "打造彰显您个性的空间。在这个由居住空间定义的世界里，我们相信每个房间都应该是自我的表达。",
+    "products": "产品",
+    "livingRoom": "客厅",
+    "studyRoom": "书房",
+    "kitchen": "厨房",
+    "bathroom": "浴室",
+    "bedroom": "卧室",
+    "allProducts": "所有产品",
+    "navigate": "导航",
+    "home": "首页",
+    "myProfile": "我的资料",
+    "copyright": "© {year} ComfyHome。保留所有权利。"
+  },
+  "home": {
+    "hero": {
+      "title": "舒适生活。",
+      "subtitle": "打造定义您生活方式的空间。",
+      "cta": "查看系列"
+    },
+    "showcase": {
+      "title": "社区作品展示",
+      "body": "当ComfyHome为我们的顾客提供自由设计家具的空间时，看看您的创意能带您走向何方。通过我们的开放设计平台，许多精彩的社区贡献已经诞生——从温馨的阅读角落到令人印象深刻的餐厅。",
+      "cta": "查看更多"
+    },
+    "interior": {
+      "title": "精美内饰",
+      "modern": "现代",
+      "minimalist": "简约",
+      "aesthetic": "美学"
+    },
+    "gallery": {
+      "line1": "步入一座",
+      "line2": "优雅画廊",
+      "body": "美学家具，每一件都讲述着精致品味与永恒工艺的故事。"
+    },
+    "feature": {
+      "customize": "定制家具",
+      "body": "沉浸在定制生活的艺术中——选择您的面料、饰面和造型。"
+    },
+    "stats": {
+      "products": "产品",
+      "projects": "项目",
+      "customers": "满意客户",
+      "rank": "马来西亚第一"
+    },
+    "about": {
+      "eyebrow": "优雅 · 永恒",
+      "title": "现代风格",
+      "title2": "永恒魅力",
+      "body": "探索ComfyHome最新系列，涵盖体现多元生活理念的沙发、椅子和扶手椅，以及为挑剔家居精心打造的时尚桌子、茶几和储物柜。基于美感与舒适从不冲突的信念，我们创造的每一件作品都带着超越流行的从容自信。"
+    },
+    "explore": {
+      "title": "探索我们的产品",
+      "body": "ComfyHome将通过每个精心策划的品类，展现其对当代建筑与室内设计的独特愿景。",
+      "viewMore": "查看更多"
+    },
+    "testimonials": {
+      "title": "客户评价",
+      "cta": "分享您的反馈"
+    },
+    "sold": "已售"
+  },
+  "products": {
+    "breadcrumb": {
+      "home": "首页",
+      "products": "产品"
+    },
+    "title": "我们的系列",
+    "subtitle": "为您家中每个房间精心挑选的家具",
+    "filterBy": "筛选",
+    "categories": "类别",
+    "productType": "产品类型",
+    "searchPlaceholder": "搜索产品…",
+    "items": "件",
+    "sort": {
+      "default": "默认排序",
+      "priceLow": "价格：从低到高",
+      "priceHigh": "价格：从高到低",
+      "mostSold": "销量最高"
+    },
+    "loginToAdd": "请登录后将商品加入购物车。",
+    "clearAll": "× 清除全部",
+    "loading": "加载产品中…",
+    "noResults": "未找到产品。请尝试调整筛选条件。",
+    "addToCart": "加入购物车",
+    "adding": "添加中…",
+    "added": "已添加",
+    "sold": "已售"
+  },
+  "showcase": {
+    "breadcrumb": {
+      "home": "首页",
+      "showcase": "作品展示"
+    },
+    "community": "社区",
+    "title": "设计展示",
+    "subtitle": "来自我们创意社区的手工家具作品",
+    "stats": {
+      "designs": "设计作品",
+      "contributors": "贡献者",
+      "areas": "区域"
+    },
+    "crafted": "以热情打造",
+    "noDesigns": "暂无设计作品",
+    "noDesignsBody": "成为第一个为社区贡献{area}设计的人。",
+    "startDesigning": "开始设计",
+    "cta": {
+      "eyebrow": "您的愿景。您的空间。",
+      "title": "设计您自己的<br>家具",
+      "body": "从18种家具类型中选择，全面定制材料、饰面和尺寸——然后与社区分享。",
+      "pill": "立即设计！"
+    }
+  },
+  "customize": {
+    "breadcrumb": {
+      "home": "首页",
+      "showcase": "作品展示",
+      "customize": "定制"
+    },
+    "title": "设计您的家具",
+    "subtitle": "打造专属于您的作品——选择形状、材料、颜色、面料，实时观看您的设计在3D中呈现。",
+    "step1": "选择家具",
+    "step2": "定制",
+    "options": {
+      "shape": "形状 / 造型",
+      "fabric": "面料",
+      "material": "材料",
+      "colour": "颜色",
+      "legStyle": "腿部样式",
+      "headboard": "床头板样式",
+      "countertop": "台面材料",
+      "included": "（已包含）",
+      "includedBare": "已包含"
+    },
+    "selectPrompt": "请在上方选择家具类型以开始定制。",
+    "previewTitle": "您的3D预览将显示在这里",
+    "previewSub": "请选择家具类型以开始",
+    "price": {
+      "summary": "价格摘要",
+      "base": "基础（{name}）",
+      "total": "预计总价"
+    },
+    "toast": {
+      "cartSuccess": "已成功加入购物车！",
+      "contribSuccess": "设计已贡献至展示区！"
+    },
+    "addToCart": "加入购物车",
+    "adding": "添加中…",
+    "contribute": "贡献作品"
+  },
+  "locations": {
+    "breadcrumb": {
+      "home": "首页",
+      "locations": "门店位置"
+    },
+    "title": "查找附近门店",
+    "subtitle": "参观我们遍布马来西亚的展示厅。在店内专家团队的指导下，亲身体验ComfyHome家具。",
+    "viewHours": "查看营业时间",
+    "viewLocation": "查看位置",
+    "mapError": "地图无法加载。",
+    "mapHint": "请在.env中设置VITE_GOOGLE_MAPS_API_KEY并重启开发服务器。"
+  },
+  "cart": {
+    "title": "我的购物车",
+    "clear": "清空购物车",
+    "loading": "加载购物车中…",
+    "empty": "您的购物车是空的。",
+    "product": "产品",
+    "count": "数量",
+    "price": "价格",
+    "custom": "定制",
+    "subtotal": "小计",
+    "shipping": "运费",
+    "sst": "SST（6%）",
+    "total": "合计",
+    "spendMore": "再消费 {amount} 即可享受免费{method}",
+    "freeShipping": "免费配送已解锁！",
+    "shippingMethod": "配送方式",
+    "free": "免费",
+    "checkout": "继续结账",
+    "selected": "已选择 {selected}/{total} 件商品",
+    "product_one": "件产品",
+    "product_other": "件产品",
+    "ctaEyebrow": "继续探索",
+    "ctaTitle": "探索我们的<br>完整系列",
+    "ctaBody": "浏览数百件为每个房间精心制作的家具——或设计完全属于您的作品。",
+    "ctaPill": "立即购物！"
+  },
+  "checkout": {
+    "shipping": {
+      "title": "配送信息",
+      "fullName": "全名",
+      "address": "收货地址",
+      "city": "城市",
+      "state": "州/省",
+      "zip": "邮政编码",
+      "continue": "继续付款",
+      "back": "返回购物车"
+    },
+    "payment": {
+      "title": "付款",
+      "shippingTo": "配送至",
+      "edit": "编辑",
+      "cardNumber": "卡号",
+      "expiry": "有效期",
+      "cvc": "CVC",
+      "processing": "处理中…",
+      "placeOrder": "下单 · {total}",
+      "back": "返回配送"
+    },
+    "summary": {
+      "title": "订单摘要",
+      "custom": "定制",
+      "subtotal": "小计",
+      "shipping": "运费",
+      "sst": "SST（6%）",
+      "total": "合计",
+      "free": "免费"
+    }
+  },
+  "orderConfirmation": {
+    "title": "订单已确认",
+    "subtitle": "感谢您的购买。您的订单已成功下单。",
+    "orderNumber": "订单号",
+    "date": "日期",
+    "shippingMethod": "配送方式",
+    "totalPaid": "实付金额",
+    "status": "状态",
+    "paid": "已付款",
+    "message": "您的订单正在处理中。您可以在个人资料中查看订单历史。",
+    "continueShopping": "继续购物",
+    "viewOrders": "查看我的订单"
+  },
+  "login": {
+    "tagline1": "精美",
+    "tagline2": "作品",
+    "tagline3": "等待着您。",
+    "subtitle": "登录以管理您的项目、探索系列，并打造您梦想中的家具。",
+    "welcome": "欢迎回来",
+    "title": "登录",
+    "email": "电子邮件",
+    "password": "密码",
+    "submit": "登录",
+    "noAccount": "没有账户？",
+    "createOne": "立即注册"
+  },
+  "register": {
+    "tagline1": "您的家。",
+    "tagline2": "您的愿景。",
+    "tagline3": "您的故事。",
+    "subtitle": "加入数千名使用ComfyHome设计完美居住空间的房主。",
+    "started": "开始",
+    "title": "创建账户",
+    "firstName": "名",
+    "lastName": "姓",
+    "email": "电子邮件",
+    "phone": "电话号码",
+    "address": "地址",
+    "password": "密码",
+    "passwordHint": "至少8个字符，包含一个大写字母和一个数字。",
+    "confirm": "确认密码",
+    "submit": "创建账户",
+    "hasAccount": "已有账户？",
+    "signIn": "登录"
+  },
+  "profile": {
+    "title": "我的资料",
+    "breadcrumb": {
+      "home": "首页",
+      "profile": "个人资料"
+    },
+    "welcome": "欢迎回来，{name}",
+    "tabs": {
+      "orders": "我的订单",
+      "details": "资料详情",
+      "contributions": "我的贡献"
+    },
+    "signOut": "退出登录",
+    "orders": {
+      "title": "订单历史",
+      "loading": "加载订单中…",
+      "empty": "您尚未下任何订单。",
+      "browseProducts": "浏览产品",
+      "shippedTo": "配送至",
+      "shippingMethod": "配送方式",
+      "subtotal": "小计",
+      "shipping": "运费",
+      "sst": "SST（6%）",
+      "orderTotal": "订单总额",
+      "free": "免费",
+      "orderAgain": "再次购买",
+      "addingToCart": "加入购物车中…"
+    },
+    "details": {
+      "title": "资料详情",
+      "firstName": "名",
+      "lastName": "姓",
+      "email": "电子邮件",
+      "phone": "电话",
+      "address": "地址",
+      "memberSince": "注册时间",
+      "saving": "保存中…",
+      "save": "保存更改",
+      "cancel": "取消",
+      "saved": "更改已成功保存。",
+      "edit": "编辑"
+    },
+    "contributions": {
+      "title": "我的贡献",
+      "loading": "加载贡献中…",
+      "empty": "您尚未提交任何设计贡献。",
+      "startDesigning": "开始设计"
+    },
+    "loading": "加载资料中…",
+    "order_one": "个订单",
+    "order_other": "个订单",
+    "design_one": "个设计",
+    "design_other": "个设计"
+  },
+  "contributionDetail": {
+    "breadcrumb": {
+      "home": "首页",
+      "showcase": "作品展示"
+    },
+    "loading": "加载设计中…"
+  },
+  "components": {
+    "searchDropdown": {
+      "searching": "搜索中…",
+      "products": "产品",
+      "seeAll": "查看 \"{query}\" 的所有产品",
+      "branches": "门店",
+      "viewAll": "查看所有门店",
+      "showcase": "作品展示",
+      "browseAll": "浏览所有展示",
+      "noResults": "\"{query}\" 无结果"
+    },
+    "feedbackModal": {
+      "title": "撰写评价",
+      "submit": "提交反馈",
+      "thanks": "感谢您的反馈！",
+      "name": "姓名",
+      "rating": "评分",
+      "comment": "评论",
+      "commentPlaceholder": "请分享您的体验…"
+    },
+    "contributionModal": {
+      "title": "贡献您的设计",
+      "subtitle": "与ComfyHome社区分享您的作品",
+      "total": "总计：",
+      "description": "设计描述",
+      "descriptionPlaceholder": "描述您的设计理念——材料、预期空间、灵感来源…",
+      "cancel": "取消",
+      "submitting": "提交中…",
+      "submit": "提交贡献"
+    },
+    "itemDetail": {
+      "specification": "规格",
+      "viewPhoto": "查看照片",
+      "view3D": "3D查看",
+      "reviews": "评价",
+      "review_one": "条评价",
+      "review_other": "条评价",
+      "adding": "添加中…",
+      "added": "已加入购物车",
+      "addToCart": "加入购物车",
+      "login": "登录",
+      "noReviews": "暂无评价。成为第一个留评的人！",
+      "writeReview": "撰写评价",
+      "signIn": "登录",
+      "toLeaveReview": "以留下评价。",
+      "designed": "设计于",
+      "anonymous": "匿名",
+      "reviewTitle": "评价此设计",
+      "submitReview": "提交评价",
+      "reviewThanks": "感谢您的评价！"
+    },
+    "checkoutSteps": {
+      "cart": "购物车",
+      "checkout": "结账",
+      "payment": "付款"
+    },
+    "contributionCard": {
+      "viewDetail": "查看详情"
+    }
+  },
+  "language": {
+    "en": "English",
+    "ms": "Melayu",
+    "zh": "中文"
+  }
+}

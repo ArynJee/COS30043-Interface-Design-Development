@@ -35,10 +35,10 @@ const {
       <div class="checkout-left">
         <!-- Step 1: Shipping -->
         <div v-if="step === 1" class="form-section">
-          <h2 class="section-title">Shipping Information</h2>
+          <h2 class="section-title">{{ $t('checkout.shipping.title') }}</h2>
 
           <div class="field-group">
-            <label class="field-label">Full Name</label>
+            <label class="field-label">{{ $t('checkout.shipping.fullName') }}</label>
             <input
               v-model="form.name"
               type="text"
@@ -48,7 +48,7 @@ const {
           </div>
 
           <div class="field-group">
-            <label class="field-label">Delivery Address</label>
+            <label class="field-label">{{ $t('checkout.shipping.address') }}</label>
             <input
               v-model="form.address"
               type="text"
@@ -59,7 +59,7 @@ const {
 
           <div class="field-row">
             <div class="field-group">
-              <label class="field-label">City</label>
+              <label class="field-label">{{ $t('checkout.shipping.city') }}</label>
               <input
                 v-model="form.city"
                 type="text"
@@ -68,7 +68,7 @@ const {
               />
             </div>
             <div class="field-group field-group-sm">
-              <label class="field-label">State</label>
+              <label class="field-label">{{ $t('checkout.shipping.state') }}</label>
               <input
                 v-model="form.state"
                 type="text"
@@ -77,7 +77,7 @@ const {
               />
             </div>
             <div class="field-group field-group-sm">
-              <label class="field-label">ZIP / Post Code</label>
+              <label class="field-label">{{ $t('checkout.shipping.zip') }}</label>
               <input
                 v-model="form.zip"
                 type="text"
@@ -88,28 +88,28 @@ const {
           </div>
 
           <button class="primary-btn" @click="proceedToPayment">
-            Continue to Payment
+            {{ $t('checkout.shipping.continue') }}
           </button>
 
-          <RouterLink to="/cart" class="back-link"><ArrowLeft size="13"/> Back to Cart</RouterLink>
+          <RouterLink to="/cart" class="back-link"><ArrowLeft size="13"/> {{ $t('checkout.shipping.back') }}</RouterLink>
         </div>
 
         <!-- Step 2: Payment -->
         <div v-if="step === 2" class="form-section">
-          <h2 class="section-title">Payment</h2>
+          <h2 class="section-title">{{ $t('checkout.payment.title') }}</h2>
 
           <!-- Shipping summary -->
           <div class="shipping-summary">
-            <div class="shipping-summary-label">Shipping to</div>
+            <div class="shipping-summary-label">{{ $t('checkout.payment.shippingTo') }}</div>
             <div class="shipping-summary-value">
               {{ form.name }} — {{ form.address }}, {{ form.city }},
               {{ form.state }} {{ form.zip }}
             </div>
-            <button class="edit-link" @click="step = 1">Edit</button>
+            <button class="edit-link" @click="step = 1">{{ $t('checkout.payment.edit') }}</button>
           </div>
 
           <div class="field-group">
-            <label class="field-label">Card Number</label>
+            <label class="field-label">{{ $t('checkout.payment.cardNumber') }}</label>
             <input
               :value="cardForm.number"
               @input="handleCardNumber"
@@ -123,7 +123,7 @@ const {
           </div>
           <div class="field-row">
             <div class="field-group">
-              <label class="field-label">Expiry Date</label>
+              <label class="field-label">{{ $t('checkout.payment.expiry') }}</label>
               <input
                 :value="cardForm.expiry"
                 @input="handleExpiry"
@@ -136,7 +136,7 @@ const {
               <span v-if="cardErrors.expiry" class="field-error">{{ cardErrors.expiry }}</span>
             </div>
             <div class="field-group">
-              <label class="field-label">CVC</label>
+              <label class="field-label">{{ $t('checkout.payment.cvc') }}</label>
               <input
                 :value="cardForm.cvc"
                 @input="handleCvc"
@@ -161,20 +161,20 @@ const {
           >
             {{
               submitting
-                ? "Processing…"
-                : `Place Order · ${formatPrice(orderTotal)}`
+                ? $t('checkout.payment.processing')
+                : $t('checkout.payment.placeOrder', { total: formatPrice(orderTotal) })
             }}
           </button>
 
           <button class="back-link-btn" @click="step = 1">
-            <ArrowLeft size="15"/> Back to Shipping
+            <ArrowLeft size="15"/> {{ $t('checkout.payment.back') }}
           </button>
         </div>
       </div>
 
       <!-- RIGHT: Order summary -->
       <div class="checkout-summary">
-        <div class="summary-header">Order Summary</div>
+        <div class="summary-header">{{ $t('checkout.summary.title') }}</div>
 
         <div class="summary-items">
           <div
@@ -193,7 +193,7 @@ const {
             <div class="summary-item-details">
               <div class="summary-item-name">{{ getItemName(item) }}</div>
               <div class="summary-item-custom" v-if="item.is_custom">
-                Custom
+                {{ $t('checkout.summary.custom') }}
               </div>
             </div>
             <div class="summary-item-price">
@@ -205,22 +205,22 @@ const {
         <div class="summary-divider"></div>
 
         <div class="summary-total-row">
-          <span>Subtotal</span>
+          <span>{{ $t('checkout.summary.subtotal') }}</span>
           <span>{{ formatPrice(subtotal) }}</span>
         </div>
         <div class="summary-total-row">
-          <span>Shipping</span>
+          <span>{{ $t('checkout.summary.shipping') }}</span>
           <span :class="shippingFee === 0 ? 'free-ship' : ''">
-            {{ shippingFee === 0 ? "Free" : formatPrice(shippingFee) }}
+            {{ shippingFee === 0 ? $t('checkout.summary.free') : formatPrice(shippingFee) }}
           </span>
         </div>
         <div class="summary-total-row">
-          <span>SST (6%)</span>
+          <span>{{ $t('checkout.summary.sst') }}</span>
           <span>{{ formatPrice(taxAmount) }}</span>
         </div>
         <div class="summary-divider"></div>
         <div class="summary-total-row summary-grand-total">
-          <span>Total</span>
+          <span>{{ $t('checkout.summary.total') }}</span>
           <span>{{ formatPrice(orderTotal) }}</span>
         </div>
       </div>

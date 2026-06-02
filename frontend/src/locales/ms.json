@@ -1,0 +1,417 @@
+{
+  "nav": {
+    "search": "Cari…",
+    "locations": "Lokasi",
+    "cart": "Troli",
+    "profile": "Profil",
+    "lightMode": "Mod cerah",
+    "darkMode": "Mod gelap",
+    "resultsFor": "Hasil untuk \"{query}\"",
+    "searching": "Mencari…",
+    "products": "Produk",
+    "allProducts": "Semua produk",
+    "branches": "Cawangan",
+    "allBranches": "Semua cawangan",
+    "showcase": "Pameran",
+    "browseShowcase": "Layari pameran",
+    "noResults": "Tiada hasil untuk \"{query}\"",
+    "language": "Bahasa",
+    "links": {
+      "products": "Produk",
+      "showcase": "Pameran",
+      "customize": "Ubah Suai"
+    }
+  },
+  "footer": {
+    "tagline": "Mencipta ruang yang mencerminkan siapa anda. Dalam dunia yang ditentukan oleh ruang yang kita diami, kami percaya setiap bilik harus menjadi pernyataan diri.",
+    "products": "Produk",
+    "livingRoom": "Bilik Tamu",
+    "studyRoom": "Bilik Belajar",
+    "kitchen": "Dapur",
+    "bathroom": "Bilik Mandi",
+    "bedroom": "Bilik Tidur",
+    "allProducts": "Semua Produk",
+    "navigate": "Navigasi",
+    "home": "Laman Utama",
+    "myProfile": "Profil Saya",
+    "copyright": "© {year} ComfyHome. Hak cipta terpelihara."
+  },
+  "home": {
+    "hero": {
+      "title": "Kehidupan Selesa.",
+      "subtitle": "Mencipta ruang yang menentukan cara anda hidup.",
+      "cta": "Lihat Koleksi"
+    },
+    "showcase": {
+      "title": "Pameran Komuniti",
+      "body": "Lihat di mana kreativiti anda membawa anda apabila ComfyHome memberikan kebebasan kepada pelanggan kami untuk mereka bentuk perabot sendiri. Banyak sumbangan hebat telah dibuat kepada komuniti melalui platform reka bentuk terbuka kami — dari sudut membaca yang intim hingga ruang makan yang mengesankan.",
+      "cta": "Lihat Lagi"
+    },
+    "interior": {
+      "title": "Dalaman Yang Menakjubkan",
+      "modern": "Moden",
+      "minimalist": "Minimalis",
+      "aesthetic": "Estetik"
+    },
+    "gallery": {
+      "line1": "Ke sebuah galeri",
+      "line2": "keanggunan",
+      "body": "Perabot estetik di mana setiap keping menceritakan kisah selera yang halus dan kemahiran yang abadi."
+    },
+    "feature": {
+      "customize": "Ubah Suai Perabot",
+      "body": "Nikmati seni kehidupan bespoke — pilih fabrik, kemasan, dan bentuk anda."
+    },
+    "stats": {
+      "products": "Produk",
+      "projects": "Projek",
+      "customers": "Pelanggan Berpuas Hati",
+      "rank": "Terbaik di Malaysia"
+    },
+    "about": {
+      "eyebrow": "Keanggunan · Abadi",
+      "title": "Gaya Moden",
+      "title2": "Pesona Abadi",
+      "body": "Temui koleksi terbaru ComfyHome, menampilkan sofa, kerusi, dan kerusi berlengan yang merangkumi pelbagai konsep gaya hidup — bersama meja, meja kopi, dan kabinet yang direka untuk rumah yang cermat. Ditubuhkan atas kepercayaan bahawa kecantikan dan keselesaan tidak pernah bercanggah, setiap keping yang kami cipta membawa keyakinan yang tenang untuk bertahan lebih lama daripada tren."
+    },
+    "explore": {
+      "title": "Terokai Produk Kami",
+      "body": "ComfyHome akan mempersembahkan visinya tentang seni bina kontemporari dan reka bentuk dalaman melalui setiap kategori yang dikurasi dengan teliti.",
+      "viewMore": "Lihat Lagi"
+    },
+    "testimonials": {
+      "title": "Apa Kata Pelanggan Kami",
+      "cta": "Kongsi Maklum Balas Anda"
+    },
+    "sold": "terjual"
+  },
+  "products": {
+    "breadcrumb": {
+      "home": "Laman Utama",
+      "products": "Produk"
+    },
+    "title": "Koleksi Kami",
+    "subtitle": "Perabot terpilih untuk setiap bilik di rumah anda",
+    "filterBy": "Tapis mengikut",
+    "categories": "Kategori",
+    "productType": "Jenis Produk",
+    "searchPlaceholder": "Cari produk…",
+    "items": "item",
+    "sort": {
+      "default": "Pengisihan Lalai",
+      "priceLow": "Harga: Rendah ke Tinggi",
+      "priceHigh": "Harga: Tinggi ke Rendah",
+      "mostSold": "Paling Banyak Dijual"
+    },
+    "loginToAdd": "Sila log masuk untuk menambah item ke troli.",
+    "clearAll": "× Padam Semua",
+    "loading": "Memuatkan produk…",
+    "noResults": "Tiada produk dijumpai. Cuba laraskan penapis anda.",
+    "addToCart": "Tambah ke Troli",
+    "adding": "Menambah…",
+    "added": "Ditambah",
+    "sold": "terjual"
+  },
+  "showcase": {
+    "breadcrumb": {
+      "home": "Laman Utama",
+      "showcase": "Pameran"
+    },
+    "community": "KOMUNITI",
+    "title": "Pameran Reka Bentuk",
+    "subtitle": "Visi perabot buatan tangan daripada komuniti kreatif kami",
+    "stats": {
+      "designs": "Reka Bentuk",
+      "contributors": "Penyumbang",
+      "areas": "Kawasan"
+    },
+    "crafted": "DIBUAT DENGAN SEMANGAT",
+    "noDesigns": "Belum Ada Reka Bentuk",
+    "noDesignsBody": "Jadilah yang pertama menyumbang reka bentuk {area} kepada komuniti.",
+    "startDesigning": "Mula Mereka Bentuk",
+    "cta": {
+      "eyebrow": "Visi Anda. Ruang Anda.",
+      "title": "Reka bentuk perabot<br>anda sendiri",
+      "body": "Pilih daripada 18 jenis perabot dan sesuaikan sepenuhnya bahan, kemasan, dan dimensi — kemudian kongsi dengan komuniti.",
+      "pill": "Reka Bentuk Sekarang!"
+    }
+  },
+  "customize": {
+    "breadcrumb": {
+      "home": "Laman Utama",
+      "showcase": "Pameran",
+      "customize": "Ubah Suai"
+    },
+    "title": "Reka Bentuk Perabot Anda",
+    "subtitle": "Cipta sesuatu yang unik untuk anda — pilih bentuk, bahan, warna, fabrik dan saksikan reka bentuk anda menjadi nyata dalam 3D masa nyata.",
+    "step1": "Pilih Perabot",
+    "step2": "Ubah Suai",
+    "options": {
+      "shape": "Bentuk / Rupa",
+      "fabric": "Fabrik",
+      "material": "Bahan",
+      "colour": "Warna",
+      "legStyle": "Gaya Kaki",
+      "headboard": "Gaya Kepala Katil",
+      "countertop": "Bahan Meja",
+      "included": "(termasuk)",
+      "includedBare": "termasuk"
+    },
+    "selectPrompt": "Pilih jenis perabot di atas untuk mula mengubah suai.",
+    "previewTitle": "Pratonton 3D anda akan muncul di sini",
+    "previewSub": "Pilih jenis perabot untuk memulakan",
+    "price": {
+      "summary": "Ringkasan Harga",
+      "base": "Asas ({name})",
+      "total": "Jumlah Anggaran"
+    },
+    "toast": {
+      "cartSuccess": "Berjaya ditambah ke troli!",
+      "contribSuccess": "Reka bentuk disumbangkan ke Pameran!"
+    },
+    "addToCart": "Tambah ke Troli",
+    "adding": "Menambah…",
+    "contribute": "Sumbangkan Karya"
+  },
+  "locations": {
+    "breadcrumb": {
+      "home": "Laman Utama",
+      "locations": "Lokasi"
+    },
+    "title": "Cari Cawangan Berdekatan",
+    "subtitle": "Lawati salah satu bilik pameran kami di seluruh Malaysia. Alami perabot ComfyHome secara langsung dengan panduan pakar daripada pasukan kedai kami.",
+    "viewHours": "Lihat waktu operasi",
+    "viewLocation": "Lihat lokasi",
+    "mapError": "Peta tidak dapat dimuatkan.",
+    "mapHint": "Tetapkan VITE_GOOGLE_MAPS_API_KEY dalam .env anda dan mulakan semula pelayan pembangunan."
+  },
+  "cart": {
+    "title": "Troli Saya",
+    "clear": "Kosongkan troli",
+    "loading": "Memuatkan troli…",
+    "empty": "Troli anda kosong.",
+    "product": "Produk",
+    "count": "Kuantiti",
+    "price": "Harga",
+    "custom": "Ubah Suai",
+    "subtotal": "Subtotal",
+    "shipping": "Penghantaran",
+    "sst": "SST (6%)",
+    "total": "Jumlah",
+    "spendMore": "Belanja lagi {amount} untuk {method} percuma",
+    "freeShipping": "Penghantaran percuma dibuka kunci!",
+    "shippingMethod": "Kaedah Penghantaran",
+    "free": "PERCUMA",
+    "checkout": "Teruskan ke Daftar Keluar",
+    "selected": "{selected} daripada {total} item dipilih",
+    "product_one": "produk",
+    "product_other": "produk",
+    "ctaEyebrow": "Terus Meneroka",
+    "ctaTitle": "Temui koleksi<br>penuh kami",
+    "ctaBody": "Layari ratusan keping perabot buatan tangan untuk setiap bilik — atau reka sesuatu yang sepenuhnya milik anda.",
+    "ctaPill": "Beli Sekarang!"
+  },
+  "checkout": {
+    "shipping": {
+      "title": "Maklumat Penghantaran",
+      "fullName": "Nama Penuh",
+      "address": "Alamat Penghantaran",
+      "city": "Bandar",
+      "state": "Negeri",
+      "zip": "Poskod",
+      "continue": "Teruskan ke Pembayaran",
+      "back": "Kembali ke Troli"
+    },
+    "payment": {
+      "title": "Pembayaran",
+      "shippingTo": "Penghantaran ke",
+      "edit": "Edit",
+      "cardNumber": "Nombor Kad",
+      "expiry": "Tarikh Tamat",
+      "cvc": "CVC",
+      "processing": "Memproses…",
+      "placeOrder": "Buat Pesanan · {total}",
+      "back": "Kembali ke Penghantaran"
+    },
+    "summary": {
+      "title": "Ringkasan Pesanan",
+      "custom": "Ubah Suai",
+      "subtotal": "Subtotal",
+      "shipping": "Penghantaran",
+      "sst": "SST (6%)",
+      "total": "Jumlah",
+      "free": "Percuma"
+    }
+  },
+  "orderConfirmation": {
+    "title": "Pesanan Disahkan",
+    "subtitle": "Terima kasih atas pembelian anda. Pesanan anda telah berjaya dibuat.",
+    "orderNumber": "Nombor Pesanan",
+    "date": "Tarikh",
+    "shippingMethod": "Kaedah Penghantaran",
+    "totalPaid": "Jumlah Dibayar",
+    "status": "Status",
+    "paid": "Dibayar",
+    "message": "Pesanan anda sedang diproses. Anda boleh melihat sejarah pesanan dalam profil anda.",
+    "continueShopping": "Teruskan Membeli-belah",
+    "viewOrders": "Lihat Pesanan Saya"
+  },
+  "login": {
+    "tagline1": "Ciptaan",
+    "tagline2": "Indah",
+    "tagline3": "Menanti.",
+    "subtitle": "Log masuk untuk mengurus projek anda, meneroka koleksi, dan mencipta perabot yang anda impikan.",
+    "welcome": "Selamat kembali",
+    "title": "Log Masuk",
+    "email": "E-mel",
+    "password": "Kata Laluan",
+    "submit": "Log Masuk",
+    "noAccount": "Tiada akaun?",
+    "createOne": "Buat akaun"
+  },
+  "register": {
+    "tagline1": "Rumah Anda.",
+    "tagline2": "Visi Anda.",
+    "tagline3": "Kisah Anda.",
+    "subtitle": "Sertai ribuan pemilik rumah yang mereka bentuk ruang hidup sempurna mereka dengan ComfyHome.",
+    "started": "Mulakan",
+    "title": "Buat Akaun",
+    "firstName": "Nama Pertama",
+    "lastName": "Nama Akhir",
+    "email": "E-mel",
+    "phone": "Nombor Telefon",
+    "address": "Alamat",
+    "password": "Kata Laluan",
+    "passwordHint": "Minimum 8 aksara, satu huruf besar dan satu nombor.",
+    "confirm": "Sahkan Kata Laluan",
+    "submit": "Buat Akaun",
+    "hasAccount": "Sudah ada akaun?",
+    "signIn": "Log Masuk"
+  },
+  "profile": {
+    "title": "Profil Saya",
+    "breadcrumb": {
+      "home": "Laman Utama",
+      "profile": "Profil"
+    },
+    "welcome": "Selamat kembali, {name}",
+    "tabs": {
+      "orders": "Pesanan Saya",
+      "details": "Butiran Profil",
+      "contributions": "Sumbangan Saya"
+    },
+    "signOut": "Log Keluar",
+    "orders": {
+      "title": "Sejarah Pesanan",
+      "loading": "Memuatkan pesanan…",
+      "empty": "Anda belum membuat sebarang pesanan.",
+      "browseProducts": "Layari Produk",
+      "shippedTo": "Dihantar ke",
+      "shippingMethod": "Kaedah Penghantaran",
+      "subtotal": "Subtotal",
+      "shipping": "Penghantaran",
+      "sst": "SST (6%)",
+      "orderTotal": "Jumlah Pesanan",
+      "free": "Percuma",
+      "orderAgain": "Pesan Semula",
+      "addingToCart": "Menambah ke troli…"
+    },
+    "details": {
+      "title": "Butiran Profil",
+      "firstName": "Nama Pertama",
+      "lastName": "Nama Akhir",
+      "email": "E-mel",
+      "phone": "Telefon",
+      "address": "Alamat",
+      "memberSince": "Ahli Sejak",
+      "saving": "Menyimpan…",
+      "save": "Simpan Perubahan",
+      "cancel": "Batal",
+      "saved": "Perubahan berjaya disimpan.",
+      "edit": "Edit"
+    },
+    "contributions": {
+      "title": "Sumbangan Saya",
+      "loading": "Memuatkan sumbangan…",
+      "empty": "Anda belum menghantar sebarang sumbangan reka bentuk.",
+      "startDesigning": "Mula Mereka Bentuk"
+    },
+    "loading": "Memuatkan profil…",
+    "order_one": "pesanan",
+    "order_other": "pesanan",
+    "design_one": "reka bentuk",
+    "design_other": "reka bentuk"
+  },
+  "contributionDetail": {
+    "breadcrumb": {
+      "home": "Laman Utama",
+      "showcase": "Pameran"
+    },
+    "loading": "Memuatkan reka bentuk…"
+  },
+  "components": {
+    "searchDropdown": {
+      "searching": "Mencari…",
+      "products": "Produk",
+      "seeAll": "Lihat semua produk untuk \"{query}\"",
+      "branches": "Cawangan",
+      "viewAll": "Lihat semua cawangan",
+      "showcase": "Pameran",
+      "browseAll": "Layari semua pameran",
+      "noResults": "Tiada hasil untuk \"{query}\""
+    },
+    "feedbackModal": {
+      "title": "Tulis Ulasan",
+      "submit": "Hantar Maklum Balas",
+      "thanks": "Terima kasih atas maklum balas anda!",
+      "name": "Nama",
+      "rating": "Penilaian",
+      "comment": "Ulasan",
+      "commentPlaceholder": "Ceritakan pengalaman anda…"
+    },
+    "contributionModal": {
+      "title": "Sumbangkan Reka Bentuk Anda",
+      "subtitle": "Kongsi ciptaan anda dengan komuniti ComfyHome",
+      "total": "Jumlah:",
+      "description": "Penerangan Reka Bentuk",
+      "descriptionPlaceholder": "Huraikan visi reka bentuk anda — bahan, ruang yang dimaksudkan, inspirasi…",
+      "cancel": "Batal",
+      "submitting": "Menghantar…",
+      "submit": "Hantar Sumbangan"
+    },
+    "itemDetail": {
+      "specification": "Spesifikasi",
+      "viewPhoto": "Lihat Foto",
+      "view3D": "Lihat dalam 3D",
+      "reviews": "Ulasan",
+      "review_one": "ulasan",
+      "review_other": "ulasan",
+      "adding": "Menambah…",
+      "added": "Ditambah ke Troli",
+      "addToCart": "Tambah ke Troli",
+      "login": "Log masuk",
+      "noReviews": "Belum ada ulasan. Jadilah yang pertama!",
+      "writeReview": "Tulis Ulasan",
+      "signIn": "Log masuk",
+      "toLeaveReview": "untuk menulis ulasan.",
+      "designed": "Direka",
+      "anonymous": "Tanpa nama",
+      "reviewTitle": "Nilai Reka Bentuk Ini",
+      "submitReview": "Hantar Ulasan",
+      "reviewThanks": "Terima kasih atas ulasan anda!"
+    },
+    "checkoutSteps": {
+      "cart": "Troli",
+      "checkout": "Daftar Keluar",
+      "payment": "Pembayaran"
+    },
+    "contributionCard": {
+      "viewDetail": "Lihat Butiran"
+    }
+  },
+  "language": {
+    "en": "English",
+    "ms": "Melayu",
+    "zh": "中文"
+  }
+}

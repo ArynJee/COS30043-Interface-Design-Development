@@ -39,11 +39,11 @@ const {
       />
       <div class="hero-inner">
         <p class="hero-breadcrumb">
-          <a href="/">Home</a>&ensp;<ChevronRight size="10"/>&ensp;Profile
+          <a href="/">{{ $t('profile.breadcrumb.home') }}</a>&ensp;<ChevronRight size="10"/>&ensp;{{ $t('profile.breadcrumb.profile') }}
         </p>
-        <h1 class="hero-title">My Profile</h1>
+        <h1 class="hero-title">{{ $t('profile.title') }}</h1>
         <p class="hero-sub" v-if="user">
-          Welcome back, {{ user.first_name }} {{ user.last_name }}
+          {{ $t('profile.welcome', { name: `${user.first_name} ${user.last_name}` }) }}
         </p>
       </div>
     </section>
@@ -68,7 +68,7 @@ const {
             @click="activeTab = 'orders'"
           >
             <Package :size="16" class="sidebar-icon" />
-            My Orders
+            {{ $t('profile.tabs.orders') }}
           </button>
           <button
             class="sidebar-link"
@@ -76,7 +76,7 @@ const {
             @click="activeTab = 'profile'"
           >
             <User :size="16" class="sidebar-icon" />
-            Profile Details
+            {{ $t('profile.tabs.details') }}
           </button>
           <button
             class="sidebar-link"
@@ -84,11 +84,11 @@ const {
             @click="activeTab = 'contributions'"
           >
             <Sparkles :size="16" class="sidebar-icon" />
-            My Contributions
+            {{ $t('profile.tabs.contributions') }}
           </button>
           <button class="sidebar-link logout-link" @click="logout">
             <LogOut :size="16" class="sidebar-icon" />
-            Sign Out
+            {{ $t('profile.signOut') }}
           </button>
         </nav>
       </aside>
@@ -98,19 +98,17 @@ const {
         <!-- orders tab -->
         <div v-if="activeTab === 'orders'">
           <div class="tab-header">
-            <h2 class="tab-title">Order History</h2>
+            <h2 class="tab-title">{{ $t('profile.orders.title') }}</h2>
             <span class="tab-count ms-3"
-              >( {{ orders.length }} order{{
-                orders.length !== 1 ? "s" : ""
-              }} )</span
+              >( {{ orders.length }} {{ orders.length !== 1 ? $t('profile.order_other') : $t('profile.order_one') }} )</span
             >
           </div>
 
-          <div v-if="loadingOrders" class="state-msg">Loading orders…</div>
+          <div v-if="loadingOrders" class="state-msg">{{ $t('profile.orders.loading') }}</div>
 
           <div v-else-if="orders.length === 0" class="empty-state">
-            <p>You haven't placed any orders yet.</p>
-            <a href="/products" class="empty-cta">Browse Products <ArrowRight size="15"/></a>
+            <p>{{ $t('profile.orders.empty') }}</p>
+            <a href="/products" class="empty-cta">{{ $t('profile.orders.browseProducts') }} <ArrowRight size="15"/></a>
           </div>
 
           <div v-else class="orders-list">
@@ -146,13 +144,13 @@ const {
                 class="order-detail"
               >
                 <div class="order-shipping">
-                  <div class="detail-label">Shipped to</div>
+                  <div class="detail-label">{{ $t('profile.orders.shippedTo') }}</div>
                   <div class="detail-value">
                     {{ order.shipping_name }} — {{ order.shipping_address }},
                     {{ order.shipping_city }}, {{ order.shipping_state }}
                     {{ order.shipping_zip }}
                   </div>
-                  <div class="detail-label" style="margin-top:0.6rem">Shipping Method</div>
+                  <div class="detail-label" style="margin-top:0.6rem">{{ $t('profile.orders.shippingMethod') }}</div>
                   <div class="detail-value">{{ shippingLabel(order.shipping_method) }}</div>
                 </div>
 
@@ -175,7 +173,7 @@ const {
                         class="order-item-type"
                         v-if="item.item_type === 'custom'"
                       >
-                        Custom
+                        {{ $t('cart.custom') }}
                       </div>
                     </div>
                     <div class="order-item-qty">× {{ item.quantity }}</div>
@@ -187,27 +185,27 @@ const {
 
                 <div class="order-breakdown">
                   <div class="breakdown-row">
-                    <span>Subtotal</span>
+                    <span>{{ $t('profile.orders.subtotal') }}</span>
                     <span>{{ formatPrice(order.subtotal) }}</span>
                   </div>
                   <div class="breakdown-row">
-                    <span>Shipping</span>
+                    <span>{{ $t('profile.orders.shipping') }}</span>
                     <span :class="{ 'free-ship': order.shipping_fee == 0 }">
                       {{
                         order.shipping_fee == null
                           ? "—"
                           : order.shipping_fee == 0
-                          ? "Free"
+                          ? $t('profile.orders.free')
                           : formatPrice(order.shipping_fee)
                       }}
                     </span>
                   </div>
                   <div class="breakdown-row">
-                    <span>SST (6%)</span>
+                    <span>{{ $t('profile.orders.sst') }}</span>
                     <span>{{ order.tax_amount != null ? formatPrice(order.tax_amount) : "—" }}</span>
                   </div>
                   <div class="breakdown-row breakdown-total">
-                    <span>Order Total</span>
+                    <span>{{ $t('profile.orders.orderTotal') }}</span>
                     <span>{{ formatPrice(order.total_amount) }}</span>
                   </div>
                 </div>
@@ -217,7 +215,7 @@ const {
                   @click="orderAgain(order)"
                   :disabled="reorderingId === order.id"
                 >
-                  {{ reorderingId === order.id ? "Adding to cart…" : "Order Again" }}
+                  {{ reorderingId === order.id ? $t('profile.orders.addingToCart') : $t('profile.orders.orderAgain') }}
                 </button>
               </div>
             </div>
@@ -227,35 +225,35 @@ const {
         <!-- profile tab -->
         <div v-if="activeTab === 'profile'">
           <div class="tab-header justify-content-between">
-            <h2 class="tab-title">Profile Details</h2>
+            <h2 class="tab-title">{{ $t('profile.details.title') }}</h2>
             <button v-if="!editMode" class="edit-btn" @click="editMode = true">
-              Edit
+              {{ $t('profile.details.edit') }}
             </button>
           </div>
 
           <div v-if="!editMode" class="profile-view">
             <div class="profile-row">
-              <span class="profile-label">First Name</span>
+              <span class="profile-label">{{ $t('profile.details.firstName') }}</span>
               <span class="profile-value">{{ user?.first_name }}</span>
             </div>
             <div class="profile-row">
-              <span class="profile-label">Last Name</span>
+              <span class="profile-label">{{ $t('profile.details.lastName') }}</span>
               <span class="profile-value">{{ user?.last_name }}</span>
             </div>
             <div class="profile-row">
-              <span class="profile-label">Email</span>
+              <span class="profile-label">{{ $t('profile.details.email') }}</span>
               <span class="profile-value">{{ user?.email }}</span>
             </div>
             <div class="profile-row">
-              <span class="profile-label">Phone</span>
+              <span class="profile-label">{{ $t('profile.details.phone') }}</span>
               <span class="profile-value">{{ user?.phone_number || "—" }}</span>
             </div>
             <div class="profile-row">
-              <span class="profile-label">Address</span>
+              <span class="profile-label">{{ $t('profile.details.address') }}</span>
               <span class="profile-value">{{ user?.address || "—" }}</span>
             </div>
             <div class="profile-row">
-              <span class="profile-label">Member Since</span>
+              <span class="profile-label">{{ $t('profile.details.memberSince') }}</span>
               <span class="profile-value">{{
                 formatDate(user?.created_at)
               }}</span>
@@ -265,7 +263,7 @@ const {
           <div v-else class="profile-edit-form">
             <div class="field-row">
               <div class="field-group">
-                <label class="field-label">First Name</label>
+                <label class="field-label">{{ $t('profile.details.firstName') }}</label>
                 <input
                   v-model="form.firstName"
                   class="field-input"
@@ -273,7 +271,7 @@ const {
                 />
               </div>
               <div class="field-group">
-                <label class="field-label">Last Name</label>
+                <label class="field-label">{{ $t('profile.details.lastName') }}</label>
                 <input
                   v-model="form.lastName"
                   class="field-input"
@@ -282,22 +280,22 @@ const {
               </div>
             </div>
             <div class="field-group">
-              <label class="field-label">Phone</label>
+              <label class="field-label">{{ $t('profile.details.phone') }}</label>
               <input v-model="form.phone" class="field-input" type="tel" />
             </div>
             <div class="field-group">
-              <label class="field-label">Address</label>
+              <label class="field-label">{{ $t('profile.details.address') }}</label>
               <input v-model="form.address" class="field-input" type="text" />
             </div>
 
             <div v-if="saveError" class="save-error">{{ saveError }}</div>
             <div v-if="saveSuccess" class="save-success">
-              Changes saved successfully.
+              {{ $t('profile.details.saved') }}
             </div>
 
             <div class="edit-actions">
               <button class="save-btn px-3 py-2 border-0" @click="saveProfile" :disabled="saving">
-                {{ saving ? "Saving…" : "Save Changes" }}
+                {{ saving ? $t('profile.details.saving') : $t('profile.details.save') }}
               </button>
               <button
                 class="cancel-btn px-3 py-2"
@@ -306,7 +304,7 @@ const {
                   saveError = '';
                 "
               >
-                Cancel
+                {{ $t('profile.details.cancel') }}
               </button>
             </div>
           </div>
@@ -315,17 +313,17 @@ const {
         <!-- contributions tab -->
         <div v-if="activeTab === 'contributions'">
           <div class="tab-header">
-            <h2 class="tab-title">My Contributions</h2>
+            <h2 class="tab-title">{{ $t('profile.contributions.title') }}</h2>
             <span class="tab-count ms-3">
-              ( {{ contributions.length }} design{{ contributions.length !== 1 ? 's' : '' }} )
+              ( {{ contributions.length }} {{ contributions.length !== 1 ? $t('profile.design_other') : $t('profile.design_one') }} )
             </span>
           </div>
 
-          <div v-if="loadingContributions" class="state-msg">Loading contributions…</div>
+          <div v-if="loadingContributions" class="state-msg">{{ $t('profile.contributions.loading') }}</div>
 
           <div v-else-if="contributions.length === 0" class="empty-state">
-            <p>You haven't submitted any design contributions yet.</p>
-            <a href="/customize" class="empty-cta">Start Designing <ArrowRight size="15"/></a>
+            <p>{{ $t('profile.contributions.empty') }}</p>
+            <a href="/customize" class="empty-cta">{{ $t('profile.contributions.startDesigning') }} <ArrowRight size="15"/></a>
           </div>
 
           <div v-else class="cp-grid">
@@ -339,7 +337,7 @@ const {
       </div>
     </div>
 
-    <div v-else class="state-msg">Loading profile…</div>
+    <div v-else class="state-msg">{{ $t('profile.loading') }}</div>
   </div>
 </template>
 
