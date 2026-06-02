@@ -108,7 +108,7 @@ export default function useCheckout() {
       const { order } = orderRes.data;
 
       await cartStore.fetchCart();
-      router.push(`/order-confirmation?orderId=${order.id}&total=${order.total}`);
+      router.push(`/order-confirmation?orderId=${order.id}&total=${order.total}&shippingMethod=${cartStore.selectedShipping}`);
     } catch (err) {
       paymentError.value =
         err.response?.data?.message || "Something went wrong. Please try again.";

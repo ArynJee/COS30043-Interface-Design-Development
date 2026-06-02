@@ -5,7 +5,7 @@ import CtaBanner from "@/components/CtaBanner.vue";
 import useOrderConfirmation from "@/hooks/useOrderConfirmation.js";
 import { CircleCheckBig } from "@lucide/vue";
 
-const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
+const { orderId, total, formatPrice, orderDate, orderShippingMethod } = useOrderConfirmation();
 </script>
 
 <template>
@@ -29,17 +29,34 @@ const { orderId, total, formatPrice, orderDate } = useOrderConfirmation();
           <span class="order-label text-uppercase">Order Number</span>
           <span class="order-value">#{{ orderId }}</span>
         </div>
+
         <div class="order-divider"></div>
+
+        <!-- order date -->
         <div class="order-row  d-flex justify-content-between align-items-center px-2 py-2">
           <span class="order-label text-uppercase">Date</span>
           <span class="order-value">{{ orderDate }}</span>
         </div>
+
         <div class="order-divider"></div>
+
+        <!-- shipping method -->
+        <div class="order-row d-flex justify-content-between align-items-center px-2 py-2">
+          <span class="order-label text-uppercase">Shipping Method</span>
+          <span class="order-value">{{ orderShippingMethod }}</span>
+        </div>
+
+        <div class="order-divider"></div>
+
+        <!-- total paid -->
         <div class="order-row  d-flex justify-content-between align-items-center px-2 py-2">
           <span class="order-label text-uppercase">Total Paid</span>
           <span class="order-value order-total fw-bold">{{ formatPrice(total) }}</span>
         </div>
+
         <div class="order-divider"></div>
+
+        <!-- order status -->
         <div class="order-row  d-flex justify-content-between align-items-center px-2 py-2">
           <span class="order-label text-uppercase">Status</span>
           <span class="order-value order-status fw-bold text-uppercase">Paid</span>

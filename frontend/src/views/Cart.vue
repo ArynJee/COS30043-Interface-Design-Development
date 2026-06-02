@@ -684,8 +684,8 @@ const {
   cursor: not-allowed;
 }
 .selection-hint {
-  font-size: var(--fs-xs);
-  color: var(--color-muted);
+  font-size: var(--fs-base);
+  color: var(--color-secondary);
   text-align: center;
   margin-top: 0.5rem;
 }
