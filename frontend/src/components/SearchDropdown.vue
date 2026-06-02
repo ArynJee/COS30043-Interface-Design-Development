@@ -169,6 +169,7 @@ function handleGoToBranch() { goToBranch(); emit('close') }
   background: none;
   cursor: pointer;
   transition: background 0.15s;
+  text-align: left;
 }
 .sd-item:hover {
   background: #faf7f3;
@@ -193,6 +194,8 @@ function handleGoToBranch() { goToBranch(); emit('close') }
 
 .sd-item-body {
   min-width: 0;
+  flex: 1;
+  align-items: flex-start;
 }
 .sd-item-name {
   font-size: var(--fs-sm);
@@ -211,6 +214,7 @@ function handleGoToBranch() { goToBranch(); emit('close') }
   font-size: var(--fs-xs);
   color: #8b6f47;
   transition: color 0.15s;
+  text-align: left;
 }
 .sd-see-all:hover {
   color: #5c4830;
