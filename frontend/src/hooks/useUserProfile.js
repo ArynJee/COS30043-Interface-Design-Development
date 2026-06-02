@@ -34,6 +34,7 @@ export default function useUserProfile() {
   const loadingContributions = ref(true);
 
   const form = ref({ firstName: "", lastName: "", phone: "", address: "" });
+  const profileErrors = ref({ firstName: "", lastName: "", phone: "" });
 
   const formatPrice = (val) => "RM " + parseFloat(val || 0).toFixed(2);
 
@@ -110,7 +111,37 @@ export default function useUserProfile() {
     }
   }
 
+  function validateProfileForm() {
+    profileErrors.value = { firstName: "", lastName: "", phone: "" };
+    let valid = true;
+    const { firstName, lastName, phone } = form.value;
+
+    if (!firstName.trim()) {
+      profileErrors.value.firstName = "First name is required.";
+      valid = false;
+    } else if (!/^[a-zA-Z '-]+$/.test(firstName.trim())) {
+      profileErrors.value.firstName = "First name must contain letters only.";
+      valid = false;
+    }
+
+    if (!lastName.trim()) {
+      profileErrors.value.lastName = "Last name is required.";
+      valid = false;
+    } else if (!/^[a-zA-Z '-]+$/.test(lastName.trim())) {
+      profileErrors.value.lastName = "Last name must contain letters only.";
+      valid = false;
+    }
+
+    if (phone.trim() && !/^0\d{8,10}$/.test(phone.trim())) {
+      profileErrors.value.phone = "Phone must start with 0 and be 9–11 digits (numbers only).";
+      valid = false;
+    }
+
+    return valid;
+  }
+
   async function saveProfile() {
+    if (!validateProfileForm()) return;
     saving.value = true;
     saveError.value = "";
     saveSuccess.value = false;
@@ -173,6 +204,7 @@ export default function useUserProfile() {
     activeTab,
     reorderingId,
     form,
+    profileErrors,
     formatPrice,
     formatDate,
     shippingLabel,

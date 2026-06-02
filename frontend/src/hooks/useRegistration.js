@@ -37,25 +37,32 @@ export default function useRegistration() {
     if (!form.firstName.trim()) {
       errors.firstName = 'First name is required.'
       valid = false
+    } else if (!/^[a-zA-Z '-]+$/.test(form.firstName.trim())) {
+      errors.firstName = 'First name must contain letters only.'
+      valid = false
     }
+
     if (!form.lastName.trim()) {
       errors.lastName = 'Last name is required.'
+      valid = false
+    } else if (!/^[a-zA-Z '-]+$/.test(form.lastName.trim())) {
+      errors.lastName = 'Last name must contain letters only.'
       valid = false
     }
 
     if (!form.email) {
       errors.email = 'Email is required.'
       valid = false
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      errors.email = 'Enter a valid email.'
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(form.email)) {
+      errors.email = 'Enter a valid email address (e.g. name@example.com).'
       valid = false
     }
 
     if (!form.phone) {
       errors.phone = 'Phone number is required.'
       valid = false
-    } else if (!/^\+?[\d\s\-()]{7,15}$/.test(form.phone)) {
-      errors.phone = 'Enter a valid phone number.'
+    } else if (!/^0\d{8,10}$/.test(form.phone.trim())) {
+      errors.phone = 'Phone must start with 0 and be 9–11 digits (numbers only).'
       valid = false
     }
 

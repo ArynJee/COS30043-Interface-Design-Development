@@ -18,6 +18,7 @@ const {
   activeTab,
   reorderingId,
   form,
+  profileErrors,
   formatPrice,
   formatDate,
   shippingLabel,
@@ -267,21 +268,34 @@ const {
                 <input
                   v-model="form.firstName"
                   class="field-input"
+                  :class="{ 'field-input--error': profileErrors.firstName }"
                   type="text"
+                  @input="profileErrors.firstName = ''"
                 />
+                <span v-if="profileErrors.firstName" class="field-error">{{ profileErrors.firstName }}</span>
               </div>
               <div class="field-group">
                 <label class="field-label">{{ $t('profile.details.lastName') }}</label>
                 <input
                   v-model="form.lastName"
                   class="field-input"
+                  :class="{ 'field-input--error': profileErrors.lastName }"
                   type="text"
+                  @input="profileErrors.lastName = ''"
                 />
+                <span v-if="profileErrors.lastName" class="field-error">{{ profileErrors.lastName }}</span>
               </div>
             </div>
             <div class="field-group">
               <label class="field-label">{{ $t('profile.details.phone') }}</label>
-              <input v-model="form.phone" class="field-input" type="tel" />
+              <input
+                v-model="form.phone"
+                class="field-input"
+                :class="{ 'field-input--error': profileErrors.phone }"
+                type="tel"
+                @input="profileErrors.phone = ''"
+              />
+              <span v-if="profileErrors.phone" class="field-error">{{ profileErrors.phone }}</span>
             </div>
             <div class="field-group">
               <label class="field-label">{{ $t('profile.details.address') }}</label>
@@ -798,6 +812,15 @@ const {
 }
 .field-input:focus {
   border-color: var(--accent-hover);
+}
+.field-input--error {
+  border-color: var(--color-error);
+}
+.field-error {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: var(--fs-xs);
+  color: var(--color-error);
 }
 .save-error {
   font-size: var(--fs-sm);
