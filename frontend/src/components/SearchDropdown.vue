@@ -50,7 +50,7 @@ function handleGoToBranch() { goToBranch(); emit('close') }
         <button
           v-for="p in products"
           :key="p.id"
-          class="sd-item d-flex align-items-center gap-3 w-100 px-3 py-2 border-0 text-left"
+          class="sd-item d-flex align-items-center gap-3 w-100 px-3 py-2 border-0 text-start"
           @mousedown.prevent
           @click="handleGoToProducts"
         >
@@ -60,7 +60,7 @@ function handleGoToBranch() { goToBranch(); emit('close') }
             <span class="sd-item-meta">{{ formatPrice(p.base_price) }}</span>
           </div>
         </button>
-        <button class="sd-see-all d-flex align-items-center w-100 gap-2 border-0 text-left" @mousedown.prevent @click="handleGoToProducts">
+        <button class="sd-see-all d-flex align-items-center w-100 gap-2 border-0 text-start" @mousedown.prevent @click="handleGoToProducts">
           {{ $t('components.searchDropdown.seeAll', { query }) }}
           <ArrowRight :size="12" />
         </button>
@@ -72,7 +72,7 @@ function handleGoToBranch() { goToBranch(); emit('close') }
         <button
           v-for="b in branchResults"
           :key="b.id"
-          class="sd-item d-flex align-items-center gap-3 w-100 px-3 py-2 border-0 text-left"
+          class="sd-item d-flex align-items-center gap-3 w-100 px-3 py-2 border-0 text-start"
           @mousedown.prevent
           @click="handleGoToBranch"
         >
@@ -84,7 +84,7 @@ function handleGoToBranch() { goToBranch(); emit('close') }
             <span class="sd-item-meta">{{ b.state }} · {{ b.address }}</span>
           </div>
         </button>
-        <button class="sd-see-all d-flex align-items-center w-100 gap-2 border-0 text-left" @mousedown.prevent @click="handleGoToBranch">
+        <button class="sd-see-all d-flex align-items-center w-100 gap-2 border-0 text-start" @mousedown.prevent @click="handleGoToBranch">
           {{ $t('components.searchDropdown.viewAll') }}
           <ArrowRight :size="12" />
         </button>
@@ -96,7 +96,7 @@ function handleGoToBranch() { goToBranch(); emit('close') }
         <button
           v-for="c in showcaseResults"
           :key="c.id"
-          class="sd-item d-flex align-items-center gap-3 w-100 px-3 py-2 border-0 text-left"
+          class="sd-item d-flex align-items-center gap-3 w-100 px-3 py-2 border-0 text-start"
           @mousedown.prevent
           @click="handleGoToShowcase(c.id)"
         >
@@ -112,7 +112,7 @@ function handleGoToBranch() { goToBranch(); emit('close') }
             <span class="sd-item-meta">{{ c.area }} · {{ c.furniture_type }}</span>
           </div>
         </button>
-        <button class="sd-see-all d-flex align-items-center w-100 gap-2 border-0 text-lef" @mousedown.prevent @click="handleGoToShowcaseAll">
+        <button class="sd-see-all d-flex align-items-center w-100 gap-2 border-0 text-start" @mousedown.prevent @click="handleGoToShowcaseAll">
           {{ $t('components.searchDropdown.browseAll') }}
           <ArrowRight :size="12" />
         </button>
