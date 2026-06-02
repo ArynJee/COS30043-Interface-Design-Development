@@ -2,10 +2,10 @@
   <div class="fv-wrap" ref="container">
     <div v-if="loading" class="fv-loading">
       <div class="fv-spinner"></div>
-      <span>Preparing 3D model…</span>
+      <span>{{ $t('components.furnitureViewer.loading') }}</span>
     </div>
     <div class="fv-hint">
-      <span>Drag to rotate · Scroll to zoom</span>
+      <span>{{ $t('components.furnitureViewer.hint') }}</span>
     </div>
   </div>
 </template>

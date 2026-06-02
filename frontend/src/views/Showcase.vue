@@ -168,10 +168,10 @@ const {
 
     <!-- customize banner cta -->
     <CtaBanner
-      eyebrow="Your Vision. Your Space."
-      title="Design your own<br>furniture"
-      body="Choose from 18 furniture types and fully customize materials, finishes, and dimensions — then share it with the community."
-      pill="Design Now!"
+      :eyebrow="$t('showcase.cta.eyebrow')"
+      :title="$t('showcase.cta.title')"
+      :body="$t('showcase.cta.body')"
+      :pill="$t('showcase.cta.pill')"
       link-to="/customize"
       aria-label="Go to Customize"
     />

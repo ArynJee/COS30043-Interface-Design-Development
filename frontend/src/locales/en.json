@@ -407,6 +407,10 @@
     },
     "contributionCard": {
       "viewDetail": "View Detail"
+    },
+    "furnitureViewer": {
+      "loading": "Preparing 3D model…",
+      "hint": "Drag to rotate · Scroll to zoom"
     }
   },
   "language": {

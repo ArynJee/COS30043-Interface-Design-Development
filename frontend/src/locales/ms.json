@@ -407,6 +407,10 @@
     },
     "contributionCard": {
       "viewDetail": "Lihat Butiran"
+    },
+    "furnitureViewer": {
+      "loading": "Menyediakan model 3D…",
+      "hint": "Seret untuk putar · Skrol untuk zum"
     }
   },
   "language": {

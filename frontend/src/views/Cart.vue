@@ -258,10 +258,10 @@ const {
     </div>
 
     <CtaBanner
-      eyebrow="Keep Exploring"
-      title="Discover our full<br>collection"
-      body="Browse hundreds of handcrafted furniture pieces for every room — or design something entirely your own."
-      pill="Shop Now!"
+      :eyebrow="$t('cart.ctaEyebrow')"
+      :title="$t('cart.ctaTitle')"
+      :body="$t('cart.ctaBody')"
+      :pill="$t('cart.ctaPill')"
       link-to="/products"
       aria-label="Go to Products"
     />

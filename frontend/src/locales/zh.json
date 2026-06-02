@@ -407,6 +407,10 @@
     },
     "contributionCard": {
       "viewDetail": "查看详情"
+    },
+    "furnitureViewer": {
+      "loading": "正在准备3D模型…",
+      "hint": "拖动旋转 · 滚动缩放"
     }
   },
   "language": {
