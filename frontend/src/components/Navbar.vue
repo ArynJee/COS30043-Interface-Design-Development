@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import {
   MapPin, ShoppingCart, UserCircle, Search,
   ChevronLeft, ChevronRight, Sun, Moon, ArrowRight, X, Languages, ChevronDown,
@@ -10,6 +10,20 @@ import { useLanguage, LOCALES } from "@/hooks/useLanguage";
 
 const mobileSearchRef = ref(null);
 const langDropdownOpen = ref(false);
+const langBtnRef = ref(null);
+
+const sbLangPanelStyle = computed(() => {
+  if (!langBtnRef.value) return {};
+  const rect = langBtnRef.value.getBoundingClientRect();
+  const isSmall = window.innerWidth <= 420;
+  const collapsedW = isSmall ? 48 : 62;
+  const openW = isSmall ? 160 : 220;
+  const left = (sidebarOpen.value ? openW : collapsedW) + 6;
+  return {
+    bottom: `${window.innerHeight - rect.bottom}px`,
+    left: `${left}px`,
+  };
+});
 
 const {
   route, cartStore, isDark, toggleDark, isAnimating, handleToggle,
@@ -90,10 +104,10 @@ function selectLocale(code) {
         <router-link
           :title="$t('nav.cart')"
           to="/cart"
-          class="icon-btn cart-icon-btn d-flex align-items-center justify-content-center text-decoration-none p-1 rounded-2"
+          class="icon-btn cart-icon-btn d-flex align-items-center justify-content-center text-decoration-none p-1 rounded-2 position-relative"
         >
           <ShoppingCart :size="19" />
-          <span v-if="cartStore.itemCount > 0" class="cart-badge">{{
+          <span v-if="cartStore.itemCount > 0" class="cart-badge position-absolute d-flex align-items-center justify-content-center">{{
             cartStore.itemCount > 99 ? "99+" : cartStore.itemCount
           }}</span>
         </router-link>
@@ -119,7 +133,7 @@ function selectLocale(code) {
         <!-- language switcher -->
         <div class="lang-wrap position-relative">
           <button
-            class="icon-btn lang-btn border-0 d-flex align-items-center justify-content-center gap-1"
+            class="icon-btn lang-btn border-0 d-flex align-items-center justify-content-center gap-1 px-1 py-2"
             :title="$t('nav.language')"
             @click="langDropdownOpen = !langDropdownOpen"
           >
@@ -227,7 +241,7 @@ function selectLocale(code) {
       >
         <div class="sb-cart-wrap d-flex position-relative flex-shrink-0">
           <ShoppingCart :size="19" class="sb-icon" />
-          <span v-if="cartStore.itemCount > 0" class="sb-cart-badge">{{
+          <span v-if="cartStore.itemCount > 0" class="sb-cart-badge position-absolute d-flex align-items-center justify-content-center">{{
             cartStore.itemCount > 99 ? "99+" : cartStore.itemCount
           }}</span>
         </div>
@@ -262,44 +276,59 @@ function selectLocale(code) {
       <!-- language switcher (sidebar) -->
       <div class="sb-lang-wrap">
         <button
-          class="sb-link sb-lang-trigger position-relative d-flex align-items-center gap-3 rounded-2 px-2 py-2 border-0 w-100"
+          ref="langBtnRef"
+          class="sb-link sb-lang-trigger position-relative d-flex align-items-center gap-3 rounded-2 px-2 py-2 border-0 w-100 text-left"
           @click="langDropdownOpen = !langDropdownOpen"
         >
           <Languages :size="19" class="sb-icon" />
           <span class="sb-label pe-none">{{ currentLocale.label }}</span>
         </button>
-        <div v-if="langDropdownOpen && sidebarOpen" class="sb-lang-panel">
-          <button
-            v-for="loc in LOCALES"
-            :key="loc.code"
-            class="sb-lang-option d-flex align-items-center gap-2 w-100 border-0 px-2 py-2 text-start"
-            :class="{ 'is-active': currentLocale.code === loc.code }"
-            @click="selectLocale(loc.code)"
-          >
-            {{ loc.label }}
-          </button>
-        </div>
       </div>
+
+      <Teleport to="body">
+        <div
+          v-if="langDropdownOpen"
+          class="sb-lang-backdrop"
+          @click="langDropdownOpen = false"
+        />
+        <Transition name="sb-slide">
+          <div
+            v-if="langDropdownOpen"
+            class="sb-lang-panel"
+            :style="sbLangPanelStyle"
+          >
+            <button
+              v-for="loc in LOCALES"
+              :key="loc.code"
+              class="sb-lang-option d-flex align-items-center gap-2 w-100 border-0 px-3 py-2 text-start"
+              :class="{ 'is-active': currentLocale.code === loc.code }"
+              @click="selectLocale(loc.code)"
+            >
+              {{ loc.label }}
+            </button>
+          </div>
+        </Transition>
+      </Teleport>
     </div>
   </aside>
 
   <!-- overlay when sidebar is expanded -->
   <div
-    class="sidebar-overlay d-lg-none position-fixed inset-0"
+    class="sidebar-overlay d-lg-none position-fixed inset-0 position-fixed"
     :class="{ visible: sidebarOpen }"
     @click="sidebarOpen = false"
   ></div>
 
   <!-- mobile search results panel -->
   <div
-    class="sb-result-panel d-lg-none position-fixed d-flex flex-column"
+    class="sb-result-panel d-lg-none position-fixed d-flex flex-column top-0 bottom-0 pe-none"
     :class="{ 'is-visible': sbShowResults }"
   >
     <!-- header -->
     <div
-      class="sb-rp-header d-flex align-items-center justify-content-between px-3 flex-shrink-0"
+      class="sb-rp-header d-flex align-items-center justify-content-between px-3 flex-shrink-0 gap-2"
     >
-      <p class="sb-rp-title mb-0">{{ $t('nav.resultsFor', { query: searchQuery }) }}</p>
+      <p class="sb-rp-title mb-0 overflow-hidden">{{ $t('nav.resultsFor', { query: searchQuery }) }}</p>
       <button
         class="sb-rp-close d-flex align-items-center justify-content-center border-0 rounded-2"
         @click="closeSearch"
@@ -498,8 +527,6 @@ function selectLocale(code) {
 .lang-btn {
   background: none;
   cursor: pointer;
-  gap: 3px;
-  padding: 2px 4px;
 }
 .lang-code {
   font-size: var(--fs-2xs);
@@ -515,7 +542,6 @@ function selectLocale(code) {
 }
 .lang-panel {
   top: calc(100% + 6px);
-  right: 0;
   min-width: 110px;
   background: var(--bg-surface);
   border: 1px solid var(--border);
@@ -679,10 +705,21 @@ function selectLocale(code) {
 .sb-lang-trigger {
   background: none;
   cursor: pointer;
-  text-align: left;
+}
+.sb-lang-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1199;
 }
 .sb-lang-panel {
-  margin: 2px 0 0 4px;
+  position: fixed;
+  min-width: 140px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  box-shadow: 4px 4px 20px rgba(30, 26, 20, 0.15);
+  z-index: 1200;
+  border-radius: 6px;
+  overflow: hidden;
 }
 .sb-lang-option {
   background: none;
@@ -691,7 +728,7 @@ function selectLocale(code) {
   color: var(--color-primary);
   cursor: pointer;
   transition: background 0.15s;
-  border-radius: 4px;
+  white-space: nowrap;
 }
 .sb-lang-option:hover {
   background: var(--bg-alt);
@@ -704,7 +741,6 @@ function selectLocale(code) {
 /* overlay */
 .sidebar-overlay {
   display: none;
-  position: fixed;
   inset: 0;
   background: rgba(44, 34, 24, 0.3);
   z-index: 1050;
@@ -716,12 +752,8 @@ function selectLocale(code) {
   opacity: 1;
 }
 
-/* ── cart badge ── */
-.cart-icon-btn {
-  position: relative;
-}
+/* cart badge */
 .cart-badge {
-  position: absolute;
   top: -4px;
   right: -4px;
   background: var(--accent);
@@ -730,14 +762,10 @@ function selectLocale(code) {
   font-family: var(--font-serif);
   min-width: 16px;
   height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 0 2px;
   line-height: 1;
 }
 .sb-cart-badge {
-  position: absolute;
   top: -4px;
   right: -4px;
   background: var(--accent);
@@ -745,9 +773,6 @@ function selectLocale(code) {
   font-size: 0.5rem;
   min-width: 14px;
   height: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 0 2px;
 }
 
@@ -769,19 +794,16 @@ function selectLocale(code) {
   text-align: left;
 }
 
-/* ── mobile search results panel ── */
+/* mobile search results panel */
 .sb-result-panel {
-  top: 0;
-  bottom: 0;
-  left: 220px;
   right: 0;
+  left: 220px;
   background: var(--bg-surface);
   border-left: 1px solid var(--border);
   box-shadow: 4px 0 20px rgba(44, 34, 24, 0.08);
   z-index: 1099;
   transform: translateX(16px);
   opacity: 0;
-  pointer-events: none;
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
   font-family: var(--font-serif);
 }
@@ -793,14 +815,12 @@ function selectLocale(code) {
 .sb-rp-header {
   min-height: 62px;
   border-bottom: 1px solid var(--border-light);
-  gap: 8px;
 }
 .sb-rp-title {
   font-size: var(--fs-xs);
   letter-spacing: 0.08em;
   color: var(--color-muted);
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
 }
 .sb-rp-close {
@@ -873,11 +893,6 @@ function selectLocale(code) {
   font-family: var(--font-serif);
 }
 
-/* ── dark mode overrides ──────────────────────────────────────────────────────
-   Most theming is automatic via CSS variable dark overrides in main.css.
-   Only override cases where variable dark values differ from the original design.
-   ──────────────────────────────────────────────────────────────────────────── */
-
 /* search bars: more visible border + placeholder in dark */
 [data-theme="dark"] .search-pill {
   background: var(--bg-elevated);
@@ -916,6 +931,10 @@ function selectLocale(code) {
 [data-theme="dark"] .icon-btn:hover {
   color: var(--accent);
 }
+[data-theme="dark"] .sb-link:hover {
+  background: rgba(196, 168, 130, 0.08);
+  color: var(--accent);
+}
 [data-theme="dark"] .sb-link.is-active {
   background: rgba(196, 168, 130, 0.15);
   color: var(--accent);
@@ -944,6 +963,29 @@ function selectLocale(code) {
 [data-theme="dark"] .lang-option.is-active {
   color: var(--accent);
 }
+[data-theme="dark"] .sb-lang-panel {
+  background: var(--bg-alt);
+  border-color: var(--color-muted);
+}
+[data-theme="dark"] .sb-lang-option:hover {
+  background: var(--bg-elevated);
+}
+[data-theme="dark"] .sb-lang-option.is-active {
+  color: var(--accent);
+}
+
+/* sidebar lang panel slide-in from left */
+.sb-slide-enter-active {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.sb-slide-leave-active {
+  transition: opacity 0.14s ease, transform 0.14s ease;
+}
+.sb-slide-enter-from,
+.sb-slide-leave-to {
+  opacity: 0;
+  transform: translateX(-8px);
+}
 
 /* ── dropdown slide-down animation ── */
 .drop-enter-active {
@@ -961,7 +1003,7 @@ function selectLocale(code) {
   transform: translateY(-7px);
 }
 
-/* ── responsive ── */
+/* responsive */
 @media (max-width: 420px) {
   .sb-brand-label {
     font-size: var(--fs-sm);
