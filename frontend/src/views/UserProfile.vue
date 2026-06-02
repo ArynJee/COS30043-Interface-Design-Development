@@ -913,5 +913,46 @@ const {
   .cp-grid {
     grid-template-columns: 1fr;
   }
+
+  /* order card overflow fixes */
+  .order-header {
+    padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .order-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1rem;
+  }
+  .order-date {
+    font-size: var(--fs-2xs);
+  }
+  .order-right {
+    gap: 0.5rem;
+  }
+  .order-total {
+    font-size: var(--fs-base);
+  }
+  .order-detail {
+    padding: 0.75rem 1rem;
+  }
+  .detail-value {
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  .order-item {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .order-item-info {
+    flex-basis: calc(100% - 48px - 0.5rem);
+  }
+  .order-item-qty {
+    margin-left: calc(48px + 0.5rem);
+  }
+  .order-item-price {
+    margin-left: auto;
+  }
 }
 </style>
