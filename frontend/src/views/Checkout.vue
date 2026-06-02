@@ -11,6 +11,7 @@ const {
   form,
   cardForm,
   cardErrors,
+  shippingErrors,
   handleCardNumber,
   handleExpiry,
   handleCvc,
@@ -43,8 +44,11 @@ const {
               v-model="form.name"
               type="text"
               class="field-input"
+              :class="{ 'field-input--error': shippingErrors.name }"
               placeholder="Jane Smith"
+              @input="shippingErrors.name = ''"
             />
+            <span v-if="shippingErrors.name" class="field-error">{{ shippingErrors.name }}</span>
           </div>
 
           <div class="field-group">
@@ -53,8 +57,11 @@ const {
               v-model="form.address"
               type="text"
               class="field-input"
+              :class="{ 'field-input--error': shippingErrors.address }"
               placeholder="123 Main Street, Apt 4B"
+              @input="shippingErrors.address = ''"
             />
+            <span v-if="shippingErrors.address" class="field-error">{{ shippingErrors.address }}</span>
           </div>
 
           <div class="field-row">
@@ -64,8 +71,11 @@ const {
                 v-model="form.city"
                 type="text"
                 class="field-input"
+                :class="{ 'field-input--error': shippingErrors.city }"
                 placeholder="Kuching"
+                @input="shippingErrors.city = ''"
               />
+              <span v-if="shippingErrors.city" class="field-error">{{ shippingErrors.city }}</span>
             </div>
             <div class="field-group field-group-sm">
               <label class="field-label">{{ $t('checkout.shipping.state') }}</label>
@@ -73,8 +83,11 @@ const {
                 v-model="form.state"
                 type="text"
                 class="field-input"
+                :class="{ 'field-input--error': shippingErrors.state }"
                 placeholder="Sarawak"
+                @input="shippingErrors.state = ''"
               />
+              <span v-if="shippingErrors.state" class="field-error">{{ shippingErrors.state }}</span>
             </div>
             <div class="field-group field-group-sm">
               <label class="field-label">{{ $t('checkout.shipping.zip') }}</label>
@@ -82,8 +95,11 @@ const {
                 v-model="form.zip"
                 type="text"
                 class="field-input"
+                :class="{ 'field-input--error': shippingErrors.zip }"
                 placeholder="93450"
+                @input="shippingErrors.zip = ''"
               />
+              <span v-if="shippingErrors.zip" class="field-error">{{ shippingErrors.zip }}</span>
             </div>
           </div>
 

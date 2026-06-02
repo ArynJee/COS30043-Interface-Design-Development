@@ -26,6 +26,7 @@ export default function useCheckout() {
 
   const cardForm = ref({ number: "", expiry: "", cvc: "" });
   const cardErrors = ref({ number: "", expiry: "", cvc: "" });
+  const shippingErrors = ref({ name: "", address: "", city: "", state: "", zip: "" });
 
   function handleCardNumber(e) {
     const digits = e.target.value.replace(/\D/g, "").slice(0, 16);
@@ -52,11 +53,15 @@ export default function useCheckout() {
   const { shippingFee, taxAmount, orderTotal } = useOrderSummary(cartStore);
 
   function validateShipping() {
+    shippingErrors.value = { name: "", address: "", city: "", state: "", zip: "" };
     const { name, address, city, state, zip } = form.value;
-    if (!name.trim() || !address.trim() || !city.trim() || !state.trim() || !zip.trim()) {
-      return "Please fill in all shipping fields.";
-    }
-    return null;
+    let valid = true;
+    if (!name.trim())    { shippingErrors.value.name    = "Full name is required.";  valid = false; }
+    if (!address.trim()) { shippingErrors.value.address = "Address is required.";    valid = false; }
+    if (!city.trim())    { shippingErrors.value.city    = "City is required.";       valid = false; }
+    if (!state.trim())   { shippingErrors.value.state   = "State is required.";      valid = false; }
+    if (!zip.trim())     { shippingErrors.value.zip     = "ZIP code is required.";   valid = false; }
+    return valid;
   }
 
   function validateCard() {
@@ -79,11 +84,7 @@ export default function useCheckout() {
   }
 
   function proceedToPayment() {
-    const err = validateShipping();
-    if (err) {
-      alert(err);
-      return;
-    }
+    if (!validateShipping()) return;
     step.value = 2;
   }
 
@@ -150,6 +151,7 @@ export default function useCheckout() {
     form,
     cardForm,
     cardErrors,
+    shippingErrors,
     handleCardNumber,
     handleExpiry,
     handleCvc,
