@@ -5,7 +5,7 @@ import { getProductsApi, getFiltersApi } from '@/services/productServices.js'
 export default function useProducts() {
   const route = useRoute()
 
-  // ── state ──────────────────────────────────────────────
+  // state
   const products    = ref([])
   const total       = ref(0)
   const totalPages  = ref(0)
@@ -20,7 +20,7 @@ export default function useProducts() {
   const searchQuery         = ref('')
   const sidebarOpen         = ref(true)
 
-  // ── slug → category name (from home page ?type= links) ─
+  //category name (from home page ?type= links) ─
   const slugToName = {
     'living-room': 'Living Room',
     'study-room':  'Study Room',
@@ -29,7 +29,7 @@ export default function useProducts() {
     'bedroom':     'Bedroom',
   }
 
-  // ── computed ───────────────────────────────────────────
+  // computed
   const hasActiveFilters = computed(
     () => selectedCategories.value.length > 0 || selectedTags.value.length > 0
   )
@@ -53,7 +53,7 @@ export default function useProducts() {
     return pages
   })
 
-  // ── helpers ────────────────────────────────────────────
+  // helpers
   const formatPrice = (price) =>
     'RM ' + parseFloat(price).toLocaleString('en-MY', {
       minimumFractionDigits: 2,
@@ -68,7 +68,7 @@ export default function useProducts() {
     return d ? `${h}H × ${w}W × ${d}D cm` : `${h}H × ${w}W cm`
   }
 
-  // ── fetch ──────────────────────────────────────────────
+  // fetch
   const fetchProducts = async () => {
     loading.value = true
     try {
@@ -112,7 +112,7 @@ export default function useProducts() {
     }
   })
 
-  // ── actions ────────────────────────────────────────────
+  // actions
   const goToPage = (p) => {
     if (p < 1 || p > totalPages.value) return
     currentPage.value = p
@@ -139,7 +139,7 @@ export default function useProducts() {
     selectedTags.value = []
   }
 
-  // ── init ───────────────────────────────────────────────
+  // init
   onMounted(async () => {
     const filterData = await getFiltersApi()
     categories.value = filterData.categories

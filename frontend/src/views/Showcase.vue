@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink } from "vue-router";
-import { ArrowRight, Sparkle, ChevronRight, Astroid} from "@lucide/vue";
+import { ArrowRight, Sparkle, ChevronLeft, ChevronRight, Astroid} from "@lucide/vue";
 import CtaBanner from "@/components/CtaBanner.vue";
 import ContributionCard from "@/components/ContributionCard.vue";
 import { useShowcase, AREAS } from "@/hooks/useShowcase.js";
@@ -12,6 +12,11 @@ const {
   totalContributors,
   totalAreas,
   filtered,
+  paginated,
+  currentPage,
+  totalPages,
+  visiblePages,
+  goToPage,
 } = useShowcase();
 </script>
 
@@ -121,14 +126,50 @@ const {
       <!-- showcase grid -->
       <TransitionGroup v-else name="card-fade" tag="div" class="sc-grid">
         <ContributionCard
-          v-for="(c, idx) in filtered"
+          v-for="(c, idx) in paginated"
           :key="c.id"
           :contribution="c"
           :show-contributor="true"
-          :featured="idx === 0 && filtered.length > 1"
+          :featured="idx === 0 && paginated.length > 1"
         />
       </TransitionGroup>
     </div>
+
+    <!-- pagination -->
+    <nav
+      class="pagination-wrap"
+      v-if="totalPages > 1"
+      aria-label="Products pagination"
+    >
+      <button
+        class="page-btn page-arrow"
+        :disabled="currentPage === 1"
+        @click="goToPage(currentPage - 1)"
+        aria-label="Previous page"
+      >
+        <ChevronLeft :size="15" />
+      </button>
+
+      <template v-for="p in visiblePages" :key="p">
+        <span v-if="p === '…'" class="page-ellipsis">…</span>
+        <button
+          v-else
+          :class="['page-btn', { 'page-active': currentPage === p }]"
+          @click="goToPage(p)"
+        >
+          {{ p }}
+        </button>
+      </template>
+
+      <button
+        class="page-btn page-arrow"
+        :disabled="currentPage === totalPages"
+        @click="goToPage(currentPage + 1)"
+        aria-label="Next page"
+      >
+        <ChevronRight :size="15" />
+      </button>
+    </nav>
 
     <!-- customize banner cta -->
     <CtaBanner
@@ -432,6 +473,15 @@ const {
   background: var(--bg-page);
   height: 5rem;
 }
+
+/* ── pagination ── */
+.pagination-wrap { display: flex; justify-content: center; align-items: center; gap: 0.3rem; padding-top: 1.5rem; }
+.page-btn { min-width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; background: var(--bg-surface); border: 1px solid var(--border); color: var(--color-primary); font-family: var(--font-serif); font-size: var(--fs-base); cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+.page-btn:hover:not(:disabled) { border-color: var(--color-primary); }
+.page-btn.page-active { background: var(--btn-bg); color: var(--btn-color); border-color: var(--btn-bg); }
+.page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.page-ellipsis { color: var(--color-secondary); padding: 0 0.25rem; }
+
 
 @media (max-width: 1199px) {
   .sc-grid {
