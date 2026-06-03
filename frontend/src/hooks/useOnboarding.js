@@ -1,8 +1,8 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { Armchair, PenLine, RotateCcw, Tag, ShoppingCart } from '@lucide/vue'
 
-const STORAGE_KEY    = 'cu-onboarding-seen'
 const SLIDE_DURATION = 5000
+let _seenThisLoad    = false
 
 export const ONBOARDING_SLIDES = [
   {
@@ -38,7 +38,7 @@ export const ONBOARDING_SLIDES = [
 ]
 
 export default function useOnboarding() {
-  const visible      = ref(!sessionStorage.getItem(STORAGE_KEY))
+  const visible      = ref(!_seenThisLoad)
   const currentSlide = ref(0)
   let timer          = null
 
@@ -58,7 +58,7 @@ export default function useOnboarding() {
 
   function dismiss() {
     visible.value = false
-    sessionStorage.setItem(STORAGE_KEY, '1')
+    _seenThisLoad = true
     clearTimer()
   }
 
