@@ -5,36 +5,11 @@ const SLIDE_DURATION = 5000
 let _seenThisLoad    = false
 
 export const ONBOARDING_SLIDES = [
-  {
-    icon: Armchair,
-    step: '01',
-    title: 'Choose Your Living Area',
-    desc: 'Start by selecting a room: Living Room, Bedroom, Kitchen, Bathroom, Study Room. Each furniture type perfectly suited for the space.',
-  },
-  {
-    icon: PenLine,
-    step: '02',
-    title: 'Customise Every Detail',
-    desc: 'Pick a furniture type, then dial in every configuration: shape, fabric, material, colour, and leg style, all in one streamlined panel.',
-  },
-  {
-    icon: Rotate3d,
-    step: '03',
-    title: 'Preview in 3D',
-    desc: 'Your selections render live in the 3D viewer. Rotate and inspect the model as you tweak options to see exactly how your piece will look.',
-  },
-  {
-    icon: Tag,
-    step: '04',
-    title: 'Real-Time Price Updates',
-    desc: 'The price summary updates instantly with every choice. You always see a transparent breakdown. No surprises when you reach the cart.',
-  },
-  {
-    icon: ShoppingCart,
-    step: '05',
-    title: 'Add to Cart or Contribute',
-    desc: 'Happy with your design? Add it straight to your cart, or share it as a community showcase piece for others to discover and order.',
-  },
+  { icon: Armchair,     step: '01', key: 's1' },
+  { icon: PenLine,      step: '02', key: 's2' },
+  { icon: Rotate3d,     step: '03', key: 's3' },
+  { icon: Tag,          step: '04', key: 's4' },
+  { icon: ShoppingCart, step: '05', key: 's5' },
 ]
 
 export default function useOnboarding() {

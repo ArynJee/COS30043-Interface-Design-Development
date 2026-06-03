@@ -411,6 +411,33 @@
     "furnitureViewer": {
       "loading": "Preparing 3D model…",
       "hint": "Drag to rotate · Scroll to zoom"
+    },
+    "onboarding": {
+      "skip": "Skip tutorial",
+      "next": "Next",
+      "getStarted": "Get Started",
+      "slides": {
+        "s1": {
+          "title": "Choose Your Living Area",
+          "desc": "Start by selecting a room: Living Room, Bedroom, Kitchen, Bathroom, or Study Room. Each area surfaces furniture types perfectly suited for the space."
+        },
+        "s2": {
+          "title": "Customise Every Detail",
+          "desc": "Pick a furniture type, then dial in every configuration: shape, fabric, material, colour, and leg style — all in one streamlined panel."
+        },
+        "s3": {
+          "title": "Preview in 3D",
+          "desc": "Your selections render live in the 3D viewer. Rotate and inspect the model as you tweak options to see exactly how your piece will look."
+        },
+        "s4": {
+          "title": "Real-Time Price Updates",
+          "desc": "The price summary updates instantly with every choice. You always see a transparent breakdown — no surprises when you reach the cart."
+        },
+        "s5": {
+          "title": "Add to Cart or Contribute",
+          "desc": "Happy with your design? Add it straight to your cart, or share it as a community showcase piece for others to discover and order."
+        }
+      }
     }
   },
   "language": {

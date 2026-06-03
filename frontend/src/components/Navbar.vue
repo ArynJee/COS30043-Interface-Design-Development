@@ -8,9 +8,10 @@ import SearchDropdown from "@/components/SearchDropdown.vue";
 import useNavbar from "@/hooks/useNavbar";
 import { useLanguage, LOCALES } from "@/hooks/useLanguage";
 
-const mobileSearchRef = ref(null);
-const langDropdownOpen = ref(false);
-const langBtnRef = ref(null);
+const mobileSearchRef   = ref(null);
+const langDropdownOpen  = ref(false);   // desktop
+const mobileLangOpen    = ref(false);   // mobile sidebar
+const langBtnRef        = ref(null);
 
 const sbLangPanelStyle = computed(() => {
   if (!langBtnRef.value) return {};
@@ -41,6 +42,7 @@ const { currentLocale, setLocale } = useLanguage();
 function selectLocale(code) {
   setLocale(code);
   langDropdownOpen.value = false;
+  mobileLangOpen.value = false;
 }
 </script>
 
@@ -278,7 +280,7 @@ function selectLocale(code) {
         <button
           ref="langBtnRef"
           class="sb-link sb-lang-trigger position-relative d-flex align-items-center gap-3 rounded-2 px-2 py-2 border-0 w-100 text-left"
-          @click="langDropdownOpen = !langDropdownOpen"
+          @click="mobileLangOpen = !mobileLangOpen"
         >
           <Languages :size="19" class="sb-icon" />
           <span class="sb-label pe-none">{{ currentLocale.label }}</span>
@@ -287,13 +289,13 @@ function selectLocale(code) {
 
       <Teleport to="body">
         <div
-          v-if="langDropdownOpen"
+          v-if="mobileLangOpen"
           class="sb-lang-backdrop"
-          @click="langDropdownOpen = false"
+          @click="mobileLangOpen = false"
         />
         <Transition name="sb-slide">
           <div
-            v-if="langDropdownOpen"
+            v-if="mobileLangOpen"
             class="sb-lang-panel"
             :style="sbLangPanelStyle"
           >

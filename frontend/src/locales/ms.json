@@ -411,6 +411,33 @@
     "furnitureViewer": {
       "loading": "Menyediakan model 3D…",
       "hint": "Seret untuk putar · Skrol untuk zum"
+    },
+    "onboarding": {
+      "skip": "Langkau tutorial",
+      "next": "Seterusnya",
+      "getStarted": "Mulakan",
+      "slides": {
+        "s1": {
+          "title": "Pilih Kawasan Ruang Anda",
+          "desc": "Mulakan dengan memilih bilik: Ruang Tamu, Bilik Tidur, Dapur, Bilik Mandi, atau Bilik Belajar. Setiap kawasan menawarkan jenis perabot yang sesuai untuk ruang tersebut."
+        },
+        "s2": {
+          "title": "Sesuaikan Setiap Perincian",
+          "desc": "Pilih jenis perabot, kemudian tetapkan setiap konfigurasi: bentuk, fabrik, bahan, warna, dan gaya kaki — semuanya dalam satu panel yang mudah."
+        },
+        "s3": {
+          "title": "Pratonton dalam 3D",
+          "desc": "Pilihan anda dipaparkan secara langsung dalam penonton 3D. Putar dan periksa model semasa anda mengubah pilihan untuk melihat rupa sebenar perabot anda."
+        },
+        "s4": {
+          "title": "Kemas Kini Harga Masa Nyata",
+          "desc": "Ringkasan harga dikemas kini serta-merta dengan setiap pilihan. Anda sentiasa melihat pecahan yang telus — tiada kejutan apabila anda sampai ke troli."
+        },
+        "s5": {
+          "title": "Tambah ke Troli atau Sumbang",
+          "desc": "Berpuas hati dengan reka bentuk anda? Tambahkannya terus ke troli, atau kongsikannya sebagai karya pameran komuniti untuk ditemui dan ditempah oleh orang lain."
+        }
+      }
     }
   },
   "language": {

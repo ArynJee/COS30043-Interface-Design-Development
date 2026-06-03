@@ -1,7 +1,9 @@
 <script setup>
 import { ArrowLeft, ChevronRight } from '@lucide/vue'
+import { useI18n } from 'vue-i18n'
 import useOnboarding, { ONBOARDING_SLIDES } from '@/hooks/useOnboarding.js'
 
+useI18n()
 const { visible, currentSlide, prev, next, goTo, dismiss } = useOnboarding()
 </script>
 
@@ -30,7 +32,7 @@ const { visible, currentSlide, prev, next, goTo, dismiss } = useOnboarding()
               </button>
               <span class="ob-counter text-uppercase">{{ ONBOARDING_SLIDES[currentSlide].step }} / 05</span>
             </div>
-            <button class="ob-skip border-0 p-0" @click="dismiss">Skip tutorial</button>
+            <button class="ob-skip border-0 p-0" @click="dismiss">{{ $t('components.onboarding.skip') }}</button>
           </div>
 
           <Transition name="ob-slide" mode="out-in">
@@ -42,9 +44,9 @@ const { visible, currentSlide, prev, next, goTo, dismiss } = useOnboarding()
                   stroke-width="1.5"
                 />
               </div>
-              <h2 class="ob-title fw-bold fs-3">{{ ONBOARDING_SLIDES[currentSlide].title }}</h2>
+              <h2 class="ob-title fw-bold fs-3">{{ $t(`components.onboarding.slides.${ONBOARDING_SLIDES[currentSlide].key}.title`) }}</h2>
               <div class="ob-rule mb-2"></div>
-              <p class="ob-desc m-0">{{ ONBOARDING_SLIDES[currentSlide].desc }}</p>
+              <p class="ob-desc m-0">{{ $t(`components.onboarding.slides.${ONBOARDING_SLIDES[currentSlide].key}.desc`) }}</p>
             </div>
           </Transition>
 
@@ -64,7 +66,7 @@ const { visible, currentSlide, prev, next, goTo, dismiss } = useOnboarding()
               />
             </div>
             <button class="ob-next-btn d-flex align-items-center gap-2 border-0" @click="next">
-              <span>{{ currentSlide === ONBOARDING_SLIDES.length - 1 ? 'Get Started' : 'Next' }}</span>
+              <span>{{ $t(currentSlide === ONBOARDING_SLIDES.length - 1 ? 'components.onboarding.getStarted' : 'components.onboarding.next') }}</span>
               <ChevronRight v-if="currentSlide < ONBOARDING_SLIDES.length - 1" :size="14" />
             </button>
           </div>
