@@ -699,7 +699,7 @@ onBeforeUnmount(() => {
 .card-body {
   padding: 0.85rem;
 }
-.card-category-badge { font-size: var(--fs-2xs); letter-spacing: 0.12em; background: var(--accent); color: #fff; padding: 0.15rem 0.5rem; }
+.card-category-badge { font-size: var(--fs-2xs); letter-spacing: 0.12em; background: var(--accent); color: #fff; padding: 0.15rem 0.5rem; white-space: nowrap; }
 [data-theme="dark"] .card-category-badge {color: #1e1a14; }
 .card-sold { font-size: var(--fs-base); color: var(--color-secondary); }
 .card-name { font-size: var(--fs-base); color: var(--color-primary); line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; }
@@ -745,23 +745,23 @@ onBeforeUnmount(() => {
 }
 @media (min-width: 768px) and (max-width: 820px) {
   .filter-bar {
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    padding: 0.7rem 1.5rem;
+    padding: 0.7rem 1.25rem;
     margin-top: 0 !important;
   }
-  .filter-right {
-    width: 100%;
-    justify-content: space-between;
+  .filter-label {
+    display: none;
+  }
+  .search-input {
+    max-width: 160px;
   }
   .products-container {
-    padding: 2rem 1.5rem 4rem;
+    padding: 2rem 1.25rem 4rem;
   }
   .hero-content {
-    padding: 0 1.5rem;
+    padding: 0 1.25rem;
   }
   .login-error-banner {
-    margin: 1rem 1.5rem 0;
+    margin: 1rem 1.25rem 0;
   }
 }
 @media (max-width: 767px) {
