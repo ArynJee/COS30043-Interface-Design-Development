@@ -253,8 +253,7 @@ const { form, errors, showPassword, showConfirm, loading, handleRegister } = use
     grid-template-columns: 1fr;
   }
   .auth-bg {
-    min-height: 220px;
-    max-height: 280px;
+    height: 260px;
   }
   .auth-brand {
     bottom: 1.75rem;

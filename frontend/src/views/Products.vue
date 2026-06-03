@@ -462,6 +462,8 @@ onBeforeUnmount(() => {
 .filter-bar {
   padding: 0.7rem 5rem;
   z-index: 90;
+  background: var(--bg-page);
+  top: 0;
 }
 .filter-label {
   font-size: var(--fs-xs);
@@ -739,6 +741,27 @@ onBeforeUnmount(() => {
   }
   .login-error-banner {
     margin: 1rem 2.5rem 0;
+  }
+}
+@media (min-width: 768px) and (max-width: 820px) {
+  .filter-bar {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.7rem 1.5rem;
+    margin-top: 0 !important;
+  }
+  .filter-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .products-container {
+    padding: 2rem 1.5rem 4rem;
+  }
+  .hero-content {
+    padding: 0 1.5rem;
+  }
+  .login-error-banner {
+    margin: 1rem 1.5rem 0;
   }
 }
 @media (max-width: 767px) {

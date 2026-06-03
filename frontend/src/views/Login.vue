@@ -333,8 +333,7 @@ const {
     grid-template-columns: 1fr;
   }
   .auth-bg {
-    min-height: 260px;
-    max-height: 320px;
+    height: 300px;
   }
   .auth-brand {
     bottom: 2rem;
