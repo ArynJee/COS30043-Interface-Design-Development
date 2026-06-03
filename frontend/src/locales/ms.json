@@ -103,6 +103,33 @@
       "priceHigh": "Harga: Tinggi ke Rendah",
       "mostSold": "Paling Banyak Dijual"
     },
+    "categoryNames": {
+      "livingRoom": "Ruang Tamu",
+      "bedroom": "Bilik Tidur",
+      "kitchen": "Dapur",
+      "bathroom": "Bilik Mandi",
+      "studyRoom": "Bilik Belajar"
+    },
+    "tagNames": {
+      "sofa": "Sofa",
+      "coffeeTable": "Meja Kopi",
+      "armchair": "Kerusi Berlengan",
+      "bookshelf": "Rak Buku",
+      "bedFrame": "Rangka Katil",
+      "wardrobe": "Almari Baju",
+      "nightstand": "Meja Tepi Katil",
+      "kitchenCounter": "Meja Dapur",
+      "barStool": "Kerusi Bar",
+      "diningTable": "Meja Makan",
+      "kitchenCabinet": "Kabinet Dapur",
+      "sink": "Sinki",
+      "bathroomShelf": "Rak Bilik Mandi",
+      "vanityCabinet": "Kabinet Solek",
+      "desk": "Meja Tulis",
+      "officeChair": "Kerusi Pejabat",
+      "studyShelf": "Rak Belajar",
+      "drawerCabinet": "Kabinet Laci"
+    },
     "loginToAdd": "Sila log masuk untuk menambah item ke troli.",
     "clearAll": "× Padam Semua",
     "loading": "Memuatkan produk…",

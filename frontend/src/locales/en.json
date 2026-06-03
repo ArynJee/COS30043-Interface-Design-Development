@@ -103,6 +103,33 @@
       "priceHigh": "Price: High to Low",
       "mostSold": "Most Sold"
     },
+    "categoryNames": {
+      "livingRoom": "Living Room",
+      "bedroom": "Bedroom",
+      "kitchen": "Kitchen",
+      "bathroom": "Bathroom",
+      "studyRoom": "Study Room"
+    },
+    "tagNames": {
+      "sofa": "Sofa",
+      "coffeeTable": "Coffee Table",
+      "armchair": "Armchair",
+      "bookshelf": "Bookshelf",
+      "bedFrame": "Bed Frame",
+      "wardrobe": "Wardrobe",
+      "nightstand": "Nightstand",
+      "kitchenCounter": "Kitchen Counter",
+      "barStool": "Bar Stool",
+      "diningTable": "Dining Table",
+      "kitchenCabinet": "Kitchen Cabinet",
+      "sink": "Sink",
+      "bathroomShelf": "Bathroom Shelf",
+      "vanityCabinet": "Vanity Cabinet",
+      "desk": "Desk",
+      "officeChair": "Office Chair",
+      "studyShelf": "Study Shelf",
+      "drawerCabinet": "Drawer Cabinet"
+    },
     "loginToAdd": "Please log in to add items to your cart.",
     "clearAll": "× Clear All",
     "loading": "Loading products…",

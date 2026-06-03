@@ -103,6 +103,33 @@
       "priceHigh": "价格：从高到低",
       "mostSold": "销量最高"
     },
+    "categoryNames": {
+      "livingRoom": "客厅",
+      "bedroom": "卧室",
+      "kitchen": "厨房",
+      "bathroom": "浴室",
+      "studyRoom": "书房"
+    },
+    "tagNames": {
+      "sofa": "沙发",
+      "coffeeTable": "茶几",
+      "armchair": "扶手椅",
+      "bookshelf": "书架",
+      "bedFrame": "床架",
+      "wardrobe": "衣柜",
+      "nightstand": "床头柜",
+      "kitchenCounter": "厨台",
+      "barStool": "吧台椅",
+      "diningTable": "餐桌",
+      "kitchenCabinet": "厨柜",
+      "sink": "水槽",
+      "bathroomShelf": "浴室架",
+      "vanityCabinet": "化妆柜",
+      "desk": "书桌",
+      "officeChair": "办公椅",
+      "studyShelf": "书房架",
+      "drawerCabinet": "抽屉柜"
+    },
     "loginToAdd": "请登录后将商品加入购物车。",
     "clearAll": "× 清除全部",
     "loading": "加载产品中…",

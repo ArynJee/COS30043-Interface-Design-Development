@@ -69,6 +69,9 @@ const {
   clearFilters,
 } = useProducts();
 
+// converts "Living Room" → "livingRoom" for i18n key lookup
+const toKey = (name) => name.replace(/\s+(.)/g, (_, c) => c.toUpperCase()).replace(/^(.)/, s => s.toLowerCase());
+
 // filter dropdown state
 const openDropdown = ref(null);
 const categoryDropdownRef = ref(null);
@@ -171,7 +174,7 @@ onBeforeUnmount(() => {
                   :checked="selectedCategories.includes(cat.id)"
                   @change="toggleCategory(cat.id)"
                 />
-                <span>{{ cat.name }}</span>
+                <span>{{ $t('products.categoryNames.' + toKey(cat.name), cat.name) }}</span>
               </label>
             </div>
           </Transition>
@@ -210,7 +213,7 @@ onBeforeUnmount(() => {
                   :checked="selectedTags.includes(tag.id)"
                   @change="toggleTag(tag.id)"
                 />
-                <span>{{ tag.name }}</span>
+                <span>{{ $t('products.tagNames.' + toKey(tag.name), tag.name) }}</span>
               </label>
             </div>
           </Transition>
