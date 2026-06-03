@@ -8,7 +8,6 @@ import {
   ChevronRight,
   CheckCircle2,
   AlertCircle,
-  RotateCcw,
   Coffee,
   Armchair,
   BookOpen,
@@ -29,6 +28,7 @@ import {
 } from "@lucide/vue";
 import FurnitureViewer from "@/components/FurnitureViewer.vue";
 import ContributionModal from "@/components/ContributionModal.vue";
+import Onboarding from "@/components/Onboarding.vue";
 import useCustomize from "@/hooks/useCustomize.js";
 
 const { t } = useI18n();
@@ -405,6 +405,8 @@ const priceBreakdown = computed(() => {
       @submit="submitContribution"
     />
   </div>
+
+  <Onboarding />
 </template>
 
 <style scoped>
