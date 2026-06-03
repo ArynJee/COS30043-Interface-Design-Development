@@ -250,10 +250,16 @@ const { form, errors, showPassword, showConfirm, loading, handleRegister } = use
 /* ── responsive ── */
 @media (max-width: 960px) {
   .auth-page {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
   }
   .auth-bg {
     height: 260px;
+    flex-shrink: 0;
+  }
+  .auth-panel {
+    flex: 1;
+    padding: 2rem 1.5rem;
   }
   .auth-brand {
     bottom: 1.75rem;
@@ -261,9 +267,6 @@ const { form, errors, showPassword, showConfirm, loading, handleRegister } = use
   }
   .auth-brand-title {
     font-size: 2rem;
-  }
-  .auth-panel {
-    padding: 2rem 1.5rem;
   }
 }
 @media (max-width: 480px) {

@@ -330,10 +330,16 @@ const {
 /* ── responsive ── */
 @media (max-width: 900px) {
   .auth-page {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
   }
   .auth-bg {
     height: 300px;
+    flex-shrink: 0;
+  }
+  .auth-panel {
+    flex: 1;
+    padding: 2.5rem 1.5rem;
   }
   .auth-brand {
     bottom: 2rem;
@@ -341,9 +347,6 @@ const {
   }
   .auth-brand-title {
     font-size: 2.2rem;
-  }
-  .auth-panel {
-    padding: 2.5rem 1.5rem;
   }
 }
 </style>
