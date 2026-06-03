@@ -1,8 +1,8 @@
 <script setup>
-import { ChevronRight } from '@lucide/vue'
+import { ArrowLeft, ChevronRight } from '@lucide/vue'
 import useOnboarding, { ONBOARDING_SLIDES } from '@/hooks/useOnboarding.js'
 
-const { visible, currentSlide, next, goTo, dismiss } = useOnboarding()
+const { visible, currentSlide, prev, next, goTo, dismiss } = useOnboarding()
 </script>
 
 <template>
@@ -10,49 +10,60 @@ const { visible, currentSlide, next, goTo, dismiss } = useOnboarding()
     <Transition name="ob-fade">
       <div
         v-if="visible"
-        class="ob-backdrop"
+        class="ob-backdrop position-fixed d-flex align-items-center justify-content-center p-3"
         role="dialog"
         aria-modal="true"
         aria-label="Getting started guide"
       >
-        <div class="ob-card">
+        <div class="ob-card position-relative" w-100 overflow-hidden>
 
-          <div class="ob-header">
-            <span class="ob-counter">{{ ONBOARDING_SLIDES[currentSlide].step }} / 05</span>
-            <button class="ob-skip" @click="dismiss">Skip tutorial</button>
+          <div class="ob-header d-flex align-items-center justify-content-between mb-4">
+            <div class="d-flex align-items-center gap-2">
+              <button
+                class="ob-prev border-0 p-0 d-flex align-items-center"
+                :class="{ 'ob-prev--hidden': currentSlide === 0 }"
+                :disabled="currentSlide === 0"
+                aria-label="Previous slide"
+                @click="prev"
+              >
+                <ArrowLeft :size="15" />
+              </button>
+              <span class="ob-counter text-uppercase">{{ ONBOARDING_SLIDES[currentSlide].step }} / 05</span>
+            </div>
+            <button class="ob-skip border-0 p-0" @click="dismiss">Skip tutorial</button>
           </div>
 
           <Transition name="ob-slide" mode="out-in">
             <div :key="currentSlide" class="ob-body">
-              <div class="ob-icon-ring">
+              <div class="ob-icon-ring rounded-pill d-flex align-items-center justify-content-center mb-3">
                 <component
                   :is="ONBOARDING_SLIDES[currentSlide].icon"
                   :size="32"
                   stroke-width="1.5"
                 />
               </div>
-              <h2 class="ob-title">{{ ONBOARDING_SLIDES[currentSlide].title }}</h2>
-              <div class="ob-rule"></div>
-              <p class="ob-desc">{{ ONBOARDING_SLIDES[currentSlide].desc }}</p>
+              <h2 class="ob-title fw-bold fs-3">{{ ONBOARDING_SLIDES[currentSlide].title }}</h2>
+              <div class="ob-rule mb-2"></div>
+              <p class="ob-desc m-0">{{ ONBOARDING_SLIDES[currentSlide].desc }}</p>
             </div>
           </Transition>
 
-          <div class="ob-progress-track">
-            <div :key="currentSlide" class="ob-progress-fill"></div>
+          <div class="ob-progress-track rounded overflow-hidden">
+            <div :key="currentSlide" class="ob-progress-fill h-100 rounded"></div>
           </div>
 
-          <div class="ob-footer">
-            <div class="ob-dots">
+          <div class="ob-footer d-flex align-items-center justify-content-between">
+            <div class="ob-dots d-flex align-items-center gap-2">
               <button
                 v-for="(_, i) in ONBOARDING_SLIDES"
                 :key="i"
-                class="ob-dot"
+                class="ob-dot rounded-pill border-0 p-0"
                 :class="{ 'ob-dot--active': i === currentSlide }"
                 :aria-label="`Go to slide ${i + 1}`"
                 @click="goTo(i)"
               />
             </div>
-            <button class="ob-next-btn" @click="next">
+            <button class="ob-next-btn d-flex align-items-center gap-2 border-0" @click="next">
               <span>{{ currentSlide === ONBOARDING_SLIDES.length - 1 ? 'Get Started' : 'Next' }}</span>
               <ChevronRight v-if="currentSlide < ONBOARDING_SLIDES.length - 1" :size="14" />
             </button>
@@ -68,54 +79,56 @@ const { visible, currentSlide, next, goTo, dismiss } = useOnboarding()
 @import "@/styles/main.css";
 
 .ob-backdrop {
-  position: fixed;
   inset: 0;
   background: rgba(20, 16, 10, 0.65);
   backdrop-filter: blur(3px);
   z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
 }
 
 .ob-card {
-  position: relative;
   background: var(--bg-page);
-  width: 100%;
   max-width: 580px;
   padding: 2.5rem 2.75rem 2.25rem;
-  overflow: hidden;
 }
 
 [data-theme="dark"] .ob-card {
   border: 1px solid var(--color-subtle);
 }
 
-/* header row */
-.ob-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.75rem;
+.ob-prev {
+  background: none;
+  color: #9a8875;
+  cursor: pointer;
+  transition: color 0.2s, opacity 0.2s;
+  line-height: 1;
+}
+.ob-prev:hover:not(:disabled) {
+  color: #2c2218;
+}
+.ob-prev--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+[data-theme="dark"] .ob-prev {
+  color: #6a5a4a;
+}
+[data-theme="dark"] .ob-prev:hover:not(:disabled) {
+  color: #e8ddd0;
 }
 
 .ob-counter {
   font-family: "Times New Roman", serif;
   font-size: var(--fs-xs);
   letter-spacing: 0.14em;
-  text-transform: uppercase;
   color: #c4a882;
 }
 
 .ob-skip {
   background: none;
-  border: none;
   font-family: "Times New Roman", serif;
   font-size: var(--fs-sm);
   color: #9a8875;
   cursor: pointer;
-  padding: 0;
   transition: color 0.2s;
   letter-spacing: 0.02em;
 }
@@ -131,20 +144,13 @@ const { visible, currentSlide, next, goTo, dismiss } = useOnboarding()
 .ob-icon-ring {
   width: 72px;
   height: 72px;
-  border-radius: 50%;
   background: #f0e8da;
   border: 1px solid #e0d5c5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   color: #2c2218;
-  margin-bottom: 1.5rem;
 }
 
 .ob-title {
   font-family: "Times New Roman", serif;
-  font-size: 1.75rem;
-  font-weight: 700;
   color: #2c2218;
   line-height: 1.2;
   margin: 0 0 0.65rem;
@@ -162,23 +168,18 @@ const { visible, currentSlide, next, goTo, dismiss } = useOnboarding()
   font-size: var(--fs-base);
   color: #7a6a58;
   line-height: 1.75;
-  margin: 0;
 }
 
 /* progress bar */
 .ob-progress-track {
   height: 2px;
   background: #e0d5c5;
-  border-radius: 1px;
-  overflow: hidden;
   margin: 1.5rem 0 1.25rem;
 }
 
 .ob-progress-fill {
-  height: 100%;
   width: 0%;
   background: #c4a882;
-  border-radius: 1px;
   animation: ob-advance 5s linear forwards;
 }
 
@@ -187,26 +188,10 @@ const { visible, currentSlide, next, goTo, dismiss } = useOnboarding()
   to   { width: 100% }
 }
 
-/* footer row */
-.ob-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.ob-dots {
-  display: flex;
-  gap: 0.4rem;
-  align-items: center;
-}
-
 .ob-dot {
   width: 7px;
   height: 7px;
-  border-radius: 50%;
   background: #ddd5c5;
-  border: none;
-  padding: 0;
   cursor: pointer;
   transition: all 0.28s ease;
 }
@@ -222,12 +207,8 @@ const { visible, currentSlide, next, goTo, dismiss } = useOnboarding()
 }
 
 .ob-next-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
   background: #2c2218;
   color: #f0ebe2;
-  border: none;
   font-family: "Times New Roman", serif;
   font-size: var(--fs-base);
   letter-spacing: 0.02em;

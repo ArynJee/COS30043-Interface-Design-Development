@@ -1,5 +1,5 @@
 import { ref, onMounted, onUnmounted } from 'vue'
-import { Armchair, PenLine, RotateCcw, Tag, ShoppingCart } from '@lucide/vue'
+import { Armchair, PenLine, Rotate3d, Tag, ShoppingCart } from '@lucide/vue'
 
 const SLIDE_DURATION = 5000
 let _seenThisLoad    = false
@@ -9,16 +9,16 @@ export const ONBOARDING_SLIDES = [
     icon: Armchair,
     step: '01',
     title: 'Choose Your Living Area',
-    desc: 'Start by selecting a room — Living Room, Bedroom, Kitchen, Bathroom, or Office. Each area surfaces furniture types perfectly suited for the space.',
+    desc: 'Start by selecting a room: Living Room, Bedroom, Kitchen, Bathroom, Study Room. Each furniture type perfectly suited for the space.',
   },
   {
     icon: PenLine,
     step: '02',
     title: 'Customise Every Detail',
-    desc: 'Pick a furniture type, then dial in every configuration: shape, fabric, material, colour, and leg style — all in one streamlined panel.',
+    desc: 'Pick a furniture type, then dial in every configuration: shape, fabric, material, colour, and leg style, all in one streamlined panel.',
   },
   {
-    icon: RotateCcw,
+    icon: Rotate3d,
     step: '03',
     title: 'Preview in 3D',
     desc: 'Your selections render live in the 3D viewer. Rotate and inspect the model as you tweak options to see exactly how your piece will look.',
@@ -27,7 +27,7 @@ export const ONBOARDING_SLIDES = [
     icon: Tag,
     step: '04',
     title: 'Real-Time Price Updates',
-    desc: 'The price summary updates instantly with every choice. You always see a transparent breakdown — no surprises when you reach the cart.',
+    desc: 'The price summary updates instantly with every choice. You always see a transparent breakdown. No surprises when you reach the cart.',
   },
   {
     icon: ShoppingCart,
@@ -41,6 +41,13 @@ export default function useOnboarding() {
   const visible      = ref(!_seenThisLoad)
   const currentSlide = ref(0)
   let timer          = null
+
+  function prev() {
+    if (currentSlide.value > 0) {
+      currentSlide.value--
+      resetTimer()
+    }
+  }
 
   function next() {
     if (currentSlide.value < ONBOARDING_SLIDES.length - 1) {
@@ -80,5 +87,5 @@ export default function useOnboarding() {
   onMounted(() => { if (visible.value) resetTimer() })
   onUnmounted(clearTimer)
 
-  return { visible, currentSlide, next, goTo, dismiss }
+  return { visible, currentSlide, prev, next, goTo, dismiss }
 }
