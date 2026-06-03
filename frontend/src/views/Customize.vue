@@ -32,6 +32,7 @@ import Onboarding from "@/components/Onboarding.vue";
 import useCustomize from "@/hooks/useCustomize.js";
 
 const { t } = useI18n();
+const toKey = (name) => name.replace(/\s+(.)/g, (_, c) => c.toUpperCase()).replace(/^(.)/, s => s.toLowerCase());
 const viewerRef = ref(null);
 
 const isNarrow = ref(window.innerWidth <= 992);
@@ -176,7 +177,7 @@ const priceBreakdown = computed(() => {
               @click="selectArea(area)"
               role="tab"
             >
-              {{ area }}
+              {{ $t('products.categoryNames.' + toKey(area)) }}
             </button>
           </div>
 
@@ -195,7 +196,7 @@ const priceBreakdown = computed(() => {
                   :size="22"
                 />
               </div>
-              <span class="cu-type-name">{{ ft.name }}</span>
+              <span class="cu-type-name">{{ $t('products.tagNames.' + toKey(ft.name)) }}</span>
               <span class="cu-type-price"
                 >from {{ formatPrice(ft.basePrice) }}</span
               >
@@ -212,7 +213,7 @@ const priceBreakdown = computed(() => {
                 >2</span
               >
               {{ $t('customize.step2') }}
-              <span class="cu-step-sub">{{ currentType.name }}</span>
+              <span class="cu-step-sub">{{ $t('products.tagNames.' + toKey(currentType.name)) }}</span>
             </h2>
 
             <div
@@ -325,7 +326,7 @@ const priceBreakdown = computed(() => {
           </h3>
           <div class="cu-price-rows d-flex flex-column gap-2">
             <div class="cu-price-row d-flex justify-content-between">
-              <span>{{ $t('customize.price.base', { name: currentType.name }) }}</span>
+              <span>{{ $t('customize.price.base', { name: $t('products.tagNames.' + toKey(currentType.name)) }) }}</span>
               <span>{{ formatPrice(currentType.basePrice) }}</span>
             </div>
             <div

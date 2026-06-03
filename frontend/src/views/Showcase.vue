@@ -5,6 +5,8 @@ import CtaBanner from "@/components/CtaBanner.vue";
 import ContributionCard from "@/components/ContributionCard.vue";
 import { useShowcase, AREAS } from "@/hooks/useShowcase.js";
 
+const toKey = (name) => name.replace(/\s+(.)/g, (_, c) => c.toUpperCase()).replace(/^(.)/, s => s.toLowerCase());
+
 const {
   contributions,
   loading,
@@ -87,7 +89,7 @@ const {
         :class="{ 'is-active': selectedArea === area }"
         @click="selectedArea = area"
       >
-        {{ area }}
+        {{ area === 'All' ? $t('showcase.all') : $t('products.categoryNames.' + toKey(area)) }}
       </button>
     </div>
 
