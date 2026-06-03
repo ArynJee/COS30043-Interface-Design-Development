@@ -27,7 +27,7 @@ const { visible, currentSlide, next, goTo, dismiss } = useOnboarding()
               <div class="ob-icon-ring">
                 <component
                   :is="ONBOARDING_SLIDES[currentSlide].icon"
-                  :size="28"
+                  :size="32"
                   stroke-width="1.5"
                 />
               </div>
@@ -70,25 +70,26 @@ const { visible, currentSlide, next, goTo, dismiss } = useOnboarding()
 .ob-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 9999;
-  background: rgba(20, 17, 12, 0.68);
+  background: rgba(20, 16, 10, 0.65);
+  backdrop-filter: blur(3px);
+  z-index: 2000;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
   padding: 1rem;
 }
 
 .ob-card {
   position: relative;
-  background: #faf7f2;
-  border: 1px solid #e0d5c5;
-  width: min(480px, 100%);
-  padding: 2rem 2.25rem 1.75rem;
-  box-shadow:
-    0 32px 80px rgba(20, 17, 12, 0.3),
-    0 6px 20px rgba(20, 17, 12, 0.12);
+  background: var(--bg-page);
+  width: 100%;
+  max-width: 580px;
+  padding: 2.5rem 2.75rem 2.25rem;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .ob-card {
+  border: 1px solid var(--color-subtle);
 }
 
 /* header row */
@@ -124,12 +125,12 @@ const { visible, currentSlide, next, goTo, dismiss } = useOnboarding()
 
 /* slide body */
 .ob-body {
-  min-height: 190px;
+  min-height: 210px;
 }
 
 .ob-icon-ring {
-  width: 60px;
-  height: 60px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   background: #f0e8da;
   border: 1px solid #e0d5c5;
@@ -137,16 +138,16 @@ const { visible, currentSlide, next, goTo, dismiss } = useOnboarding()
   align-items: center;
   justify-content: center;
   color: #2c2218;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 .ob-title {
   font-family: "Times New Roman", serif;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: #2c2218;
   line-height: 1.2;
-  margin: 0 0 0.6rem;
+  margin: 0 0 0.65rem;
 }
 
 .ob-rule {
@@ -262,10 +263,6 @@ const { visible, currentSlide, next, goTo, dismiss } = useOnboarding()
 }
 
 /* dark mode */
-[data-theme="dark"] .ob-card {
-  background: #2e2923;
-  border-color: #3a3025;
-}
 [data-theme="dark"] .ob-icon-ring {
   background: #3a3025;
   border-color: #4a4035;
