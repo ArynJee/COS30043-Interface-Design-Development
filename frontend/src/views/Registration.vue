@@ -237,7 +237,7 @@ const { form, errors, showPassword, showConfirm, loading, handleRegister } = use
 .auth-pw-hint { font-size: var(--fs-xs); color: var(--color-muted); margin: -0.25rem 0 1rem; line-height: 1.5; }
 
 /* ── submit ── */
-.auth-submit { display: inline-flex; align-items: center; justify-content: center; width: 100%; padding: 0.85rem 1.5rem; background: var(--btn-alt-bg); color: #ffffff; font-family: var(--font-serif); font-size: var(--fs-base); letter-spacing: 0.12em; text-transform: uppercase; border: none; cursor: pointer; transition: background 0.25s; margin-top: 0.25rem; }
+.auth-submit { display: inline-flex; align-items: center; justify-content: center; width: 100%; padding: 0.85rem 1.5rem; background: var(--btn-alt-bg); color: var(--btn-color); font-family: var(--font-serif); font-size: var(--fs-base); letter-spacing: 0.12em; text-transform: uppercase; border: none; cursor: pointer; transition: background 0.25s; margin-top: 0.25rem; }
 .auth-submit:hover:not(:disabled) { background: var(--accent); }
 .auth-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 .auth-spinner { width: 18px; height: 18px; border: 2px solid rgba(255, 255, 255, 0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }

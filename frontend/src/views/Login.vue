@@ -264,7 +264,7 @@ const {
   width: 100%;
   padding: 0.85rem 1.5rem;
   background: var(--btn-alt-bg);
-  color: #ffffff;
+  color: var(--btn-color);
   font-family: var(--font-serif);
   font-size: var(--fs-base);
   letter-spacing: 0.12em;

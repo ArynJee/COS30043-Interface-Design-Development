@@ -444,6 +444,9 @@ const {
   position: relative;
   overflow: hidden;
 }
+[data-theme="dark"] .fg-card-dark {
+  background: #2a2318;
+}
 
 .fg-card-tag {
   font-size: var(--fs-2xs);
@@ -616,7 +619,7 @@ const {
 .explore-view-more {
   font-size: var(--fs-xs);
   letter-spacing: 0.15em;
-  color: #ffffff;
+  color: var(--btn-color);
   background: var(--btn-alt-bg);
   padding: 0.5rem 1.25rem;
   transition: background 0.2s;
