@@ -17,7 +17,7 @@ A furniture e-commerce web app built with Vue 3 (frontend) and Express + Postgre
 
 ```bash
 cd backend
-cp .env.example .env   # Windows: copy .env.example .env
+cp .env.example .env
 npm install
 ```
 
