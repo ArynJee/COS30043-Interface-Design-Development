@@ -2,6 +2,8 @@
 
 A furniture e-commerce web app built with Vue 3 (frontend) and Express + PostgreSQL (backend).
 
+> **Note:** The payment system in this project does not involve a real payment gateway. Stripe is integrated only for real-life payment simulation, so no charges are actually made. 
+
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) v20.19.0 or higher
@@ -39,8 +41,8 @@ STRIPE_SECRET_KEY=sk_test_...
 Run migrations, then seed:
 
 ```bash
-npm run migrate   # creates all tables
-npm run seed      # resets and populates with sample data
+npm run migrate
+npm run seed
 ```
 
 Start the dev server:
@@ -57,7 +59,7 @@ In a separate terminal:
 
 ```bash
 cd frontend
-cp .env.example .env   # Windows: copy .env.example .env
+cp .env.example .env
 npm install
 npm run dev
 ```
